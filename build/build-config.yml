@@ -1,0 +1,14 @@
+#
+# config:
+# -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
+#     build:
+#     - work-dir: < Working directory of the app to be built >
+#       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
+#       image-name: < Docker image name  >
+# -
+# -
+config:
+  - name: "builds/iFix/core/libraries/ifix-services-common"
+    build:
+      - work-dir: "ifix-services-common"
+        image-name: "ifix-services-common"
