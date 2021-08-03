@@ -3,6 +3,9 @@ package org.egov.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
+import org.egov.common.contract.response.ResponseHeader;
+import org.egov.service.ChartOfAccountService;
+import org.egov.util.ResponseHeaderCreator;
 import org.egov.web.models.COARequest;
 import org.egov.web.models.COAResponse;
 import org.egov.web.models.COASearchRequest;
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.util.Collections;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -29,6 +32,12 @@ public class ChartOfAccountApiController {
     private final HttpServletRequest request;
 
     @Autowired
+    private ChartOfAccountService chartOfAccountService;
+
+    @Autowired
+    private ResponseHeaderCreator responseHeaderCreator;
+
+    @Autowired
     public ChartOfAccountApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
@@ -36,28 +45,17 @@ public class ChartOfAccountApiController {
 
     @RequestMapping(value = "/chartOfAccount/v1/_create", method = RequestMethod.POST)
     public ResponseEntity<COAResponse> chartOfAccountV1CreatePost(@ApiParam(value = "Details for the new COA + RequestHeader (meta data of the API).", required = true) @Valid @RequestBody COARequest body) {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("")) {
-//            try {
-//                return new ResponseEntity<COAResponse>(objectMapper.readValue("", COAResponse.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e) {
-//                return new ResponseEntity<COAResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
 
-        return new ResponseEntity<COAResponse>(HttpStatus.NOT_IMPLEMENTED);
+        COARequest coaRequest = chartOfAccountService.chartOfAccountV1CreatePost(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
+        COAResponse coaResponse = COAResponse.builder().responseInfo(responseHeader)
+                .chartOfAccounts(Collections.singletonList(coaRequest.getChartOfAccount())).build();
+
+        return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/chartOfAccount/v1/_search", method = RequestMethod.POST)
     public ResponseEntity<COAResponse> chartOfAccountV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody COASearchRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("")) {
-            try {
-                return new ResponseEntity<COAResponse>(objectMapper.readValue("", COAResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                return new ResponseEntity<COAResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
 
         return new ResponseEntity<COAResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
