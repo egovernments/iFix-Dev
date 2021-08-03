@@ -15,8 +15,15 @@ public class GovernmentService {
     @Autowired
     GovernmentRepository governmentRepository;
 
-    public void addGovernment(GovernmentRequest governmentRequest) {
-        governmentValidator.validateGovernmentRequestData(governmentRequest);
+    @Autowired
+    GovernmentEnrichmentService governmentEnrichmentService;
 
+    public GovernmentRequest addGovernment(GovernmentRequest governmentRequest) {
+        governmentValidator.validateGovernmentRequestData(governmentRequest);
+        governmentEnrichmentService.enrichGovernmentData(governmentRequest);
+
+        governmentRepository.save(governmentRequest);
+
+        return governmentRequest;
     }
 }

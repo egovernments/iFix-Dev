@@ -4,7 +4,7 @@ package org.egov.service;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
-import org.egov.util.MasterDateServiceUtil;
+import org.egov.util.MasterDataServiceUtil;
 import org.egov.web.models.COARequest;
 import org.egov.web.models.ChartOfAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class COAEnrichmentService {
 
     @Autowired
-    private MasterDateServiceUtil mdsUtil;
+    private MasterDataServiceUtil mdsUtil;
 
     /**
      * Enrich the COA create request with COA code, id and audit details.

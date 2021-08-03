@@ -6,7 +6,7 @@ import org.egov.web.models.ChartOfAccount;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MasterDateServiceUtil {
+public class MasterDataServiceUtil {
 
     /**
      * Method to return auditDetails for create/update flows for COA

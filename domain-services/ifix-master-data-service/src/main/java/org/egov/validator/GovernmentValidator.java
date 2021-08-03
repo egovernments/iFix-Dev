@@ -30,8 +30,8 @@ public class GovernmentValidator {
                 throw new CustomException(GovernmentConstants.GOVERNMENT_NAME, "Government name is missing in request data");
             }
 
+        }else {
+            throw new CustomException(GovernmentConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }
-
-        throw new CustomException(GovernmentConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
     }
 }
