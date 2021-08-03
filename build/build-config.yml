@@ -12,3 +12,7 @@ config:
     build:
       - work-dir: "core/libraries/ifix-services-common"
         image-name: "ifix-services-common"
+  - name: "builds/iFix/domain-services/ifix-master-data-service"
+    build:
+      - work-dir: "domain-services/ifix-master-data-service"
+        image-name: "ifix-master-data-service"
