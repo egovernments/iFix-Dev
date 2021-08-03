@@ -43,7 +43,7 @@ public class ChartOfAccountApiController {
         this.request = request;
     }
 
-    @RequestMapping(value = "/chartOfAccount/v1/_create", method = RequestMethod.POST)
+    @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<COAResponse> chartOfAccountV1CreatePost(@ApiParam(value = "Details for the new COA + RequestHeader (meta data of the API).", required = true) @Valid @RequestBody COARequest body) {
 
         COARequest coaRequest = chartOfAccountService.chartOfAccountV1CreatePost(body);
@@ -54,7 +54,7 @@ public class ChartOfAccountApiController {
         return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.ACCEPTED);
     }
 
-    @RequestMapping(value = "/chartOfAccount/v1/_search", method = RequestMethod.POST)
+    @RequestMapping(value = "/_search", method = RequestMethod.POST)
     public ResponseEntity<COAResponse> chartOfAccountV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody COASearchRequest body) {
 
         return new ResponseEntity<COAResponse>(HttpStatus.NOT_IMPLEMENTED);

@@ -3,6 +3,7 @@ package org.egov.validator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.egov.web.models.COARequest;
 import org.egov.web.models.ChartOfAccount;
@@ -19,7 +20,15 @@ public class ChartOfAccountValidator {
     public void validateCreatePost(COARequest coaRequest) {
         log.info("Enter into ChartOfAccountValidator.validateCreatePost()");
         ChartOfAccount chartOfAccount = coaRequest.getChartOfAccount();
+        RequestHeader requestHeader = coaRequest.getRequestHeader();
         Map<String, String> errorMap =  new HashMap<>();
+
+        if(requestHeader == null){
+            errorMap.put("REQUEST_HEADER","Request header is missing");
+        }
+        if(requestHeader.getUserInfo() == null || requestHeader.getUserInfo().getUuid() == null){
+            errorMap.put("USER_INFO","User info is missing");
+        }
 
         if(StringUtils.isBlank(chartOfAccount.getGroupHead())){
             errorMap.put("GROUP_HEAD","Group head Code is mandatory for chart of account");
