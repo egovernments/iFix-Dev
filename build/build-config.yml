@@ -12,3 +12,12 @@ config:
     build:
       - work-dir: "core/libraries/ifix-services-common"
         image-name: "ifix-services-common"
+  - name: "builds/iFix/core/libraries/ifix-tracer"
+    build:
+      - work-dir: "core/libraries/ifix-tracer"
+        image-name: "ifix-tracer"
+  - name: "builds/iFix/domain-services/ifix-master-data-service"
+    build:
+      - work-dir: "domain-services/ifix-master-data-service"
+        image-name: "ifix-master-data-service"
+        dockerfile: "build/maven/Dockerfile"
