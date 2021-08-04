@@ -1,0 +1,6 @@
+{
+  "requestHeader": {
+    "correlationId": "someCorrelationId"
+  },
+  "foo": "bar"
+}
