@@ -31,6 +31,5 @@ public class GovernmentEnrichmentService {
         }
 
         government.setAuditDetails(auditDetails);
-        government.setUuid(UUID.randomUUID().toString());
     }
 }

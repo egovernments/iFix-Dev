@@ -6,6 +6,9 @@ import lombok.*;
 import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * This object captures the fiscal information of external systems.
  */
@@ -18,7 +21,10 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class Government {
+
     @JsonProperty("id")
     private String id = null;
 
@@ -30,9 +36,6 @@ public class Government {
 
     @JsonProperty("attributes")
     private Object attributes = null;
-
-    @JsonProperty("uuid")
-    private String uuid = null;
 
 }
 

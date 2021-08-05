@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -42,6 +43,10 @@ public class GovernmentApiController {
         this.request = request;
     }
 
+    /**
+     * @param body
+     * @return
+     */
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<GovernmentResponse> governmentV1CreatePost(@ApiParam(value =
             "Details for the governmet master data creation, RequestHeader (meta data of the API).", required = true)
@@ -57,18 +62,23 @@ public class GovernmentApiController {
         return new ResponseEntity<GovernmentResponse>(governmentResponse, HttpStatus.ACCEPTED);
     }
 
+    /**
+     * @param body
+     * @return
+     */
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
-    public ResponseEntity<GovernmentResponse> governmentV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody GovernmentSearchRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("")) {
-            try {
-                return new ResponseEntity<GovernmentResponse>(objectMapper.readValue("", GovernmentResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                return new ResponseEntity<GovernmentResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<GovernmentResponse> governmentV1SearchPost(@ApiParam(value = "RequestHeader meta data.",
+            required = true) @Valid @RequestBody GovernmentSearchRequest body) {
 
-        return new ResponseEntity<GovernmentResponse>(HttpStatus.NOT_IMPLEMENTED);
+        List<Government> governmentList = governmentService.searchAllGovernmentByIdList(body);
+
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
+
+        GovernmentResponse governmentResponse = GovernmentResponse.builder().responseHeader(responseHeader)
+                .government(governmentList).build();
+
+        return new ResponseEntity<GovernmentResponse>(governmentResponse, HttpStatus.ACCEPTED);
     }
 
 }
