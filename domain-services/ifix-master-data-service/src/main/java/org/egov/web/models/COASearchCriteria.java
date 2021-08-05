@@ -3,6 +3,7 @@ package org.egov.web.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -21,6 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class COASearchCriteria {
     @JsonProperty("Ids")
     @Valid
@@ -47,6 +50,9 @@ public class COASearchCriteria {
     @JsonProperty("objectHead")
     private String objectHead = null;
 
+    @JsonProperty("coaCode")
+    private String coaCode = null;
+
 
     public COASearchCriteria addIdsItem(String idsItem) {
         if (this.ids == null) {
@@ -54,6 +60,12 @@ public class COASearchCriteria {
         }
         this.ids.add(idsItem);
         return this;
+    }
+
+    public boolean isEmpty(){
+        return (StringUtils.isBlank(tenantId) && StringUtils.isBlank(majorHead) && StringUtils.isBlank(minorHead)
+                && StringUtils.isBlank(subHead) && StringUtils.isBlank(subMajorHead) && StringUtils.isBlank(groupHead)
+                && StringUtils.isBlank(objectHead) && (ids == null || ids.isEmpty()) && StringUtils.isBlank(coaCode));
     }
 
 }

@@ -18,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class COASearchRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;
