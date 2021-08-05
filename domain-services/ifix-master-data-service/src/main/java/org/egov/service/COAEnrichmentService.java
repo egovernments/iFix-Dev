@@ -6,6 +6,8 @@ import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.util.MasterDataServiceUtil;
 import org.egov.web.models.COARequest;
+import org.egov.web.models.COASearchCriteria;
+import org.egov.web.models.COASearchRequest;
 import org.egov.web.models.ChartOfAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +38,9 @@ public class COAEnrichmentService {
          */
 
         if(chartOfAccount.getAuditDetails() == null){
-            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo() != null ? requestHeader.getUserInfo().getUuid():"", chartOfAccount.getAuditDetails(), true);
+            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), chartOfAccount.getAuditDetails(), true);
         }else{
-            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo() != null ? requestHeader.getUserInfo().getUuid():"", chartOfAccount.getAuditDetails(), false);
+            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), chartOfAccount.getAuditDetails(), false);
         }
 
         chartOfAccount.setAuditDetails(auditDetails);
@@ -59,13 +61,18 @@ public class COAEnrichmentService {
      */
     protected void createCoaCode(ChartOfAccount chartOfAccount) {
         StringBuilder coaCode = new StringBuilder();
-        coaCode.append(chartOfAccount.getMinorHead()).append("-")
+        coaCode.append(chartOfAccount.getMajorHead()).append("-")
                 .append(chartOfAccount.getSubMajorHead()).append("-")
                 .append(chartOfAccount.getMinorHead()).append("-")
                 .append(chartOfAccount.getSubHead()).append("-")
                 .append(chartOfAccount.getGroupHead()).append("-")
-                .append(chartOfAccount.getObjectHead()).append("-");
+                .append(chartOfAccount.getObjectHead());
 
         chartOfAccount.setCoaCode(coaCode.toString());
+    }
+
+    public void enrichSearchPost(COASearchRequest coaSearchRequest) {
+        COASearchCriteria searchCriteria = coaSearchRequest.getCriteria();
+        //TODO- fill if any default search criteria
     }
 }
