@@ -1,7 +1,7 @@
-
 All notable changes to this module will be documented in this file.
 
 ## 1.3.0 - 2021-05-17
+
 - Changes to error handling
 - Removed stack trace printing
 - Added rate limiting functionality
@@ -17,9 +17,10 @@ All notable changes to this module will be documented in this file.
 
 - ZUUL METRIC CAPTURING ADDED
 
-## 1.2.0 
+## 1.2.0
 
 ## 1.1.0 - 2020-06-22
+
 - Added typescript definition generation plugin
 - Upgraded to `tracer:2.0.0-SNAPSHOT`
 - Upgraded to spring boot `2.2.6-RELEASE`

@@ -1,6 +1,5 @@
 package org.egov;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
@@ -30,46 +29,37 @@ import java.util.HashSet;
 @EnableZuulProxy
 @EnableCaching
 @SpringBootApplication
-@PropertySource({"${zuul.routes.filepath}","${zuul.limiter.filepath}"})
+@PropertySource({"${zuul.routes.filepath}", "${zuul.limiter.filepath}"})
 public class ZuulGatewayApplication {
+    @Value("${egov.user-info-header}")
+    private String userInfoHeader;
+    @Value("#{'${egov.open-endpoints-whitelist}'.split(',')}")
+    private String[] openEndpointsWhitelist;
+    @Value("#{'${egov.mixed-mode-endpoints-whitelist}'.split(',')}")
+    private String[] mixedModeEndpointsWhitelist;
+    @Value("${egov.auth-service-host}")
+    private String authServiceHost;
+    @Value("${egov.auth-service-uri}")
+    private String authServiceUri;
+    @Value("${egov.authorize.access.control.host}${egov.authorize.access.control.uri}")
+    private String authorizationUrl;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private UserUtils userUtils;
+    @Autowired
+    private CustomRateLimitUtils customRateLimitUtils;
+
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);
     }
 
-    @Value("${egov.user-info-header}")
-    private String userInfoHeader;
-
-    @Value("#{'${egov.open-endpoints-whitelist}'.split(',')}")
-    private String[] openEndpointsWhitelist;
-
-    @Value("#{'${egov.mixed-mode-endpoints-whitelist}'.split(',')}")
-    private String[] mixedModeEndpointsWhitelist;
-
-    @Value("${egov.auth-service-host}")
-    private String authServiceHost;
-
-    @Value("${egov.auth-service-uri}")
-    private String authServiceUri;
-
-    @Value("${egov.authorize.access.control.host}${egov.authorize.access.control.uri}")
-    private String authorizationUrl;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private UserUtils userUtils;
-
-    @Autowired
-    private CustomRateLimitUtils customRateLimitUtils;
-
     @Bean
     public AuthPreCheckFilter authCheckFilter() {
         return new AuthPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
-            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)),userUtils);
+            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)), userUtils);
     }
 
     @Bean

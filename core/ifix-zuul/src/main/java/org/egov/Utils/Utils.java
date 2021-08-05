@@ -2,7 +2,6 @@ package org.egov.Utils;
 
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.entity.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class Utils {
             body = IOUtils.toString(ctx.getResponseDataStream());
             ctx.setResponseBody(body);
         }
-        
+
         return body;
     }
 
@@ -31,7 +30,7 @@ public class Utils {
             POST.equalsIgnoreCase(getRequestMethod(servletRequest))
                 || PUT.equalsIgnoreCase(getRequestMethod(servletRequest))
                 || PATCH.equalsIgnoreCase(getRequestMethod(servletRequest))
-            )
+        )
             && getRequestContentType(servletRequest).contains(JSON_TYPE);
     }
 

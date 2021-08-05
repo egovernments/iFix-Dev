@@ -1,6 +1,7 @@
 # Local Setup
 
-To setup the Zuul service in your local system, clone the [Core Service repository](https://github.com/egovernments/core-services).
+To setup the Zuul service in your local system, clone
+the [Core Service repository](https://github.com/egovernments/core-services).
 
 ## Dependencies
 
@@ -10,8 +11,8 @@ To setup the Zuul service in your local system, clone the [Core Service reposito
 - [ ] Redis
 - [ ] Elasticsearch
 - [ ] Kafka
-  - [ ] Consumer
-  - [ ] Producer
+    - [ ] Consumer
+    - [ ] Producer
 
 ## Running Locally
 

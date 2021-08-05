@@ -5,12 +5,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import org.apache.commons.io.IOUtils;
 import org.egov.exceptions.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ExceptionUtils {
         return null;
     }
 
-    public static void setCustomException(HttpStatus status, String message)  {
+    public static void setCustomException(HttpStatus status, String message) {
         try {
             _setExceptionBody(status, getErrorInfoObject("CustomException", message, message));
         } catch (JsonProcessingException e) {
@@ -85,9 +85,9 @@ public class ExceptionUtils {
         throw new RuntimeException(new CustomException(message, status.value(), "CustomException"));
     }
 
-    public static void raiseErrorFilterException( RequestContext ctx) {
+    public static void raiseErrorFilterException(RequestContext ctx) {
 //        RequestContext ctx = RequestContext.getCurrentContext();
-        Throwable e = ctx.getThrowable() == null ? (Throwable)ctx.get("error.exception") : ctx.getThrowable();
+        Throwable e = ctx.getThrowable() == null ? (Throwable) ctx.get("error.exception") : ctx.getThrowable();
 
         try {
             if (e == null) {
@@ -125,10 +125,10 @@ public class ExceptionUtils {
                 _setExceptionBody(HttpStatus.UNAUTHORIZED, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else if (exceptionName.equalsIgnoreCase("RateLimitExceededException")) {
                 _setExceptionBody(HttpStatus.TOO_MANY_REQUESTS, getErrorInfoObject(exceptionName, "Rate limit exceeded", null));
-            }else if (exceptionName.equalsIgnoreCase("JsonParseException")) {
+            } else if (exceptionName.equalsIgnoreCase("JsonParseException")) {
                 _setExceptionBody(HttpStatus.BAD_REQUEST, getErrorInfoObject(exceptionName, "Bad request", null));
-            }else if (exceptionName.equalsIgnoreCase("CustomException")) {
-                CustomException ce = (CustomException)e;
+            } else if (exceptionName.equalsIgnoreCase("CustomException")) {
+                CustomException ce = (CustomException) e;
                 _setExceptionBody(HttpStatus.valueOf(ce.nStatusCode), getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else {
                 _setExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));

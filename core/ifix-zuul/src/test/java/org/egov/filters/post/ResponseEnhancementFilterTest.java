@@ -9,7 +9,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ResponseEnhancementFilterTest {
 
@@ -38,14 +39,14 @@ public class ResponseEnhancementFilterTest {
 
         boolean correlationHeaderPresent = false;
         boolean cacheControlHeadersPresent = false;
-        for(Pair<String, String> header : zuulResponseHeaders){
+        for (Pair<String, String> header : zuulResponseHeaders) {
 
-            if(header.first().equalsIgnoreCase("x-correlation-id")){
+            if (header.first().equalsIgnoreCase("x-correlation-id")) {
                 correlationHeaderPresent = true;
                 assertEquals("someCorrelationId", header.second());
             }
 
-            if(header.first().equalsIgnoreCase("Cache-Control")){
+            if (header.first().equalsIgnoreCase("Cache-Control")) {
                 cacheControlHeadersPresent = true;
                 assertEquals("no-cache, no-store, max-age=0, must-revalidate", header.second());
             }
@@ -55,12 +56,12 @@ public class ResponseEnhancementFilterTest {
 
     @Test
     public void test_should_always_execute_filter() {
-        assertTrue( filter.shouldFilter());
+        assertTrue(filter.shouldFilter());
     }
 
     @Test
     public void test_should_execute_as_last_post_filter() {
-        assertEquals(0,  filter.filterOrder());
+        assertEquals(0, filter.filterOrder());
     }
 
 }

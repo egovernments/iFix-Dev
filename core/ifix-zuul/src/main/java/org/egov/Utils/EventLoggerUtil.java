@@ -29,7 +29,7 @@ public class EventLoggerUtil {
     private RequestCaptureCriteria criteria;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         criteria = RequestCaptureCriteria.builder()
             .captureInputBody(captureInputBody)
             .captureOutputBody(captureOutputBody)
@@ -37,7 +37,7 @@ public class EventLoggerUtil {
             .build();
     }
 
-    public Object logCurrentRequest(String topic){
+    public Object logCurrentRequest(String topic) {
         try {
             EventLogRequest request = EventLogRequest.fromRequestContext(RequestContext.getCurrentContext(), criteria);
             producer.push(topic, request);

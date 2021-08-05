@@ -50,7 +50,7 @@ public class PostHookFilter extends ZuulFilter {
             log.debug("Executing post-hook filter. Sending request to - " + UrlProvider.getUrlPostHooksMap().get(uri));
             response = restTemplate.postForObject(UrlProvider.getUrlPostHooksMap().get(uri), req,
                 String.class);
-        } catch (HttpClientErrorException| HttpServerErrorException e) {
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("POST-Hook - Http Exception Occurred", e);
             ExceptionUtils.raiseCustomException(e.getStatusCode(), "POST_HOOK_ERROR - Post-hook url threw an error - " + e.getMessage());
         } catch (Exception e) {

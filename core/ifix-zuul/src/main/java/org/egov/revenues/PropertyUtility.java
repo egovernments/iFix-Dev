@@ -4,7 +4,7 @@ import javax.servlet.ServletContext;
 
 public class PropertyUtility {
 
-	public void updateCalculation (ServletContext ctx) {
-		
-	}
+    public void updateCalculation(ServletContext ctx) {
+
+    }
 }

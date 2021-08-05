@@ -8,7 +8,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import java.io.IOException;
 import java.io.StringReader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CustomRequestWrapperTest {
     private final Resources resources = new Resources();

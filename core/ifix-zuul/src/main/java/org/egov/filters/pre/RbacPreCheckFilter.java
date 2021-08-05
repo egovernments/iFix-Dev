@@ -12,8 +12,8 @@ import static org.egov.constants.RequestContextConstants.RBAC_BOOLEAN_FLAG_NAME;
 import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
 
 /**
- *  3rd pre filter to get executed.
- *  If the URI is part of open or mixed endpoint list then RBAC check is marked as false
+ * 3rd pre filter to get executed.
+ * If the URI is part of open or mixed endpoint list then RBAC check is marked as false
  */
 public class RbacPreCheckFilter extends ZuulFilter {
 

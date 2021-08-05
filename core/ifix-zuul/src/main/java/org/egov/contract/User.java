@@ -16,7 +16,7 @@ public class User implements java.io.Serializable {
 
     @JsonProperty("id")
     private Integer id;
-    
+
     @JsonProperty("uuid")
     private String uuid;
 
@@ -45,13 +45,17 @@ public class User implements java.io.Serializable {
     @JsonProperty("actions")
     private List<Action> actions;
 
-	public User() {
+    public User() {
     }
 
     @JsonIgnore
-    public List<Action> getActions(){
+    public List<Action> getActions() {
         return this.actions;
 
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
     }
 
     public void setId(Integer id) {
@@ -82,20 +86,16 @@ public class User implements java.io.Serializable {
         this.roles = roles;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
-
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
-    
-    public String getUuid() {
-		return uuid;
-	}
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
 }

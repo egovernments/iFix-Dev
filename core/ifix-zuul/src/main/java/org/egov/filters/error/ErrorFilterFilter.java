@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class ErrorFilterFilter extends ZuulFilter {
 
     private static final String ERROR_STATUS_CODE = "error.status_code";
+
     @Override
     public String filterType() {
         return "error";

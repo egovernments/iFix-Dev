@@ -14,7 +14,10 @@ import org.egov.contract.User;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.egov.constants.RequestContextConstants.*;
 
@@ -105,7 +108,7 @@ public class EventLogRequest {
         String userTenantId = "";
         String userName = "";
         Integer userId = 0;
-        
+
         if (user != null) {
             uuid = user.getUuid();
             userType = user.getType();

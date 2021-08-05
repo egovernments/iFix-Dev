@@ -4,7 +4,7 @@
         "authToken": "dummy-auth-token",
         "userInfo": {
             "id": 30,
-            "uuid":"asdfgvcxzawertyjnbvcxzasdfgh",
+            "uuid": "asdfgvcxzawertyjnbvcxzasdfgh",
             "userName": "userName",
             "name": "name",
             "type": "EMPLOYEE",

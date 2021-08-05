@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostHookFilterRequest {
 
-	private String Request;
-	
-	private String Response;
+    private String Request;
+
+    private String Response;
 
 }

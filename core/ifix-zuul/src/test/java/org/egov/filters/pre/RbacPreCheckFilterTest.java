@@ -19,7 +19,7 @@ public class RbacPreCheckFilterTest {
     private RbacPreCheckFilter rbacPreCheckFilter;
 
     @Before
-    public void init(){
+    public void init() {
         openEndpointsWhitelist.add("/user/_details");
         openEndpointsWhitelist.add("open-endpoint2");
         anonymousEndpointsWhitelist.add("/pgr/complaintTypeCategories");
@@ -47,7 +47,7 @@ public class RbacPreCheckFilterTest {
     }
 
     @Test
-    public void test_That_Rbac_Check_Sould_Not_Happen_For_AnonymousEndPoints(){
+    public void test_That_Rbac_Check_Sould_Not_Happen_For_AnonymousEndPoints() {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setRequestURI("/pgr/complaintTypeCategories");
         ctx.setRequest(request);

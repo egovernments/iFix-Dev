@@ -6,14 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.contract.User;
 import org.egov.model.UserDetailResponse;
 import org.egov.model.UserSearchRequest;
-import org.egov.tracer.model.CustomException;
-import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -41,10 +38,10 @@ public class UserUtils {
     }
 
 
-    @Cacheable(value = "systemUser" , sync = true)
-    public User fetchSystemUser(){
+    @Cacheable(value = "systemUser", sync = true)
+    public User fetchSystemUser() {
 
-        UserSearchRequest userSearchRequest =new UserSearchRequest();
+        UserSearchRequest userSearchRequest = new UserSearchRequest();
         userSearchRequest.setRoleCodes(Collections.singletonList("ANONYMOUS"));
         userSearchRequest.setUserType("SYSTEM");
         userSearchRequest.setPageSize(1);
@@ -53,12 +50,11 @@ public class UserUtils {
         StringBuilder uri = new StringBuilder(userSearchURI);
         User user = null;
         try {
-           UserDetailResponse response = restTemplate.postForObject(uri.toString(), userSearchRequest, UserDetailResponse.class);
-           if(!CollectionUtils.isEmpty(response.getUser()))
-               user = response.getUser().get(0);
-        }
-        catch(Exception e) {
-            log.error("Exception while fetching system user: ",e);
+            UserDetailResponse response = restTemplate.postForObject(uri.toString(), userSearchRequest, UserDetailResponse.class);
+            if (!CollectionUtils.isEmpty(response.getUser()))
+                user = response.getUser().get(0);
+        } catch (Exception e) {
+            log.error("Exception while fetching system user: ", e);
         }
 
         /*if(user == null)
@@ -66,8 +62,6 @@ public class UserUtils {
 
         return user;
     }
-
-
 
 
 }

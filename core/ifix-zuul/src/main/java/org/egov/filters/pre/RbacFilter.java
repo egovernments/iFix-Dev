@@ -1,7 +1,9 @@
 package org.egov.filters.pre;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.node.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
@@ -121,23 +123,22 @@ public class RbacFilter extends ZuulFilter {
                 List<String> tenants = new LinkedList<>();
 
                 for (JsonNode node : requestBody.findValues(REQUEST_TENANT_ID_KEY)) {
-                    if (node.getNodeType() == JsonNodeType.ARRAY)
-                    {
+                    if (node.getNodeType() == JsonNodeType.ARRAY) {
                         node.elements().forEachRemaining(n -> tenants.add(n.asText()));
                     } else if (node.getNodeType() == JsonNodeType.STRING) {
                         tenants.add(node.asText());
                     }
                 }
-                if( ! tenants.isEmpty())
-                // Filtering null tenantids will be removed once fix is done in TL service.
+                if (!tenants.isEmpty())
+                    // Filtering null tenantids will be removed once fix is done in TL service.
                     tenants.forEach(tenant -> {
                         if (tenant != null && !tenant.equalsIgnoreCase("null"))
                             tenantIds.add(tenant);
                     });
-                else{
+                else {
                     if (!isNull(queryParams) && queryParams.containsKey(REQUEST_TENANT_ID_KEY) && !queryParams.get(REQUEST_TENANT_ID_KEY).isEmpty()) {
                         String tenantId = queryParams.get(REQUEST_TENANT_ID_KEY).get(0);
-                        if(tenantId.contains(",")){
+                        if (tenantId.contains(",")) {
                             tenantIds.addAll(Arrays.asList(tenantId.split(",")));
                         } else
                             tenantIds.add(tenantId);
@@ -146,7 +147,7 @@ public class RbacFilter extends ZuulFilter {
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException( new CustomException("REQUEST_PARSE_FAILED", HttpStatus.UNAUTHORIZED.value() ,"Failed to parse request at" +
+                throw new RuntimeException(new CustomException("REQUEST_PARSE_FAILED", HttpStatus.UNAUTHORIZED.value(), "Failed to parse request at" +
                     " API gateway"));
             }
         }

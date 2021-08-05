@@ -49,7 +49,7 @@ public class PreHookFilter extends ZuulFilter {
             CustomRequestWrapper requestWrapper = new CustomRequestWrapper(ctx.getRequest());
             requestWrapper.setPayload(response);
             ctx.setRequest(requestWrapper);
-        } catch (HttpClientErrorException|HttpServerErrorException e) {
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Pre-Hook - Http Exception Occurred", e);
             ExceptionUtils.raiseCustomException(e.getStatusCode(), "PRE_HOOK_ERROR - Pre-hook url threw an error - " + e.getMessage());
         } catch (Exception e) {

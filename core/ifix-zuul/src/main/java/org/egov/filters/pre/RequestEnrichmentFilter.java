@@ -23,8 +23,8 @@ import static org.egov.Utils.Utils.isRequestBodyCompatible;
 import static org.egov.constants.RequestContextConstants.*;
 
 /**
- *  6th pre filter to get executed.
- *  Enriches the request body and header with 1) correlation id 2) user info
+ * 6th pre filter to get executed.
+ * Enriches the request body and header with 1) correlation id 2) user info
  */
 @Component
 public class RequestEnrichmentFilter extends ZuulFilter {
@@ -37,10 +37,10 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private static final String ADDED_USER_INFO_TO_HEADER_MESSAGE = "Adding user info to header.";
     private static final String EMPTY_STRING = "";
     private static final String JSON_TYPE = "json";
-    private final ObjectMapper objectMapper;
     private static final String USER_INFO_HEADER_NAME = "x-user-info";
     private static final String PASS_THROUGH_GATEWAY_HEADER_NAME = "x-pass-through-gateway";
     private static final String PASS_THROUGH_GATEWAY_HEADER_VALUE = "true";
+    private final ObjectMapper objectMapper;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public RequestEnrichmentFilter() {
@@ -135,13 +135,13 @@ public class RequestEnrichmentFilter extends ZuulFilter {
         return new RequestBodyInspector(requestBody);
     }
 
-    private void setCorrelationId(HashMap<String, Object> requestInfo) {
-        requestInfo.put(CORRELATION_ID_FIELD_NAME, getCorrelationId());
-    }
-
     private String getCorrelationId() {
         RequestContext ctx = RequestContext.getCurrentContext();
         return (String) ctx.get(CORRELATION_ID_KEY);
+    }
+
+    private void setCorrelationId(HashMap<String, Object> requestInfo) {
+        requestInfo.put(CORRELATION_ID_FIELD_NAME, getCorrelationId());
     }
 
     private void setUserInfo(HashMap<String, Object> requestInfo) {
@@ -162,7 +162,8 @@ public class RequestEnrichmentFilter extends ZuulFilter {
 
     private HashMap<String, Object> getRequestBody(RequestContext ctx) throws IOException {
         String payload = IOUtils.toString(ctx.getRequest().getInputStream());
-        return objectMapper.readValue(payload, new TypeReference<HashMap<String, Object>>() { });
+        return objectMapper.readValue(payload, new TypeReference<HashMap<String, Object>>() {
+        });
     }
 
 }

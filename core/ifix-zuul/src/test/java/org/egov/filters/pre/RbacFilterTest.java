@@ -40,7 +40,7 @@ public class RbacFilterTest {
 
 
     @Before
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
         request = new MockHttpServletRequest();
         rbacFilter = new RbacFilter(restTemplate, "http://localhost:8091/access/v1/actions/_authorize", new ObjectMapper());
@@ -64,7 +64,7 @@ public class RbacFilterTest {
     public void shouldAbortWhenUserIsRequestingUnauthorizedURI() throws Throwable {
         MonitoringHelper.initMocks();
         User user = new User();
-        Action action1  = new Action();
+        Action action1 = new Action();
         action1.setUrl("/pgr/seva");
         user.setActions(new ArrayList<>(Collections.singletonList(action1)));
         user.setRoles(Collections.singletonList(new Role(10L, "CITIZEN", "CITIZEN", "default")));
@@ -79,7 +79,7 @@ public class RbacFilterTest {
         try {
             rbacFilter.run();
         } catch (RuntimeException ex) {
-            CustomException e = (CustomException)ex.getCause();
+            CustomException e = (CustomException) ex.getCause();
             assertThat(e.nStatusCode, is(403));
             throw ex.getCause();
         }
@@ -90,7 +90,7 @@ public class RbacFilterTest {
     @Test
     public void shouldNotAbortWhenUserIsRequestingAuthorizedURI() throws Exception {
         User user = new User();
-        Action action1  = new Action();
+        Action action1 = new Action();
         action1.setUrl("/pgr/seva");
         user.setActions(new ArrayList<>(Arrays.asList(action1)));
         user.setRoles(Collections.singletonList(new Role(10L, "CITIZEN", "CITIZEN", "default")));
@@ -125,7 +125,7 @@ public class RbacFilterTest {
         try {
             rbacFilter.run();
         } catch (RuntimeException ex) {
-            CustomException e = (CustomException)ex.getCause();
+            CustomException e = (CustomException) ex.getCause();
             assertThat(e.nStatusCode, is(403));
             throw ex.getCause();
         }
@@ -137,7 +137,7 @@ public class RbacFilterTest {
     @Ignore
     public void shouldNotAbortWhenUserIsRequestingURIAndAuthorizedURIHasDynamicPlaceHolders() throws Exception {
         User user = new User();
-        Action action1  = new Action();
+        Action action1 = new Action();
         action1.setUrl("/pgr/seva/{id}/_update");
         user.setActions(new ArrayList<>(Arrays.asList(action1)));
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -157,7 +157,7 @@ public class RbacFilterTest {
     @Ignore
     public void shouldNotAbortWhenUserIsRequestingURIAndAuthorizedURIHasMultipleDynamicPlaceHolders() throws Exception {
         User user = new User();
-        Action action1  = new Action();
+        Action action1 = new Action();
         action1.setUrl("/pgr/seva/{tenantCode}/{id}/_update");
         user.setActions(new ArrayList<>(Arrays.asList(action1)));
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -174,7 +174,7 @@ public class RbacFilterTest {
     public void shouldAbortWhenUserIsRequestingURIAndAuthorizedURIWithDynamicPlaceHoldersDoesNotMatch() throws Throwable {
         MonitoringHelper.initMocks();
         User user = new User();
-        Action action1  = new Action();
+        Action action1 = new Action();
         action1.setUrl("/pgr/seva/{id}/_create");
         user.setActions(new ArrayList<>(Arrays.asList(action1)));
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -185,7 +185,7 @@ public class RbacFilterTest {
         try {
             rbacFilter.run();
         } catch (RuntimeException ex) {
-            CustomException e = (CustomException)ex.getCause();
+            CustomException e = (CustomException) ex.getCause();
             assertThat(e.nStatusCode, is(403));
             throw ex.getCause();
         }

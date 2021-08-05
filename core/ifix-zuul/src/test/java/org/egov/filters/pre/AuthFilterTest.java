@@ -20,7 +20,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AuthFilterTest {
@@ -78,9 +77,9 @@ public class AuthFilterTest {
 
         try {
             authFilter.run();
-            assertFalse("Shouldn't reach here", true );
+            assertFalse("Shouldn't reach here", true);
         } catch (RuntimeException ex) {
-            assertThat(((HttpClientErrorException)ex.getCause()).getStatusCode().value(), is(401));
+            assertThat(((HttpClientErrorException) ex.getCause()).getStatusCode().value(), is(401));
         }
     }
 

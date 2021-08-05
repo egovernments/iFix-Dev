@@ -17,8 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import static org.egov.constants.RequestContextConstants.*;
 
 /**
- *  4th pre filter to get executed.
- *  If the auth flag is enabled then the user is retrieved for the given auth token.
+ * 4th pre filter to get executed.
+ * If the auth flag is enabled then the user is retrieved for the given auth token.
  */
 public class AuthFilter extends ZuulFilter {
 

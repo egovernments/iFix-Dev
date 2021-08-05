@@ -17,7 +17,7 @@ public class Configuration {
 
     @Bean
     public RestTemplate restTemplate() {
-        return  new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+        return new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
     }
 
     @Bean
@@ -30,17 +30,17 @@ public class Configuration {
         return new DefaultRateLimiterErrorHandler() {
             @Override
             public void handleSaveError(String key, Exception e) {
-                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException(new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
 
             @Override
             public void handleFetchError(String key, Exception e) {
-                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException(new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
 
             @Override
             public void handleError(String msg, Exception e) {
-                throw new RuntimeException( new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
+                throw new RuntimeException(new CustomException("TOO_MANY_REQUESTS", HttpStatus.TOO_MANY_REQUESTS.toString()));
             }
         };
     }

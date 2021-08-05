@@ -21,15 +21,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class AuthPreCheckFilterTest {
-    private MockHttpServletRequest request = new MockHttpServletRequest();
-
-    private AuthPreCheckFilter authPreCheckFilter;
-
-    private HashSet<String> openEndpointsWhitelist = new HashSet<>();
-    private HashSet<String> anonymousEndpointsWhitelist = new HashSet<>();
-
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
+    private MockHttpServletRequest request = new MockHttpServletRequest();
+    private AuthPreCheckFilter authPreCheckFilter;
+    private HashSet<String> openEndpointsWhitelist = new HashSet<>();
+    private HashSet<String> anonymousEndpointsWhitelist = new HashSet<>();
 
     @Before
     public void init() {
@@ -297,7 +294,7 @@ public class AuthPreCheckFilterTest {
         }
     }
 
-    @Test (expected = CustomException.class)
+    @Test(expected = CustomException.class)
     public void testThatFilterShouldAbortForOtherPUTEndpointsOnNoRequestnInfo() throws Throwable {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("PUT");

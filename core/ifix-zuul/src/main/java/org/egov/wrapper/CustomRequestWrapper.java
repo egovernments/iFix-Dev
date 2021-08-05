@@ -30,7 +30,7 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
         return payload;
     }
 
-    public void setPayload(String payload){
+    public void setPayload(String payload) {
         this.payload = payload;
     }
 
