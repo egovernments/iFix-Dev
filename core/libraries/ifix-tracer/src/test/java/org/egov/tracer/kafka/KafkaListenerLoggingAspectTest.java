@@ -60,7 +60,7 @@ public class KafkaListenerLoggingAspectTest {
         final HashMap<String, Object> payload = new HashMap<>();
         final HashMap<String, Object> requestHeader = new HashMap<>();
         requestHeader.put("correlationId", TEST_CORRELATION_ID);
-        payload.put("eequestHeader", requestHeader);
+        payload.put("requestHeader", requestHeader);
 
         kafkaListenerWithOnlyPayloadAnnotatedHashMap.bar(payload);
 

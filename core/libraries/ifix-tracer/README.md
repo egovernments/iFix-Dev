@@ -66,9 +66,9 @@ Note - See the "logging.pattern" mentioned in the "Tracer integration" section.
  ```
      <repositories>
          <repository>
-             <id>repo.digit.org</id>
+             <id>repo.egovernments.org</id>
              <name>eGov ERP Releases Repository</name>
-             <url>http://repo.digit.org/nexus/content/repositories/releases/</url>
+             <url>http://repo.egovernments.org/nexus/content/repositories/releases/</url>
          </repository>
      </repositories>
  ```
@@ -78,7 +78,7 @@ Note - See the "logging.pattern" mentioned in the "Tracer integration" section.
  ```
          <dependency>
              <groupId>org.egov.services</groupId>
-             <artifactId>ifix-tracer</artifactId>
+             <artifactId>tracer</artifactId>
              <version>X.Y.Z</version>
          </dependency>
  ```
@@ -106,7 +106,7 @@ Note - See the "logging.pattern" mentioned in the "Tracer integration" section.
 - A Spring filter is used to retrieve the correlation id from the incoming http request.
 - If the incoming http request is a POST and the content type is compatible with application/json then the library makes
   an attempt to retrieve the correlation id from the request body. The json path searched for the correlation id are
-  RequestHeader.correlationId and requestHeader.correlationId.
+  RequestInfo.correlationId and requestInfo.correlationId.
 - If the correlation id is not present in the request body or the http verb is not POST or the content type is not json
   compatible then an attempt is made to retrieve the correlation id from the http request header "x-correlation-id".
 - If the correlation id is not present in the request body or header then a new correlation id (UUID v4) is generated.
@@ -120,4 +120,3 @@ Note - See the "logging.pattern" mentioned in the "Tracer integration" section.
   retrieve the correlation id from the received payload.
 - The correlation id retrieved via the filter or aspect is then stored in a thread local variable to forward as
   necessary.
-  

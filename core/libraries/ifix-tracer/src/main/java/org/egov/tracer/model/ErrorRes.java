@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.egov.common.contract.response.ResponseHeader;
+import org.apache.kafka.common.requests.ResponseHeader;
 
 import java.util.List;
+
 
 /**
  * All APIs will return ErrorRes in case of failure which will carry responseHeader as metadata and Error object as
