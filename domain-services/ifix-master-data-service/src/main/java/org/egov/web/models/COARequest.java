@@ -18,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class COARequest {
 
     @JsonProperty("requestHeader")

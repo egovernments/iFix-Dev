@@ -28,10 +28,10 @@ public class DepartmentResponse {
 
     @JsonProperty("department")
     @Valid
-    private List<ChartOfAccount> department = null;
+    private List<Department> department = null;
 
 
-    public DepartmentResponse addDepartmentItem(ChartOfAccount departmentItem) {
+    public DepartmentResponse addDepartmentItem(Department departmentItem) {
         if (this.department == null) {
             this.department = new ArrayList<>();
         }

@@ -22,6 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class COAResponse {
     @JsonProperty("responseInfo")
     private ResponseHeader responseInfo = null;
