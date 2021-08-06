@@ -5,19 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.COARequest;
-import org.egov.web.models.COASearchCriteria;
-import org.egov.web.models.COASearchRequest;
-import org.egov.web.models.ChartOfAccount;
+import org.egov.util.CoaUtil;
+import org.egov.web.models.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
 @Slf4j
 public class ChartOfAccountValidator {
 
+
+    @Autowired
+    private CoaUtil coaUtil;
 
     public void validateCreatePost(COARequest coaRequest) {
         log.info("Enter into ChartOfAccountValidator.validateCreatePost()");
@@ -108,7 +111,10 @@ public class ChartOfAccountValidator {
         //validate the tenant id is exist in the system or not
         if (StringUtils.isNotBlank(chartOfAccount.getTenantId())) {
             //call the Tenant Service for search, if doesn't exist add in the error map
-            //errorMap.put("TENANT_ID","Tenant id doesn't exist in the system");
+            List<Government> governments = coaUtil.searchTenants(requestHeader, chartOfAccount);
+            if (governments == null || governments.isEmpty()) {
+                errorMap.put("TENANT_ID", "Tenant id doesn't exist in the system");
+            }
         }
 
 
