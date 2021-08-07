@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ResponseHeaderCreator {
 
-    public ResponseHeader createResponseInfoFromRequestInfo(final RequestHeader requestInfo, final Boolean success) {
+    public ResponseHeader createResponseHeaderFromRequestHeader(final RequestHeader requestInfo, final Boolean success) {
 
         final String correlationId = requestInfo != null ? requestInfo.getCorrelationId() : "";
         final String ver = requestInfo != null ? requestInfo.getVersion() : "";

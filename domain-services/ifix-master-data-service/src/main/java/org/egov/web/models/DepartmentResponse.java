@@ -23,8 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class DepartmentResponse {
-    @JsonProperty("responseInfo")
-    private ResponseHeader responseInfo = null;
+    @JsonProperty("responseHeader")
+    private ResponseHeader responseHeader = null;
 
     @JsonProperty("department")
     @Valid
