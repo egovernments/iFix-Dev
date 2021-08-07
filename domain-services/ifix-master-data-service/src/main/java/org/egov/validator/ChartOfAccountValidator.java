@@ -83,8 +83,8 @@ public class ChartOfAccountValidator {
                 && (chartOfAccount.getMajorHeadName().length() < 2 || chartOfAccount.getMajorHeadName().length() > 64))
             errorMap.put("MAJOR_HEAD_NAME", "Major head name's length is invalid");
 
-        if (StringUtils.isNotBlank(chartOfAccount.getMajorHeadtype())
-                && (chartOfAccount.getMajorHeadtype().length() < 2 || chartOfAccount.getMajorHeadtype().length() > 32))
+        if (StringUtils.isNotBlank(chartOfAccount.getMajorHeadType())
+                && (chartOfAccount.getMajorHeadType().length() < 2 || chartOfAccount.getMajorHeadType().length() > 32))
             errorMap.put("MAJOR_HEAD_TYPE", "Major head type's length is invalid");
 
         if (StringUtils.isNotBlank(chartOfAccount.getSubMajorHeadName())
