@@ -21,6 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class EatSearchCriteria {
     @JsonProperty("Ids")
     @Valid
