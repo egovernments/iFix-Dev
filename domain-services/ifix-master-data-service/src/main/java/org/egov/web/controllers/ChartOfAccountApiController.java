@@ -49,8 +49,8 @@ public class ChartOfAccountApiController {
     public ResponseEntity<COAResponse> chartOfAccountV1CreatePost(@ApiParam(value = "Details for the new COA + RequestHeader (meta data of the API).", required = true) @Valid @RequestBody COARequest body) {
 
         COARequest coaRequest = chartOfAccountService.chartOfAccountV1CreatePost(body);
-        ResponseHeader responseHeader = responseHeaderCreator.createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
-        COAResponse coaResponse = COAResponse.builder().responseInfo(responseHeader)
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        COAResponse coaResponse = COAResponse.builder().responseHeader(responseHeader)
                 .chartOfAccounts(Collections.singletonList(coaRequest.getChartOfAccount())).build();
 
         return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.ACCEPTED);
@@ -59,8 +59,8 @@ public class ChartOfAccountApiController {
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
     public ResponseEntity<COAResponse> chartOfAccountV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody COASearchRequest body) {
         List<ChartOfAccount> chartOfAccounts = chartOfAccountService.chartOfAccountV1SearchPost(body);
-        ResponseHeader responseHeader = responseHeaderCreator.createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
-        COAResponse coaResponse = COAResponse.builder().responseInfo(responseHeader)
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        COAResponse coaResponse = COAResponse.builder().responseHeader(responseHeader)
                 .chartOfAccounts(chartOfAccounts).build();
 
         return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.OK);

@@ -25,8 +25,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class EatResponse {
-    @JsonProperty("responseInfo")
-    private ResponseHeader responseInfo = null;
+    @JsonProperty("responseHeader")
+    private ResponseHeader responseHeader = null;
 
     @JsonProperty("eat")
     @Valid

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class GovernmentApiController {
 
         GovernmentRequest governmentRequest = governmentService.addGovernment(body);
 
-        ResponseHeader responseHeader = responseHeaderCreator.createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         GovernmentResponse governmentResponse = GovernmentResponse.builder().responseHeader(responseHeader)
                 .government(Collections.singletonList(governmentRequest.getGovernment())).build();
@@ -73,7 +72,7 @@ public class GovernmentApiController {
         List<Government> governmentList = governmentService.searchAllGovernmentByIdList(body);
 
         ResponseHeader responseHeader = responseHeaderCreator
-                .createResponseInfoFromRequestInfo(body.getRequestHeader(), true);
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         GovernmentResponse governmentResponse = GovernmentResponse.builder().responseHeader(responseHeader)
                 .government(governmentList).build();

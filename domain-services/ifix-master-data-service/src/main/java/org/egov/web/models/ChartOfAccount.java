@@ -36,8 +36,8 @@ public class ChartOfAccount {
     @JsonProperty("majorHeadName")
     private String majorHeadName = null;
 
-    @JsonProperty("majorHeadtype")
-    private String majorHeadtype = null;
+    @JsonProperty("majorHeadType")
+    private String majorHeadType = null;
 
     @JsonProperty("subMajorHead")
     private String subMajorHead = null;

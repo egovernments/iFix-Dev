@@ -28,4 +28,14 @@ public class MasterDataServiceConfiguration {
 
     @Value("${coa.kafka.create.topic}")
     private String coaSaveTopic;
+
+    @Value("${ifix.master.government.host}")
+    private String ifixMasterGovernmentHost;
+
+    @Value("${ifix.master.government.context.path}")
+    private String ifixMasterGovernmentContextPath;
+
+    @Value("${ifix.master.government.search.path}")
+    private String ifixMasterGovernmentSearchPath;
+
 }
