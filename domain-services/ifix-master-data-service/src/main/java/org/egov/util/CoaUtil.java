@@ -7,12 +7,15 @@ import org.apache.kafka.common.protocol.types.Field;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.repository.ChartOfAccountRepository;
+import org.egov.repository.ServiceRequestRepository;
 import org.egov.web.models.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Component
@@ -20,7 +23,7 @@ import java.util.List;
 public class CoaUtil {
 
     @Autowired
-    private ChartOfAccountRepository coaRepository;
+    private ServiceRequestRepository searchRequestRepository;
 
     @Autowired
     private MasterDataServiceConfiguration mdsConfiguration;
@@ -34,7 +37,14 @@ public class CoaUtil {
     public List<Government> searchTenants(RequestHeader requestHeader, ChartOfAccount chartOfAccount) {
         GovernmentSearchRequest govtSearchRequest = createSearchTenantRequest(requestHeader, chartOfAccount);
         String url = createSearchTenantUrl();
-        return (coaRepository.searchTenants(url, govtSearchRequest));
+        Object response = searchRequestRepository.fetchResult(url,govtSearchRequest);
+       if(response != null){
+           LinkedHashMap linkedHashMap = (LinkedHashMap) response;
+           List<Government> governments = (List<Government>) linkedHashMap.get("government");
+           return governments;
+       }
+
+        return Collections.emptyList();
     }
 
     /**
