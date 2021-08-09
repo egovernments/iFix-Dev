@@ -3,6 +3,7 @@ package org.egov.web.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -43,6 +44,9 @@ public class DepartmentSearchCriteria {
         this.ids.add(idsItem);
         return this;
     }
-
+    public boolean isEmpty(){
+        return (StringUtils.isBlank(tenantId) && StringUtils.isBlank(name) && StringUtils.isBlank(code)
+                && (ids == null || ids.isEmpty()));
+    }
 }
 
