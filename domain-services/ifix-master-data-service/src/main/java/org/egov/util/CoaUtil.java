@@ -23,7 +23,7 @@ import java.util.List;
 public class CoaUtil {
 
     @Autowired
-    private ServiceRequestRepository<GovernmentSearchRequest,GovernmentResponse> searchRequestRepository;
+    private ServiceRequestRepository searchRequestRepository;
 
     @Autowired
     private MasterDataServiceConfiguration mdsConfiguration;
@@ -37,10 +37,13 @@ public class CoaUtil {
     public List<Government> searchTenants(RequestHeader requestHeader, ChartOfAccount chartOfAccount) {
         GovernmentSearchRequest govtSearchRequest = createSearchTenantRequest(requestHeader, chartOfAccount);
         String url = createSearchTenantUrl();
-        GovernmentResponse governmentResponse = searchRequestRepository.fetchResult(url,govtSearchRequest,new GovernmentResponse());
-        if(governmentResponse != null){
-            return governmentResponse.getGovernment();
-        }
+        Object response = searchRequestRepository.fetchResult(url,govtSearchRequest);
+       if(response != null){
+           LinkedHashMap linkedHashMap = (LinkedHashMap) response;
+           List<Government> governments = (List<Government>) linkedHashMap.get("government");
+           return governments;
+       }
+
         return Collections.emptyList();
     }
 

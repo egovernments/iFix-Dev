@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 @Repository
 @Slf4j
-public class ServiceRequestRepository<R,T> {
+public class ServiceRequestRepository {
 
     private ObjectMapper mapper;
 
@@ -29,15 +31,16 @@ public class ServiceRequestRepository<R,T> {
      * @param request
      * @return
      */
-    public T fetchResult(String uri, R request,T response) {
+    public Object fetchResult(String uri, Object request) {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        Object response = null;
         try {
-            response = (T) restTemplate.postForObject(uri, request, response.getClass());
-        } catch (HttpClientErrorException e) {
-            log.error("External Service threw an Exception: ", e);
+            response = restTemplate.postForObject(uri, request, Map.class);
+        }catch(HttpClientErrorException e) {
+            log.error("External Service threw an Exception: ",e);
             throw new ServiceCallException(e.getResponseBodyAsString());
-        } catch (Exception e) {
-            log.error("Exception while fetching from searcher: ", e);
+        }catch(Exception e) {
+            log.error("Exception while fetching from searcher: ",e);
         }
 
         return response;
