@@ -1,15 +1,23 @@
 package org.egov.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.producer.Producer;
 import org.egov.repository.GovernmentRepository;
+import org.egov.tracer.model.ServiceCallException;
 import org.egov.validator.GovernmentValidator;
 import org.egov.web.models.Government;
 import org.egov.web.models.GovernmentRequest;
 import org.egov.web.models.GovernmentSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GovernmentService {
