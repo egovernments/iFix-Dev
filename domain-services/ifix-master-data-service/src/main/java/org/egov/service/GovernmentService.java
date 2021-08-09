@@ -56,36 +56,4 @@ public class GovernmentService {
 
         return governmentRepository.findAllByIdList(governmentSearchRequest.getCriteria().getIds());
     }
-
-    @Component
-    @Slf4j
-    public static class ServiceRequestRepository {
-
-        private ObjectMapper mapper;
-
-        private RestTemplate restTemplate;
-
-
-        @Autowired
-        public ServiceRequestRepository(ObjectMapper mapper, RestTemplate restTemplate) {
-            this.mapper = mapper;
-            this.restTemplate = restTemplate;
-        }
-
-
-        public Object fetchResult(StringBuilder uri, Object request) {
-            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            Object response = null;
-            try {
-                response = restTemplate.postForObject(uri.toString(), request, Map.class);
-            }catch(HttpClientErrorException e) {
-                log.error("External Service threw an Exception: ",e);
-                throw new ServiceCallException(e.getResponseBodyAsString());
-            }catch(Exception e) {
-                log.error("Exception while fetching from searcher: ",e);
-            }
-
-            return response;
-        }
-    }
 }

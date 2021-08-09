@@ -37,9 +37,4 @@ public class ChartOfAccountRepository {
         Query searchQuery = coaQueryBuilder.buildSearchQuery(searchCriteria);
         return (mongoTemplate.find(searchQuery,ChartOfAccount.class));
     }
-
-    public List<ChartOfAccount> searchCoaCode(ChartOfAccount chartOfAccount) {
-        Criteria criteria = Criteria.where("coaCode").is(chartOfAccount.getCoaCode());
-        return (mongoTemplate.find(new Query(criteria),ChartOfAccount.class));
-    }
 }
