@@ -4,6 +4,7 @@ package org.egov.validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.repository.ChartOfAccountRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.CoaUtil;
 import org.egov.web.models.*;
@@ -21,6 +22,9 @@ public class ChartOfAccountValidator {
 
     @Autowired
     private CoaUtil coaUtil;
+
+    @Autowired
+    private ChartOfAccountRepository coaRepository;
 
     public void validateCreatePost(COARequest coaRequest) {
         log.info("Enter into ChartOfAccountValidator.validateCreatePost()");
@@ -42,37 +46,37 @@ public class ChartOfAccountValidator {
 
         //code validation
         if (StringUtils.isBlank(chartOfAccount.getGroupHead())) {
-            errorMap.put("GROUP_HEAD", "Group head Code is mandatory for chart of account");
+            throw new CustomException("GROUP_HEAD", "Group head Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getGroupHead()) && chartOfAccount.getGroupHead().length() != 2) {
             errorMap.put("GROUP_HEAD_CODE_LENGTH", "Group head Code should be of length 2");
         }
         if (StringUtils.isBlank(chartOfAccount.getMajorHead())) {
-            errorMap.put("MAJOR_HEAD", "Major head Code is mandatory for chart of account");
+            throw new CustomException("MAJOR_HEAD", "Major head Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getMajorHead()) && chartOfAccount.getMajorHead().length() != 4) {
             errorMap.put("MAJOR_HEAD_CODE_LENGTH", "Major head Code should be of length 4");
         }
         if (StringUtils.isBlank(chartOfAccount.getMinorHead())) {
-            errorMap.put("MINOR_HEAD", "Minor head Code is mandatory for chart of account");
+            throw new CustomException("MINOR_HEAD", "Minor head Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getMinorHead()) && chartOfAccount.getMinorHead().length() != 3) {
             errorMap.put("MINOR_HEAD_CODE_LENGTH", "Minor head Code should be of length 3");
         }
         if (StringUtils.isBlank(chartOfAccount.getSubHead())) {
-            errorMap.put("SUB_HEAD", "Sub head Code is mandatory for chart of account");
+            throw new CustomException("SUB_HEAD", "Sub head Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getSubHead()) && chartOfAccount.getSubHead().length() != 2) {
             errorMap.put("SUB_HEAD_CODE_LENGTH", "Sub head Code should be of length 2");
         }
         if (StringUtils.isBlank(chartOfAccount.getObjectHead())) {
-            errorMap.put("OBJECT_HEAD", "Object head Code is mandatory for chart of account");
+            throw new CustomException("OBJECT_HEAD", "Object head Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getObjectHead()) && chartOfAccount.getObjectHead().length() != 2) {
             errorMap.put("OBJECT_HEAD_CODE_LENGTH", "Object head Code should be of length 2");
         }
         if (StringUtils.isBlank(chartOfAccount.getSubMajorHead())) {
-            errorMap.put("SUB_MAJOR_HEAD", "Sub Major Code is mandatory for chart of account");
+            throw new CustomException("SUB_MAJOR_HEAD", "Sub Major Code is mandatory for chart of account");
         }
         if (StringUtils.isNotBlank(chartOfAccount.getSubMajorHead()) && chartOfAccount.getSubMajorHead().length() != 2) {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
@@ -122,6 +126,12 @@ public class ChartOfAccountValidator {
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
 
+    }
+
+    public void validateCoaCode(COASearchCriteria searchCriteria) {
+        List<ChartOfAccount> chartOfAccounts = coaRepository.search(searchCriteria);
+        if (!chartOfAccounts.isEmpty())
+            throw new CustomException("DUPLICATE_COA_CODE", "This coa code exists in the system");
     }
 
     public void validateSearchPost(COASearchRequest coaSearchRequest) {
