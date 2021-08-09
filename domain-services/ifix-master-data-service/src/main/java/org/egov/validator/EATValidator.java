@@ -3,8 +3,7 @@ package org.egov.validator;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
-import org.egov.util.GovernmentConstants;
-import org.egov.web.models.EAT;
+import org.egov.util.MasterDataConstants;
 import org.egov.web.models.EatSearchCriteria;
 import org.egov.web.models.EatSearchRequest;
 import org.springframework.stereotype.Component;
@@ -19,34 +18,34 @@ public class EATValidator {
             RequestHeader requestHeader = eatSearchRequest.getRequestHeader();
 
             if (requestHeader.getUserInfo() == null || StringUtils.isEmpty(requestHeader.getUserInfo().getUuid())) {
-                throw new CustomException(GovernmentConstants.USER_INFO, "User information is missing");
+                throw new CustomException(MasterDataConstants.USER_INFO, "User information is missing");
             }
 
             EatSearchCriteria criteria = eatSearchRequest.getCriteria();
 
             if (StringUtils.isEmpty(criteria.getTenantId())) {
-                throw new CustomException(GovernmentConstants.TENANT_ID, "Tenant id is missing in request data");
+                throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");
             }
 
             if (criteria.getTenantId().length() < 2 || criteria.getTenantId().length() > 64) {
-                throw new CustomException(GovernmentConstants.TENANT_ID, "Tenant id length is invalid. " +
+                throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id length is invalid. " +
                         "Length range [2-64]");
             }
 
             if (!StringUtils.isEmpty(criteria.getName())
                     && (criteria.getName().length() < 2 || criteria.getName().length() > 256)) {
-                throw new CustomException(GovernmentConstants.EAT_NAME, "EAT name length is invalid. " +
+                throw new CustomException(MasterDataConstants.EAT_NAME, "EAT name length is invalid. " +
                         "Length range [2-256]");
             }
 
             if (!StringUtils.isEmpty(criteria.getCode())
                     && (criteria.getCode().length() < 2 || criteria.getCode().length() > 64)) {
-                    throw new CustomException(GovernmentConstants.EAT_CODE, "EAT code length is invalid. " +
+                    throw new CustomException(MasterDataConstants.EAT_CODE, "EAT code length is invalid. " +
                             "Length range [2-64]");
             }
 
         }else {
-            throw new CustomException(GovernmentConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
+            throw new CustomException(MasterDataConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }
     }
 }

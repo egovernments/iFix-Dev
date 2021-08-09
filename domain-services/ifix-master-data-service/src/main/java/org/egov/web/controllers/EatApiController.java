@@ -45,14 +45,6 @@ public class EatApiController {
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<EatResponse> eatV1CreatePost(@ApiParam(value = "Details for the new department + RequestHeader" +
             " (meta data of the API).", required = true) @Valid @RequestBody EatRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("")) {
-            try {
-                return new ResponseEntity<EatResponse>(objectMapper.readValue("", EatResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                return new ResponseEntity<EatResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
 
         return new ResponseEntity<EatResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -67,10 +59,10 @@ public class EatApiController {
 
         List<EAT> eatList = eatService.findAllByCriteria(body);
 
-        ResponseHeader responseHeader = responseHeaderCreator.createResponseInfoFromRequestInfo(body.getRequestHeader(),
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(),
                 true);
 
-        EatResponse eatResponse = EatResponse.builder().responseInfo(responseHeader).eat(eatList).build();
+        EatResponse eatResponse = EatResponse.builder().responseHeader(responseHeader).eat(eatList).build();
 
         return new ResponseEntity<>(eatResponse, HttpStatus.ACCEPTED);
     }
