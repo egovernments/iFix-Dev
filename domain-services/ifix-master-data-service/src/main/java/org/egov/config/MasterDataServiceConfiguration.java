@@ -26,9 +26,6 @@ public class MasterDataServiceConfiguration {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
-    @Value("${coa.kafka.create.topic}")
-    private String coaSaveTopic;
-
     @Value("${ifix.master.government.host}")
     private String ifixMasterGovernmentHost;
 
