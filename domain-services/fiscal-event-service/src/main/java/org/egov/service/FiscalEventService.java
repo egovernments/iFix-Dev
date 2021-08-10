@@ -1,4 +1,4 @@
-package service;
+package org.egov.service;
 
 
 import lombok.extern.slf4j.Slf4j;

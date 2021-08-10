@@ -2,6 +2,9 @@ package org.egov.validator;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestHeader;
+import org.egov.tracer.model.CustomException;
 import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEventRequest;
 import org.springframework.stereotype.Component;
@@ -15,16 +18,22 @@ public class FiscalEventValidator {
      * @param fiscalEventRequest
      */
     public void validateFiscalEventPushPost(FiscalEventRequest fiscalEventRequest) {
-        validateReqHeader(fiscalEventRequest);
+        validateReqHeader(fiscalEventRequest.getRequestHeader());
         validateFiscalEventExceptAmountDetails(fiscalEventRequest.getFiscalEvent());
         validateFiscalEventAmountDetails(fiscalEventRequest.getFiscalEvent());
     }
 
     /**
      * Validate the request header
-     * @param fiscalEventRequest
+     * @param requestHeader
      */
-    private void validateReqHeader(FiscalEventRequest fiscalEventRequest) {
+    private void validateReqHeader(RequestHeader requestHeader) {
+        if(requestHeader == null)
+            throw new CustomException("REQUEST_HEADER","Request header is missing");
+        if(requestHeader.getUserInfo() == null)
+            throw new CustomException("USER_INFO","User info is missing in request header");
+        if(StringUtils.isBlank(requestHeader.getUserInfo().getUuid()))
+            throw new CustomException("USER_INFO","User info is missing in request header");
     }
 
     /**
