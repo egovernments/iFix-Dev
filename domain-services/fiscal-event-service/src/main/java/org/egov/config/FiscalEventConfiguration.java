@@ -26,6 +26,6 @@ public class FiscalEventConfiguration {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
-//    @Value("${coa.kafka.create.topic}")
-//    private String coaSaveTopic;
+    @Value("${fiscal.kafka.push.topic}")
+    private String fiscalPushRequest;
 }
