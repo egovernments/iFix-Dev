@@ -1,0 +1,38 @@
+db.project.insertMany([
+{
+    "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac4",
+    "tenantId": "HR",
+    "code": "PR2",
+    "name": "Project2",
+    "eatId": "EAT2",
+    "departmentId": "DEP2",
+    "locationId": [
+      "L11","L12"
+    ],
+    "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628063909104),
+        "lastModifiedTime" : NumberLong(1628063909104)
+    },
+    "_class": "org.egov.web.models.Project"
+},
+{
+    "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac5",
+    "tenantId": "PB",
+    "code": "PR3",
+    "name": "Project3",
+    "eatId": "EAT3",
+    "departmentId": "DEP3",
+    "locationId": [
+      "L111","L121"
+    ],
+    "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628063909104),
+        "lastModifiedTime" : NumberLong(1628063909104)
+    },
+    "_class": "org.egov.web.models.Project"
+}
+]);
