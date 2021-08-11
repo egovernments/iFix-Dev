@@ -5,19 +5,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
+import org.egov.util.MasterDataConstants;
+import org.egov.util.ProjectUtil;
+import org.egov.util.TenantUtil;
 import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEventRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
 public class FiscalEventValidator {
+
+    @Autowired
+    TenantUtil tenantUtil;
+
+    @Autowired
+    ProjectUtil projectUtil;
 
     /**
      * Validate the fiscal Event request
      * @param fiscalEventRequest
      */
     public void validateFiscalEventPushPost(FiscalEventRequest fiscalEventRequest) {
+        validateTenantId(fiscalEventRequest);
+        validateProjectId(fiscalEventRequest);
         validateReqHeader(fiscalEventRequest.getRequestHeader());
         validateFiscalEventExceptAmountDetails(fiscalEventRequest.getFiscalEvent());
         validateFiscalEventAmountDetails(fiscalEventRequest.getFiscalEvent());
@@ -49,6 +64,29 @@ public class FiscalEventValidator {
      * @param fiscalEventRequest
      */
     private void validateFiscalEventAmountDetails(FiscalEvent fiscalEvent) {
+    }
+
+    /**
+     * @param fiscalEventRequest
+     */
+    public void validateTenantId(FiscalEventRequest fiscalEventRequest) {
+        boolean isValidTenant = tenantUtil.validateTenant(fiscalEventRequest);
+
+        if (!isValidTenant) {
+
+            throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
+        }
+    }
+
+    /**
+     * @param fiscalEventRequest
+     */
+    public void validateProjectId(FiscalEventRequest fiscalEventRequest) {
+        boolean isValidProject = projectUtil.validateProjectId(fiscalEventRequest);
+
+        if (!isValidProject) {
+            throw new CustomException(MasterDataConstants.PROJECT_ID, "Project id doesn't exist in the system");
+        }
     }
 
 }

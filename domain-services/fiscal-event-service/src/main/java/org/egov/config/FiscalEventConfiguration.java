@@ -28,4 +28,22 @@ public class FiscalEventConfiguration {
 
     @Value("${fiscal.kafka.push.topic}")
     private String fiscalPushRequest;
+
+    @Value("${ifix.master.government.host}")
+    private String ifixMasterGovernmentHost;
+
+    @Value("${ifix.master.government.context.path}")
+    private String ifixMasterGovernmentContextPath;
+
+    @Value("${ifix.master.government.search.path}")
+    private String ifixMasterGovernmentSearchPath;
+
+    @Value("${ifix.master.project.host}")
+    private String ifixMasterProjectHost;
+
+    @Value("${ifix.master.project.context.path}")
+    private String ifixMasterProjectContextPath;
+
+    @Value("${ifix.master.project.search.path}")
+    private String ifixMasterProjectSearchPath;
 }
