@@ -34,7 +34,7 @@ public class FiscalEventService {
     public FiscalEventRequest fiscalEventsV1PushPost(FiscalEventRequest fiscalEventRequest) {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
-        producer.push(eventConfiguration.getFiscalPushRequest(),fiscalEventRequest.getFiscalEvent());
+        producer.push(eventConfiguration.getFiscalPushRequest(),fiscalEventRequest);
         return fiscalEventRequest;
     }
 }

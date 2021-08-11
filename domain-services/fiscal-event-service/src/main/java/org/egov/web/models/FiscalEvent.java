@@ -1,8 +1,11 @@
 package org.egov.web.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -30,10 +33,10 @@ public class FiscalEvent {
     private String tenantId = null;
 
     @JsonProperty("projectId")
-    private UUID projectId = null;
+    private String projectId = null;
 
     @JsonProperty("eventType")
-    private String eventType = null;
+    private EventTypeEnum eventType = null;
 
     @JsonProperty("eventTime")
     private Long eventTime = null;
@@ -57,6 +60,40 @@ public class FiscalEvent {
     @JsonProperty("attributes")
     private Object attributes = null;
 
+
+    public enum EventTypeEnum {
+        SANCTION("Sanction"),
+        APPROPRIATION("Appropriation"),
+        ALLOCATION("Allocation"),
+        INTRATRANSFER("IntraTransfer"),
+        INTERTRANSFER("InterTransfer"),
+        DEMAND("Demand"),
+        RECEIPT("Receipt"),
+        BILL("Bill"),
+        PAYMENT("Payment");
+
+        private String value;
+
+        EventTypeEnum(String value) {
+            this.value = value;
+        }
+
+        @JsonCreator
+        public static EventTypeEnum fromValue(String text) {
+            for (EventTypeEnum eventTypeEnum : EventTypeEnum.values()) {
+                if (String.valueOf(eventTypeEnum.value).equals(text)) {
+                    return eventTypeEnum;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+    }
 
     public FiscalEvent addAmountDetailsItem(Amount amountDetailsItem) {
         this.amountDetails.add(amountDetailsItem);

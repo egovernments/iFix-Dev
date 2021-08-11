@@ -2,6 +2,10 @@ package org.egov.util;
 
 public class MasterDataConstants {
     public static final String PROJECT_ID = "PROJECT_ID";
+    public static final String JSONPATH_ERROR = "JSONPATH_ERROR";
+    public static final String FISCAL_EVENT = "FISCAL_EVENT";
+    public static final String REFERENCE_ID = "REFERENCE_ID";
+    public static final String EVENT_TYPE = "EVENT_TYPE";
 
     private MasterDataConstants() {
     }
@@ -20,6 +24,7 @@ public class MasterDataConstants {
 
     public static final String $_TENANT_LIST = "$.government.*";
     public static final String $_PROJECT_LIST = "$.project.*";
+    public static final String COA_IDS_JSON_PATH = "$.chartOfAccounts.*.id";
 
 
 }
