@@ -119,7 +119,8 @@ public class FiscalEventValidator {
         }
 
         if (!errorCoaIds.isEmpty()) {
-            errorMap.put("COA_ID_INVALID", "This chart of account id : " + errorCoaIds.toString() + " is invalid.");
+            errorMap.put("COA_ID_INVALID", "This chart of account id : " + errorCoaIds.toString() + " is invalid " +
+                    "(or) Combination of tenant id with this chart of account id doesn't exist");
         }
     }
 
