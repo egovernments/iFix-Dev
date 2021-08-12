@@ -1,0 +1,71 @@
+db.chartOfAccount.insertMany([
+  {
+    "tenantId": "UP",
+    "majorHead": "8243",
+    "majorHeadName": "majorHeadName82",
+    "majorHeadtype": "majorHeadtype",
+    "subMajorHead": "12",
+    "subMajorHeadName": "subMajorHeadName",
+    "minorHead": "373",
+    "minorHeadName": "minorHeadName347",
+    "subHead": "56",
+    "subHeadName": "subHeadName",
+    "groupHead": "78",
+    "groupHeadName": "groupHeadName",
+    "objectHead": "90",
+    "objectHeadName": "objectHeadName",
+	 "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628155293725),
+        "lastModifiedTime" : NumberLong(1628155293725)
+    },
+    "_class": "org.egov.web.models.ChartOfAccount"
+  },
+  {
+    "tenantId": "PB",
+    "majorHead": "8243",
+    "majorHeadName": "majorHeadName82",
+    "majorHeadtype": "majorHeadtype",
+    "subMajorHead": "12",
+    "subMajorHeadName": "subMajorHeadName",
+    "minorHead": "373",
+    "minorHeadName": "minorHeadName347",
+    "subHead": "56",
+    "subHeadName": "subHeadName",
+    "groupHead": "78",
+    "groupHeadName": "groupHeadName",
+    "objectHead": "90",
+    "objectHeadName": "objectHeadName",
+	 "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628155293725),
+        "lastModifiedTime" : NumberLong(1628155293725)
+    },
+    "_class": "org.egov.web.models.ChartOfAccount"
+  },
+  {
+    "tenantId": "PB",
+    "majorHead": "8943",
+    "majorHeadName": "majorHeadName89",
+    "majorHeadtype": "majorHeadtype",
+    "subMajorHead": "12",
+    "subMajorHeadName": "subMajorHeadName",
+    "minorHead": "567",
+    "minorHeadName": "minorHeadName347",
+    "subHead": "56",
+    "subHeadName": "subHeadName",
+    "groupHead": "78",
+    "groupHeadName": "groupHeadName",
+    "objectHead": "90",
+    "objectHeadName": "objectHeadName",
+	 "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628155293725),
+        "lastModifiedTime" : NumberLong(1628155293725)
+    },
+    "_class": "org.egov.web.models.ChartOfAccount"
+  }
+]);
