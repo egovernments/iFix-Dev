@@ -66,6 +66,9 @@ public class FiscalEventDeReferenced {
     @JsonProperty("attributes")
     private Object attributes = null;
 
+    @JsonProperty("version")
+    private String version = null;
+
 
     public FiscalEventDeReferenced addAmountDetailsItem(AmountDetailsDeReferenced amountDetailsItem) {
         this.amountDetails.add(amountDetailsItem);

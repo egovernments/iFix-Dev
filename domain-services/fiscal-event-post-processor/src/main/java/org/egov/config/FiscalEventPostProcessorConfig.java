@@ -41,4 +41,30 @@ public class FiscalEventPostProcessorConfig {
     @Value("${fiscal.event.processor.kafka.push.topic}")
     private String eventProcessorMongoDB;
 
+    @Value("${ifix.master.coa.host}")
+    private String ifixMasterCoaHost;
+
+    @Value("${ifix.master.coa.context.path}")
+    private String ifixMasterCoaContextPath;
+
+    @Value("${ifix.master.coa.search.path}")
+    private String ifixMasterCoaSearchPath;
+
+    @Value("${ifix.master.government.host}")
+    private String ifixMasterGovernmentHost;
+
+    @Value("${ifix.master.government.context.path}")
+    private String ifixMasterGovernmentContextPath;
+
+    @Value("${ifix.master.government.search.path}")
+    private String ifixMasterGovernmentSearchPath;
+
+    @Value("${ifix.master.project.host}")
+    private String ifixMasterProjectHost;
+
+    @Value("${ifix.master.project.context.path}")
+    private String ifixMasterProjectContextPath;
+
+    @Value("${ifix.master.project.search.path}")
+    private String ifixMasterProjectSearchPath;
 }

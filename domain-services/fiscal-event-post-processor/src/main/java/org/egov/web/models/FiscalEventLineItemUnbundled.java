@@ -68,6 +68,8 @@ public class FiscalEventLineItemUnbundled {
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
 
+    @JsonProperty("version")
+    private String version = null;
 
 }
 

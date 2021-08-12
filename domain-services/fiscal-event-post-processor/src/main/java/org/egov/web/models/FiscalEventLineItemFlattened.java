@@ -109,6 +109,9 @@ public class FiscalEventLineItemFlattened {
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
 
+    @JsonProperty("version")
+    private String version = null;
+
     /**
      * Type of the EAT
      */

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class FiscalEventDereferenceEnrichmentService {
+
+
     public void enrich(FiscalEventDeReferenced fiscalEventDeReferenced, FiscalEventDeReferenced fiscalEventDeReferenced1) {
     }
 }
