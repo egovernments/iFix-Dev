@@ -22,8 +22,8 @@ public class MasterDataConstants {
 
     public static final String CRITERIA_TENANT_ID = "tenantId";
 
-    public static final String $_TENANT_LIST = "$.government.*";
-    public static final String $_PROJECT_LIST = "$.project.*";
+    public static final String TENANT_LIST = "$.government.*";
+    public static final String PROJECT_LIST = "$.project.*";
     public static final String COA_IDS_JSON_PATH = "$.chartOfAccounts.*.id";
 
 

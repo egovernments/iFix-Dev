@@ -43,7 +43,7 @@ public class TenantUtil {
             Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);
 
             try{
-                List list = JsonPath.read(response, MasterDataConstants.$_TENANT_LIST);
+                List list = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
 
                 return list != null && !list.isEmpty();
             }catch (Exception e){
