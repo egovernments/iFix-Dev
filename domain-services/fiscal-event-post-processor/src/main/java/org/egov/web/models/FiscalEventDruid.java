@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Builder
 public class FiscalEventDruid {
 
