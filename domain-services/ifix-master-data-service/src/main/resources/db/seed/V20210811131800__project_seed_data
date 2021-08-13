@@ -7,7 +7,6 @@ db.project.insertMany([
     "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
     "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
     "locationIds": [
-      "bddfe094-9902-4c1e-91dc-1c07c0ce926c","7b8dd41c-c6c1-43f2-9794-ce2e3d648eaa"
     ],
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
@@ -25,7 +24,6 @@ db.project.insertMany([
     "expenditureId": "a4c21fc1-28df-494b-8983-baf3c6b027d7",
     "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad3",
     "locationIds": [
-      "bddfe094-9902-4c1e-91dc-1c07c0ce926c","2c8d44e8-cf2e-4974-97d7-f3ce848b543b"
     ],
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
