@@ -47,17 +47,16 @@ public class GovernmentUtil {
             tenantMap.put(MasterDataConstants.REQUEST_HEADER, fiscalEventRequest.getRequestHeader());
             tenantMap.put(MasterDataConstants.CRITERIA, tenantValueMap);
 
-            Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);
+            Object response = serviceRequestRepository.fetchResult(createSearchGovernmentUrl(), tenantMap);
             List<Government> governments = null;
             try {
                 governments = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
+                if (governments != null && !governments.isEmpty()) {
+                    return objectMapper.convertValue(governments, new TypeReference<List<Government>>() {
+                    });
+                }
             } catch (Exception e) {
                 throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse government response for tenantId");
-            }
-
-            if (governments != null && !governments.isEmpty()) {
-                return objectMapper.convertValue(governments, new TypeReference<List<Government>>() {
-                });
             }
         }
         return Collections.emptyList();
@@ -67,7 +66,7 @@ public class GovernmentUtil {
     /**
      * @return
      */
-    private String createSearchTenantUrl() {
+    private String createSearchGovernmentUrl() {
         StringBuilder uriBuilder = new StringBuilder();
         uriBuilder.append(configuration.getIfixMasterGovernmentHost())
                 .append(configuration.getIfixMasterGovernmentContextPath())

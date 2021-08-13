@@ -19,12 +19,6 @@ import java.util.List;
 public class FiscalEventDereferenceService {
 
     @Autowired
-    private Producer producer;
-
-    @Autowired
-    private FiscalEventPostProcessorConfig processorConfig;
-
-    @Autowired
     private FiscalEventDereferenceEnrichmentService enricher;
 
     @Autowired
@@ -37,18 +31,18 @@ public class FiscalEventDereferenceService {
     private ProjectUtil projectUtil;
 
     @Autowired
-    private EatUtil eatUtil;
+    private ExpenditureUtil expenditureUtil;
 
     @Autowired
     private DepartmentUtil departmentUtil;
 
-    public void dereference(FiscalEventRequest fiscalEventRequest) {
+    public FiscalEventDeReferenced dereference(FiscalEventRequest fiscalEventRequest) {
         FiscalEventDeReferenced fiscalEventDeReferenced =  new FiscalEventDeReferenced();
         dereferenceTenantId(fiscalEventRequest,fiscalEventDeReferenced);
         dereferenceCoaId(fiscalEventRequest,fiscalEventDeReferenced);
         dereferenceProjectId(fiscalEventRequest, fiscalEventDeReferenced);
         enricher.enrich(fiscalEventRequest,fiscalEventDeReferenced);
-        producer.push(processorConfig.getEventProcessorMongoDB(),fiscalEventDeReferenced);
+        return fiscalEventDeReferenced;
     }
 
     private void dereferenceTenantId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
@@ -116,10 +110,10 @@ public class FiscalEventDereferenceService {
                 Project project = projectList.get(0);
                 fiscalEventDeReferenced.setProject(project);
 
-                List<EAT> eatList = eatUtil.getEatReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
-                        project.getEatId(), fiscalEventRequest.getRequestHeader());
-                if (eatList != null && !eatList.isEmpty()) {
-                    fiscalEventDeReferenced.setEat(eatList.get(0));
+                List<Expenditure> expenditureList = expenditureUtil.getExpenditureReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
+                        project.getExpenditureId(), fiscalEventRequest.getRequestHeader());
+                if (expenditureList != null && !expenditureList.isEmpty()) {
+                    fiscalEventDeReferenced.setExpenditure(expenditureList.get(0));
                 }
 
                 List<Department> departmentList = departmentUtil

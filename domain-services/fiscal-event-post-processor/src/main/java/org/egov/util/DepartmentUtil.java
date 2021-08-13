@@ -10,7 +10,6 @@ import org.egov.config.FiscalEventPostProcessorConfig;
 import org.egov.resposioty.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.web.models.Department;
-import org.egov.web.models.EAT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

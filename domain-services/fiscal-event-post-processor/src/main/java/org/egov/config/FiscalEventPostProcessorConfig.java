@@ -38,8 +38,17 @@ public class FiscalEventPostProcessorConfig {
         return converter;
     }
 
-    @Value("${fiscal.event.processor.kafka.push.topic}")
-    private String eventProcessorMongoDB;
+    @Value("${fiscal.event.processor.kafka.mongodb.topic}")
+    private String fiscalEventMongoDbSink;
+
+    @Value("${fiscal.event.kafka.dereferenced.topic}")
+    private String fiscalEventDereferenceTopic;
+
+    @Value("${fiscal.event.kafka.flattened.topic}")
+    private String fiscalEventFlattenedTopic;
+
+    @Value("${fiscal.event.processor.kafka.druid.topic}")
+    private String fiscalEventDruidTopic;
 
     @Value("${ifix.master.coa.host}")
     private String ifixMasterCoaHost;
@@ -68,14 +77,14 @@ public class FiscalEventPostProcessorConfig {
     @Value("${ifix.master.project.search.path}")
     private String ifixMasterProjectSearchPath;
 
-    @Value("${ifix.master.eat.host}")
-    private String ifixMasterEatHost;
+    @Value("${ifix.master.expenditure.host}")
+    private String ifixMasterExpenditureHost;
 
-    @Value("${ifix.master.eat.context.path}")
-    private String ifixMasterEatContextPath;
+    @Value("${ifix.master.expenditure.context.path}")
+    private String ifixMasterExpenditureContextPath;
 
-    @Value("${ifix.master.eat.search.path}")
-    private String ifixMasterEatSearchPath;
+    @Value("${ifix.master.expenditure.search.path}")
+    private String ifixMasterExpenditureSearchPath;
 
     @Value("${ifix.master.department.host}")
     private String ifixMasterDepartmentHost;

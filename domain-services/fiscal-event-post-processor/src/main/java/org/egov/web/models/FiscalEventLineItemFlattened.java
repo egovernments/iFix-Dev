@@ -46,16 +46,16 @@ public class FiscalEventLineItemFlattened {
     @JsonProperty("department.name")
     private String departmentName = null;
 
-    @JsonProperty("eat.id")
-    private String eatId = null;
+    @JsonProperty("expenditure.id")
+    private String expenditureId = null;
 
-    @JsonProperty("eat.code")
-    private String eatCode = null;
+    @JsonProperty("expenditure.code")
+    private String expenditureCode = null;
 
-    @JsonProperty("eat.name")
-    private String eatName = null;
-    @JsonProperty("eat.type")
-    private EatTypeEnum eatType = null;
+    @JsonProperty("expenditure.name")
+    private String expenditureName = null;
+    @JsonProperty("expenditure.type")
+    private ExpenditureTypeEnum expenditureType = null;
     @JsonProperty("project.id")
     private String projectId = null;
     @JsonProperty("project.code")
@@ -113,22 +113,22 @@ public class FiscalEventLineItemFlattened {
     private String version = null;
 
     /**
-     * Type of the EAT
+     * Type of the Expenditure
      */
-    public enum EatTypeEnum {
+    public enum ExpenditureTypeEnum {
         SCHEME("Scheme"),
 
         NON_SCHEME("Non-Scheme");
 
         private String value;
 
-        EatTypeEnum(String value) {
+        ExpenditureTypeEnum(String value) {
             this.value = value;
         }
 
         @JsonCreator
-        public static EatTypeEnum fromValue(String text) {
-            for (EatTypeEnum b : EatTypeEnum.values()) {
+        public static ExpenditureTypeEnum fromValue(String text) {
+            for (ExpenditureTypeEnum b : ExpenditureTypeEnum.values()) {
                 if (String.valueOf(b.value).equals(text)) {
                     return b;
                 }

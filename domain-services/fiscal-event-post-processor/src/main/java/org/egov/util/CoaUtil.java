@@ -1,13 +1,10 @@
 package org.egov.util;
 
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventPostProcessorConfig;
@@ -19,7 +16,6 @@ import org.egov.web.models.FiscalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -49,12 +45,12 @@ public class CoaUtil {
         List<ChartOfAccount> chartOfAccounts = null;
         try {
             chartOfAccounts = JsonPath.read(response, MasterDataConstants.COA_JSON_PATH);
+            if (chartOfAccounts != null) {
+                return objectMapper.convertValue(chartOfAccounts, new TypeReference<List<ChartOfAccount>>() {
+                });
+            }
         } catch (Exception e) {
             throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse coa response for coaIds");
-        }
-        if (chartOfAccounts != null) {
-            return objectMapper.convertValue(chartOfAccounts, new TypeReference<List<ChartOfAccount>>() {
-            });
         }
         return Collections.emptyList();
     }
