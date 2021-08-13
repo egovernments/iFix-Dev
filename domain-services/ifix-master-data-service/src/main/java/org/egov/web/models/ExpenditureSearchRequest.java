@@ -7,9 +7,9 @@ import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Eat search request along with request metadata. Defoult operator b/w multiple criteria is AND.
+ * Expenditure search request along with request metadata. Defoult operator b/w multiple criteria is AND.
  */
-@ApiModel(description = "Eat search request along with request metadata. Defoult operator b/w multiple criteria is AND.")
+@ApiModel(description = "Expenditure search request along with request metadata. Defoult operator b/w multiple criteria is AND.")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -20,12 +20,12 @@ import org.springframework.validation.annotation.Validated;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class EatSearchRequest {
+public class ExpenditureSearchRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;
 
     @JsonProperty("criteria")
-    private EatSearchCriteria criteria = null;
+    private ExpenditureSearchCriteria criteria = null;
 
 
 }

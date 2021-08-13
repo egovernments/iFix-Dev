@@ -9,9 +9,9 @@ import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Captures the EAT attributes
+ * Captures the Expenditure attributes
  */
-@ApiModel(description = "Captures the EAT attributes")
+@ApiModel(description = "Captures the Expenditure attributes")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -22,7 +22,7 @@ import org.springframework.validation.annotation.Validated;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class EAT {
+public class Expenditure {
     @JsonProperty("id")
     private String id = null;
 
@@ -42,7 +42,7 @@ public class EAT {
     private AuditDetails auditDetails = null;
 
     /**
-     * Capture the type of the eat
+     * Capture the type of the Expenditure
      */
     public enum TypeEnum {
         SCHEME("Scheme"),

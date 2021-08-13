@@ -16,7 +16,7 @@ db.department.insertMany([
 },
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ad3",
-    "tenantId": "pb",
+    "tenantId": "PB",
     "code": "dept02",
     "name": "departmentName-2",
     "isNodal": false,
@@ -32,7 +32,7 @@ db.department.insertMany([
 },
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ad4",
-    "tenantId": "pb",
+    "tenantId": "PB",
     "code": "dept03",
     "name": "departmentName-3",
     "isNodal": false,

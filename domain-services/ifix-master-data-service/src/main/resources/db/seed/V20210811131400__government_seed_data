@@ -1,6 +1,6 @@
 db.government.insertMany([
   {
-    "_id" : "PB",
+    "_id" : "pb",
     "_class" : "org.egov.web.models.Government",
     "name" : "Punjab",
     "auditDetails" : {
@@ -12,7 +12,7 @@ db.government.insertMany([
     "attributes" : {}
 },
 {
-    "_id" : "BR",
+    "_id" : "br",
     "_class" : "org.egov.web.models.Government",
     "name" : "Bihar",
     "auditDetails" : {
@@ -24,7 +24,7 @@ db.government.insertMany([
     "attributes" : {}
 },
 {
-    "_id" : "HR",
+    "_id" : "hr",
     "name" : "Haryana",
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
@@ -36,7 +36,7 @@ db.government.insertMany([
     "_class" : "org.egov.web.models.Government"
 },
 {
-    "_id" : "UP",
+    "_id" : "up",
     "name" : "Utter Pradesh",
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",

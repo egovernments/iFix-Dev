@@ -35,8 +35,8 @@ public class ProjectSearchCriteria {
     @JsonProperty("code")
     private String code = null;
 
-    @JsonProperty("eatId")
-    private String eatId = null;
+    @JsonProperty("expenditureId")
+    private String expenditureId = null;
 
     @JsonProperty("departmentId")
     private String departmentId = null;

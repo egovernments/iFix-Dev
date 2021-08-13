@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains the ResponseHeader and the enriched Eat information
+ * Contains the ResponseHeader and the enriched Expenditure information
  */
-@ApiModel(description = "Contains the ResponseHeader and the enriched Eat information")
+@ApiModel(description = "Contains the ResponseHeader and the enriched Expenditure information")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -24,20 +24,20 @@ import java.util.List;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class EatResponse {
+public class ExpenditureResponse {
     @JsonProperty("responseHeader")
     private ResponseHeader responseHeader = null;
 
-    @JsonProperty("eat")
+    @JsonProperty("expenditure")
     @Valid
-    private List<EAT> eat = null;
+    private List<Expenditure> expenditure = null;
 
 
-    public EatResponse addEatItem(EAT eatItem) {
-        if (this.eat == null) {
-            this.eat = new ArrayList<>();
+    public ExpenditureResponse addEatItem(Expenditure expenditureItem) {
+        if (this.expenditure == null) {
+            this.expenditure = new ArrayList<>();
         }
-        this.eat.add(eatItem);
+        this.expenditure.add(expenditureItem);
         return this;
     }
 
