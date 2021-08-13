@@ -1,7 +1,7 @@
 db.department.insertMany([
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
-    "tenantId": "PB",
+    "tenantId": "pb",
     "code": "dept01",
     "name": "departmentName-1",
     "isNodal": false,

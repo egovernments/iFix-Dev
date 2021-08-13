@@ -1,7 +1,7 @@
 db.project.insertMany([
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac4",
-    "tenantId": "HR",
+    "tenantId": "hr",
     "code": "PR2",
     "name": "Project2",
     "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
@@ -18,7 +18,7 @@ db.project.insertMany([
 },
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac5",
-    "tenantId": "PB",
+    "tenantId": "pb",
     "code": "PR3",
     "name": "Project3",
     "expenditureId": "a4c21fc1-28df-494b-8983-baf3c6b027d7",

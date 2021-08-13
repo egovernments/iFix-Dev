@@ -1,6 +1,6 @@
 db.chartOfAccount.insertMany([
   {
-    "tenantId": "UP",
+    "tenantId": "up",
     "majorHead": "8243",
     "majorHeadName": "majorHeadName82",
     "majorHeadtype": "majorHeadtype",
@@ -23,7 +23,7 @@ db.chartOfAccount.insertMany([
     "_class": "org.egov.web.models.ChartOfAccount"
   },
   {
-    "tenantId": "PB",
+    "tenantId": "pb",
     "majorHead": "8243",
     "majorHeadName": "majorHeadName82",
     "majorHeadtype": "majorHeadtype",
