@@ -17,7 +17,7 @@ db.expenditure.insertMany([
 },
 {
     "_id" : "a4c21fc1-28df-494b-8983-baf3c6b027d7",
-    "_class" : "org.egov.web.models.EAT",
+    "_class" : "org.egov.web.models.Expenditure",
     "tenantId" : "br",
     "code" : "123",
     "name" : "Exp-2",
