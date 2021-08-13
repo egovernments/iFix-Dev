@@ -22,17 +22,17 @@ public class FiscalEventPostConsumer {
 
     @Autowired
     private ObjectMapper mapper;
-
-    @KafkaListener(topics = { "${fiscal.event.kafka.push.topic}"})
+    /**/
+    @KafkaListener(topics = {"${fiscal.event.kafka.push.topic}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
         try {
-            log.info("Received fiscal event post request " + record);
+            log.info("Received fiscal event post request : " + record);
             FiscalEventRequest fiscalEventRequest = mapper.convertValue(record, FiscalEventRequest.class);;
             deferenceService.dereference(fiscalEventRequest);
         }
         catch (Exception e){
-            log.error("Error occured while processing the record from topic : " + topic, e);
+            log.error("Error occured while processing the record from topic : " /*+ topic*/, e);
         }
 
     }
