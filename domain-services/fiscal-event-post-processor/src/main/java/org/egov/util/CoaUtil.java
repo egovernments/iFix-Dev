@@ -25,9 +25,6 @@ import java.util.*;
 @Component
 @Slf4j
 public class CoaUtil {
-
-    public static final String COA_JSON_PATH = "$.chartOfAccounts.*";
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -51,9 +48,9 @@ public class CoaUtil {
         Object response = serviceRequestRepository.fetchResult(url, coaSearchRequest);
         List<ChartOfAccount> chartOfAccounts = null;
         try {
-            chartOfAccounts = JsonPath.read(response, COA_JSON_PATH);
+            chartOfAccounts = JsonPath.read(response, MasterDataConstants.COA_JSON_PATH);
         } catch (Exception e) {
-            throw new CustomException("JSONPATH_ERROR", "Failed to parse coa response for coaIds");
+            throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse coa response for coaIds");
         }
         if (chartOfAccounts != null) {
             return objectMapper.convertValue(chartOfAccounts, new TypeReference<List<ChartOfAccount>>() {
@@ -77,11 +74,11 @@ public class CoaUtil {
 
             Map<String, Object> coaSearchRequest = new HashMap<>();
             Map<String, Object> criteria = new HashMap<>();
-            criteria.put("Ids", coaIds);
-            criteria.put("tenantId", fiscalEvent.getTenantId());
+            criteria.put(MasterDataConstants.IDS, coaIds);
+            criteria.put(MasterDataConstants.CRITERIA_TENANT_ID, fiscalEvent.getTenantId());
 
-            coaSearchRequest.put("requestHeader", requestHeader);
-            coaSearchRequest.put("criteria", criteria);
+            coaSearchRequest.put(MasterDataConstants.REQUEST_HEADER, requestHeader);
+            coaSearchRequest.put(MasterDataConstants.CRITERIA, criteria);
             return coaSearchRequest;
         }
 

@@ -27,6 +27,7 @@ public class MasterDataConstants {
     public static final String COA_IDS_JSON_PATH = "$.chartOfAccounts.*.id";
     public static final String EAT_JSON_PATH = "$.eat.*";
     public static final String DEPARTMENT_JSON_PATH = "$.department.*";
+    public static final String COA_JSON_PATH = "$.chartOfAccounts.*";
 
 
 }

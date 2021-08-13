@@ -2,10 +2,10 @@ package org.egov.service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventPostProcessorConfig;
 import org.egov.producer.Producer;
-import org.egov.util.CoaUtil;
-import org.egov.util.GovernmentUtil;
+import org.egov.util.*;
 import org.egov.web.models.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,20 @@ public class FiscalEventDereferenceService {
     @Autowired
     private GovernmentUtil governmentUtil;
 
+    @Autowired
+    private ProjectUtil projectUtil;
+
+    @Autowired
+    private EatUtil eatUtil;
+
+    @Autowired
+    private DepartmentUtil departmentUtil;
+
     public void dereference(FiscalEventRequest fiscalEventRequest) {
         FiscalEventDeReferenced fiscalEventDeReferenced =  new FiscalEventDeReferenced();
         dereferenceTenantId(fiscalEventRequest,fiscalEventDeReferenced);
         dereferenceCoaId(fiscalEventRequest,fiscalEventDeReferenced);
+        dereferenceProjectId(fiscalEventRequest, fiscalEventDeReferenced);
         enricher.enrich(fiscalEventRequest,fiscalEventDeReferenced);
         producer.push(processorConfig.getEventProcessorMongoDB(),fiscalEventDeReferenced);
     }
@@ -92,5 +102,49 @@ public class FiscalEventDereferenceService {
         }
 
         fiscalEventDeReferenced.setAmountDetails(updatedAmtDereferences);
+    }
+
+    /**
+     * @param fiscalEventRequest
+     * @param fiscalEventDeReferenced
+     */
+    private void dereferenceProjectId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
+        if (isValidProjectIdParam(fiscalEventRequest) && fiscalEventDeReferenced != null) {
+            List<Project> projectList = projectUtil.getProjectReference(fiscalEventRequest);
+
+            if (projectList != null && !projectList.isEmpty()) {
+                Project project = projectList.get(0);
+                fiscalEventDeReferenced.setProject(project);
+
+                List<EAT> eatList = eatUtil.getEatReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
+                        project.getEatId(), fiscalEventRequest.getRequestHeader());
+                if (eatList != null && !eatList.isEmpty()) {
+                    fiscalEventDeReferenced.setEat(eatList.get(0));
+                }
+
+                List<Department> departmentList = departmentUtil
+                        .getDepartmentReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
+                                project.getDepartmentId(), fiscalEventRequest.getRequestHeader());
+                if (departmentList != null && !departmentList.isEmpty()) {
+                    fiscalEventDeReferenced.setDepartment(departmentList.get(0));
+                }
+            }
+        }
+    }
+
+    /**
+     * @param fiscalEventRequest
+     * @return
+     */
+    private boolean isValidProjectIdParam(FiscalEventRequest fiscalEventRequest) {
+        if (fiscalEventRequest != null && fiscalEventRequest.getFiscalEvent() != null
+                && fiscalEventRequest.getRequestHeader() != null
+                && !StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getProjectId())
+                && !StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getTenantId())
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

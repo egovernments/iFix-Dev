@@ -21,12 +21,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class GovernmentUtil {
-
-    public static final String TENANT_LIST = "$.government.*";
-    public static final String REQUEST_HEADER = "requestHeader";
-    public static final String IDS = "Ids";
-    public static final String CRITERIA = "criteria";
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -46,19 +40,19 @@ public class GovernmentUtil {
                 && StringUtils.isNotBlank(fiscalEventRequest.getFiscalEvent().getTenantId())) {
 
             Map<String, Object> tenantValueMap = new HashMap<>();
-            tenantValueMap.put(IDS,
+            tenantValueMap.put(MasterDataConstants.IDS,
                     Collections.singletonList(fiscalEventRequest.getFiscalEvent().getTenantId()));
 
             Map<String, Object> tenantMap = new HashMap<>();
-            tenantMap.put(REQUEST_HEADER, fiscalEventRequest.getRequestHeader());
-            tenantMap.put(CRITERIA, tenantValueMap);
+            tenantMap.put(MasterDataConstants.REQUEST_HEADER, fiscalEventRequest.getRequestHeader());
+            tenantMap.put(MasterDataConstants.CRITERIA, tenantValueMap);
 
             Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);
             List<Government> governments = null;
             try {
-                governments = JsonPath.read(response, TENANT_LIST);
+                governments = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
             } catch (Exception e) {
-                throw new CustomException("JSONPATH_ERROR", "Failed to parse government response for tenantId");
+                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse government response for tenantId");
             }
 
             if (governments != null && !governments.isEmpty()) {
