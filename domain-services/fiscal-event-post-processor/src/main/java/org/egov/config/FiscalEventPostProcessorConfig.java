@@ -67,4 +67,22 @@ public class FiscalEventPostProcessorConfig {
 
     @Value("${ifix.master.project.search.path}")
     private String ifixMasterProjectSearchPath;
+
+    @Value("${ifix.master.eat.host}")
+    private String ifixMasterEatHost;
+
+    @Value("${ifix.master.eat.context.path}")
+    private String ifixMasterEatContextPath;
+
+    @Value("${ifix.master.eat.search.path}")
+    private String ifixMasterEatSearchPath;
+
+    @Value("${ifix.master.department.host}")
+    private String ifixMasterDepartmentHost;
+
+    @Value("${ifix.master.department.context.path}")
+    private String ifixMasterDepartmentContextPath;
+
+    @Value("${ifix.master.department.search.path}")
+    private String ifixMasterDepartmentSearchPath;
 }
