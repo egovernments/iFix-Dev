@@ -2,7 +2,6 @@ package org.egov.repository.queryBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.web.models.ProjectSearchCriteria;
-import org.egov.web.models.ProjectSearchRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -27,8 +26,8 @@ public class ProjectQueryBuilder {
             criteria.and("locationIds").in(Collections.singletonList(projectSearchCriteria.getLocationId()));
         }
 
-        if (!StringUtils.isEmpty(projectSearchCriteria.getEatId())) {
-            criteria.and("eatId").is(projectSearchCriteria.getEatId());
+        if (!StringUtils.isEmpty(projectSearchCriteria.getExpenditureId())) {
+            criteria.and("eatId").is(projectSearchCriteria.getExpenditureId());
         }
 
         if (!StringUtils.isEmpty(projectSearchCriteria.getDepartmentId())) {

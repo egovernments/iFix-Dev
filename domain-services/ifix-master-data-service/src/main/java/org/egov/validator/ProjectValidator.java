@@ -44,9 +44,9 @@ public class ProjectValidator {
                         "Length range [2-64]");
             }
 
-            if (!StringUtils.isEmpty(projectSearchCriteria.getEatId())
-                    && (projectSearchCriteria.getEatId().length() < 2 || projectSearchCriteria.getEatId().length() > 64)) {
-                throw new CustomException(MasterDataConstants.EAT_ID, "EAT id length is invalid. " +
+            if (!StringUtils.isEmpty(projectSearchCriteria.getExpenditureId())
+                    && (projectSearchCriteria.getExpenditureId().length() < 2 || projectSearchCriteria.getExpenditureId().length() > 64)) {
+                throw new CustomException(MasterDataConstants.EXPENDITURE_ID, "Expenditure id length is invalid. " +
                         "Length range [2-64]");
             }
 

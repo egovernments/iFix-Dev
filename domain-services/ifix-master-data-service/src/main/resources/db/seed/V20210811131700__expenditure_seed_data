@@ -1,12 +1,12 @@
-db.eAT.insertMany([
+db.expenditure.insertMany([
 {
     "_id" : "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
-    "_class" : "org.egov.web.models.EAT",
-    "tenantId" : "HR",
+    "_class" : "org.egov.web.models.Expenditure",
+    "tenantId" : "PB",
     "code" : "12345",
-    "name" : "EAT-3",
-    "type" : "Non-Scheme",
-    "departmentId" : "dummy-department-3",
+    "name" : "Exp-1",
+    "type" : "SCHEME",
+    "departmentId" : "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
         "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
@@ -18,11 +18,11 @@ db.eAT.insertMany([
 {
     "_id" : "a4c21fc1-28df-494b-8983-baf3c6b027d7",
     "_class" : "org.egov.web.models.EAT",
-    "tenantId" : "PB",
+    "tenantId" : "BR",
     "code" : "123",
-    "name" : "EAT-1",
-    "type" : "Scheme",
-    "departmentId" : "dummy-department-1",
+    "name" : "Exp-2",
+    "type" : "NON_SCHEME",
+    "departmentId" : "3d9ef18a-361a-40cf-b142-dd6f998e1ad3",
     "auditDetails" : {
         "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
         "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",

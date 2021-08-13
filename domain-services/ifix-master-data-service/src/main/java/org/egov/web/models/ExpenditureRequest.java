@@ -7,9 +7,9 @@ import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Eat request along with request metadata
+ * Expenditure request along with request metadata
  */
-@ApiModel(description = "Eat request along with request metadata")
+@ApiModel(description = "Expenditure request along with request metadata")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -18,12 +18,12 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EatRequest {
+public class ExpenditureRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;
 
-    @JsonProperty("eat")
-    private EAT eat = null;
+    @JsonProperty("expenditure")
+    private Expenditure expenditure = null;
 
 
 }

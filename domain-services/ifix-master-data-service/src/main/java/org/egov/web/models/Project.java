@@ -35,8 +35,8 @@ public class Project {
     @JsonProperty("name")
     private String name = null;
 
-    @JsonProperty("eatId")
-    private String eatId = null;
+    @JsonProperty("expenditureId")
+    private String expenditureId = null;
 
     @JsonProperty("departmentId")
     private String departmentId = null;

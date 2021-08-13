@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The object contains all the search criteria of the Eat
+ * The object contains all the search criteria of the Expenditure
  */
-@ApiModel(description = "The object contains all the search criteria of the Eat")
+@ApiModel(description = "The object contains all the search criteria of the Expenditure")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -23,7 +23,7 @@ import java.util.List;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class EatSearchCriteria {
+public class ExpenditureSearchCriteria {
     @JsonProperty("Ids")
     @Valid
     private List<String> ids = null;
@@ -38,7 +38,7 @@ public class EatSearchCriteria {
     private String code = null;
 
 
-    public EatSearchCriteria addIdsItem(String idsItem) {
+    public ExpenditureSearchCriteria addIdsItem(String idsItem) {
         if (this.ids == null) {
             this.ids = new ArrayList<>();
         }
