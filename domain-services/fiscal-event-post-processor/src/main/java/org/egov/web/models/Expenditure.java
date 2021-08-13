@@ -8,9 +8,9 @@ import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * EAT details
+ * Expenditure details
  */
-@ApiModel(description = "EAT details")
+@ApiModel(description = "Expenditure details")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-09T17:56:59.067+05:30")
 
@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EAT {
+public class Expenditure {
     @JsonProperty("id")
     private String id = null;
 
@@ -32,7 +32,7 @@ public class EAT {
     private TypeEnum type = null;
 
     /**
-     * Type of the EAT
+     * Type of the Expenditure
      */
     public enum TypeEnum {
         SCHEME("Scheme"),

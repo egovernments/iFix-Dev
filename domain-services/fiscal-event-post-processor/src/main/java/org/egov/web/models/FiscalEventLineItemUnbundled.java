@@ -35,8 +35,8 @@ public class FiscalEventLineItemUnbundled {
     @JsonProperty("department")
     private Department department = null;
 
-    @JsonProperty("eat")
-    private EAT eat = null;
+    @JsonProperty("expenditure")
+    private Expenditure expenditure = null;
 
     @JsonProperty("project")
     private Project project = null;
