@@ -30,6 +30,6 @@ public class FiscalEventDereferenceEnrichmentService {
         fiscalEventDeReferenced.setVersion("1.0.0");
 
         fiscalEventDeReferenced.setAuditDetails(fiscalEvent.getAuditDetails());
-        fiscalEventDeReferenced.setId(UUID.randomUUID().toString());
+        fiscalEventDeReferenced.setId(fiscalEvent.getId());
     }
 }
