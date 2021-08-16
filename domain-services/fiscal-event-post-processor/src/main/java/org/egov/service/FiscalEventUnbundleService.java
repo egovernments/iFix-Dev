@@ -24,8 +24,8 @@ public class FiscalEventUnbundleService {
         List<AmountDetailsDeReferenced> amountDetails = fiscalEventDeReferenced.getAmountDetails();
         if(amountDetails != null && !amountDetails.isEmpty()){
             for(AmountDetailsDeReferenced amountDetailsDeReferenced : amountDetails){
-                FiscalEventLineItemUnbundled fiscalEventLineItemUnbundled = getUnbundleFiscalEventFromDereferenceEvent(amountDetailsDeReferenced,fiscalEventDeReferenced);
-                fiscalEventLineItemUnbundledList.add(fiscalEventLineItemUnbundled);
+                fiscalEventLineItemUnbundledList.add(getUnbundleFiscalEventFromDereferenceEvent(
+                        amountDetailsDeReferenced,fiscalEventDeReferenced));
             }
         }
 
