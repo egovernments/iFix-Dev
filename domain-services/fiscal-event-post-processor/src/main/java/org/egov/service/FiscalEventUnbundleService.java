@@ -40,7 +40,7 @@ public class FiscalEventUnbundleService {
      * @param amountDetailsDeReferenced
      * @param fiscalEventDeReferenced
      */
-    private void setUnbundleFiscalEventFromDereferenceEvent(FiscalEventLineItemUnbundled fiscalEventLineItemUnbundled,
+    private FiscalEventLineItemUnbundled setUnbundleFiscalEventFromDereferenceEvent(FiscalEventLineItemUnbundled fiscalEventLineItemUnbundled,
                                                             AmountDetailsDeReferenced amountDetailsDeReferenced,
                                                             FiscalEventDeReferenced fiscalEventDeReferenced) {
 
@@ -63,5 +63,6 @@ public class FiscalEventUnbundleService {
         fiscalEventLineItemUnbundled.setReferenceId(fiscalEventDeReferenced.getReferenceId());
         fiscalEventLineItemUnbundled.setTenantId(fiscalEventDeReferenced.getTenantId());
         fiscalEventLineItemUnbundled.setVersion(fiscalEventDeReferenced.getVersion());
+        return fiscalEventLineItemUnbundled;
     }
 }
