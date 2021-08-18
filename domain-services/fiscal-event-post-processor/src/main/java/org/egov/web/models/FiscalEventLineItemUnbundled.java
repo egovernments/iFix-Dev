@@ -20,6 +20,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class FiscalEventLineItemUnbundled {
+
+    @JsonProperty("version")
+    private String version = null;
+
     @JsonProperty("id")
     private String id = null;
 
@@ -67,9 +71,6 @@ public class FiscalEventLineItemUnbundled {
 
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
-
-    @JsonProperty("version")
-    private String version = null;
 
 }
 

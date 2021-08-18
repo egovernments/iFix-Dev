@@ -3,32 +3,21 @@ package org.egov.consumer;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.github.wnameless.json.flattener.JsonFlattener;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 import org.egov.config.FiscalEventPostProcessorConfig;
 import org.egov.producer.Producer;
 import org.egov.service.FiscalEventFlattenService;
 import org.egov.service.FiscalEventUnbundleService;
 import org.egov.web.models.FiscalEventDeReferenced;
-import org.egov.web.models.FiscalEventLineItemFlattened;
 import org.egov.web.models.FiscalEventLineItemUnbundled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.JacksonUtils;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Component

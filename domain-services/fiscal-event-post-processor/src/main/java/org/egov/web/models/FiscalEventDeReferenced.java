@@ -23,6 +23,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FiscalEventDeReferenced {
+
+    @JsonProperty("version")
+    private String version = null;
+
     @JsonProperty("id")
     private String id = null;
 
@@ -65,10 +69,6 @@ public class FiscalEventDeReferenced {
 
     @JsonProperty("attributes")
     private Object attributes = null;
-
-    @JsonProperty("version")
-    private String version = null;
-
 
     public FiscalEventDeReferenced addAmountDetailsItem(AmountDetailsDeReferenced amountDetailsItem) {
         this.amountDetails.add(amountDetailsItem);
