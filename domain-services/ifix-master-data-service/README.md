@@ -1,9 +1,9 @@
 # iFIX-Master-Data-Service
 
-## Connect to MongoDB pod
+## Connect to MongoDB through Playground pod
 Check the correct running mongodb pod and execute the below command
 ```
-kubectl exec -it <mongodb_pod_name> -- /bin/bash
+kubectl exec -it <playground_pod_name> -- /bin/bash
 ```
 
 For connecting to particular running mongodb, run the below command
