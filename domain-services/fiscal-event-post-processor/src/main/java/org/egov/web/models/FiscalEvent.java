@@ -1,6 +1,7 @@
 package org.egov.web.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
@@ -63,15 +64,15 @@ public class FiscalEvent {
 
 
     public enum EventTypeEnum {
-        SANCTION("Sanction"),
-        APPROPRIATION("Appropriation"),
-        ALLOCATION("Allocation"),
-        INTRATRANSFER("IntraTransfer"),
-        INTERTRANSFER("InterTransfer"),
-        DEMAND("Demand"),
-        RECEIPT("Receipt"),
-        BILL("Bill"),
-        PAYMENT("Payment");
+        Sanction("Sanction"),
+        Appropriation("Appropriation"),
+        Allocation("Allocation"),
+        IntraTransfer("IntraTransfer"),
+        InterTransfer("InterTransfer"),
+        Demand("Demand"),
+        Receipt("Receipt"),
+        Bill("Bill"),
+        Payment("Payment");
 
         private String value;
 

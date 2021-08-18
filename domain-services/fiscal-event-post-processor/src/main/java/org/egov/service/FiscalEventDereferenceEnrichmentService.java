@@ -4,6 +4,7 @@ package org.egov.service;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.util.MasterDataConstants;
 import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEventDeReferenced;
 import org.egov.web.models.FiscalEventRequest;
@@ -27,7 +28,7 @@ public class FiscalEventDereferenceEnrichmentService {
         fiscalEventDeReferenced.setParentEventId(fiscalEvent.getParentEventId());
         fiscalEventDeReferenced.setReferenceId(fiscalEvent.getReferenceId());
         fiscalEventDeReferenced.setAttributes(fiscalEvent.getAttributes());
-        fiscalEventDeReferenced.setVersion("1.0.0");
+        fiscalEventDeReferenced.setVersion(MasterDataConstants.FISCAL_EVENT_VERSION);
 
         fiscalEventDeReferenced.setAuditDetails(fiscalEvent.getAuditDetails());
         fiscalEventDeReferenced.setId(fiscalEvent.getId());
