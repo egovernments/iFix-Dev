@@ -1,5 +1,16 @@
 # iFIX-Master-Data-Service
 
+## Connect to MongoDB pod
+Check the correct running mongodb pod and execute the below command
+```
+kubectl exec -it <mongodb_pod_name> -- /bin/bash
+```
+
+For connecting to particular running mongodb, run the below command
+```
+mongo --host <mongodb_url:port> -u <username> -p <password>
+```
+
 ## MongoDB
 
 Please copy the commands written in the files mentioned below and execute them in Mongo Shell. Also, make sure you 
