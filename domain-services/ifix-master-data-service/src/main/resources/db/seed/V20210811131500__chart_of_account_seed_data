@@ -1,5 +1,6 @@
 db.chartOfAccount.insertMany([
   {
+	"_id": "50cc5634-6cc3-456b-ae33-e40741128cdc",
     "tenantId": "up",
     "majorHead": "8243",
     "majorHeadName": "majorHeadName82",
@@ -23,6 +24,7 @@ db.chartOfAccount.insertMany([
     "_class": "org.egov.web.models.ChartOfAccount"
   },
   {
+	"_id": "50cc5634-6cc3-456b-ae33-e40741128cde",
     "tenantId": "pb",
     "majorHead": "8243",
     "majorHeadName": "majorHeadName82",
@@ -46,6 +48,7 @@ db.chartOfAccount.insertMany([
     "_class": "org.egov.web.models.ChartOfAccount"
   },
   {
+	"_id": "50cc5634-6cc3-456b-ae33-e40741128cd3",
     "tenantId": "PB",
     "majorHead": "8943",
     "majorHeadName": "majorHeadName89",
