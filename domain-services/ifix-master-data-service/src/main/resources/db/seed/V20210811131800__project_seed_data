@@ -1,7 +1,7 @@
 db.project.insertMany([
 {
     "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac4",
-    "tenantId": "hr",
+    "tenantId": "pb",
     "code": "PR2",
     "name": "Project2",
     "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
