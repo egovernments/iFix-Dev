@@ -1,15 +1,13 @@
 package org.egov;
 
+import com.auth0.jwt.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
 import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
-import org.egov.filters.pre.AuthFilter;
-import org.egov.filters.pre.AuthPreCheckFilter;
-import org.egov.filters.pre.RbacFilter;
-import org.egov.filters.pre.RbacPreCheckFilter;
+import org.egov.filters.pre.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -52,8 +50,16 @@ public class ZuulGatewayApplication {
     @Autowired
     private CustomRateLimitUtils customRateLimitUtils;
 
+    @Autowired
+    private JWTVerifier jwtVerifier;
+
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter keycloakAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtVerifier);
     }
 
     @Bean
