@@ -49,5 +49,6 @@ public class FiscalEventEnrichmentService {
 
         //set the audit details
         fiscalEvent.setAuditDetails(auditDetails);
+        fiscalEvent.setIngestionTime(System.currentTimeMillis());
     }
 }

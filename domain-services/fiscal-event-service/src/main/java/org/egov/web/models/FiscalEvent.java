@@ -38,6 +38,9 @@ public class FiscalEvent {
     @JsonProperty("eventType")
     private EventTypeEnum eventType = null;
 
+    @JsonProperty("ingestionTime")
+    private Long ingestionTime = null;
+
     @JsonProperty("eventTime")
     private Long eventTime = null;
 
