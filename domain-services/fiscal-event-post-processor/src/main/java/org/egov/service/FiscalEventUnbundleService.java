@@ -51,6 +51,7 @@ public class FiscalEventUnbundleService {
         fiscalEventLineItemUnbundled.setToBillingPeriod(amountDetailsDeReferenced.getToBillingPeriod());
 
         fiscalEventLineItemUnbundled.setDepartment(fiscalEventDeReferenced.getDepartment());
+        fiscalEventLineItemUnbundled.setIngestionTime(fiscalEventDeReferenced.getIngestionTime());
         fiscalEventLineItemUnbundled.setEventTime(fiscalEventDeReferenced.getEventTime());
         fiscalEventLineItemUnbundled.setEventType(fiscalEventDeReferenced.getEventType());
         fiscalEventLineItemUnbundled.setExpenditure(fiscalEventDeReferenced.getExpenditure());

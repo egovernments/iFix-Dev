@@ -48,6 +48,9 @@ public class FiscalEventDeReferenced {
     @JsonProperty("eventType")
     private String eventType = null;
 
+    @JsonProperty("ingestionTime")
+    private Long ingestionTime = null;
+
     @JsonProperty("eventTime")
     private Long eventTime = null;
 
