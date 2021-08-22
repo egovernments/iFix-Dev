@@ -1,0 +1,36 @@
+db.project.insertMany([
+{
+    "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac4",
+    "tenantId": "pb",
+    "code": "PR2",
+    "name": "Project2",
+    "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
+    "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
+    "locationIds": [
+    ],
+    "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628063909104),
+        "lastModifiedTime" : NumberLong(1628063909104)
+    },
+    "_class": "org.egov.web.models.Project"
+},
+{
+    "_id": "3d9ef18a-361a-40cf-b142-dd6f998e1ac5",
+    "tenantId": "pb",
+    "code": "PR3",
+    "name": "Project3",
+    "expenditureId": "a4c21fc1-28df-494b-8983-baf3c6b027d7",
+    "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad3",
+    "locationIds": [
+    ],
+    "auditDetails" : {
+        "createdBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy" : "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime" : NumberLong(1628063909104),
+        "lastModifiedTime" : NumberLong(1628063909104)
+    },
+    "_class": "org.egov.web.models.Project"
+}
+]);
