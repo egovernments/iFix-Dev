@@ -20,18 +20,15 @@ import java.security.spec.X509EncodedKeySpec;
 @Configuration
 public class KeycloakJwtVerifierConfig {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${keycloak.host}")
     private String keycloakHost;
     @Value("${keycloak.context-path}")
     private String keycloakContextPath;
     @Value("${keycloak.realm}")
     private String keycloakRealmName;
-
     @Autowired
     private RestTemplate restTemplate;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private JWTVerifier jwtVerifier;
 
     @Bean

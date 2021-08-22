@@ -141,7 +141,8 @@
                     </classes>
                     <customTypeMappings>
                         <customTypeMapping>org.egov.common.contract.request
-                            .RequestHeader:RequestHeader</customTypeMapping>
+                            .RequestHeader:RequestHeader
+                        </customTypeMapping>
                         <customTypeMapping>org.egov.common.contract.response.ResponseHeader:ResponseHeader
                         </customTypeMapping>
                     </customTypeMappings>
