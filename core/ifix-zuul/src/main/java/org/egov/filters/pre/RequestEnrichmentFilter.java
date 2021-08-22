@@ -116,14 +116,14 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private void enrichRequestBody() throws IOException {
         RequestContext ctx = RequestContext.getCurrentContext();
         final RequestBodyInspector requestBodyInspector = getRequestBodyInspector(ctx);
-        HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
-        if (requestInfo == null) {
+        HashMap<String, Object> requestHeader = requestBodyInspector.getRequestHeader();
+        if (requestHeader == null) {
             logger.info(SKIPPED_BODY_ENRICHMENT_DUE_TO_NO_KNOWN_FIELD_MESSAGE);
             return;
         }
-        setUserInfo(requestInfo);
-        setCorrelationId(requestInfo);
-        requestBodyInspector.updateRequestInfo(requestInfo);
+        setUserInfo(requestHeader);
+        setCorrelationId(requestHeader);
+        requestBodyInspector.updateRequestHeader(requestHeader);
         CustomRequestWrapper requestWrapper = new CustomRequestWrapper(ctx.getRequest());
         requestWrapper.setPayload(objectMapper.writeValueAsString(requestBodyInspector.getRequestBody()));
         logger.info(BODY_ENRICHED_MESSAGE);
@@ -140,13 +140,13 @@ public class RequestEnrichmentFilter extends ZuulFilter {
         return (String) ctx.get(CORRELATION_ID_KEY);
     }
 
-    private void setCorrelationId(HashMap<String, Object> requestInfo) {
-        requestInfo.put(CORRELATION_ID_FIELD_NAME, getCorrelationId());
+    private void setCorrelationId(HashMap<String, Object> requestHeader) {
+        requestHeader.put(CORRELATION_ID_FIELD_NAME, getCorrelationId());
     }
 
-    private void setUserInfo(HashMap<String, Object> requestInfo) {
+    private void setUserInfo(HashMap<String, Object> requestheader) {
         if (isUserInfoPresent()) {
-            requestInfo.put(USER_INFO_FIELD_NAME, getUser());
+            requestheader.put(USER_INFO_FIELD_NAME, getUser());
         }
     }
 

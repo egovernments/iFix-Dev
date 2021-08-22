@@ -3,7 +3,7 @@ package org.egov.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.RequestHeader;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class UserSearchRequest {
-    @JsonProperty("RequestInfo")
-    private RequestInfo requestInfo;
+    @JsonProperty("requestheader")
+    private RequestHeader requestHeader;
     @JsonProperty("uuid")
     private List<String> uuid;
     @JsonProperty("id")

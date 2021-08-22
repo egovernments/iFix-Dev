@@ -12,23 +12,23 @@ public class RequestBodyInspectorTest {
     @Test
     public void test_should_return_request_info_when_request_info_container_field_name_has_pascal_case() {
         final HashMap<String, Object> requestBody = new HashMap<>();
-        final HashMap<Object, Object> requestInfoBody = new HashMap<>();
-        requestBody.put("RequestInfo", requestInfoBody);
+        final HashMap<Object, Object> requestHeaderBody = new HashMap<>();
+        requestBody.put("requestHeader", requestHeaderBody);
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        assertEquals(requestInfoBody, requestBodyInspector.getRequestInfo());
+        assertEquals(requestHeaderBody, requestBodyInspector.getRequestHeader());
     }
 
     @Test
     public void test_should_return_request_info_when_request_info_container_field_name_has_camel_case() {
         final HashMap<String, Object> requestBody = new HashMap<>();
-        final HashMap<Object, Object> requestInfoBody = new HashMap<>();
-        requestBody.put("requestInfo", requestInfoBody);
+        final HashMap<Object, Object> requestHeaderBody = new HashMap<>();
+        requestBody.put("requestHeader", requestHeaderBody);
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        assertEquals(requestInfoBody, requestBodyInspector.getRequestInfo());
+        assertEquals(requestHeaderBody, requestBodyInspector.getRequestHeader());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class RequestBodyInspectorTest {
         final HashMap<String, Object> requestBody = new HashMap<>();
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        assertNull(requestBodyInspector.getRequestInfo());
+        assertNull(requestBodyInspector.getRequestHeader());
     }
 
     @Test
@@ -45,27 +45,27 @@ public class RequestBodyInspectorTest {
         requestBody.put("someField", new HashMap<>());
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        assertNull(requestBodyInspector.getRequestInfo());
+        assertNull(requestBodyInspector.getRequestHeader());
     }
 
     @Test
     public void test_should_update_request_info() {
         final HashMap<String, Object> requestBody = new HashMap<>();
-        final HashMap<Object, Object> originalRequestInfoBody = new HashMap<>();
-        requestBody.put("requestInfo", originalRequestInfoBody);
+        final HashMap<Object, Object> originalRequestHeaderBody = new HashMap<>();
+        requestBody.put("requestHeader", originalRequestHeaderBody);
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        final HashMap<String, Object> updatedRequestInfo = new HashMap<>();
-        updatedRequestInfo.put("foo", "bar");
+        final HashMap<String, Object> updatedRequestHeader = new HashMap<>();
+        updatedRequestHeader.put("foo", "bar");
 
-        requestBodyInspector.updateRequestInfo(updatedRequestInfo);
+        requestBodyInspector.updateRequestHeader(updatedRequestHeader);
 
         final HashMap<String, Object> actualRequestBody = requestBodyInspector.getRequestBody();
-        final HashMap<String, Object> actualRequestInfo =
-            (HashMap<String, Object>) actualRequestBody.get("requestInfo");
-        assertNotNull(actualRequestInfo);
-        assertTrue(actualRequestInfo.containsKey("foo"));
+        final HashMap<String, Object> actualRequestHeader =
+            (HashMap<String, Object>) actualRequestBody.get("requestHeader");
+        assertNotNull(actualRequestHeader);
+        assertTrue(actualRequestHeader.containsKey("foo"));
     }
 
     @Test
@@ -75,10 +75,10 @@ public class RequestBodyInspectorTest {
 
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
 
-        final HashMap<String, Object> updatedRequestInfo = new HashMap<>();
-        updatedRequestInfo.put("userInfo", "user");
+        final HashMap<String, Object> updatedRequestHeader = new HashMap<>();
+        updatedRequestHeader.put("userInfo", "user");
 
-        requestBodyInspector.updateRequestInfo(updatedRequestInfo);
+        requestBodyInspector.updateRequestHeader(updatedRequestHeader);
 
         final HashMap<String, Object> actualRequestBody = requestBodyInspector.getRequestBody();
         final Set<String> keys = actualRequestBody.keySet();

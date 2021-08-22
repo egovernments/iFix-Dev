@@ -40,8 +40,8 @@
         </dependency>
         <dependency>
             <groupId>org.egov.services</groupId>
-            <artifactId>tracer</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <artifactId>ifix-tracer</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -78,19 +78,19 @@
     </dependencies>
     <repositories>
         <repository>
-            <id>repo.egovernments.org</id>
+            <id>repo.digit.org</id>
             <name>eGov ERP Releases Repository</name>
-            <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+            <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>repo.egovernments.org.snapshots</id>
+            <id>repo.digit.org.snapshots</id>
             <name>eGov ERP Releases Repository</name>
-            <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+            <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>repo.egovernments.org.public</id>
+            <id>repo.digit.org.public</id>
             <name>eGov Public Repository Group</name>
-            <url>https://nexus-repo.egovernments.org/nexus/content/groups/public/</url>
+            <url>https://nexus-repo.digit.org/nexus/content/groups/public/</url>
         </repository>
     </repositories>
     <build>
@@ -140,8 +140,9 @@
                         <class>org.egov.model.UserSearchRequest</class>
                     </classes>
                     <customTypeMappings>
-                        <customTypeMapping>org.egov.common.contract.request.RequestInfo:RequestInfo</customTypeMapping>
-                        <customTypeMapping>org.egov.common.contract.response.ResponseInfo:ResponseInfo
+                        <customTypeMapping>org.egov.common.contract.request
+                            .RequestHeader:RequestHeader</customTypeMapping>
+                        <customTypeMapping>org.egov.common.contract.response.ResponseHeader:ResponseHeader
                         </customTypeMapping>
                     </customTypeMappings>
                     <namespace>Digit</namespace>

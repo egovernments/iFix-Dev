@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.RequestHeader;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,8 +13,8 @@ import org.egov.common.contract.request.RequestInfo;
 @Builder
 public class AuthorizationRequestWrapper {
 
-    @JsonProperty("RequestInfo")
-    private RequestInfo requestInfo;
+    @JsonProperty("requestHeader")
+    private RequestHeader requestHeader;
 
     @JsonProperty("AuthorizationRequest")
     private AuthorizationRequest authorizationRequest;

@@ -18,7 +18,7 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 public class CustomRateLimitUtils implements RateLimitUtils {
 
 
-    private static final String UUID_JSON_PATH = "$.RequestInfo.userInfo.uuid";
+    private static final String UUID_JSON_PATH = "$.requestHeader.userInfo.uuid";
     private static final String ANONYMOUS_USER = "anonymous";
     private static final String X_FORWARDED_FOR_HEADER_DELIMITER = ",";
 

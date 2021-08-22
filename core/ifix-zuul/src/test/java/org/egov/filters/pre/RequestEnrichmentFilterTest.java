@@ -116,7 +116,7 @@ public class RequestEnrichmentFilterTest {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
         request.setRequestURI("http://foo/bar/v1/_create");
-        request.setContent(getContent("postRequestWithoutRequestInfoFromConsumer.json"));
+        request.setContent(getContent("postRequestWithoutRequestHeaderFromConsumer.json"));
         currentContext.setRequest(request);
         final String expectedCorrelationId = "someCorrelationId";
         currentContext.set("CORRELATION_ID", expectedCorrelationId);
@@ -124,7 +124,7 @@ public class RequestEnrichmentFilterTest {
 
         filter.run();
 
-        String expectedBody = resources.getFileContents("postRequestWithoutRequestInfoFromConsumer.json");
+        String expectedBody = resources.getFileContents("postRequestWithoutRequestHeaderFromConsumer.json");
         assertEquals(expectedBody, IOUtils.toString(currentContext.getRequest().getInputStream()));
     }
 

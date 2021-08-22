@@ -68,23 +68,23 @@ public class ZuulGatewayApplication {
             new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)), userUtils);
     }
 
-    @Bean
-    public AuthFilter authFilter() {
-        final ProxyRequestHelper proxyRequestHelper = new ProxyRequestHelper();
-        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri);
-    }
-
-    @Bean
-    public RbacFilter rbacFilter() {
-        return new RbacFilter(restTemplate, authorizationUrl, objectMapper);
-    }
-
-    @Bean
-    public RbacPreCheckFilter rbacCheckFilter() {
-        return new RbacPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
-            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist))
-        );
-    }
+//    @Bean
+//    public AuthFilter authFilter() {
+//        final ProxyRequestHelper proxyRequestHelper = new ProxyRequestHelper();
+//        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri);
+//    }
+//
+//    @Bean
+//    public RbacFilter rbacFilter() {
+//        return new RbacFilter(restTemplate, authorizationUrl, objectMapper);
+//    }
+//
+//    @Bean
+//    public RbacPreCheckFilter rbacCheckFilter() {
+//        return new RbacPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
+//            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist))
+//        );
+//    }
 
     @Configuration
     public static class RateLimitUtilsConfiguration {

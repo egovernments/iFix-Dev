@@ -53,7 +53,7 @@ processing for any particular transaction. We can add any number of filters for 
 - Property module tax calculation filter for firecess
 - Request enrichment filter:
 - Addition of co-relation id
-- Addition of authenticated user’s userinfo to requestInfo.
+- Addition of authenticated user’s userinfo to requestHeader.
 - Error filter:
     - Error response formatting
 - Validation Filter to check if a tenant of a particular module is enabled or not.

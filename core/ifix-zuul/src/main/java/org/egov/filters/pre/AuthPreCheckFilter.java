@@ -141,12 +141,12 @@ public class AuthPreCheckFilter extends ZuulFilter {
         HashMap<String, Object> requestBody = getRequestBody(requestWrapper);
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
         @SuppressWarnings("unchecked")
-        HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
-        if (requestInfo == null) {
+        HashMap<String, Object> requestHeader = requestBodyInspector.getRequestHeader();
+        if (requestHeader == null) {
             logger.info(NO_REQUEST_INFO_FIELD_MESSAGE, getRequestURI());
             return null;
         }
-        String authToken = (String) requestInfo.get(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
+        String authToken = (String) requestHeader.get(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
         sanitizeAndSetRequest(requestBodyInspector, requestWrapper);
         return authToken;
     }
@@ -158,11 +158,11 @@ public class AuthPreCheckFilter extends ZuulFilter {
     }
 
     private void sanitizeAndSetRequest(RequestBodyInspector requestBodyInspector, CustomRequestWrapper requestWrapper) {
-        HashMap<String, Object> requestInfo = requestBodyInspector.getRequestInfo();
+        HashMap<String, Object> requestHeader = requestBodyInspector.getRequestHeader();
         RequestContext ctx = RequestContext.getCurrentContext();
-        requestInfo.remove(USER_INFO_FIELD_NAME);
-        requestInfo.remove(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
-        requestBodyInspector.updateRequestInfo(requestInfo);
+        requestHeader.remove(USER_INFO_FIELD_NAME);
+        requestHeader.remove(AUTH_TOKEN_REQUEST_BODY_FIELD_NAME);
+        requestBodyInspector.updateRequestHeader(requestHeader);
         try {
             String requestSanitizedBody = objectMapper.writeValueAsString(requestBodyInspector.getRequestBody());
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY, requestBodyInspector.getRequestBody());

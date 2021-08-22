@@ -25,7 +25,7 @@ public class ExceptionUtils {
 
     private static HashMap<String, Object> getErrorInfoObject(String code, String message, String description) {
         String errorTemplate = "{\n" +
-            "    \"ResponseInfo\": null,\n" +
+            "    \"responseHeader\": null,\n" +
             "    \"Errors\": [\n" +
             "        {\n" +
             "            \"code\": \"Exception\",\n" +

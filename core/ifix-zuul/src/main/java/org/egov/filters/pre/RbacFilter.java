@@ -9,7 +9,7 @@ import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.Utils;
-import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.RequestHeader;
 import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.egov.model.AuthorizationRequest;
@@ -118,7 +118,7 @@ public class RbacFilter extends ZuulFilter {
             try {
                 ObjectNode requestBody = (ObjectNode) objectMapper.readTree(request.getInputStream());
 
-                stripRequestInfo(requestBody);
+                stripRequestHeader(requestBody);
 
                 List<String> tenants = new LinkedList<>();
 
@@ -159,7 +159,7 @@ public class RbacFilter extends ZuulFilter {
         return tenantIds;
     }
 
-    private void stripRequestInfo(ObjectNode requestBody) {
+    private void stripRequestHeader(ObjectNode requestBody) {
         if (requestBody.has(REQUEST_INFO_FIELD_NAME_PASCAL_CASE))
             requestBody.remove(REQUEST_INFO_FIELD_NAME_PASCAL_CASE);
 
@@ -169,7 +169,7 @@ public class RbacFilter extends ZuulFilter {
     }
 
     private boolean isUriAuthorized(AuthorizationRequest authorizationRequest) {
-        AuthorizationRequestWrapper authorizationRequestWrapper = new AuthorizationRequestWrapper(new RequestInfo(),
+        AuthorizationRequestWrapper authorizationRequestWrapper = new AuthorizationRequestWrapper(new RequestHeader(),
             authorizationRequest);
 
         try {

@@ -12,30 +12,30 @@ public class RequestBodyInspector {
         this.requestBody = requestBody;
     }
 
-    public boolean isRequestInfoPresent() {
-        return requestBody != null && isRequestInfoContainerFieldPresent();
+    public boolean isRequestHeaderPresent() {
+        return requestBody != null && isRequestHeaderContainerFieldPresent();
     }
 
     public HashMap<String, Object> getRequestBody() {
         return requestBody;
     }
 
-    public void updateRequestInfo(HashMap<String, Object> requestInfo) {
-        if (!isRequestInfoPresent()) {
+    public void updateRequestHeader(HashMap<String, Object> requestHeader) {
+        if (!isRequestHeaderPresent()) {
             return;
         }
-        requestBody.put(getRequestInfoFieldNamePresent(), requestInfo);
+        requestBody.put(getRequestHeaderFieldNamePresent(), requestHeader);
     }
 
     @SuppressWarnings("unchecked")
-    public HashMap<String, Object> getRequestInfo() {
-        if (isRequestInfoPresent()) {
-            return (HashMap<String, Object>) requestBody.get(getRequestInfoFieldNamePresent());
+    public HashMap<String, Object> getRequestHeader() {
+        if (isRequestHeaderPresent()) {
+            return (HashMap<String, Object>) requestBody.get(getRequestHeaderFieldNamePresent());
         }
         return null;
     }
 
-    private String getRequestInfoFieldNamePresent() {
+    private String getRequestHeaderFieldNamePresent() {
         if (isPascalCasePresent()) {
             return REQUEST_INFO_FIELD_NAME_PASCAL_CASE;
         } else {
@@ -43,7 +43,7 @@ public class RequestBodyInspector {
         }
     }
 
-    private boolean isRequestInfoContainerFieldPresent() {
+    private boolean isRequestHeaderContainerFieldPresent() {
         return isPascalCasePresent() || isCamelCasePresent();
     }
 

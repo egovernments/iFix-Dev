@@ -100,20 +100,20 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setRequestURI("anonymous-endpoint1");
         request.setMethod("POST");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
     }
 
     @Test
-    public void testThatAuthShouldNotHappenForAnonymousPOSTEndpointsOnNoRequestInfo() throws IOException {
+    public void testThatAuthShouldNotHappenForAnonymousPOSTEndpointsOnNoRequestHeader() throws IOException {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setRequestURI("anonymous-endpoint1");
         request.setMethod("POST");
@@ -135,21 +135,21 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setRequestURI("anonymous-endpoint1");
         request.setMethod("PUT");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
 
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
     }
 
     @Test
-    public void testThatAuthShouldNotHappenForAnonymousPUTEndpointsOnNoRequestInfo() throws IOException {
+    public void testThatAuthShouldNotHappenForAnonymousPUTEndpointsOnNorequestHeader() throws IOException {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setRequestURI("anonymous-endpoint1");
         request.setMethod("PUT");
@@ -184,7 +184,7 @@ public class AuthPreCheckFilterTest {
         request.addHeader("auth-token", "token");
         request.setMethod("POST");
         request.setContentType("application/json");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
 
@@ -199,7 +199,7 @@ public class AuthPreCheckFilterTest {
         request.addHeader("auth-token", "token");
         request.setContentType("application/json");
         request.setMethod("PUT");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
 
@@ -230,7 +230,7 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("POST");
         request.setRequestURI("other-endpoint");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
 
         try {
@@ -282,7 +282,7 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("PUT");
         request.setRequestURI("other-endpoint");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
 
         try {
@@ -339,18 +339,18 @@ public class AuthPreCheckFilterTest {
     }
 
     @Test
-    public void testThatRequestInfoIsSanitizedForOtherPUTEndpoints() throws IOException {
+    public void testThatRequestHeaderIsSanitizedForOtherPUTEndpoints() throws IOException {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.addHeader("auth-token", "token");
         request.setMethod("PUT");
         request.setContentType("application/json");
-        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\", \"userInfo\": {\"name\": \"fubarred\"}}}")));
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"requestHeader\": {\"fu\": \"bar\", \"authToken\": \"authtoken\", \"userInfo\": {\"name\": \"fubarred\"}}}")));
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
 
         authPreCheckFilter.run();
 
-        String expectedBody = "{\"RequestInfo\":{\"fu\":\"bar\"}}";
+        String expectedBody = "{\"requestHeader\":{\"fu\":\"bar\"}}";
         assertEquals(expectedBody, IOUtils.toString(ctx.getRequest().getInputStream()));
     }
 }
