@@ -9,6 +9,7 @@ import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.contract.User;
+import org.egov.contract.UserInfo;
 import org.egov.model.RequestBodyInspector;
 import org.egov.tracer.model.CustomException;
 import org.egov.wrapper.CustomRequestWrapper;
@@ -80,7 +81,7 @@ public class RequestEnrichmentFilter extends ZuulFilter {
 
     private void addUserInfoHeader(RequestContext ctx) {
         if (isUserInfoPresent() && !isRequestBodyCompatible(ctx.getRequest())) {
-            User user = getUser();
+            UserInfo user = getUser();
             try {
                 ctx.addZuulRequestHeader(USER_INFO_HEADER_NAME, objectMapper.writeValueAsString(user));
                 logger.info(ADDED_USER_INFO_TO_HEADER_MESSAGE);
@@ -150,9 +151,9 @@ public class RequestEnrichmentFilter extends ZuulFilter {
         }
     }
 
-    private User getUser() {
+    private UserInfo getUser() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        return (User) ctx.get(USER_INFO_KEY);
+        return (UserInfo) ctx.get(USER_INFO_KEY);
     }
 
     private boolean isUserInfoPresent() {
