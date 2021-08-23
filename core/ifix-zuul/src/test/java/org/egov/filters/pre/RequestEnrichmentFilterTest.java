@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.egov.Resources;
 import org.egov.contract.Role;
 import org.egov.contract.User;
+import org.egov.contract.UserInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -128,31 +130,13 @@ public class RequestEnrichmentFilterTest {
         assertEquals(expectedBody, IOUtils.toString(currentContext.getRequest().getInputStream()));
     }
 
-    private User getUser() {
-        User mockUser = new User();
-        mockUser.setId(30);
-        mockUser.setUserName("userName");
-        mockUser.setUuid("asdfgvcxzawertyjnbvcxzasdfgh");
-        mockUser.setName("name");
-        mockUser.setMobileNumber("1234567890");
-        mockUser.setEmailId("fu@bar.com");
-        mockUser.setTenantId("default");
-        mockUser.setType("EMPLOYEE");
-        Role mockRole1 = new Role();
-        mockRole1.setId(1L);
-        mockRole1.setName("Employee");
-        mockRole1.setCode("EMPLOYEE");
-        mockRole1.setTenantId("default");
-        Role mockRole2 = new Role();
-        mockRole2.setId(2L);
-        mockRole2.setName("ULB Operator");
-        mockRole2.setCode("ULB");
-        mockRole2.setTenantId("default");
-        List<Role> roles = new ArrayList<>();
-        roles.add(mockRole1);
-        roles.add(mockRole2);
-        mockUser.setRoles(roles);
-        return mockUser;
+    private UserInfo getUser() {
+        UserInfo mockUserInfo = new UserInfo();
+        mockUserInfo.setUuid("abcd");
+        mockUserInfo.setTenants(Arrays.asList(new String[]{"pb"}));
+        mockUserInfo.setRoles(Arrays.asList(new String[]{"fiscal-event-producer"}));
+        mockUserInfo.setAttributes(null);
+        return mockUserInfo;
     }
 
     private byte[] getContent(String fileName) {

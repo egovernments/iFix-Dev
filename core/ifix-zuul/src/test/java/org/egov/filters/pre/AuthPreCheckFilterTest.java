@@ -82,7 +82,7 @@ public class AuthPreCheckFilterTest {
     public void testThatAuthShouldHappenForAnonymousGETEndpointsOnAuthTokenInHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("GET");
-        request.addHeader("auth-token", "token");
+        request.addHeader("Authorization", "Bearer token");
 
         request.setRequestURI("/anonymous-endpoint1");
         ctx.setRequest(request);
@@ -169,7 +169,7 @@ public class AuthPreCheckFilterTest {
     @Test
     public void testThatAuthShouldHappenForOtherGETEndpointsOnAuthTokenInHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        request.addHeader("auth-token", "token");
+        request.addHeader("Authorization", "Bearer token");
         request.setMethod("GET");
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
@@ -324,18 +324,6 @@ public class AuthPreCheckFilterTest {
         }
         assertFalse(ctx.sendZuulResponse());
         assertThat(ctx.getResponseStatusCode(), is(500));
-    }
-
-    @Test
-    public void testThatAuthTokenIsAlwaysReferredFromHeaderForFileStoreEndpoints() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        request.setMethod("POST");
-        request.addHeader("auth-token", "authtoken");
-        request.setRequestURI("/filestore/v1/files");
-        ctx.setRequest(request);
-
-        authPreCheckFilter.run();
-        assertEquals("authtoken", ctx.get("authToken"));
     }
 
     @Test

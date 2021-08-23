@@ -177,7 +177,11 @@ public class AuthPreCheckFilter extends ZuulFilter {
 
     private String getAuthTokenFromRequestHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        return ctx.getRequest().getHeader("Authorization").split(" ")[1];   // To remove "Bearer "
+        try {
+            return ctx.getRequest().getHeader("Authorization").split(" ")[1];   // To remove "Bearer "
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     private void setShouldDoAuth(boolean enableAuth) {
