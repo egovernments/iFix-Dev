@@ -1,0 +1,4 @@
+db.fiscalEvent.createIndexes(
+  [{"eventType":1},{"eventTime":1},{"tenantId":1},{"referenceId":1}]
+ );
+db.fiscalEvent.getIndexes();
