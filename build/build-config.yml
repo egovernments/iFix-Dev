@@ -36,3 +36,8 @@ config:
       - work-dir: "core/ifix-zuul"
         image-name: "ifix-zuul"
         dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/domain-services/ifix-department-entity-service"
+    build:
+      - work-dir: "domain-services/ifix-department-entity-service"
+        image-name: "ifix-department-entity-service"
+        dockerfile: "build/maven/Dockerfile"
