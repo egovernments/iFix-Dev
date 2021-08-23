@@ -17,8 +17,8 @@ public class RequestContextConstants {
     public static final String PATCH = "PATCH";
 
     public static final String FILESTORE_REGEX = "^/filestore/.*";
-    public static final String REQUEST_INFO_FIELD_NAME_PASCAL_CASE = "RequestHeader";
-    public static final String REQUEST_INFO_FIELD_NAME_CAMEL_CASE = "requestHeader";
+    public static final String REQUEST_HEADER_FIELD_NAME_PASCAL_CASE = "RequestHeader";
+    public static final String REQUEST_HEADER_FIELD_NAME_CAMEL_CASE = "requestHeader";
     public static final String USER_INFO_FIELD_NAME = "userInfo";
     public static final String USER_INFO_KEY = "USER_INFO";
     public static final String CORRELATION_ID_FIELD_NAME = "correlationId";

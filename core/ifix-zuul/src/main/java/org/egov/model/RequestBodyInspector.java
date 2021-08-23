@@ -2,8 +2,8 @@ package org.egov.model;
 
 import java.util.HashMap;
 
-import static org.egov.constants.RequestContextConstants.REQUEST_INFO_FIELD_NAME_CAMEL_CASE;
-import static org.egov.constants.RequestContextConstants.REQUEST_INFO_FIELD_NAME_PASCAL_CASE;
+import static org.egov.constants.RequestContextConstants.REQUEST_HEADER_FIELD_NAME_CAMEL_CASE;
+import static org.egov.constants.RequestContextConstants.REQUEST_HEADER_FIELD_NAME_PASCAL_CASE;
 
 public class RequestBodyInspector {
     private HashMap<String, Object> requestBody;
@@ -37,9 +37,9 @@ public class RequestBodyInspector {
 
     private String getRequestHeaderFieldNamePresent() {
         if (isPascalCasePresent()) {
-            return REQUEST_INFO_FIELD_NAME_PASCAL_CASE;
+            return REQUEST_HEADER_FIELD_NAME_PASCAL_CASE;
         } else {
-            return REQUEST_INFO_FIELD_NAME_CAMEL_CASE;
+            return REQUEST_HEADER_FIELD_NAME_CAMEL_CASE;
         }
     }
 
@@ -48,11 +48,11 @@ public class RequestBodyInspector {
     }
 
     private boolean isCamelCasePresent() {
-        return requestBody.containsKey(REQUEST_INFO_FIELD_NAME_CAMEL_CASE);
+        return requestBody.containsKey(REQUEST_HEADER_FIELD_NAME_CAMEL_CASE);
     }
 
     private boolean isPascalCasePresent() {
-        return requestBody.containsKey(REQUEST_INFO_FIELD_NAME_PASCAL_CASE);
+        return requestBody.containsKey(REQUEST_HEADER_FIELD_NAME_PASCAL_CASE);
     }
 
 }
