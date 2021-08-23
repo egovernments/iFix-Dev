@@ -1,0 +1,103 @@
+{
+  "type": "kafka",
+  "spec": {
+    "ioConfig": {
+      "type": "kafka",
+      "consumerProperties": {
+        "bootstrap.servers": "kafka-v2-headless.ifix:9092"
+      },
+      "topic": "fiscal-event-druid-sink",
+      "inputFormat": {
+        "type": "json"
+      },
+      "useEarliestOffset": true
+    },
+    "tuningConfig": {
+      "type": "kafka"
+    },
+    "dataSchema": {
+      "dataSource": "fiscal-event",
+      "timestampSpec": {
+        "column": "eventTime",
+        "format": "millis"
+      },
+      "dimensionsSpec": {
+        "dimensions": [
+          {
+            "type": "double",
+            "name": "amount"
+          },
+          {
+            "type": "long",
+            "name": "coa.groupHead"
+          },
+          "coa.groupHeadName",
+          "coa.id",
+          {
+            "type": "long",
+            "name": "coa.majorHead"
+          },
+          "coa.majorHeadName",
+          {
+            "type": "long",
+            "name": "coa.minorHead"
+          },
+          "coa.minorHeadName",
+          {
+            "type": "long",
+            "name": "coa.objectHead"
+          },
+          "coa.objectHeadName",
+          {
+            "type": "long",
+            "name": "coa.subHead"
+          },
+          "coa.subHeadName",
+          {
+            "type": "long",
+            "name": "coa.subMajorHead"
+          },
+          "coa.subMajorHeadName",
+          "department.code",
+          "department.id",
+          "department.name",
+          "eventId",
+          "eventType",
+          {
+            "type": "long",
+            "name": "expenditure.code"
+          },
+          "expenditure.id",
+          "expenditure.name",
+          "expenditure.type",
+          {
+            "type": "long",
+            "name": "fromBillingPeriod"
+          },
+          "government.id",
+          "government.name",
+          "id",
+          "parentEventId",
+          "parentReferenceId",
+          "project.code",
+          "project.departmentId",
+          "project.expenditureId",
+          "project.id",
+          "project.name",
+          "referenceId",
+          "tenantId",
+          {
+            "type": "long",
+            "name": "toBillingPeriod"
+          },
+          "version"
+        ]
+      },
+      "granularitySpec": {
+        "queryGranularity": "none",
+        "rollup": false,
+        "segmentGranularity": "hour"
+      }
+    }
+  }
+}
