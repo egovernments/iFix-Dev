@@ -8,6 +8,8 @@ import org.egov.web.models.DepartmentEntityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class DepartmentEntityEnrichmentService {
     @Autowired
@@ -28,6 +30,7 @@ public class DepartmentEntityEnrichmentService {
             auditDetails = enrichAuditDetails.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), departmentEntity.getAuditDetails(), false);
         }
 
+        departmentEntity.setId(UUID.randomUUID().toString());
         departmentEntity.setAuditDetails(auditDetails);
     }
 }

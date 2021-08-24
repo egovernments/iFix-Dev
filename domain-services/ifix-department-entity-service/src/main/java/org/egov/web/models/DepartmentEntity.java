@@ -44,13 +44,13 @@ public class DepartmentEntity {
 
     @JsonProperty("children")
     @Valid
-    private List<DepartmentEntity> children = new ArrayList<>();
+    private List<Integer> children = new ArrayList<>();
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;
 
 
-    public DepartmentEntity addChildrenItem(DepartmentEntity childrenItem) {
+    public DepartmentEntity addChildrenItem(Integer childrenItem) {
         this.children.add(childrenItem);
         return this;
     }
