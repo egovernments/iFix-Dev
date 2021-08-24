@@ -40,7 +40,7 @@ public class DepartmentEntity {
     private String name = null;
 
     @JsonProperty("hierarchyLevelId")
-    private BigDecimal hierarchyLevelId = null;
+    private Integer hierarchyLevelId = null;
 
     @JsonProperty("children")
     @Valid
