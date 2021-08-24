@@ -73,8 +73,14 @@ public class DepartmentEntityApiController {
     public ResponseEntity<DepartmentEntityResponse> departmentEntityV1SearchPost(
             @ApiParam(value = "RequestHeader meta data.", required = true)
             @Valid @RequestBody DepartmentEntitySearchRequest body) {
-        List<DepartmentEntity> departmentEntityList = departmentEntityService.findAllByCriteria(body);
-        return new ResponseEntity<DepartmentEntityResponse>(HttpStatus.NOT_IMPLEMENTED);
+        List<? extends DepartmentEntityAbstract> departmentEntityList = departmentEntityService.findAllByCriteria(body);
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        DepartmentEntityResponse departmentEntityResponse = DepartmentEntityResponse.builder()
+                .responseHeader(responseHeader)
+                .departmentEntity(departmentEntityList).build();
+
+        return new ResponseEntity<DepartmentEntityResponse>(departmentEntityResponse, HttpStatus.OK);
     }
 
 }
