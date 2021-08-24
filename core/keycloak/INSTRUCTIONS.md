@@ -2,6 +2,10 @@
 
 ## Import Realm
 
+1. Open the keycloak console
+2. Near the top-left corner in the realm drop down menu, select **Add Realm**.
+3. Select the [ifix-realm.json](./ifix-realm.json) file.
+
 ## Creating Clients
 
 1. From the Clients section of Keycloak Admin Console, create a client. 
