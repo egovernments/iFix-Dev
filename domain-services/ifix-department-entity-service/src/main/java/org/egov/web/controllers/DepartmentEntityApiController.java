@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-23T11:51:49.710+05:30")
 
@@ -72,6 +73,7 @@ public class DepartmentEntityApiController {
     public ResponseEntity<DepartmentEntityResponse> departmentEntityV1SearchPost(
             @ApiParam(value = "RequestHeader meta data.", required = true)
             @Valid @RequestBody DepartmentEntitySearchRequest body) {
+        List<DepartmentEntity> departmentEntityList = departmentEntityService.findAllByCriteria(body);
         return new ResponseEntity<DepartmentEntityResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
