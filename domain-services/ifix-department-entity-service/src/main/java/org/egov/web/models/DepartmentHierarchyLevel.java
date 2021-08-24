@@ -37,7 +37,7 @@ public class DepartmentHierarchyLevel {
     private String parent = null;
 
     @JsonProperty("level")
-    private BigDecimal level = null;
+    private Integer level = null;
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;

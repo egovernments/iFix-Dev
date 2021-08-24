@@ -39,18 +39,18 @@ public class DepartmentEntity {
     @JsonProperty("name")
     private String name = null;
 
-    @JsonProperty("hierarchyLevelId")
-    private BigDecimal hierarchyLevelId = null;
+    @JsonProperty("hierarchyLevel")
+    private Integer hierarchyLevel = null;
 
     @JsonProperty("children")
     @Valid
-    private List<DepartmentEntity> children = new ArrayList<>();
+    private List<String> children = new ArrayList<>();
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;
 
 
-    public DepartmentEntity addChildrenItem(DepartmentEntity childrenItem) {
+    public DepartmentEntity addChildrenItem(String childrenItem) {
         this.children.add(childrenItem);
         return this;
     }
