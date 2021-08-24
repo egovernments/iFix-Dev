@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
@@ -29,20 +30,19 @@ public class GovernmentUtil {
     private ServiceRequestRepository serviceRequestRepository;
 
     /**
-     * @param hierarchyLevelRequest
+     *
+     * @param tenantId
+     * @param requestHeader
      * @return
      */
-    public List<String> getGovernmentFromGovernmentService(DepartmentHierarchyLevelRequest hierarchyLevelRequest) {
-        if (hierarchyLevelRequest != null && hierarchyLevelRequest.getRequestHeader() != null
-                && hierarchyLevelRequest.getDepartmentHierarchyLevel() != null
-                && StringUtils.isNotBlank(hierarchyLevelRequest.getDepartmentHierarchyLevel().getTenantId())) {
-
+    public List<String> getGovernmentFromGovernmentService(String tenantId, RequestHeader requestHeader) {
+        if (StringUtils.isNotBlank(tenantId)) {
             Map<String, Object> tenantValueMap = new HashMap<>();
             tenantValueMap.put(DepartmentEntityConstant.IDS,
-                    Collections.singletonList(hierarchyLevelRequest.getDepartmentHierarchyLevel().getTenantId().trim()));
+                    Collections.singletonList(tenantId.trim()));
 
             Map<String, Object> tenantMap = new HashMap<>();
-            tenantMap.put(DepartmentEntityConstant.REQUEST_HEADER, hierarchyLevelRequest.getRequestHeader());
+            tenantMap.put(DepartmentEntityConstant.REQUEST_HEADER, requestHeader);
             tenantMap.put(DepartmentEntityConstant.CRITERIA, tenantValueMap);
 
             Object response = serviceRequestRepository.fetchResult(createSearchGovernmentUrl(), tenantMap);
