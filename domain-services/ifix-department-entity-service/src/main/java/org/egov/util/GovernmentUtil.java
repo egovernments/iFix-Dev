@@ -1,6 +1,5 @@
 package org.egov.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -8,7 +7,6 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.DepartmentHierarchyLevelRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +18,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class GovernmentUtil {
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     private IfixDepartmentEntityConfig configuration;

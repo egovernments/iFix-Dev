@@ -8,7 +8,6 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.DepartmentHierarchyLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +26,6 @@ public class DepartmentUtil {
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     /**
      *

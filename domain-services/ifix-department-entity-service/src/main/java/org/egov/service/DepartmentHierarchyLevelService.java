@@ -2,7 +2,6 @@ package org.egov.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.validator.DepartmentHierarchyLevelValidator;
 import org.egov.web.models.DepartmentHierarchyLevelRequest;
@@ -18,9 +17,6 @@ public class DepartmentHierarchyLevelService {
 
     @Autowired
     private DepartmentHierarchyLevelEnrichmentService enricher;
-
-    @Autowired
-    private IfixDepartmentEntityConfig departmentEntityConfig;
 
     @Autowired
     private DepartmentHierarchyLevelRepository hierarchyLevelRepository;
