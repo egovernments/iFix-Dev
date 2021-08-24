@@ -38,14 +38,14 @@ public class IfixDepartmentEntityConfig {
         return converter;
     }
 
-    @Value("${ifix.master.coa.search.path}")
-    private String ifixMasterCoaSearchPath;
-
     @Value("${ifix.master.government.host}")
     private String ifixMasterGovernmentHost;
 
     @Value("${ifix.master.government.context.path}")
     private String ifixMasterGovernmentContextPath;
+
+    @Value("${ifix.master.government.search.path}")
+    private String ifixMasterGovernmentSearchPath;
 
     @Value("${ifix.master.department.host}")
     private String ifixMasterDepartmentHost;
