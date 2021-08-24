@@ -54,14 +54,15 @@ public class DepartmentHierarchyLevelValidator {
         }
 
         if (StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())) {
-            List<String> governments = governmentUtil.getGovernmentFromGovernmentService(request);
+            List<String> governments = governmentUtil.getGovernmentFromGovernmentService(departmentHierarchyLevel.getTenantId(),requestHeader);
             if (governments.isEmpty())
                 errorMap.put(DepartmentEntityConstant.INVALID_TENANT_ID, "Tenant id : " + departmentHierarchyLevel.getTenantId()
                         + " doesn't exist in the system");
         }
 
         if (StringUtils.isNotBlank(departmentHierarchyLevel.getDepartmentId()) && StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())) {
-            List<String> departments = departmentUtil.getDepartmentFromDepartmentService(departmentHierarchyLevel, requestHeader);
+            List<String> departments = departmentUtil.getDepartmentFromDepartmentService(departmentHierarchyLevel.getTenantId(),
+                    departmentHierarchyLevel.getDepartmentId(), requestHeader);
             if (departments.isEmpty())
                 errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevel.getDepartmentId()
                         + " doesn't exist in the system");

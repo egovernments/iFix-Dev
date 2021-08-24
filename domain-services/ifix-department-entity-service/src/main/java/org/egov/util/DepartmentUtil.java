@@ -30,12 +30,19 @@ public class DepartmentUtil {
     @Autowired
     ObjectMapper objectMapper;
 
-    public List<String> getDepartmentFromDepartmentService(DepartmentHierarchyLevel departmentHierarchyLevel, RequestHeader requestHeader) {
-        if (StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId()) && StringUtils.isNotBlank(departmentHierarchyLevel.getDepartmentId())) {
+    /**
+     *
+     * @param tenantId
+     * @param departmentId
+     * @param requestHeader
+     * @return
+     */
+    public List<String> getDepartmentFromDepartmentService(String tenantId,String departmentId, RequestHeader requestHeader) {
+        if (StringUtils.isNotBlank(tenantId) && StringUtils.isNotBlank(departmentId)) {
 
             Map<String, Object> departmentValueMap = new HashMap<>();
-            departmentValueMap.put(DepartmentEntityConstant.IDS, Collections.singletonList(departmentHierarchyLevel.getDepartmentId().trim()));
-            departmentValueMap.put(DepartmentEntityConstant.CRITERIA_TENANT_ID, departmentHierarchyLevel.getTenantId().trim());
+            departmentValueMap.put(DepartmentEntityConstant.IDS, Collections.singletonList(departmentId.trim()));
+            departmentValueMap.put(DepartmentEntityConstant.CRITERIA_TENANT_ID, tenantId.trim());
 
             Map<String, Object> departmentMap = new HashMap<>();
             departmentMap.put(DepartmentEntityConstant.REQUEST_HEADER, requestHeader);
