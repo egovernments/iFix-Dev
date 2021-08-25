@@ -39,6 +39,9 @@ public class FiscalEventDeReferenced {
     @JsonProperty("department")
     private Department department = null;
 
+    @JsonProperty("departmentEntity")
+    private DepartmentEntity departmentEntity = null;
+
     @JsonProperty("expenditure")
     private Expenditure expenditure = null;
 
