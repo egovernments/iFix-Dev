@@ -38,8 +38,8 @@ public class DepartmentEntitySearchCriteria {
     @JsonProperty("name")
     private String name = null;
 
-    @JsonProperty("level")
-    private String level = null;
+    @JsonProperty("hierarchyLevel")
+    private String hierarchyLevel = null;
 
     @JsonProperty("getAncestry")
     // TODO : Set default value false

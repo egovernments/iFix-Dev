@@ -1,5 +1,7 @@
 package org.egov.repository;
 
+import org.apache.commons.lang3.StringUtils;
+import org.egov.repository.queryBuilder.DepartmentEntityQueryBuilder;
 import org.egov.web.models.DepartmentEntity;
 import org.egov.web.models.DepartmentEntitySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class DepartmentEntityRepository {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private DepartmentEntityQueryBuilder queryBuilder;
 
     /**
      * @param departmentEntity
@@ -34,13 +39,10 @@ public class DepartmentEntityRepository {
     }
 
     public List<DepartmentEntity> searchEntity(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
-
-        DepartmentEntity departmentEntity = DepartmentEntity.builder()
-                .build();
-
-        departmentEntity.setId("525f7b94-1755-426e-982f-430904554dd3");
-        departmentEntity.setChildren(Collections.singletonList("ads"));
-
-        return Collections.singletonList(departmentEntity);
+        if (StringUtils.isNotBlank(departmentEntitySearchRequest.getCriteria().getTenantId())) {
+            Query searchQuery = queryBuilder.buildPlainSearchQuery(departmentEntitySearchRequest.getCriteria());
+            return (mongoTemplate.find(searchQuery, DepartmentEntity.class));
+        }
+        return Collections.emptyList();
     }
 }
