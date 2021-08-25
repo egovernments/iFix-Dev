@@ -23,6 +23,13 @@ public class MasterDataConstants {
     public static final String EXPENDITURE_ID = "EXPENDITURE_ID";
     public static final String DEPARTMENT_ID = "DEPARTMENT_ID";
     public static final String LOCATION_ID = "LOCATION_ID";
+    public static final String IDS = "Ids";
+    public static final String REQUEST_HEADER = "requestHeader";
+    public static final String CRITERIA = "criteria";
+    public static final String TENANT_LIST = "$.government.*";
+    public static final String EXPENDITURE_LIST = "$.expenditure.*";
+
+    public static final String JSONPATH_ERROR = "JSONPATH_ERROR";
 
 
 }
