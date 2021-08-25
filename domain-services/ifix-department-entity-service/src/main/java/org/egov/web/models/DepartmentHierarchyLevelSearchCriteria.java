@@ -37,7 +37,7 @@ public class DepartmentHierarchyLevelSearchCriteria {
     private String label = null;
 
     @JsonProperty("level")
-    private BigDecimal level = null;
+    private Integer level = null;
 
 
     public DepartmentHierarchyLevelSearchCriteria addIdsItem(String idsItem) {

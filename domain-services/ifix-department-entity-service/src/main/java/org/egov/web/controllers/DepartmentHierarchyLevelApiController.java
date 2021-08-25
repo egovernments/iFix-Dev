@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-23T11:51:49.710+05:30")
 
@@ -44,7 +45,7 @@ public class DepartmentHierarchyLevelApiController {
 
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<DepartmentHierarchyLevelResponse> departmentEntityHierarchyLevelV1CreatePost(@ApiParam(value = "Details for the new DepartmentHierarchyLevel + RequestHeader (meta data of the API).", required = true) @Valid @RequestBody DepartmentHierarchyLevelRequest body) {
-        DepartmentHierarchyLevelRequest departmentHierarchyLevelRequest = hierarchyLevelService.departmentEntityHierarchyLevelV1CreatePost(body);
+        DepartmentHierarchyLevelRequest departmentHierarchyLevelRequest = hierarchyLevelService.createDepartmentEntityHierarchyLevel(body);
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         DepartmentHierarchyLevelResponse departmentHierarchyLevelResponse = DepartmentHierarchyLevelResponse.builder().responseHeader(responseHeader)
                 .departmentHierarchyLevel(Collections.singletonList(departmentHierarchyLevelRequest.getDepartmentHierarchyLevel())).build();
@@ -53,6 +54,10 @@ public class DepartmentHierarchyLevelApiController {
 
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
     public ResponseEntity<DepartmentHierarchyLevelResponse> departmentEntityHierarchyLevelV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody DepartmentHierarchyLevelSearchRequest body) {
-        return new ResponseEntity<DepartmentHierarchyLevelResponse>(HttpStatus.NOT_IMPLEMENTED);
+        List<DepartmentHierarchyLevel> departmentHierarchyLevels = hierarchyLevelService.searchDepartmentEntityHierarchyLevel(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        DepartmentHierarchyLevelResponse departmentHierarchyLevelResponse = DepartmentHierarchyLevelResponse.builder().responseHeader(responseHeader)
+                .departmentHierarchyLevel(departmentHierarchyLevels).build();
+        return new ResponseEntity<DepartmentHierarchyLevelResponse>(departmentHierarchyLevelResponse, HttpStatus.OK);
     }
 }

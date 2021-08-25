@@ -19,8 +19,15 @@ public class DepartmentHierarchyLevelRepository {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private DepartmentHierarchyLevelQueryBuilder queryBuilder;
+
     public void save(DepartmentHierarchyLevel departmentHierarchyLevel) {
         mongoTemplate.save(departmentHierarchyLevel);
     }
 
+    public List<DepartmentHierarchyLevel> searchDeptHierarchyLevel(DepartmentHierarchyLevelSearchCriteria searchCriteria) {
+        Query searchQuery = queryBuilder.buildSearchQuery(searchCriteria);
+        return (mongoTemplate.find(searchQuery, DepartmentHierarchyLevel.class));
+    }
 }

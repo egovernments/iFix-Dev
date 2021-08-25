@@ -16,6 +16,7 @@ public class DepartmentEntityConstant {
     public static final String DEPARTMENT_LABEL = "DEPARTMENT_LABEL";
     public static final String INVALID_TENANT_ID = "INVALID_TENANT_ID";
     public static final String INVALID_DEPARTMENT_ID = "INVALID_DEPARTMENT_ID";
+    public static final String ERROR_SEARCH_CRITERIA = "SEARCH_CRITERIA";
 
     //Search key parameters
     public static final String IDS = "Ids";
