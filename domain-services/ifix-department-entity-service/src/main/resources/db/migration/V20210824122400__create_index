@@ -4,7 +4,7 @@ db.departmentHierarchyLevel.createIndexes(
 db.departmentHierarchyLevel.getIndexes();
 
 db.departmentEntity.createIndexes(
-  [{"departmentId":1},{"code":1},{"tenantId":1},{"level":1},{"name":1}]
+  [{"departmentId":1},{"code":1},{"tenantId":1},{"level":1},{"name":1},{"children":1}]
  );
 db.departmentEntity.getIndexes();
 
