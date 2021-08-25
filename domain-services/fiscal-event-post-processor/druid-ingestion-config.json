@@ -4,7 +4,7 @@
     "ioConfig": {
       "type": "kafka",
       "consumerProperties": {
-        "bootstrap.servers": "kafka-v2-headless.ifix:9092"
+        "bootstrap.servers": "kafka-v2.ifix:9092"
       },
       "topic": "fiscal-event-druid-sink",
       "inputFormat": {
@@ -18,7 +18,7 @@
     "dataSchema": {
       "dataSource": "fiscal-event",
       "timestampSpec": {
-        "column": "eventTime",
+        "column": "ingestionTime",
         "format": "millis"
       },
       "dimensionsSpec": {
@@ -62,6 +62,10 @@
           "department.id",
           "department.name",
           "eventId",
+          {
+            "type": "long",
+            "name": "eventTime"
+          },
           "eventType",
           {
             "type": "long",
