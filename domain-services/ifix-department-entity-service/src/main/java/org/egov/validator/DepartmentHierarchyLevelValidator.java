@@ -9,6 +9,8 @@ import org.egov.util.DepartmentUtil;
 import org.egov.util.GovernmentUtil;
 import org.egov.web.models.DepartmentHierarchyLevel;
 import org.egov.web.models.DepartmentHierarchyLevelRequest;
+import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
+import org.egov.web.models.DepartmentHierarchyLevelSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -68,6 +70,36 @@ public class DepartmentHierarchyLevelValidator {
                         + " doesn't exist in the system");
         }
 
+        if (!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);
+        }
+    }
+
+    public void validateHierarchyLevelSearchPost(DepartmentHierarchyLevelSearchRequest searchRequest) {
+        DepartmentHierarchyLevelSearchCriteria searchCriteria = searchRequest.getCriteria();
+        RequestHeader requestHeader = searchRequest.getRequestHeader();
+        Map<String, String> errorMap = new HashMap<>();
+
+        //Header validation
+        if (requestHeader == null) {
+            throw new CustomException(DepartmentEntityConstant.ERROR_REQUEST_HEADER, "Request header is missing");
+        }
+        if (requestHeader.getUserInfo() == null || requestHeader.getUserInfo().getUuid() == null) {
+            errorMap.put(DepartmentEntityConstant.USER_INFO, "User info is missing");
+        }
+        if (searchCriteria == null) {
+            throw new CustomException(DepartmentEntityConstant.ERROR_SEARCH_CRITERIA, "Search criteria is missing");
+        }
+        if (StringUtils.isBlank(searchCriteria.getTenantId())) {
+            errorMap.put(DepartmentEntityConstant.TENANT_ID, "Government Id (Tenant id) is missing");
+        }
+
+        if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
+            List<String> governments = governmentUtil.getGovernmentFromGovernmentService(searchCriteria.getTenantId(), requestHeader);
+            if (governments.isEmpty())
+                errorMap.put(DepartmentEntityConstant.INVALID_TENANT_ID, "Tenant id : " + searchCriteria.getTenantId()
+                        + " doesn't exist in the system");
+        }
         if (!errorMap.isEmpty()) {
             throw new CustomException(errorMap);
         }
