@@ -7,7 +7,6 @@ import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +21,27 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class DepartmentEntity extends DepartmentEntityAbstract {
-    @JsonProperty("children")
-    @Valid
-    private List<String> children = new ArrayList<>();
+public abstract class DepartmentEntityAbstract {
+    @JsonProperty("id")
+    private String id = null;
 
-    public DepartmentEntity addChildrenItem(String childrenItem) {
-        this.children.add(childrenItem);
-        return this;
-    }
+    @JsonProperty("tenantId")
+    private String tenantId = null;
+
+    @JsonProperty("departmentId")
+    private String departmentId = null;
+
+    @JsonProperty("code")
+    private String code = null;
+
+    @JsonProperty("name")
+    private String name = null;
+
+    @JsonProperty("hierarchyLevel")
+    private Integer hierarchyLevel = null;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails = null;
 
 }
 

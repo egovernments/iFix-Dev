@@ -56,4 +56,7 @@ public class IfixDepartmentEntityConfig {
     @Value("${ifix.master.department.search.path}")
     private String ifixMasterDepartmentSearchPath;
 
+    @Value("${maximum.supported.department.hierarchy}")
+    private Integer maximumSupportedDepartmentHierarchy;
+
 }
