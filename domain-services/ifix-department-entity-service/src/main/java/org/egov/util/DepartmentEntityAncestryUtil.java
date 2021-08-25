@@ -17,9 +17,8 @@ public class DepartmentEntityAncestryUtil {
         departmentEntityAncestry.setId(departmentEntity.getId());
         departmentEntityAncestry.setTenantId(departmentEntity.getTenantId());
         departmentEntityAncestry.setDepartmentId(departmentEntity.getDepartmentId());
-        departmentEntityAncestry.setCode(departmentEntityAncestry.getCode());
-        departmentEntityAncestry.setName(departmentEntityAncestry.getName());
-        departmentEntityAncestry.setName(departmentEntityAncestry.getName());
+        departmentEntityAncestry.setCode(departmentEntity.getCode());
+        departmentEntityAncestry.setName(departmentEntity.getName());
         departmentEntityAncestry.setHierarchyLevel(departmentEntity.getHierarchyLevel());
         departmentEntityAncestry.setAuditDetails(departmentEntity.getAuditDetails());
 
