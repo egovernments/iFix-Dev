@@ -28,16 +28,15 @@ public class DepartmentEntityResponse {
 
     @JsonProperty("departmentEntity")
     @Valid
-    private List<DepartmentEntity> departmentEntity = null;
+    private List<? extends DepartmentEntityAbstract> departmentEntity = null;
 
-
-    public DepartmentEntityResponse addDepartmentEntityItem(DepartmentEntity departmentEntityItem) {
-        if (this.departmentEntity == null) {
-            this.departmentEntity = new ArrayList<>();
-        }
-        this.departmentEntity.add(departmentEntityItem);
-        return this;
-    }
+//    public DepartmentEntityResponse addDepartmentEntityItem(Object departmentEntityItem) {
+//        if (this.departmentEntity == null) {
+//            this.departmentEntity = new ArrayList<>();
+//        }
+//        this.departmentEntity.add(departmentEntityItem);
+//        return this;
+//    }
 
 }
 
