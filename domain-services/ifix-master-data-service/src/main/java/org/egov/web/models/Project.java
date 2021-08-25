@@ -41,6 +41,9 @@ public class Project {
     @JsonProperty("departmentEntitytId")
     private String departmentEntitytId = null;
 
+    @JsonProperty("departmentEntity")
+    private DepartmentEntity departmentEntity = null;
+
     @JsonProperty("locationIds")
     @Valid
     private List<String> locationIds = null;
