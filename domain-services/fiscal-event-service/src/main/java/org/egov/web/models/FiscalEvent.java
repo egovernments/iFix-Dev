@@ -65,15 +65,15 @@ public class FiscalEvent {
 
 
     public enum EventTypeEnum {
-        Sanction("Sanction"),
-        Appropriation("Appropriation"),
-        Allocation("Allocation"),
-        IntraTransfer("IntraTransfer"),
-        InterTransfer("InterTransfer"),
-        Demand("Demand"),
-        Receipt("Receipt"),
-        Bill("Bill"),
-        Payment("Payment");
+        SANCTION("SANCTION"),
+        APPROPRIATION("APPROPRIATION"),
+        ALLOCATION("ALLOCATION"),
+        INTRATRANSFER("INTRATRANSFER"),
+        INTERTRANSFER("INTERTRANSFER"),
+        DEMAND("DEMAND"),
+        RECEIPT("RECEIPT"),
+        BILL("BILL"),
+        PAYMENT("PAYMENT");
 
         private String value;
 
