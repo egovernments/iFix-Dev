@@ -69,6 +69,7 @@ public class ProjectDepartmentEntityIntegration {
                 .code(departmentEntityDetails.get("code").asText())
                 .name(departmentEntityDetails.get("name").asText())
                 .hierarchyLevel(departmentEntityDetails.get("hierarchyLevel").asInt())
+                .departmentId(departmentEntityDetails.get("departmentId").asText())
                 .build();
         return departmentEntity;
     }

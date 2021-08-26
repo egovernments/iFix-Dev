@@ -21,6 +21,9 @@ public class DepartmentEntity {
     @JsonProperty("name")
     private String name = null;
 
+    @JsonProperty("departmentId")
+    private String departmentId;
+
     @JsonProperty("hierarchyLevel")
     private Integer hierarchyLevel = null;
 
