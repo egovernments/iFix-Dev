@@ -3,6 +3,7 @@ package org.egov.validator;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
+import org.egov.util.DepartmentUtil;
 import org.egov.util.ExpenditureUtil;
 import org.egov.util.MasterDataConstants;
 import org.egov.util.TenantUtil;
@@ -26,6 +27,9 @@ public class ProjectValidator {
 
     @Autowired
     private ExpenditureUtil expenditureUtil;
+
+    @Autowired
+    private DepartmentUtil departmentUtil;
 
     /**
      * @param projectSearchRequest
@@ -133,6 +137,19 @@ public class ProjectValidator {
                         Collections.singletonList(project.getExpenditureId()), requestHeader)) {
                     errorMap.put(MasterDataConstants.EXPENDITURE_ID, "Expenditure id : " + project.getExpenditureId()
                             + " doesn't exist in the system");
+                }
+            }
+
+            if (!StringUtils.isEmpty(project.getDepartmentEntitytId())) {
+                if (project.getDepartmentEntitytId().length() < 2 || project.getDepartmentEntitytId().length() > 64) {
+                    errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Department Entity id length is invalid. " +
+                            "Length range [2-64]");
+                }
+
+                if (!departmentUtil.validateDepartmentEntity(project.getTenantId(),
+                        Collections.singletonList(project.getDepartmentEntitytId()), requestHeader)) {
+                    errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Department Entity id : "
+                            + project.getExpenditureId() + " doesn't exist in the system");
                 }
             }
 

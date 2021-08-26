@@ -28,8 +28,12 @@ public class MasterDataConstants {
     public static final String CRITERIA = "criteria";
     public static final String TENANT_LIST = "$.government.*";
     public static final String EXPENDITURE_LIST = "$.expenditure.*";
+    public static final String DEPARTMENT_ENTITY_LIST = "$.departmentEntity.*";
+    public static final String DEPARTMENT_ENTITY_ID = "DEPARTMENT_ENTITY_ID";
 
     public static final String JSONPATH_ERROR = "JSONPATH_ERROR";
+    public static final String GET_ANCESTRY = "getAncestry";
+
 
 
 }
