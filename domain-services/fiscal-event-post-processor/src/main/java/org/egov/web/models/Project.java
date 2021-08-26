@@ -26,9 +26,9 @@ public class Project {
 
     @JsonProperty("name")
     private String name = null;
-
-    @JsonProperty("departmentEntity")
-    private DepartmentEntity departmentEntity = null;
+//
+//    @JsonProperty("departmentEntity")
+//    private DepartmentEntity departmentEntity = null;
 
 
 }

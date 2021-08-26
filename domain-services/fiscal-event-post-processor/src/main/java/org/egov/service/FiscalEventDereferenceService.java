@@ -1,10 +1,10 @@
 package org.egov.service;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.sun.org.apache.xpath.internal.objects.XObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.egov.config.FiscalEventPostProcessorConfig;
-import org.egov.producer.Producer;
 import org.egov.util.*;
 import org.egov.web.models.*;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -104,26 +106,50 @@ public class FiscalEventDereferenceService {
      */
     private void dereferenceProjectId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
         if (isValidProjectIdParam(fiscalEventRequest) && fiscalEventDeReferenced != null) {
-            List<Project> projectList = projectUtil.getProjectReference(fiscalEventRequest);
 
-            if (projectList != null && !projectList.isEmpty()) {
-                Project project = projectList.get(0);
-                fiscalEventDeReferenced.setProject(project);
+            JsonNode jsonNode = projectUtil.getProjectReference(fiscalEventRequest);
+            JsonNode projectListNode = jsonNode.get("project");
+            if (projectListNode != null && !projectListNode.isEmpty()) {
+                JsonNode projectNode = projectListNode.get(0);
 
-                List<Expenditure> expenditureList = expenditureUtil.getExpenditureReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
-                        project.getExpenditureId(), fiscalEventRequest.getRequestHeader());
+                String expenditureId = null;
+                String departmentId = null;
+                if(projectNode != null && !projectNode.isEmpty()) {
+                    expenditureId = projectNode.get("expenditureId").asText();
+                    departmentId = projectNode.get("departmentEntity").get("departmentId").asText();
+
+                    fiscalEventDeReferenced.setProject(getProjectDetails(projectNode));
+                    fiscalEventDeReferenced.setDepartmentEntity(projectUtil.getDepartmentEntityFromProject(projectNode.get("departmentEntity")));
+                }
+
+                List<Expenditure> expenditureList = null;
+                if (StringUtils.isNotBlank(expenditureId)) {
+                    expenditureList = expenditureUtil.getExpenditureReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
+                            expenditureId, fiscalEventRequest.getRequestHeader());
+                }
+
                 if (expenditureList != null && !expenditureList.isEmpty()) {
                     fiscalEventDeReferenced.setExpenditure(expenditureList.get(0));
                 }
 
-                List<Department> departmentList = departmentUtil
-                        .getDepartmentReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
-                                project.getDepartmentId(), fiscalEventRequest.getRequestHeader());
+                List<Department> departmentList = null;
+                if (StringUtils.isNotBlank(departmentId)) {
+                    departmentList = departmentUtil
+                            .getDepartmentReference(fiscalEventRequest.getFiscalEvent().getTenantId(),
+                                    departmentId, fiscalEventRequest.getRequestHeader());
+                }
+
                 if (departmentList != null && !departmentList.isEmpty()) {
                     fiscalEventDeReferenced.setDepartment(departmentList.get(0));
                 }
             }
         }
+    }
+
+    private Project getProjectDetails(JsonNode projectNode) {
+        return Project.builder().id(projectNode.get("id").asText())
+                .code(projectNode.get("code").asText())
+                .name(projectNode.get("name").asText()).build();
     }
 
     /**

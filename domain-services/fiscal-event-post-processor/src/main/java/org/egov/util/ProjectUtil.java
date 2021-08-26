@@ -1,6 +1,8 @@
 package org.egov.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventPostProcessorConfig;
 import org.egov.resposioty.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
+import org.egov.web.models.DepartmentEntity;
 import org.egov.web.models.FiscalEventRequest;
 import org.egov.web.models.Project;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +35,10 @@ public class ProjectUtil {
 
     /**
      * @param fiscalEventRequest
+     * @param idMap
      * @return
      */
-    public List<Project> getProjectReference(FiscalEventRequest fiscalEventRequest) {
+    public JsonNode getProjectReference(FiscalEventRequest fiscalEventRequest) {
         if (fiscalEventRequest != null && fiscalEventRequest.getRequestHeader() != null
                 && fiscalEventRequest.getFiscalEvent() != null
                 && !StringUtils.isEmpty(fiscalEventRequest.getFiscalEvent().getProjectId())) {
@@ -50,16 +54,10 @@ public class ProjectUtil {
             ProjectMap.put(MasterDataConstants.CRITERIA, projectValueMap);
 
             Object response = serviceRequestRepository.fetchResult(createSearchProjectUrl(), ProjectMap);
-
-            try{
-                List<Project>  projectList = JsonPath.read(response, MasterDataConstants.PROJECT_LIST);
-
-                return objectMapper.convertValue(projectList, new TypeReference<List<Project>>() {});
-            }catch (Exception e){
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse project response for projectId");
-            }
+            JsonNode jsonNode = objectMapper.convertValue(response, JsonNode.class);
+            return jsonNode;
         }
-        return Collections.emptyList();
+        return objectMapper.createObjectNode();
     }
 
     private String createSearchProjectUrl() {
@@ -69,4 +67,20 @@ public class ProjectUtil {
                 .append(processorConfig.getIfixMasterProjectSearchPath());
         return uriBuilder.toString();
     }
+
+    /**
+     *
+     * @param departmentEntityNode
+     * @return
+     */
+    public DepartmentEntity getDepartmentEntityFromProject(JsonNode departmentEntityNode) {
+        DepartmentEntity departmentEntity = null;
+        try {
+            departmentEntity = objectMapper.treeToValue(departmentEntityNode, DepartmentEntity.class);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse project Node for department entity");
+        }
+        return departmentEntity;
+    }
 }
+
