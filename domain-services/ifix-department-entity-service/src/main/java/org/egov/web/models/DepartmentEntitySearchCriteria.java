@@ -42,8 +42,7 @@ public class DepartmentEntitySearchCriteria {
     private String hierarchyLevel = null;
 
     @JsonProperty("getAncestry")
-    // TODO : Set default value false
-    private Boolean getAncestry = null;
+    private boolean getAncestry = false;
 
 
     public DepartmentEntitySearchCriteria addIdsItem(String idsItem) {

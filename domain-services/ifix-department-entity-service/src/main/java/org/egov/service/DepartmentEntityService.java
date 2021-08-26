@@ -44,7 +44,7 @@ public class DepartmentEntityService {
 
     public List<? extends DepartmentEntityAbstract> findAllByCriteria(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
         List<DepartmentEntity> departmentEntityList = entityRepository.searchEntity(departmentEntitySearchRequest);
-        if(departmentEntitySearchRequest.getCriteria().getGetAncestry()) {
+        if(departmentEntitySearchRequest.getCriteria().isGetAncestry()) {
             List<DepartmentEntityAncestry> departmentEntityAncestryList = new ArrayList<>();
             for(DepartmentEntity departmentEntity : departmentEntityList) {
                 departmentEntityAncestryList.add(createAncestryFor(departmentEntity));
