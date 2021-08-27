@@ -41,3 +41,8 @@ config:
       - work-dir: "domain-services/ifix-department-entity-service"
         image-name: "ifix-department-entity-service"
         dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-adapter"
+    build:
+      - work-dir: "reference-adapter"
+        image-name: "ifix-reference-adapter"
+        dockerfile: "build/maven/Dockerfile"
