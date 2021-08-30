@@ -95,10 +95,10 @@ public class ZuulGatewayApplication {
             return new SecuredRateLimitUtils(rateLimitProperties);
         }
 
-        @Bean
-        public RateLimitUtils rateLimitUtils(final RateLimitProperties rateLimitProperties) {
-            return new CustomRateLimitUtils(rateLimitProperties);
-        }
+//        @Bean
+//        public RateLimitUtils rateLimitUtils(final RateLimitProperties rateLimitProperties) {
+//            return new CustomRateLimitUtils(rateLimitProperties);
+//        }
     }
 
 }
