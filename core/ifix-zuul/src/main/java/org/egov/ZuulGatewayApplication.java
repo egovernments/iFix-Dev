@@ -83,11 +83,11 @@ public class ZuulGatewayApplication {
     @Configuration
     public static class RateLimitUtilsConfiguration {
 
-        @Bean
-        @ConditionalOnClass(name = "org.springframework.security.core.Authentication")
-        public RateLimitUtils securedRateLimitUtils(final RateLimitProperties rateLimitProperties) {
-            return new SecuredRateLimitUtils(rateLimitProperties);
-        }
+//        @Bean
+//        @ConditionalOnClass(name = "org.springframework.security.core.Authentication")
+//        public RateLimitUtils securedRateLimitUtils(final RateLimitProperties rateLimitProperties) {
+//            return new SecuredRateLimitUtils(rateLimitProperties);
+//        }
 
 //        @Bean
 //        public RateLimitUtils rateLimitUtils(final RateLimitProperties rateLimitProperties) {
