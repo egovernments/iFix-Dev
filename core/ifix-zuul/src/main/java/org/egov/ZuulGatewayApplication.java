@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
-import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
 import org.egov.filters.pre.AuthPreCheckFilter;
 import org.egov.filters.pre.JwtAuthenticationFilter;
@@ -47,8 +46,6 @@ public class ZuulGatewayApplication {
     private ObjectMapper objectMapper;
     @Autowired
     private UserUtils userUtils;
-    @Autowired
-    private CustomRateLimitUtils customRateLimitUtils;
 
     @Autowired
     private JWTVerifier jwtVerifier;
