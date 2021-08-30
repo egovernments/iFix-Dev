@@ -23,115 +23,114 @@
       },
       "dimensionsSpec": {
         "dimensions": [
+          "id",
           {
             "type": "double",
             "name": "amount"
           },
-          {
-            "type": "long",
-            "name": "coa.groupHead"
-          },
-          "coa.groupHeadName",
-          "coa.id",
-          {
-            "type": "long",
-            "name": "coa.majorHead"
-          },
-          "coa.majorHeadName",
-          {
-            "type": "long",
-            "name": "coa.minorHead"
-          },
-          "coa.minorHeadName",
-          {
-            "type": "long",
-            "name": "coa.objectHead"
-          },
-          "coa.objectHeadName",
-          {
-            "type": "long",
-            "name": "coa.subHead"
-          },
-          "coa.subHeadName",
-          {
-            "type": "long",
-            "name": "coa.subMajorHead"
-          },
-          "coa.subMajorHeadName",
-          "department.code",
-          "department.id",
-          "department.name",
 
-          "departmentEntity.code",
-          "departmentEntity.name",
-          "departmentEntity.hierarchyLevel",
-
-          "departmentEntity.ancestry[0].code",
-          "departmentEntity.ancestry[0].name",
-          "departmentEntity.ancestry[0].hierarchyLevel",
-          "departmentEntity.ancestry[1].code",
-          "departmentEntity.ancestry[1].name",
-          "departmentEntity.ancestry[1].hierarchyLevel",
-          "departmentEntity.ancestry[2].code",
-          "departmentEntity.ancestry[2].name",
-          "departmentEntity.ancestry[2].hierarchyLevel",
-          "departmentEntity.ancestry[3].code",
-          "departmentEntity.ancestry[3].name",
-          "departmentEntity.ancestry[3].hierarchyLevel",
-          "departmentEntity.ancestry[4].code",
-          "departmentEntity.ancestry[4].name",
-          "departmentEntity.ancestry[4].hierarchyLevel",
-          "departmentEntity.ancestry[5].code",
-          "departmentEntity.ancestry[5].name",
-          "departmentEntity.ancestry[5].hierarchyLevel",
-          "departmentEntity.ancestry[6].code",
-          "departmentEntity.ancestry[6].name",
-          "departmentEntity.ancestry[6].hierarchyLevel",
-          "departmentEntity.ancestry[7].code",
-          "departmentEntity.ancestry[7].name",
-          "departmentEntity.ancestry[7].hierarchyLevel",
-          "departmentEntity.ancestry[8].code",
-          "departmentEntity.ancestry[8].name",
-          "departmentEntity.ancestry[8].hierarchyLevel",
-          "departmentEntity.ancestry[9].code",
-          "departmentEntity.ancestry[9].name",
-          "departmentEntity.ancestry[9].hierarchyLevel",
-          "departmentEntity.ancestry[10].code",
-          "departmentEntity.ancestry[10].name",
-          "departmentEntity.ancestry[10].hierarchyLevel",
-
+          "version",
+          "tenantId",
           "eventId",
           {
             "type": "long",
             "name": "eventTime"
           },
           "eventType",
-          {
-            "type": "long",
-            "name": "expenditure.code"
-          },
-          "expenditure.id",
-          "expenditure.name",
-          "expenditure.type",
+          "referenceId",
+          "parentEventId",
+          "parentReferenceId",
+
           {
             "type": "long",
             "name": "fromBillingPeriod"
           },
-          "government.id",
-          "government.name",
-          "id",
-          "parentEventId",
-          "parentReferenceId",
-          "project.id",
-          "project.code",
-          "project.name",
-          "referenceId",
-          "tenantId",
           {
             "type": "long",
             "name": "toBillingPeriod"
           },
-          "version"
+
+          "coa.id",
+          "coa.coaCode",
+          "coa.majorHead",
+          "coa.majorHeadName",
+          "coa.subMajorHead",
+          "coa.subMajorHeadName",
+          "coa.minorHead",
+          "coa.minorHeadName",
+          "coa.subHead",
+          "coa.subHeadName",
+          "coa.groupHead",
+          "coa.groupHeadName",
+          "coa.objectHead",
+          "coa.objectHeadName",
+
+          "department.id",
+          "department.code",
+          "department.name",
+
+          "departmentEntity.id",
+          "departmentEntity.code",
+          "departmentEntity.name",
+          "departmentEntity.hierarchyLevel",
+
+          "departmentEntity.ancestry[0].id",
+          "departmentEntity.ancestry[0].code",
+          "departmentEntity.ancestry[0].name",
+          "departmentEntity.ancestry[0].hierarchyLevel",
+          "departmentEntity.ancestry[1].id",
+          "departmentEntity.ancestry[1].code",
+          "departmentEntity.ancestry[1].name",
+          "departmentEntity.ancestry[1].hierarchyLevel",
+          "departmentEntity.ancestry[2].id",
+          "departmentEntity.ancestry[2].code",
+          "departmentEntity.ancestry[2].name",
+          "departmentEntity.ancestry[2].hierarchyLevel",
+          "departmentEntity.ancestry[3].id",
+          "departmentEntity.ancestry[3].code",
+          "departmentEntity.ancestry[3].name",
+          "departmentEntity.ancestry[3].hierarchyLevel",
+          "departmentEntity.ancestry[4].id",
+          "departmentEntity.ancestry[4].code",
+          "departmentEntity.ancestry[4].name",
+          "departmentEntity.ancestry[4].hierarchyLevel",
+          "departmentEntity.ancestry[5].id",
+          "departmentEntity.ancestry[5].code",
+          "departmentEntity.ancestry[5].name",
+          "departmentEntity.ancestry[5].hierarchyLevel",
+          "departmentEntity.ancestry[6].id",
+          "departmentEntity.ancestry[6].code",
+          "departmentEntity.ancestry[6].name",
+          "departmentEntity.ancestry[6].hierarchyLevel",
+          "departmentEntity.ancestry[7].id",
+          "departmentEntity.ancestry[7].code",
+          "departmentEntity.ancestry[7].name",
+          "departmentEntity.ancestry[7].hierarchyLevel",
+          "departmentEntity.ancestry[8].id",
+          "departmentEntity.ancestry[8].code",
+          "departmentEntity.ancestry[8].name",
+          "departmentEntity.ancestry[8].hierarchyLevel",
+          "departmentEntity.ancestry[9].id",
+          "departmentEntity.ancestry[9].code",
+          "departmentEntity.ancestry[9].name",
+          "departmentEntity.ancestry[9].hierarchyLevel",
+          "departmentEntity.ancestry[10].id",
+          "departmentEntity.ancestry[10].code",
+          "departmentEntity.ancestry[10].name",
+          "departmentEntity.ancestry[10].hierarchyLevel",
+
+          "expenditure.id",
+          "expenditure.code",
+          "expenditure.name",
+          "expenditure.type",
+
+          "government.id",
+          "government.name",
+
+          "project.id",
+          "project.code",
+          "project.name"
+
         ]
       },
       "granularitySpec": {
