@@ -13,12 +13,12 @@ db.chartOfAccount.createIndexes(
  );
 db.chartOfAccount.getIndexes();
 
-db.eAT.createIndexes(
+db.expenditure.createIndexes(
    [{"name":1},{"code":1},{"tenantId":1}]
 );
-db.eAT.getIndexes();
+db.expenditure.getIndexes();
 
 db.project.createIndexes(
-   [{"name":1},{"code":1},{"tenantId":1},{"eatId":1},{"departmentId":1},{"locationIds":1}]
+   [{"name":1},{"code":1},{"tenantId":1},{"expenditureId":1},{"departmentId":1}]
 );
 db.project.getIndexes();
