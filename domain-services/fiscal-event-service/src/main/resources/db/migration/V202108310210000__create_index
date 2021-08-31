@@ -1,5 +1,5 @@
 db.fiscalEvent.createIndexes(
   [{"ingestionTime": 1}, {"departmentEntity.id": 1} ,{"departmentEntity.hierarchyLevel": 1} , {"departmentEntity.code": 1} , {"departmentEntity.name": 1},
-  {"departmentEntity.ancestry.code": 1}, {"departmentEntity.ancestry.name": 1}, {"departmentEntity.ancestry.hierarchyLevel": 1},  ]
+  {"departmentEntity.ancestry.id": 1}, {"departmentEntity.ancestry.code": 1}, {"departmentEntity.ancestry.name": 1}, {"departmentEntity.ancestry.hierarchyLevel": 1},  ]
  );
 db.fiscalEvent.getIndexes();
