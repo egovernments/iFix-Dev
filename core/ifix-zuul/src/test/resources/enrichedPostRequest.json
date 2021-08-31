@@ -1,0 +1,13 @@
+{
+    "requestHeader": {
+        "fu": "bar",
+        "authToken": "dummy-auth-token",
+        "userInfo": {
+            "uuid": "abcd",
+            "roles": ["fiscal-event-producer"],
+            "tenants": ["pb"],
+            "attributes": null
+        },
+        "correlationId": "someCorrelationId"
+    }
+}

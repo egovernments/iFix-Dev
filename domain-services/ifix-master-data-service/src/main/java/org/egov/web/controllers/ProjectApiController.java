@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
@@ -43,13 +44,29 @@ public class ProjectApiController {
         this.request = request;
     }
 
+    /**
+     * @param body
+     * @return
+     */
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<ProjectResponse> projectV1CreatePost(@ApiParam(value = "Details for the new Project " +
             "RequestHeader (meta data of the API).", required = true) @Valid @RequestBody ProjectRequest body) {
 
-        return new ResponseEntity<ProjectResponse>(HttpStatus.NOT_IMPLEMENTED);
+        ProjectRequest projectRequest = projectService.createProject(body);
+
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(),true);
+
+        ProjectResponse projectResponse = ProjectResponse.builder().responseHeader(responseHeader)
+                .project(Collections.singletonList(projectRequest.getProject())).build();
+
+        return new ResponseEntity<>(projectResponse, HttpStatus.OK);
     }
 
+    /**
+     * @param body
+     * @return
+     */
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
     public ResponseEntity<ProjectResponse> projectV1SearchPost(@ApiParam(value = "Details for the Project search " +
             "criteria RequestHeader (meta data of the API).", required = true)

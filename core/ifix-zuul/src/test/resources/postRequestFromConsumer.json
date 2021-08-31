@@ -1,0 +1,6 @@
+{
+    "requestHeader": {
+        "fu": "bar",
+        "authToken": "dummy-auth-token"
+    }
+}
