@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.util.ResponseHeaderCreator;
+import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEventGetRequest;
 import org.egov.web.models.FiscalEventRequest;
 import org.egov.web.models.FiscalEventResponse;
@@ -20,6 +21,7 @@ import org.egov.service.FiscalEventService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-09T17:28:42.515+05:30")
 
@@ -54,7 +56,12 @@ public class FiscalApiController {
 
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
     public ResponseEntity<FiscalEventResponse> fiscalEventsV1SearchPost(@ApiParam(value = "RequestHeader meta data.", required = true) @Valid @RequestBody FiscalEventGetRequest body) {
-        return new ResponseEntity<FiscalEventResponse>(HttpStatus.NOT_IMPLEMENTED);
+        List<FiscalEvent> fiscalEventList = fiscalEventService.fiscalEventsV1SearchPost(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        FiscalEventResponse fiscalEventResponse = FiscalEventResponse.builder().responseHeader(responseHeader)
+                .fiscalEvent(fiscalEventList).build();
+
+        return new ResponseEntity<FiscalEventResponse>(fiscalEventResponse, HttpStatus.OK);
     }
 
 }

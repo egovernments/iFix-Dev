@@ -24,20 +24,20 @@ public class TenantUtil {
     ServiceRequestRepository serviceRequestRepository;
 
     /**
-     * @param fiscalEventRequest
+     *
+     * @param tenantId
+     * @param requestHeader
      * @return
      */
-    public boolean validateTenant(FiscalEventRequest fiscalEventRequest) {
-        if (fiscalEventRequest != null && fiscalEventRequest.getRequestHeader() != null
-                && fiscalEventRequest.getFiscalEvent() != null
-                && !StringUtils.isEmpty(fiscalEventRequest.getFiscalEvent().getTenantId())) {
+    public boolean validateTenant(String tenantId, RequestHeader requestHeader) {
+        if (StringUtils.isNotBlank(tenantId) && requestHeader != null) {
 
             Map<String, Object> tenantValueMap = new HashMap<>();
             tenantValueMap.put(MasterDataConstants.IDS,
-                    Collections.singletonList(fiscalEventRequest.getFiscalEvent().getTenantId()));
+                    Collections.singletonList(tenantId));
 
             Map<String, Object> tenantMap = new HashMap<>();
-            tenantMap.put(MasterDataConstants.REQUEST_HEADER, fiscalEventRequest.getRequestHeader());
+            tenantMap.put(MasterDataConstants.REQUEST_HEADER, requestHeader);
             tenantMap.put(MasterDataConstants.CRITERIA, tenantValueMap);
 
             Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);

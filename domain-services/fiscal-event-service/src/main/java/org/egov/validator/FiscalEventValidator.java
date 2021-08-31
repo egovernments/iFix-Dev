@@ -5,22 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.repository.FiscalEventRepository;
 import org.egov.tracer.model.CustomException;
+import org.egov.util.CoaUtil;
 import org.egov.util.MasterDataConstants;
 import org.egov.util.ProjectUtil;
 import org.egov.util.TenantUtil;
-import org.egov.util.CoaUtil;
-import org.egov.web.models.Amount;
-import org.egov.web.models.FiscalEvent;
-import org.egov.web.models.FiscalEventRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -35,6 +30,9 @@ public class FiscalEventValidator {
 
     @Autowired
     ProjectUtil projectUtil;
+
+    @Autowired
+    private FiscalEventRepository eventRepository;
 
     /**
      * Validate the fiscal Event request
@@ -61,6 +59,7 @@ public class FiscalEventValidator {
             validateTenantId(fiscalEventRequest, errorMap);
             validateProjectId(fiscalEventRequest, errorMap);
             validateFiscalEventAmountDetails(fiscalEventRequest, errorMap);
+            validateParentEventId(fiscalEventRequest,errorMap);
 
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
@@ -68,6 +67,21 @@ public class FiscalEventValidator {
 
         } else {
             throw new CustomException(MasterDataConstants.FISCAL_EVENT, "Fiscal event request data is not valid");
+        }
+    }
+
+    private void validateParentEventId(FiscalEventRequest fiscalEventRequest, Map<String, String> errorMap) {
+        if (StringUtils.isNotBlank(fiscalEventRequest.getFiscalEvent().getParentEventId())
+                && StringUtils.isNotBlank(fiscalEventRequest.getFiscalEvent().getTenantId())) {
+            Criteria criteria = new Criteria();
+
+            criteria.setTenantId(fiscalEventRequest.getFiscalEvent().getTenantId());
+            criteria.setIds(Collections.singletonList(fiscalEventRequest.getFiscalEvent().getParentEventId()));
+
+            List<Object> fiscalEventList = eventRepository.searchFiscalEvent(criteria);
+            if (fiscalEventList == null || fiscalEventList.isEmpty())
+                errorMap.put(MasterDataConstants.PARENT_EVENT_ID, "Parent event id doesn't exist in the system.");
+
         }
     }
 
@@ -128,8 +142,13 @@ public class FiscalEventValidator {
      * @param fiscalEventRequest
      */
     public void validateTenantId(FiscalEventRequest fiscalEventRequest, Map<String, String> errorMap) {
-        boolean isValidTenant = tenantUtil.validateTenant(fiscalEventRequest);
-
+        if(StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getTenantId())){
+            errorMap.put(MasterDataConstants.TENANT_ID,"Tenant id is missing in request");
+        }
+        boolean isValidTenant = false;
+        if (fiscalEventRequest.getFiscalEvent() != null && StringUtils.isNotBlank(fiscalEventRequest.getFiscalEvent().getTenantId())) {
+            isValidTenant = tenantUtil.validateTenant(fiscalEventRequest.getFiscalEvent().getTenantId(), fiscalEventRequest.getRequestHeader());
+        }
         if (!isValidTenant) {
             errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
         }
@@ -146,4 +165,43 @@ public class FiscalEventValidator {
         }
     }
 
+    public void validateFiscalEventSearchPost(FiscalEventGetRequest fiscalEventGetRequest) {
+        RequestHeader requestHeader = fiscalEventGetRequest.getRequestHeader();
+        Criteria criteria = fiscalEventGetRequest.getCriteria();
+
+        validateReqHeader(requestHeader);
+        if (criteria == null)
+            throw new CustomException(MasterDataConstants.SEARCH_CRITERIA, "Search criteria is missing.");
+
+        Map<String, String> errorMap = new HashMap<>();
+
+        //validation : tenant id
+        if (StringUtils.isBlank(criteria.getTenantId()))
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request");
+        boolean isValidTenant = false;
+        if (StringUtils.isNotBlank(criteria.getTenantId())) {
+            isValidTenant = tenantUtil.validateTenant(criteria.getTenantId(), requestHeader);
+        }
+        if (!isValidTenant)
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
+
+        //validation : event type
+        if (StringUtils.isBlank(criteria.getEventType()))
+            errorMap.put(MasterDataConstants.EVENT_TYPE, "Event type is missing in request");
+
+        //validation :  fromEventTime and toEventTime
+        if (criteria.getFromEventTime() != null) {
+            if (criteria.getToEventTime() == null) {
+                errorMap.put(MasterDataConstants.TO_EVENT_TIME, "To(End) event time is missing for given From(start) event time in request.");
+            }
+        }
+        if (criteria.getToEventTime() != null) {
+            if (criteria.getFromEventTime() == null) {
+                errorMap.put(MasterDataConstants.FROM_EVENT_TIME, "From(start) event time is missing for given To(End) event time in request.");
+            }
+        }
+        if (!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);
+        }
+    }
 }

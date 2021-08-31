@@ -6,6 +6,9 @@ public class MasterDataConstants {
     public static final String FISCAL_EVENT = "FISCAL_EVENT";
     public static final String REFERENCE_ID = "REFERENCE_ID";
     public static final String EVENT_TYPE = "EVENT_TYPE";
+    public static final String TO_EVENT_TIME = "TO_EVENT_TIME";
+    public static final String FROM_EVENT_TIME = "FROM_EVENT_TIME";
+    public static final String PARENT_EVENT_ID = "PARENT_EVENT_ID";
 
     private MasterDataConstants() {
     }
@@ -25,6 +28,8 @@ public class MasterDataConstants {
     public static final String TENANT_LIST = "$.government.*";
     public static final String PROJECT_LIST = "$.project.*";
     public static final String COA_IDS_JSON_PATH = "$.chartOfAccounts.*.id";
+
+    public static final String SEARCH_CRITERIA = "SEARCH_CRITERIA";
 
 
 }
