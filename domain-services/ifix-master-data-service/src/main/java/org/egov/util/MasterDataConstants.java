@@ -37,6 +37,9 @@ public class MasterDataConstants {
     public static final String GET_ANCESTRY = "getAncestry";
 
     public static final String REQUEST_HEADER_MISSING = "REQUEST_HEADER";
+    public static final String DEPARTMENT_CODE = "DEPARTMENT_CODE";
+    public static final String DEPARTMENT_NAME = "DEPARTMENT_NAME";
+    public static final String DEPARTMENT_PARENT = "DEPARTMENT_PARENT";
 
 
 }
