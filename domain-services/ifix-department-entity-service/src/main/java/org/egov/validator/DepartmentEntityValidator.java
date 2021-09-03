@@ -45,11 +45,11 @@ public class DepartmentEntityValidator {
 
             if (StringUtils.isEmpty(departmentEntity.getTenantId())) {
                 errorMap.put(DepartmentEntityConstant.TENANT_ID, "Tenant id is missing in request data");
-            }else if (departmentEntity.getTenantId().length() < 2 || departmentEntity.getTenantId().length() > 64) {
+            } else if (departmentEntity.getTenantId().length() < 2 || departmentEntity.getTenantId().length() > 64) {
                 errorMap.put(DepartmentEntityConstant.TENANT_ID, "Tenant id length is invalid. " +
                         "Length range [2-64]");
-            }else {
-                List<String> governments = governmentUtil.getGovernmentFromGovernmentService(departmentEntity.getTenantId(),requestHeader);
+            } else {
+                List<String> governments = governmentUtil.getGovernmentFromGovernmentService(departmentEntity.getTenantId(), requestHeader);
                 if (governments.isEmpty())
                     errorMap.put(DepartmentEntityConstant.INVALID_TENANT_ID, "Tenant id : " + departmentEntity.getTenantId()
                             + " doesn't exist in the system");
@@ -58,7 +58,7 @@ public class DepartmentEntityValidator {
             if (StringUtils.isEmpty(departmentEntity.getCode())) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_ENTITY_CODE, "Department entity code" +
                         " is missing in request data");
-            }else if (departmentEntity.getCode().length() < 1 || departmentEntity.getCode().length() > 256) {
+            } else if (departmentEntity.getCode().length() < 1 || departmentEntity.getCode().length() > 256) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_ENTITY_CODE, "Department entity code " +
                         "length is invalid. Length range [2-256]");
             }
@@ -66,7 +66,7 @@ public class DepartmentEntityValidator {
             if (StringUtils.isEmpty(departmentEntity.getName())) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_ENTITY_NAME, "Department entity name" +
                         " is missing in request data");
-            }else if (departmentEntity.getName().length() < 1 || departmentEntity.getName().length() > 256) {
+            } else if (departmentEntity.getName().length() < 1 || departmentEntity.getName().length() > 256) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_ENTITY_NAME, "Department entity name " +
                         "length is invalid. Length range [2-256]");
             }
@@ -74,7 +74,7 @@ public class DepartmentEntityValidator {
             if (departmentEntity.getHierarchyLevel() == null) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_HIERARCHY_ID, "Department hierarchy id" +
                         " is missing in request data");
-            }else if (departmentEntity.getHierarchyLevel() < 1 || departmentEntity.getHierarchyLevel() > 256) {
+            } else if (departmentEntity.getHierarchyLevel() < 1 || departmentEntity.getHierarchyLevel() > 256) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_HIERARCHY_ID, "Department hierarchy id " +
                         "length is invalid. Length range [2-256]");
             }
@@ -86,7 +86,7 @@ public class DepartmentEntityValidator {
                 throw new CustomException(errorMap);
             }
 
-        }else {
+        } else {
             throw new CustomException(DepartmentEntityConstant.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }
     }

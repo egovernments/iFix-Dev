@@ -6,7 +6,6 @@ import org.egov.web.models.DepartmentEntityAncestry;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Component
 @Slf4j

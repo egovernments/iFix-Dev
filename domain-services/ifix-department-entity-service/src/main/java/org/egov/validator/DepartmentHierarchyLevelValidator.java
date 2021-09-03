@@ -56,7 +56,7 @@ public class DepartmentHierarchyLevelValidator {
         }
 
         if (StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())) {
-            List<String> governments = governmentUtil.getGovernmentFromGovernmentService(departmentHierarchyLevel.getTenantId(),requestHeader);
+            List<String> governments = governmentUtil.getGovernmentFromGovernmentService(departmentHierarchyLevel.getTenantId(), requestHeader);
             if (governments.isEmpty())
                 errorMap.put(DepartmentEntityConstant.INVALID_TENANT_ID, "Tenant id : " + departmentHierarchyLevel.getTenantId()
                         + " doesn't exist in the system");

@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.DepartmentEntityService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.*;
+import org.egov.web.models.DepartmentEntityAbstract;
+import org.egov.web.models.DepartmentEntityRequest;
+import org.egov.web.models.DepartmentEntityResponse;
+import org.egov.web.models.DepartmentEntitySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 

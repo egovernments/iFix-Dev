@@ -1,6 +1,5 @@
 package org.egov.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,13 +27,12 @@ public class DepartmentUtil {
 
 
     /**
-     *
      * @param tenantId
      * @param departmentId
      * @param requestHeader
      * @return
      */
-    public List<String> getDepartmentFromDepartmentService(String tenantId,String departmentId, RequestHeader requestHeader) {
+    public List<String> getDepartmentFromDepartmentService(String tenantId, String departmentId, RequestHeader requestHeader) {
         if (StringUtils.isNotBlank(tenantId) && StringUtils.isNotBlank(departmentId)) {
 
             Map<String, Object> departmentValueMap = new HashMap<>();

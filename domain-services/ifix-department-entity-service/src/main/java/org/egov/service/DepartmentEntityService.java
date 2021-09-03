@@ -45,9 +45,9 @@ public class DepartmentEntityService {
     public List<? extends DepartmentEntityAbstract> findAllByCriteria(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
         departmentEntityValidator.validateSearchDepartmentEntity(departmentEntitySearchRequest);
         List<DepartmentEntity> departmentEntityList = entityRepository.searchEntity(departmentEntitySearchRequest);
-        if(departmentEntitySearchRequest.getCriteria().isGetAncestry()) {
+        if (departmentEntitySearchRequest.getCriteria().isGetAncestry()) {
             List<DepartmentEntityAncestry> departmentEntityAncestryList = new ArrayList<>();
-            for(DepartmentEntity departmentEntity : departmentEntityList) {
+            for (DepartmentEntity departmentEntity : departmentEntityList) {
                 departmentEntityAncestryList.add(createAncestryFor(departmentEntity));
             }
             return departmentEntityAncestryList;
@@ -61,7 +61,7 @@ public class DepartmentEntityService {
                 departmentEntityAncestryUtil.createDepartmentEntityAncestryFromDepartmentEntity(departmentEntity);
         while (hierarchyCount >= 0) {
             DepartmentEntity parentEntity = entityRepository.getParent(ancestry.getId());
-            if(parentEntity == null)
+            if (parentEntity == null)
                 break;
 
             DepartmentEntityAncestry parentAncestry =
@@ -72,7 +72,7 @@ public class DepartmentEntityService {
             hierarchyCount--;
         }
 
-        if(hierarchyCount < 0)
+        if (hierarchyCount < 0)
             throw new CustomException("MAXIMUM_SUPPORTED_HIERARCHY_EXCEEDED", "Loop to find ancestors " +
                     "exceeded the maximum supported hierarchy. The data might be corrupted.");
 

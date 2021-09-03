@@ -24,9 +24,9 @@ public class DepartmentEntityEnrichmentService {
 
         AuditDetails auditDetails = null;
 
-        if(departmentEntity.getAuditDetails() == null){
+        if (departmentEntity.getAuditDetails() == null) {
             auditDetails = enrichAuditDetails.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), departmentEntity.getAuditDetails(), true);
-        }else{
+        } else {
             auditDetails = enrichAuditDetails.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), departmentEntity.getAuditDetails(), false);
         }
 

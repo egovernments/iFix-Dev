@@ -6,8 +6,6 @@ import lombok.*;
 import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
-import java.math.BigDecimal;
-
 /**
  * This object captures the information for level of the department hierarchy and it&#39;s alias
  */
