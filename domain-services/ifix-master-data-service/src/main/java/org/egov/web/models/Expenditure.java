@@ -36,8 +36,8 @@ public class Expenditure {
     private String name = null;
     @JsonProperty("type")
     private TypeEnum type = null;
-    @JsonProperty("parent")
-    private String parent = null;
+    @JsonProperty("departmentId")
+    private String departmentId = null;
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;
 

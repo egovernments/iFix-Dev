@@ -18,7 +18,7 @@
     "dataSchema": {
       "dataSource": "fiscal-event",
       "timestampSpec": {
-        "column": "ingestionTime",
+        "column": "eventTime",
         "format": "millis"
       },
       "dimensionsSpec": {
@@ -34,7 +34,7 @@
           "eventId",
           {
             "type": "long",
-            "name": "eventTime"
+            "name": "ingestionTime"
           },
           "eventType",
           "referenceId",

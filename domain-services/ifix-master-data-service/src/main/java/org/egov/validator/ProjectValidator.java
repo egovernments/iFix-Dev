@@ -46,6 +46,9 @@ public class ProjectValidator {
 
             ProjectSearchCriteria projectSearchCriteria = projectSearchRequest.getCriteria();
 
+            if (projectSearchCriteria == null) {
+                throw new CustomException("INVALID_SEARCH_CRITERIA", "Search criteria is missing");
+            }
             if (StringUtils.isEmpty(projectSearchCriteria.getTenantId())) {
                 throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");
             }

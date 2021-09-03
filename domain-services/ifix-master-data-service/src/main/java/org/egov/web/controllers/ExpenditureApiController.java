@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.ExpenditureService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.*;
+import org.egov.web.models.Expenditure;
+import org.egov.web.models.ExpenditureRequest;
+import org.egov.web.models.ExpenditureResponse;
+import org.egov.web.models.ExpenditureSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
@@ -30,7 +34,7 @@ public class ExpenditureApiController {
     private final HttpServletRequest request;
 
     @Autowired
-    ExpenditureService expenditureService;
+    private ExpenditureService expenditureService;
 
     @Autowired
     private ResponseHeaderCreator responseHeaderCreator;
@@ -44,8 +48,11 @@ public class ExpenditureApiController {
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<ExpenditureResponse> eatV1CreatePost(@ApiParam(value = "Details for the new expenditure RequestHeader" +
             " (meta data of the API).", required = true) @Valid @RequestBody ExpenditureRequest body) {
-
-        return new ResponseEntity<ExpenditureResponse>(HttpStatus.NOT_IMPLEMENTED);
+        ExpenditureRequest expenditureRequest = expenditureService.createV1Expenditure(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        ExpenditureResponse expenditureResponse = ExpenditureResponse.builder().responseHeader(responseHeader)
+                .expenditure(Collections.singletonList(expenditureRequest.getExpenditure())).build();
+        return new ResponseEntity<ExpenditureResponse>(expenditureResponse, HttpStatus.OK);
     }
 
     /**

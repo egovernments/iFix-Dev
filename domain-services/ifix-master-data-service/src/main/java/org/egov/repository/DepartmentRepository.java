@@ -28,4 +28,11 @@ public class DepartmentRepository {
         Query searchQuery = departmentQueryBuilder.buildSearchQuery(searchCriteria);
         return (mongoTemplate.find(searchQuery, Department.class));
     }
+
+    /**
+     * @param department
+     */
+    public void save(Department department) {
+        mongoTemplate.save(department);
+    }
 }

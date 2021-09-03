@@ -16,6 +16,7 @@ public class MasterDataConstants {
     public static final String TENANT_ID = "TENANT_ID";
     public static final String EXPENDITURE_NAME = "EXPENDITURE_NAME";
     public static final String EXPENDITURE_CODE = "EXPENDITURE_CODE";
+    public static final String EXPENDITURE_TYPE = "EXPENDITURE_TYPE";
 
     public static final String REQUEST_PAYLOAD_MISSING = "REQUEST_PAYLOAD";
     public static final String PROJECT_NAME = "PROJECT_NAME";
@@ -29,11 +30,16 @@ public class MasterDataConstants {
     public static final String TENANT_LIST = "$.government.*";
     public static final String EXPENDITURE_LIST = "$.expenditure.*";
     public static final String DEPARTMENT_ENTITY_LIST = "$.departmentEntity.*";
+    public static final String DEPARTMENT_JSON_PATH = "$.department.*";
     public static final String DEPARTMENT_ENTITY_ID = "DEPARTMENT_ENTITY_ID";
 
     public static final String JSONPATH_ERROR = "JSONPATH_ERROR";
     public static final String GET_ANCESTRY = "getAncestry";
 
+    public static final String REQUEST_HEADER_MISSING = "REQUEST_HEADER";
+    public static final String DEPARTMENT_CODE = "DEPARTMENT_CODE";
+    public static final String DEPARTMENT_NAME = "DEPARTMENT_NAME";
+    public static final String DEPARTMENT_PARENT = "DEPARTMENT_PARENT";
 
 
 }
