@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -38,17 +36,17 @@ public class FiscalEventDereferenceService {
     private DepartmentUtil departmentUtil;
 
     public FiscalEventDeReferenced dereference(FiscalEventRequest fiscalEventRequest) {
-        FiscalEventDeReferenced fiscalEventDeReferenced =  new FiscalEventDeReferenced();
-        dereferenceTenantId(fiscalEventRequest,fiscalEventDeReferenced);
-        dereferenceCoaId(fiscalEventRequest,fiscalEventDeReferenced);
+        FiscalEventDeReferenced fiscalEventDeReferenced = new FiscalEventDeReferenced();
+        dereferenceTenantId(fiscalEventRequest, fiscalEventDeReferenced);
+        dereferenceCoaId(fiscalEventRequest, fiscalEventDeReferenced);
         dereferenceProjectId(fiscalEventRequest, fiscalEventDeReferenced);
-        enricher.enrich(fiscalEventRequest,fiscalEventDeReferenced);
+        enricher.enrich(fiscalEventRequest, fiscalEventDeReferenced);
         return fiscalEventDeReferenced;
     }
 
     private void dereferenceTenantId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
         List<Government> governments = governmentUtil.getGovernmentFromGovernmentService(fiscalEventRequest);
-        if(!governments.isEmpty()){
+        if (!governments.isEmpty()) {
             fiscalEventDeReferenced.setGovernment(governments.get(0));
         }
         fiscalEventDeReferenced.setTenantId(fiscalEventRequest.getFiscalEvent().getTenantId());
@@ -57,16 +55,16 @@ public class FiscalEventDereferenceService {
     private void dereferenceCoaId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
         //copy the amount details except chart of account in deReferenced amount
         List<AmountDetailsDeReferenced> amtDetailsDereferenced = new ArrayList<>();
-        if(fiscalEventRequest.getFiscalEvent() != null
-                && fiscalEventRequest.getFiscalEvent().getAmountDetails()!=null
-                && !fiscalEventRequest.getFiscalEvent().getAmountDetails().isEmpty()){
-            for(Amount amount : fiscalEventRequest.getFiscalEvent().getAmountDetails()){
-                AmountDetailsDeReferenced amountDetailsDeReferenced =  new AmountDetailsDeReferenced();
+        if (fiscalEventRequest.getFiscalEvent() != null
+                && fiscalEventRequest.getFiscalEvent().getAmountDetails() != null
+                && !fiscalEventRequest.getFiscalEvent().getAmountDetails().isEmpty()) {
+            for (Amount amount : fiscalEventRequest.getFiscalEvent().getAmountDetails()) {
+                AmountDetailsDeReferenced amountDetailsDeReferenced = new AmountDetailsDeReferenced();
                 amountDetailsDeReferenced.setAmount(amount.getAmount());
                 amountDetailsDeReferenced.setFromBillingPeriod(amount.getFromBillingPeriod());
                 amountDetailsDeReferenced.setToBillingPeriod(amount.getToBillingPeriod());
                 amountDetailsDeReferenced.setId(amount.getId());
-                ChartOfAccount coa =  new ChartOfAccount();
+                ChartOfAccount coa = new ChartOfAccount();
                 coa.setId(amount.getCoaId());
                 //coaIds.add(amount.getCoaId());
                 amountDetailsDeReferenced.setCoa(coa);
@@ -80,13 +78,13 @@ public class FiscalEventDereferenceService {
                 fiscalEventRequest.getFiscalEvent());
         //copy the amount details except chart of account in deReferenced amount
         List<AmountDetailsDeReferenced> updatedAmtDereferences = new ArrayList<>();
-        if(!chartOfAccounts.isEmpty()){
-            for(AmountDetailsDeReferenced amtDeReferenced : amtDetailsDereferenced){
+        if (!chartOfAccounts.isEmpty()) {
+            for (AmountDetailsDeReferenced amtDeReferenced : amtDetailsDereferenced) {
                 AmountDetailsDeReferenced newAmtDereference = new AmountDetailsDeReferenced();
-                BeanUtils.copyProperties(amtDeReferenced,newAmtDereference);
+                BeanUtils.copyProperties(amtDeReferenced, newAmtDereference);
 
-                for(ChartOfAccount chartOfAccount : chartOfAccounts){
-                    if(chartOfAccount.getId().equals(amtDeReferenced.getCoa().getId())){
+                for (ChartOfAccount chartOfAccount : chartOfAccounts) {
+                    if (chartOfAccount.getId().equals(amtDeReferenced.getCoa().getId())) {
                         newAmtDereference.setCoa(chartOfAccount);
                         break;
                     }
@@ -113,7 +111,7 @@ public class FiscalEventDereferenceService {
 
                 String expenditureId = null;
                 String departmentId = null;
-                if(projectNode != null && !projectNode.isEmpty()) {
+                if (projectNode != null && !projectNode.isEmpty()) {
                     expenditureId = projectNode.get("expenditureId").asText();
                     departmentId = projectNode.get("departmentEntity").get("departmentId").asText();
 

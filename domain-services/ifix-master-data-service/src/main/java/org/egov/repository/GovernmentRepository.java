@@ -1,7 +1,6 @@
 package org.egov.repository;
 
 import org.egov.web.models.Government;
-import org.egov.web.models.GovernmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,7 +26,7 @@ public class GovernmentRepository {
     public List<Government> findAllByIdList(List<String> idList) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").in(idList));
-        return mongoTemplate.find(query,Government.class);
+        return mongoTemplate.find(query, Government.class);
     }
 
 }

@@ -40,7 +40,7 @@ public class ExpenditureValidator {
 
             if (StringUtils.isEmpty(criteria.getTenantId())) {
                 throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");
-            }else if (criteria.getTenantId().length() < 2 || criteria.getTenantId().length() > 64) {
+            } else if (criteria.getTenantId().length() < 2 || criteria.getTenantId().length() > 64) {
                 throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id length is invalid. " +
                         "Length range [2-64]");
             }
@@ -53,11 +53,11 @@ public class ExpenditureValidator {
 
             if (!StringUtils.isEmpty(criteria.getCode())
                     && (criteria.getCode().length() < 2 || criteria.getCode().length() > 64)) {
-                    throw new CustomException(MasterDataConstants.EXPENDITURE_CODE, "Expenditure code length is invalid. " +
-                            "Length range [2-64]");
+                throw new CustomException(MasterDataConstants.EXPENDITURE_CODE, "Expenditure code length is invalid. " +
+                        "Length range [2-64]");
             }
 
-        }else {
+        } else {
             throw new CustomException(MasterDataConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }
     }
@@ -116,7 +116,7 @@ public class ExpenditureValidator {
         }
 
         //type
-        if(expenditure.getType() == null){
+        if (expenditure.getType() == null) {
             errorMap.put(MasterDataConstants.EXPENDITURE_TYPE, "Expenditure type is missing in request data");
         }
         //department id

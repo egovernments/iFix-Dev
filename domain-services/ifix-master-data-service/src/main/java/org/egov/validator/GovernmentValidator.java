@@ -31,13 +31,13 @@ public class GovernmentValidator {
             Government government = governmentRequest.getGovernment();
             if (StringUtils.isEmpty(government.getId())) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_ID, "Government Id (Tenant id) is missing in request data");
-            }else if (government.getId().length() < 1 || government.getId().length() > 64) {
+            } else if (government.getId().length() < 1 || government.getId().length() > 64) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_ID, "Government id length is invalid.");
             }
 
             if (StringUtils.isEmpty(government.getName())) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_NAME, "Government name is missing in request data");
-            }else if (government.getName().length() < 2 || government.getName().length() > 256) {
+            } else if (government.getName().length() < 2 || government.getName().length() > 256) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_NAME, "Government name length is invalid");
             }
 
@@ -45,7 +45,7 @@ public class GovernmentValidator {
             if (existingGovernment != null) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_ID, "Duplicate government id");
             }
-        }else {
+        } else {
             throw new CustomException(MasterDataConstants.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }
     }
@@ -58,7 +58,7 @@ public class GovernmentValidator {
 
             if (criteria == null) {
                 throw new CustomException("INVALID_SEARCH_CRITERIA", "Search criteria is missing");
-            }else if (criteria.getIds() == null || criteria.getIds().isEmpty()) {
+            } else if (criteria.getIds() == null || criteria.getIds().isEmpty()) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_ID, "Government id list are missing");
             }
 

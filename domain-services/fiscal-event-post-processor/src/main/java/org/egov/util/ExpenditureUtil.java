@@ -48,12 +48,13 @@ public class ExpenditureUtil {
 
             Object response = serviceRequestRepository.fetchResult(createSearchExpenditureUrl(), expenditureMap);
 
-            try{
+            try {
                 List<Expenditure> expenditureList = JsonPath.read(response, MasterDataConstants.EXPENDITURE_JSON_PATH);
 
-                return objectMapper.convertValue(expenditureList, new TypeReference<List<Expenditure>>() {});
-            }catch (Exception e){
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse project response for projectId");
+                return objectMapper.convertValue(expenditureList, new TypeReference<List<Expenditure>>() {
+                });
+            } catch (Exception e) {
+                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse project response for projectId");
             }
         }
         return Collections.emptyList();

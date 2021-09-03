@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -111,23 +110,23 @@ public class ProjectValidator {
 
             if (StringUtils.isEmpty(project.getTenantId())) {
                 errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");
-            }else if (project.getTenantId().length() < 2 || project.getTenantId().length() > 64) {
+            } else if (project.getTenantId().length() < 2 || project.getTenantId().length() > 64) {
                 errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id length is invalid. " +
                         "Length range [2-64]");
-            }else if (!tenantUtil.validateTenant(project.getTenantId(),requestHeader)) {
-                    errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id : " + project.getTenantId()
-                            + " doesn't exist in the system");
+            } else if (!tenantUtil.validateTenant(project.getTenantId(), requestHeader)) {
+                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id : " + project.getTenantId()
+                        + " doesn't exist in the system");
             }
 
             if (StringUtils.isEmpty(project.getCode())) {
                 errorMap.put(MasterDataConstants.PROJECT_CODE, "Project code is missing in request data");
-            }else if (project.getCode().length() < 1 || project.getCode().length() > 64) {
+            } else if (project.getCode().length() < 1 || project.getCode().length() > 64) {
                 errorMap.put(MasterDataConstants.PROJECT_CODE, "Project code length is invalid. Length range [1-64]");
             }
 
             if (StringUtils.isEmpty(project.getName())) {
                 errorMap.put(MasterDataConstants.PROJECT_NAME, "Project name is missing in request data");
-            }else if (project.getName().length() < 1 || project.getName().length() > 64) {
+            } else if (project.getName().length() < 1 || project.getName().length() > 64) {
                 errorMap.put(MasterDataConstants.PROJECT_NAME, "Project name length is invalid. Length range [1-64]");
             }
 
@@ -159,7 +158,7 @@ public class ProjectValidator {
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
             }
-        }else {
+        } else {
             throw new CustomException(MasterDataConstants.REQUEST_PAYLOAD_MISSING,
                     "Request payload is missing some value");
         }

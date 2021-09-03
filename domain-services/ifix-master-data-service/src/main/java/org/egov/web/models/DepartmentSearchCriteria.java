@@ -44,7 +44,8 @@ public class DepartmentSearchCriteria {
         this.ids.add(idsItem);
         return this;
     }
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return (StringUtils.isBlank(tenantId) && StringUtils.isBlank(name) && StringUtils.isBlank(code)
                 && (ids == null || ids.isEmpty()));
     }

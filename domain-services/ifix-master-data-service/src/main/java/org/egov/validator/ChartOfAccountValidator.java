@@ -187,7 +187,7 @@ public class ChartOfAccountValidator {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
         }
         if (StringUtils.isNotBlank(searchCriteria.getCoaCode()) && (searchCriteria.getCoaCode().length() < 1
-                || searchCriteria.getCoaCode().length()>64) ) {
+                || searchCriteria.getCoaCode().length() > 64)) {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
         }
 

@@ -2,7 +2,6 @@ package org.egov.util;
 
 
 import org.egov.common.contract.AuditDetails;
-import org.egov.web.models.ChartOfAccount;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,7 +16,7 @@ public class MasterDataServiceUtil {
      */
     public AuditDetails enrichAuditDetails(String by, AuditDetails auditDetails, Boolean isCreate) {
         Long time = System.currentTimeMillis();
-        if(isCreate)
+        if (isCreate)
             return AuditDetails.builder().createdBy(by).lastModifiedBy(by).createdTime(time).lastModifiedTime(time).build();
         else
             return AuditDetails.builder().createdBy(auditDetails.getCreatedBy()).lastModifiedBy(by)

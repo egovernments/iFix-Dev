@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.util.MasterDataServiceUtil;
-import org.egov.web.models.*;
+import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentRequest;
+import org.egov.web.models.DepartmentSearchCriteria;
+import org.egov.web.models.DepartmentSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,8 @@ public class DepartmentEnrichmentService {
     MasterDataServiceUtil enrichAuditDetails;
 
     /**
-     *  Enrich the department search request
+     * Enrich the department search request
+     *
      * @param searchRequest
      */
     public void enrichSearchPost(DepartmentSearchRequest searchRequest) {
@@ -37,9 +41,9 @@ public class DepartmentEnrichmentService {
 
         AuditDetails auditDetails = null;
 
-        if(department.getAuditDetails() == null){
+        if (department.getAuditDetails() == null) {
             auditDetails = enrichAuditDetails.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), department.getAuditDetails(), true);
-        }else{
+        } else {
             auditDetails = enrichAuditDetails.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), department.getAuditDetails(), false);
         }
 
