@@ -26,12 +26,7 @@ import java.util.List;
 public class DepartmentEntity extends DepartmentEntityAbstract {
     @JsonProperty("children")
     @Valid
-    private List<String> children = new ArrayList<>();
-
-    public DepartmentEntity addChildrenItem(String childrenItem) {
-        this.children.add(childrenItem);
-        return this;
-    }
+    private List<String> children = null;
 
 }
 
