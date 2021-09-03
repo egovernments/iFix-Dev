@@ -61,7 +61,7 @@ public class ProjectDepartmentEntityIntegration {
     }
 
     private DepartmentEntity getCurrentDepartmentEntity(JsonNode departmentEntityDetails) {
-        while(departmentEntityDetails.get("children").size() != 0) {
+        while (departmentEntityDetails.get("children").size() != 0) {
             departmentEntityDetails = departmentEntityDetails.get("children").get(0);
         }
         DepartmentEntity departmentEntity = DepartmentEntity.builder()
@@ -84,7 +84,7 @@ public class ProjectDepartmentEntityIntegration {
                     .hierarchyLevel(departmentEntityDetails.get("hierarchyLevel").asInt())
                     .build();
             ancestry.add(departmentEntityAttributes);
-            if(departmentEntityDetails.get("children").size() != 0)
+            if (departmentEntityDetails.get("children").size() != 0)
                 departmentEntityDetails = departmentEntityDetails.get("children").get(0);
             else
                 departmentEntityDetails = null;

@@ -36,11 +36,11 @@ public class ServiceRequestRepository {
         Object response = null;
         try {
             response = restTemplate.postForObject(uri, request, Map.class);
-        }catch(HttpClientErrorException e) {
-            log.error("External Service threw an Exception: ",e);
+        } catch (HttpClientErrorException e) {
+            log.error("External Service threw an Exception: ", e);
             throw new ServiceCallException(e.getResponseBodyAsString());
-        }catch(Exception e) {
-            log.error("Exception while fetching from searcher: ",e);
+        } catch (Exception e) {
+            log.error("Exception while fetching from searcher: ", e);
         }
 
         return response;

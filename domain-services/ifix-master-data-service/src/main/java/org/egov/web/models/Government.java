@@ -6,9 +6,6 @@ import lombok.*;
 import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 /**
  * This object captures the fiscal information of external systems.
  */
