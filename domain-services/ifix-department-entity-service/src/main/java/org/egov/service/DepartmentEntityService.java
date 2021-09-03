@@ -43,6 +43,7 @@ public class DepartmentEntityService {
     }
 
     public List<? extends DepartmentEntityAbstract> findAllByCriteria(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
+        departmentEntityValidator.validateSearchDepartmentEntity(departmentEntitySearchRequest);
         List<DepartmentEntity> departmentEntityList = entityRepository.searchEntity(departmentEntitySearchRequest);
         if(departmentEntitySearchRequest.getCriteria().isGetAncestry()) {
             List<DepartmentEntityAncestry> departmentEntityAncestryList = new ArrayList<>();
