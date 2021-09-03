@@ -7,6 +7,8 @@ import org.egov.util.DepartmentEntityConstant;
 import org.egov.util.GovernmentUtil;
 import org.egov.web.models.DepartmentEntity;
 import org.egov.web.models.DepartmentEntityRequest;
+import org.egov.web.models.DepartmentEntitySearchCriteria;
+import org.egov.web.models.DepartmentEntitySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,13 +82,35 @@ public class DepartmentEntityValidator {
             if (departmentEntity.getChildren() == null) {
                 errorMap.put(DepartmentEntityConstant.USER_INFO, "Department children information is missing");
             }
-
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
             }
 
         }else {
             throw new CustomException(DepartmentEntityConstant.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
+        }
+    }
+
+    public void validateSearchDepartmentEntity(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
+        DepartmentEntitySearchCriteria searchCriteria = departmentEntitySearchRequest.getCriteria();
+        RequestHeader requestHeader = departmentEntitySearchRequest.getRequestHeader();
+        Map<String, String> errorMap = new HashMap<>();
+        //header
+        if (requestHeader == null) {
+            throw new CustomException(DepartmentEntityConstant.ERROR_REQUEST_HEADER, "Request header is missing");
+        }
+        if (requestHeader.getUserInfo() == null || requestHeader.getUserInfo().getUuid() == null) {
+            errorMap.put(DepartmentEntityConstant.USER_INFO, "User info is missing");
+        }
+        //criteria
+        if (searchCriteria == null) {
+            throw new CustomException(DepartmentEntityConstant.ERROR_SEARCH_CRITERIA, "Search criteria is missing");
+        }
+        if (StringUtils.isEmpty(searchCriteria.getTenantId())) {
+            errorMap.put(DepartmentEntityConstant.TENANT_ID, "Tenant id is missing in request data");
+        }
+        if (!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);
         }
     }
 }
