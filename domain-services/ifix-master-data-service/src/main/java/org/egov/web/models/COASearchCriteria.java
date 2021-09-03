@@ -62,7 +62,7 @@ public class COASearchCriteria {
         return this;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return (StringUtils.isBlank(tenantId) && StringUtils.isBlank(majorHead) && StringUtils.isBlank(minorHead)
                 && StringUtils.isBlank(subHead) && StringUtils.isBlank(subMajorHead) && StringUtils.isBlank(groupHead)
                 && StringUtils.isBlank(objectHead) && (ids == null || ids.isEmpty()) && StringUtils.isBlank(coaCode));

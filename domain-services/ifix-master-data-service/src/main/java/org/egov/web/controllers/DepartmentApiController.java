@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.DepartmentService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.*;
+import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentRequest;
+import org.egov.web.models.DepartmentResponse;
+import org.egov.web.models.DepartmentSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class DepartmentApiController {
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         DepartmentResponse departmentResponse = DepartmentResponse.builder().responseHeader(responseHeader)
                 .department(departments).build();
-        return new ResponseEntity<DepartmentResponse>(departmentResponse,HttpStatus.OK);
+        return new ResponseEntity<DepartmentResponse>(departmentResponse, HttpStatus.OK);
     }
 
 }

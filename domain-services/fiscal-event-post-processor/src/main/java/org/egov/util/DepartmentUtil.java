@@ -43,12 +43,13 @@ public class DepartmentUtil {
 
             Object response = serviceRequestRepository.fetchResult(createSearchDepartmentUrl(), departmentMap);
 
-            try{
-                List<Department>  departmentList = JsonPath.read(response, MasterDataConstants.DEPARTMENT_JSON_PATH);
+            try {
+                List<Department> departmentList = JsonPath.read(response, MasterDataConstants.DEPARTMENT_JSON_PATH);
 
-                return objectMapper.convertValue(departmentList, new TypeReference<List<Department>>() {});
-            }catch (Exception e){
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse project response for projectId");
+                return objectMapper.convertValue(departmentList, new TypeReference<List<Department>>() {
+                });
+            } catch (Exception e) {
+                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse project response for projectId");
             }
         }
         return Collections.emptyList();

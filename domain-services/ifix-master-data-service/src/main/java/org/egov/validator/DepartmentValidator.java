@@ -7,7 +7,10 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.MasterDataConstants;
 import org.egov.util.TenantUtil;
-import org.egov.web.models.*;
+import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentRequest;
+import org.egov.web.models.DepartmentSearchCriteria;
+import org.egov.web.models.DepartmentSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -96,14 +99,14 @@ public class DepartmentValidator {
 
             if (StringUtils.isEmpty(department.getCode())) {
                 errorMap.put(MasterDataConstants.DEPARTMENT_CODE, "Department code is missing in request data");
-            }else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
+            } else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
                 errorMap.put(MasterDataConstants.DEPARTMENT_CODE, "Department code length is invalid. " +
                         "Length range [1-64]");
             }
 
             if (StringUtils.isEmpty(department.getCode())) {
                 errorMap.put(MasterDataConstants.DEPARTMENT_NAME, "Department name is missing in request data");
-            }else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
+            } else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
                 errorMap.put(MasterDataConstants.DEPARTMENT_NAME, "Department name length is invalid. " +
                         "Length range [1-64]");
             }
