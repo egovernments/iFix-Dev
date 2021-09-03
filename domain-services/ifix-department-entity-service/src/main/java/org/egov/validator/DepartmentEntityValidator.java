@@ -80,7 +80,7 @@ public class DepartmentEntityValidator {
             }
 
             if (departmentEntity.getChildren() == null) {
-                errorMap.put(DepartmentEntityConstant.USER_INFO, "Department children information is missing");
+                errorMap.put(DepartmentEntityConstant.DEPARTMENT_CHILDREN, "Department children information is missing");
             }
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);

@@ -9,6 +9,7 @@ public class DepartmentEntityConstant {
     public static final String DEPARTMENT_ENTITY_CODE = "DEPARTMENT_ENTITY_CODE";
     public static final String DEPARTMENT_ENTITY_NAME = "DEPARTMENT_ENTITY_NAME";
     public static final String DEPARTMENT_HIERARCHY_ID = "DEPARTMENT_HIERARCHY_ID";
+    public static final String DEPARTMENT_CHILDREN = "DEPARTMENT_CHILDREN";
     public static final String REQUEST_PAYLOAD_MISSING = "REQUEST_PAYLOAD";
     public static final String ERROR_REQUEST_HEADER = "REQUEST_HEADER";
     public static final String INVALID_REQUEST = "INVALID_REQUEST";
