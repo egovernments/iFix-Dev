@@ -43,7 +43,7 @@ public class FiscalEventUnbundledFlattenConsumer {
         mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
         try {
             FiscalEventDeReferenced fiscalEventDeReferenced = mapper.convertValue(record, FiscalEventDeReferenced.class);
-            List<FiscalEventLineItemUnbundled> fiscalEventLineItemUnbundledList  = unbundleService.unbundle(fiscalEventDeReferenced);
+            List<FiscalEventLineItemUnbundled> fiscalEventLineItemUnbundledList = unbundleService.unbundle(fiscalEventDeReferenced);
 
             List<String> flattenJsonDataList = flattenService.getFlattenData(fiscalEventLineItemUnbundledList);
 
