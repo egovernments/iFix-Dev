@@ -1,10 +1,10 @@
 ---
 openapi: 3.0.0
 info:
-  title: iFIX-Fiscal-Event
-  version: 1.0.1
+  title: fiscal-event-service
+  version: 0.1.0
 servers:
-- url: https://<server_address>/fiscal-event-service/1.0.1
+- url: https://<server_address>/fiscal-event-service
   description: SwaggerHub API Auto Mocking
 paths:
   /fiscal/events/v1/_push:
