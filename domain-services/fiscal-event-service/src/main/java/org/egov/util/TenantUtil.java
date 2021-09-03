@@ -7,11 +7,13 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.FiscalEventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -24,7 +26,6 @@ public class TenantUtil {
     ServiceRequestRepository serviceRequestRepository;
 
     /**
-     *
      * @param tenantId
      * @param requestHeader
      * @return
@@ -42,12 +43,12 @@ public class TenantUtil {
 
             Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);
 
-            try{
+            try {
                 List list = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
 
                 return list != null && !list.isEmpty();
-            }catch (Exception e){
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse government response for tenantId");
+            } catch (Exception e) {
+                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse government response for tenantId");
             }
         }
         return false;

@@ -31,6 +31,7 @@ public class CoaUtil {
 
     /**
      * Get the COA Details from master data service
+     *
      * @param requestHeader
      * @param fiscalEvent
      * @return
@@ -39,12 +40,12 @@ public class CoaUtil {
         String url = createCoaSearchUrl();
         Map<String, Object> coaSearchRequest = createSearchCoaRequest(requestHeader, fiscalEvent);
 
-        Object response = serviceRequestRepository.fetchResult(url,coaSearchRequest);
+        Object response = serviceRequestRepository.fetchResult(url, coaSearchRequest);
         List<String> responseCoaIds = null;
-        try{
+        try {
             responseCoaIds = JsonPath.read(response, MasterDataConstants.COA_IDS_JSON_PATH);
-        }catch (Exception e){
-            throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse coa response for coaIds");
+        } catch (Exception e) {
+            throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse coa response for coaIds");
         }
         return responseCoaIds;
     }
@@ -69,7 +70,7 @@ public class CoaUtil {
     }
 
     private String createCoaSearchUrl() {
-        StringBuilder uriBuilder =  new StringBuilder(configuration.getIfixMasterCoaHost())
+        StringBuilder uriBuilder = new StringBuilder(configuration.getIfixMasterCoaHost())
                 .append(configuration.getIfixMasterCoaContextPath()).append(configuration.getIfixMasterCoaSearchPath());
         return uriBuilder.toString();
     }
