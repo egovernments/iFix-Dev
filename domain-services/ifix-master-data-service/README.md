@@ -1,6 +1,6 @@
 # iFIX-Master-Data-Service
 ## API Documentation Link
-https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-master-data-service/ifix-master-data-service-0.1.0.yaml
+## [API-Contract Link](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-master-data-service/ifix-master-data-service-0.1.0.yaml)
 
 ## Connect to MongoDB through Playground pod
 Check the correct running mongodb pod and execute the below command
