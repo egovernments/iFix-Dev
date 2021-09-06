@@ -53,7 +53,7 @@ public class ChartOfAccountApiController {
         COAResponse coaResponse = COAResponse.builder().responseHeader(responseHeader)
                 .chartOfAccounts(Collections.singletonList(coaRequest.getChartOfAccount())).build();
 
-        return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.ACCEPTED);
+        return new ResponseEntity<COAResponse>(coaResponse, HttpStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
@@ -63,7 +63,7 @@ public class ChartOfAccountApiController {
         COAResponse coaResponse = COAResponse.builder().responseHeader(responseHeader)
                 .chartOfAccounts(chartOfAccounts).build();
 
-        return new ResponseEntity<COAResponse>(coaResponse,HttpStatus.OK);
+        return new ResponseEntity<COAResponse>(coaResponse, HttpStatus.OK);
     }
 
 }

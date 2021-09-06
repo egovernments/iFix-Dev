@@ -37,23 +37,20 @@
     &quot;ts&quot;: 1629286294000,&#xd;
     &quot;version&quot;: &quot;v1&quot;,&#xd;
     &quot;msgId&quot;: &quot;&quot;,&#xd;
-    &quot;signature&quot;: &quot;&quot;,&#xd;
-    &quot;userInfo&quot;: {&#xd;
-      &quot;uuid&quot;: &quot;e4fd96e8-3b6b-4e36-9503-0f14a01af39d&quot;&#xd;
-    }&#xd;
+    &quot;signature&quot;: &quot;&quot;&#xd;
   },&#xd;
   &quot;fiscalEvent&quot;: {&#xd;
-    &quot;tenantId&quot;: &quot;pb&quot;,&#xd;
-    &quot;projectId&quot;: &quot;74c62227-d91a-4301-9592-2c9178af002d&quot;,&#xd;
-    &quot;eventType&quot;: &quot;RECEIPT&quot;,&#xd;
-    &quot;referenceId&quot;: &quot;8fade363-0ee6-46cb-a3ab-90e852f2de0d&quot;,&#xd;
-    &quot;eventTime&quot;: &quot;1603423893000&quot;,&#xd;
+    &quot;tenantId&quot;: &quot;${tenantId}&quot;,&#xd;
+    &quot;projectId&quot;: &quot;${projectId}&quot;,&#xd;
+    &quot;eventType&quot;: &quot;${eventType}&quot;,&#xd;
+    &quot;referenceId&quot;: &quot;${referenceId}&quot;,&#xd;
+    &quot;eventTime&quot;: ${eventTime},&#xd;
     &quot;amountDetails&quot;: [&#xd;
       {&#xd;
-        &quot;amount&quot;: 540,&#xd;
-        &quot;fromBillingPeriod&quot;: &quot;1609459693000&quot;,&#xd;
-        &quot;toBillingPeriod&quot;: &quot;1599400181000&quot;,&#xd;
-        &quot;coaId&quot;: &quot;23d38475-80a4-486d-9946-da890e165dfa&quot;&#xd;
+        &quot;amount&quot;: ${amount},&#xd;
+        &quot;fromBillingPeriod&quot;: ${fromBillingPeriod},&#xd;
+        &quot;toBillingPeriod&quot;: ${toBillingPeriod},&#xd;
+        &quot;coaId&quot;: &quot;${coaId}&quot;&#xd;
       }&#xd;
     ]&#xd;
   }&#xd;
@@ -85,7 +82,7 @@
               </elementProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">Authorization</stringProp>
-                <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPQUVaem05WEpRT0J0dkVHcTB4dklMeVBmbjlfUkVBUnBUUDNJY09hWjlvIn0.eyJleHAiOjE2MzIzMDQ4NjcsImlhdCI6MTYyOTcxMjg2NywianRpIjoiYzM5MmRkODctNWI4MC00ZjVkLWIxNGQtNjk3ZDExNGEzNWUzIiwiaXNzIjoiaHR0cHM6Ly9pZml4LWRldi5pZml4Lm9yZy5pbi9hdXRoL3JlYWxtcy9pZml4IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjRmYWE5MTJkLWQ1MzEtNDg1Yi1hZDliLTBhOTg3OGY3OTJiMCIsInR5cCI6IkJlYXJlciIsImF6cCI6Im1ncmFtc2V2YSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZmlzY2FsLWV2ZW50LXByb2R1Y2VyIiwiZGVmYXVsdC1yb2xlcy1pZml4Il19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiY2xpZW50SWQiOiJtZ3JhbXNldmEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInRlbmFudElkIjoicGIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtbWdyYW1zZXZhIn0.Hby4BbwMvecANTo-JOefpaaNhNEw1YxcCRfc8bCNxzr49PZLiz7RZZx5f11Df4ifSMErQBtyr6Xb_PDyQXtvJl10BHofznf-dciyVDIDy6uJgzUhXZJTQq6aZFIgO-WEsDvfCFuBEEoLrxB3vl5L8fATRqS3g1TEItp_uq5tKleCl05vH96MuR1soOZjH-ow6qZMSRspqU0jGwbeG-SCyMFfFWD-z123LRrXy4psTmUv4v0d4Z7QHfonctjA3Bo99uQ6GUAQ8QhgBWkwpG5hj4x8y6ZAbeCUP-LgNvXQKSms1qvsteGsGaaNuUco-jqxK7fsMVpJ69RzCCNDmFZByA</stringProp>
+                <stringProp name="Header.value">Bearer token</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
@@ -165,6 +162,18 @@
           </ResultCollector>
           <hashTree/>
         </hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+          <stringProp name="filename">/path-to-csv/fiscal-event-request-csv.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">tenantId,projectId,eventType,referenceId,eventTime,amount,fromBillingPeriod,toBillingPeriod,coaId</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">false</boolProp>
+          <boolProp name="stopThread">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
       </hashTree>
     </hashTree>
   </hashTree>

@@ -4,7 +4,6 @@ package org.egov.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.repository.querybuilder.FiscalEventQueryBuilder;
 import org.egov.web.models.Criteria;
-import org.egov.web.models.FiscalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,6 +23,6 @@ public class FiscalEventRepository {
 
     public List<Object> searchFiscalEvent(Criteria searchCriteria) {
         Query searchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria);
-        return (mongoTemplate.find(searchQuery, Object.class,"fiscalEvent"));
+        return (mongoTemplate.find(searchQuery, Object.class, "fiscalEvent"));
     }
 }

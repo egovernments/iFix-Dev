@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "9d3c2923-ae2b-4010-b5fe-5e419e646748",
+		"name": "ifix-fiscal-event",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "fiscal-event-push",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "<token>",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"fiscalEvent\": {\r\n    \"tenantId\": \"pb\",\r\n    \"projectId\": \"69b1ed7c-c585-4731-b22d-469a26badeb9\",\r\n    \"eventType\": \"Appropriation\",\r\n    \"eventTime\": 1628177497000,\r\n    \"referenceId\": \"013e9c56-8207-4dac-9f4d-f1e20bd824e7\",\r\n    \"parentEventId\": \"7d476bb0-bc9f-48e2-8ad4-5a4a36220779\",\r\n    \"parentReferenceId\": \"77f23efe-879d-407b-8f23-7b8dd5b2ecb1\",\r\n    \"amountDetails\": [\r\n      {\r\n        \"amount\": 10234.5,\r\n        \"coaId\": \"a3bc991e-17db-4fb2-b015-8b29bdbb6a6a\",\r\n        \"fromBillingPeriod\": 1622907239000,\r\n        \"toBillingPeriod\": 1628177643000\r\n      }\r\n    ],\r\n    \"attributes\": {}\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8031/fiscal-event-service/events/v1/_push",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8031",
+					"path": [
+						"fiscal-event-service",
+						"events",
+						"v1",
+						"_push"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fiscal-event-push dev",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "<token>",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"fiscalEvent\": {\r\n    \"tenantId\": \"pb\",\r\n    \"projectId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac5\",\r\n    \"eventType\": \"Bill\",\r\n    \"eventTime\": 1629286294000,\r\n    \"referenceId\": \"013e9c56-8207-4dac-9f4d-f1e20bd824e7\",\r\n    \"amountDetails\": [\r\n      {\r\n        \"amount\": 10234.5,\r\n        \"coaId\": \"50cc5634-6cc3-456b-ae33-e40741128cde\",\r\n        \"fromBillingPeriod\": 1622907239000,\r\n        \"toBillingPeriod\": 1628177643000\r\n      }\r\n    ],\r\n    \"attributes\": {}\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8031/fiscal-event-service/events/v1/_push",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8031",
+					"path": [
+						"fiscal-event-service",
+						"events",
+						"v1",
+						"_push"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fiscal-even-search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"criteria\": {\r\n    \"tenantId\": \"pb\",\r\n    \"fromEventTime\": 1627776000000,\r\n    \"toEventTime\": 1628985600000,\r\n    \"eventType\":\"APPROPRIATION\"\r\n  }\r\n  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8031/fiscal-event-service/events/v1/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8031",
+					"path": [
+						"fiscal-event-service",
+						"events",
+						"v1",
+						"_search"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "fiscal-even-search",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \"tenantId\": \"PB\",\r\n    \"fromEventTime\": 1627776000000,\r\n    \"toEventTime\": 1628985600000,\r\n    \"eventType\":\"APPROPRIATION\"\r\n  }\r\n  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8031/fiscal-event-service/events/v1/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8031",
+							"path": [
+								"fiscal-event-service",
+								"events",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Aug 2021 08:43:47 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"responseHeader\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"fiscalEvent\": [\n        {\n            \"id\": \"612c9288f79ae7f62ed5863a\",\n            \"tenantId\": \"PB\",\n            \"projectId\": null,\n            \"eventType\": \"APPROPRIATION\",\n            \"ingestionTime\": null,\n            \"eventTime\": 1628177497000,\n            \"referenceId\": \"013e9c56-8207-4dac-9f4d-f1e20bd824e7\",\n            \"parentEventId\": \"7d476bb0-bc9f-48e2-8ad4-5a4a36220779\",\n            \"parentReferenceId\": \"77f23efe-879d-407b-8f23-7b8dd5b2ecb1\",\n            \"amountDetails\": [\n                {\n                    \"id\": null,\n                    \"amount\": 10234.5,\n                    \"coaId\": null,\n                    \"fromBillingPeriod\": 1622907239000,\n                    \"toBillingPeriod\": 1628177643000\n                }\n            ],\n            \"auditDetails\": null,\n            \"attributes\": {}\n        }\n    ]\n}"
+				},
+				{
+					"name": "fiscal-even-search",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \"tenantId\": \"PB\",\r\n    \"fromEventTime\": 1627776000000,\r\n    \"toEventTime\": 1628985600000,\r\n    \"eventType\":\"APPROPRIATION\"\r\n  }\r\n  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8031/fiscal-event-service/events/v1/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8031",
+							"path": [
+								"fiscal-event-service",
+								"events",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 08:22:54 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"responseHeader\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"fiscalEvent\": [\n        {\n            \"id\": \"612c9288f79ae7f62ed5863a\",\n            \"tenantId\": \"PB\",\n            \"projectId\": \"69b1ed7c-c585-4731-b22d-469a26badeb9\",\n            \"eventType\": \"APPROPRIATION\",\n            \"ingestionTime\": null,\n            \"eventTime\": 1628177497000,\n            \"referenceId\": \"013e9c56-8207-4dac-9f4d-f1e20bd824e7\",\n            \"parentEventId\": \"7d476bb0-bc9f-48e2-8ad4-5a4a36220779\",\n            \"parentReferenceId\": \"77f23efe-879d-407b-8f23-7b8dd5b2ecb1\",\n            \"amountDetails\": [\n                {\n                    \"id\": \"612c9288f79ae7f62ed5863a\",\n                    \"amount\": 10234.5,\n                    \"coaId\": \"a3bc991e-17db-4fb2-b015-8b29bdbb6a6a\",\n                    \"fromBillingPeriod\": 1622907239000,\n                    \"toBillingPeriod\": 1628177643000\n                }\n            ],\n            \"auditDetails\": null,\n            \"attributes\": {}\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}

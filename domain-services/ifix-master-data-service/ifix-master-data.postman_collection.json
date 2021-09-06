@@ -1,0 +1,1241 @@
+{
+	"info": {
+		"_postman_id": "fee8e3c9-0f45-46b3-967a-c8d0de45665e",
+		"name": "ifix-master-data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Chart of account",
+			"item": [
+				{
+					"name": "Create_COA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "<token>",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"chartOfAccount\": {\r\n    \"tenantId\": \"pb\",\r\n    \"majorHead\": \"824\",\r\n    \"majorHeadName\": \"majorHeadName89\",\r\n    \"majorHeadtype\": \"majorHeadtype\",\r\n    \"subMajorHead\": \"12\",\r\n    \"subMajorHeadName\": \"subMajorHeadName\",\r\n    \"minorHead\": \"37\",\r\n    \"minorHeadName\": \"minorHeadName347\",\r\n    \"subHead\": \"56\",\r\n    \"subHeadName\": \"subHeadName\",\r\n    \"groupHead\": \"78\",\r\n    \"groupHeadName\": \"groupHeadName\",\r\n    \"objectHead\": \"90\",\r\n    \"objectHeadName\": \"objectHeadName\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ifix-qa.ifix.org.in/ifix-master-data/chartOfAccount/v1/_create",
+							"protocol": "https",
+							"host": [
+								"ifix-qa",
+								"ifix",
+								"org",
+								"in"
+							],
+							"path": [
+								"ifix-master-data",
+								"chartOfAccount",
+								"v1",
+								"_create"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"chartOfAccount\": {\r\n    \"tenantId\": \"PB\",\r\n    \"majorHead\": \"8988\",\r\n    \"majorHeadName\": \"majorHeadName89\",\r\n    \"majorHeadtype\": \"majorHeadtype\",\r\n    \"subMajorHead\": \"12\",\r\n    \"subMajorHeadName\": \"subMajorHeadName\",\r\n    \"minorHead\": \"347\",\r\n    \"minorHeadName\": \"minorHeadName347\",\r\n    \"subHead\": \"56\",\r\n    \"subHeadName\": \"subHeadName\",\r\n    \"groupHead\": \"78\",\r\n    \"groupHeadName\": \"groupHeadName\",\r\n    \"objectHead\": \"90\",\r\n    \"objectHeadName\": \"objectHeadName\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 06 Aug 2021 08:51:00 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"chartOfAccounts\": [\n        {\n            \"id\": \"a3bc991e-17db-4fb2-b015-8b29bdbb6a6a\",\n            \"coaCode\": \"8988-12-347-56-78-90\",\n            \"tenantId\": \"PB\",\n            \"majorHead\": \"8988\",\n            \"majorHeadName\": \"majorHeadName89\",\n            \"majorHeadtype\": \"majorHeadtype\",\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"347\",\n            \"minorHeadName\": \"minorHeadName347\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628239860279,\n                \"lastModifiedTime\": 1628239860279\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Create_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"chartOfAccount\": {\r\n    \"tenantId\": \"PB\",\r\n    \"majorHead\": \"8984\",\r\n    \"majorHeadName\": \"majorHeadName89\",\r\n    \"majorHeadtype\": \"majorHeadtype\",\r\n    \"subMajorHead\": \"12\",\r\n    \"subMajorHeadName\": \"subMajorHeadName\",\r\n    \"minorHead\": \"347\",\r\n    \"minorHeadName\": \"minorHeadName347\",\r\n    \"subHead\": \"56\",\r\n    \"subHeadName\": \"subHeadName\",\r\n    \"groupHead\": \"78\",\r\n    \"groupHeadName\": \"groupHeadName\",\r\n    \"objectHead\": \"90\",\r\n    \"objectHeadName\": \"objectHeadName\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Aug 2021 07:01:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": null,\n    \"Errors\": [\n        {\n            \"code\": \"DUPLICATE_COA_CODE\",\n            \"message\": \"This coa code exists in the system\",\n            \"description\": null,\n            \"params\": null\n        }\n    ]\n}"
+						},
+						{
+							"name": "Create_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"chartOfAccount\": {\r\n    \"tenantId\": \"PB\",\r\n    \"majorHead\": \"8983\",\r\n    \"majorHeadName\": \"majorHeadName89\",\r\n    \"majorHeadtype\": \"majorHeadtype\",\r\n    \"subMajorHead\": \"12\",\r\n    \"subMajorHeadName\": \"subMajorHeadName\",\r\n    \"minorHead\": \"347\",\r\n    \"minorHeadName\": \"minorHeadName347\",\r\n    \"subHead\": \"56\",\r\n    \"subHeadName\": \"subHeadName\",\r\n    \"groupHead\": \"78\",\r\n    \"groupHeadName\": \"groupHeadName\",\r\n    \"objectHead\": \"90\",\r\n    \"objectHeadName\": \"objectHeadName\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Aug 2021 14:14:41 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"chartOfAccounts\": [\n        {\n            \"id\": \"f064855d-d257-4737-bf52-cc48c4c7ff22\",\n            \"coaCode\": \"8983-12-347-56-78-90\",\n            \"tenantId\": \"PB\",\n            \"majorHead\": \"8983\",\n            \"majorHeadName\": \"majorHeadName89\",\n            \"majorHeadType\": null,\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"347\",\n            \"minorHeadName\": \"minorHeadName347\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628345681440,\n                \"lastModifiedTime\": 1628345681440\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Search_COA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"criteria\": {\r\n      \"Ids\": [\r\n      \"9545d9a7-0d41-4f70-bb4d-c0c049776855\",\"512db21b-9d2b-4ae4-84d0-da1afe87db13\"\r\n    ],\r\n    \"tenantId\": \"pb\",\r\n    \"subHead\": \"56\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ifix-qa.ifix.org.in/ifix-master-data/chartOfAccount/v1/_search",
+							"protocol": "https",
+							"host": [
+								"ifix-qa",
+								"ifix",
+								"org",
+								"in"
+							],
+							"path": [
+								"ifix-master-data",
+								"chartOfAccount",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Search_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n\r\n    \"tenantId\": \"string\",\r\n    \"majorHead\": \"123\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Aug 2021 08:15:36 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"chartOfAccounts\": [\n        {\n            \"id\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac0\",\n            \"coaCode\": \"34-12-34-56-78-90-\",\n            \"tenantId\": \"string\",\n            \"majorHead\": \"123\",\n            \"majorHeadName\": \"majorHeadName\",\n            \"majorHeadtype\": \"majorHeadtype\",\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"34\",\n            \"minorHeadName\": \"minorHeadName\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628063909104,\n                \"lastModifiedTime\": 1628063909104\n            }\n        },\n        {\n            \"id\": \"20361abb-11ac-4b32-abe1-3abc7e6570db\",\n            \"coaCode\": \"34-12-34-56-78-90-\",\n            \"tenantId\": \"string\",\n            \"majorHead\": \"123\",\n            \"majorHeadName\": \"majorHeadName\",\n            \"majorHeadtype\": \"majorHeadtype\",\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"34\",\n            \"minorHeadName\": \"minorHeadName\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628064067597,\n                \"lastModifiedTime\": 1628064067597\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Search_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \"tenantId\": \"string\",\r\n    \"majorHead\": \"123\",\r\n    \"minorHead\": \"34\",\r\n    \"subHead\": \"56\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Aug 2021 08:17:21 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"chartOfAccounts\": [\n        {\n            \"id\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac0\",\n            \"coaCode\": \"34-12-34-56-78-90-\",\n            \"tenantId\": \"string\",\n            \"majorHead\": \"123\",\n            \"majorHeadName\": \"majorHeadName\",\n            \"majorHeadtype\": \"majorHeadtype\",\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"34\",\n            \"minorHeadName\": \"minorHeadName\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628063909104,\n                \"lastModifiedTime\": 1628063909104\n            }\n        },\n        {\n            \"id\": \"20361abb-11ac-4b32-abe1-3abc7e6570db\",\n            \"coaCode\": \"34-12-34-56-78-90-\",\n            \"tenantId\": \"string\",\n            \"majorHead\": \"123\",\n            \"majorHeadName\": \"majorHeadName\",\n            \"majorHeadtype\": \"majorHeadtype\",\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"34\",\n            \"minorHeadName\": \"minorHeadName\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628064067597,\n                \"lastModifiedTime\": 1628064067597\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Search_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \r\n    \"majorHead\": \"123\",\r\n    \"minorHead\": \"34\",\r\n    \"subHead\": \"56\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Aug 2021 08:22:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ResponseInfo\": null,\n    \"Errors\": [\n        {\n            \"code\": \"TENANT_ID\",\n            \"message\": \"Tenant id is mandatory\",\n            \"description\": null,\n            \"params\": null\n        }\n    ]\n}"
+						},
+						{
+							"name": "Search_COA",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n      \"Ids\": [\r\n      \"3d9ef18a-361a-40cf-b142-dd6f998e1ac0\",\"512db21b-9d2b-4ae4-84d0-da1afe87db13\"\r\n    ],\r\n    \"tenantId\": \"PB\",\r\n    \"subHead\": \"56\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/chartOfAccount/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"chartOfAccount",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Aug 2021 07:03:04 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"chartOfAccounts\": [\n        {\n            \"id\": \"512db21b-9d2b-4ae4-84d0-da1afe87db13\",\n            \"coaCode\": \"8984-12-347-56-78-90\",\n            \"tenantId\": \"PB\",\n            \"majorHead\": \"8984\",\n            \"majorHeadName\": \"majorHeadName89\",\n            \"majorHeadType\": null,\n            \"subMajorHead\": \"12\",\n            \"subMajorHeadName\": \"subMajorHeadName\",\n            \"minorHead\": \"347\",\n            \"minorHeadName\": \"minorHeadName347\",\n            \"subHead\": \"56\",\n            \"subHeadName\": \"subHeadName\",\n            \"groupHead\": \"78\",\n            \"groupHeadName\": \"groupHeadName\",\n            \"objectHead\": \"90\",\n            \"objectHeadName\": \"objectHeadName\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628319687417,\n                \"lastModifiedTime\": 1628319687417\n            }\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Government",
+			"item": [
+				{
+					"name": "Create_Government",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "<token>",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"requestHeader\": {\r\n     \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"government\": {\r\n    \"id\": \"pb\",\r\n    \"name\": \"Punjab\",\r\n    \"attributes\": {}\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8030/ifix-master-data/government/v1/_create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8030",
+							"path": [
+								"ifix-master-data",
+								"government",
+								"v1",
+								"_create"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create_Government",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"government\": {\r\n    \"id\": \"UP\",\r\n    \"name\": \"Uttar Pardesh\",\r\n    \"attributes\": {}\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/government/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"government",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 07 Aug 2021 14:15:12 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"government\": [\n        {\n            \"id\": \"UP\",\n            \"name\": \"Uttar Pardesh\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628345712790,\n                \"lastModifiedTime\": 1628345712790\n            },\n            \"attributes\": {}\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Search_Government",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestHeader\": {\n    \"ts\": 1627193067,\n    \"version\": \"0.1.0\",\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\n  },\n  \"criteria\": {\n    \"Ids\": [\n      \"pb\",\"br\",\"hr\",\"up\",\"ka\"\n    ]\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8030/ifix-master-data/government/v1/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8030",
+							"path": [
+								"ifix-master-data",
+								"government",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Department",
+			"item": [
+				{
+					"name": "Search_Department",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n  \"criteria\": {\r\n    \"Ids\": [\r\n      \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\",\"3d9ef18a-361a-40cf-b142-dd6f998e1ad3\"\r\n    ],\r\n    \"tenantId\": \"pb\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8020/ifix-master-data/department/v1/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8020",
+							"path": [
+								"ifix-master-data",
+								"department",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Search_Department",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \"Ids\": [\r\n      \"3d9ef18a-361a-40cf-b142-dd6f998e1ac1\"\r\n    ],\r\n    \"tenantId\": \"pb\"\r\n  }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data//department/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"",
+										"department",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 06 Aug 2021 08:20:56 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"department\": [\n        {\n            \"id\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac1\",\n            \"tenantId\": \"pb\",\n            \"code\": \"123\",\n            \"name\": \"departmentName\",\n            \"isNodal\": false,\n            \"parent\": \"parent\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628063909104,\n                \"lastModifiedTime\": 1628063909104\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Search_Department",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n  \"criteria\": {\r\n    \"Ids\": [\r\n      \"3d9ef18a-361a-40cf-b142-dd6f998e1ac1\",\"3d9ef18a-361a-40cf-b142-dd6f998e1ac2\"\r\n    ],\r\n    \"tenantId\": \"pb\"\r\n  }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data//department/v1/_search",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"",
+										"department",
+										"v1",
+										"_search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 06 Aug 2021 08:26:10 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseInfo\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"department\": [\n        {\n            \"id\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac1\",\n            \"tenantId\": \"pb\",\n            \"code\": \"123\",\n            \"name\": \"departmentName\",\n            \"isNodal\": false,\n            \"parent\": \"parent\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628063909104,\n                \"lastModifiedTime\": 1628063909104\n            }\n        },\n        {\n            \"id\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ac2\",\n            \"tenantId\": \"pb\",\n            \"code\": \"1234\",\n            \"name\": \"departmentName1\",\n            \"isNodal\": false,\n            \"parent\": \"parent1\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1628063909104,\n                \"lastModifiedTime\": 1628063909104\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "create_department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "<token>",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPQUVaem05WEpRT0J0dkVHcTB4dklMeVBmbjlfUkVBUnBUUDNJY09hWjlvIn0.eyJleHAiOjE2MzI1NzUwNTEsImlhdCI6MTYyOTk4MzA1MSwianRpIjoiNmZkZTJiMjktY2VmZS00MDFjLWIwNjgtOWE0Y2ViYjM1YzdlIiwiaXNzIjoiaHR0cHM6Ly9pZml4LWRldi5pZml4Lm9yZy5pbi9hdXRoL3JlYWxtcy9pZml4IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjRmYWE5MTJkLWQ1MzEtNDg1Yi1hZDliLTBhOTg3OGY3OTJiMCIsInR5cCI6IkJlYXJlciIsImF6cCI6Im1ncmFtc2V2YSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZmlzY2FsLWV2ZW50LXByb2R1Y2VyIiwiZGVmYXVsdC1yb2xlcy1pZml4Il19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiY2xpZW50SWQiOiJtZ3JhbXNldmEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInRlbmFudElkIjoicGIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtbWdyYW1zZXZhIn0.JsNvMIt8aQOiw2fnCtMN2a8xniBmH613cJu_MH_POjYL5nLI1ec4j7KA46gMxpKzy_2tL-LZ_snc4YtpertNdIOtoIk4KjH93DtKEnh2gAcuI_dbS4IRjBjyvqojkD0SJ6a3T17FwDLQk60TS9RytynhHQUjzeurC559bLhlTmEp1Q8Z0PtR5JnyjproHtoesVPoxCMq1Yuu5EBG2wcyKPlXnNXmGwt9WmdRaWPJFbhoEl0DxnuNDgBuP1nkB-mxA-nwPhNi90lLr1PUsdJ2xbkeQxekj4cUOf7bUn5ctJa1WcsNs2cjZeT5JJTMt_5FHSOjh1yr4cETN47pe0SrJQ"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestHeader\": {\n    \"ts\": 1627193067,\n    \"version\": \"0.1.0\",\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\n  },\n  \"department\": {\n    \"tenantId\": \"pb\",\n    \"code\": \"DEP-1000\",\n    \"name\": \"department-1000\",\n    \"isNodal\": false,\n    \"parent\": \"parent2\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8030/ifix-master-data/department/v1/_create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8030",
+							"path": [
+								"ifix-master-data",
+								"department",
+								"v1",
+								"_create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Expenditure",
+			"item": [
+				{
+					"name": "Create_Expenditure",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "<token>",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"0.1.0\",\r\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\r\n  },\r\n   \"expenditure\": {\r\n    \"tenantId\": \"pb\",\r\n    \"code\": \"exp-01\",\r\n    \"name\": \"expenditure one\",\r\n    \"type\": \"Scheme\",\r\n    \"departmentId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://ifix-dev.ifix.org.in/ifix-master-data/expenditure/v1/_create",
+							"protocol": "http",
+							"host": [
+								"ifix-dev",
+								"ifix",
+								"org",
+								"in"
+							],
+							"path": [
+								"ifix-master-data",
+								"expenditure",
+								"v1",
+								"_create"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create_Expenditure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n   \"expenditure\": {\r\n    \"tenantId\": \"PB\",\r\n    \"code\": \"exp-01\",\r\n    \"name\": \"expenditure one\",\r\n    \"type\": \"Scheme\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/expenditure/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"expenditure",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 01 Sep 2021 08:40:05 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"expenditure\": [\n        {\n            \"id\": \"dd3fe84b-f436-4b9d-88be-cfcbf23131f1\",\n            \"tenantId\": \"PB\",\n            \"code\": \"exp-01\",\n            \"name\": \"expenditure one\",\n            \"type\": \"Scheme\",\n            \"departmentId\": null,\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1630485605296,\n                \"lastModifiedTime\": 1630485605296\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Create_Expenditure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n   \"expenditure\": {\r\n    \"tenantId\": \"PB\",\r\n    \"code\": \"exp-01\",\r\n    \"name\": \"expenditure one\",\r\n    \"type\": \"Scheme\",\r\n    \"departmentId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/expenditure/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"expenditure",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 01 Sep 2021 08:43:43 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": {\n        \"ts\": 1627193067,\n        \"correlationId\": null,\n        \"msgId\": \"Unknown\",\n        \"status\": \"successful\",\n        \"signature\": \"NON\",\n        \"version\": \"V1\"\n    },\n    \"expenditure\": [\n        {\n            \"id\": \"59bce7d2-9c87-4856-89cf-4a1f2ffba55a\",\n            \"tenantId\": \"PB\",\n            \"code\": \"exp-01\",\n            \"name\": \"expenditure one\",\n            \"type\": \"Scheme\",\n            \"departmentId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\",\n            \"auditDetails\": {\n                \"createdBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"lastModifiedBy\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\",\n                \"createdTime\": 1630485823004,\n                \"lastModifiedTime\": 1630485823004\n            }\n        }\n    ]\n}"
+						},
+						{
+							"name": "Create_Expenditure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n   \"expenditure\": {\r\n    \"tenantId\": \"PB\",\r\n    \"code\": \"exp-01\",\r\n    \"name\": \"expenditure one\",\r\n   \r\n    \"departmentId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8030/ifix-master-data/expenditure/v1/_create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8030",
+									"path": [
+										"ifix-master-data",
+										"expenditure",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 01 Sep 2021 08:44:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": null,\n    \"Errors\": [\n        {\n            \"code\": \"EXPENDITURE_TYPE\",\n            \"message\": \"Expenditure type is missing in request data\",\n            \"description\": null,\n            \"params\": null\n        }\n    ]\n}"
+						},
+						{
+							"name": "Create_Expenditure",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"requestHeader\": {\r\n    \"ts\": 1627193067,\r\n    \"version\": \"V1\",\r\n    \"msgId\": \"Unknown\",\r\n    \"signature\": \"NON\",\r\n    \"userInfo\": {\r\n        \"uuid\": \"e4fd96e8-3b6b-4e36-9503-0f14a01af39d\"\r\n    }\r\n  },\r\n   \"expenditure\": {\r\n    \"tenantId\": \"pb\",\r\n    \"code\": \"exp-01\",\r\n    \"name\": \"expenditure one\",\r\n    \"type\": \"Scheme\",\r\n    \"departmentId\": \"3d9ef18a-361a-40cf-b142-dd6f998e1ad2\"\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://ifix-dev.ifix.org.in/ifix-master-data/expenditure/v1/_create",
+									"protocol": "http",
+									"host": [
+										"ifix-dev",
+										"ifix",
+										"org",
+										"in"
+									],
+									"path": [
+										"ifix-master-data",
+										"expenditure",
+										"v1",
+										"_create"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 02 Sep 2021 08:42:06 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubdomains; preload"
+								},
+								{
+									"key": "X-Lua-Resty-WAF-ID",
+									"value": "fb1470275dd9fd94e4eb"
+								},
+								{
+									"key": "x-correlation-id",
+									"value": "c40f14a7-3951-4ba6-8795-47ce4ac3d247"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self' https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'; img-src 'self' https: data: blob:; style-src https: blob: 'unsafe-inline'; worker-src 'self' blob:; font-src 'self' https: data: blob:; child-src 'self' https: data: blob:;"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer-when-downgrade"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "sameorigin"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"responseHeader\": null,\n    \"Errors\": [\n        {\n            \"code\": \"DEPARTMENT_ID\",\n            \"message\": \"Department id doesn't exist in the system\",\n            \"description\": null,\n            \"params\": null\n        },\n        {\n            \"code\": \"TENANT_ID\",\n            \"message\": \"Tenant id doesn't exist in the system\",\n            \"description\": null,\n            \"params\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "search_expenditure",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestHeader\": {\n    \"ts\": 1627193067,\n    \"version\": \"0.1.0\",\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\n  },\n  \"criteria\": {\n    \"Ids\": [\n      \"910f4d23-fc63-48fb-a8fb-f0ad567b788a\",\"a4c21fc1-28df-494b-8983-baf3c6b027d7\"\n    ],\n    \"tenantId\": \"pb\"\n  }\n}"
+						},
+						"url": {
+							"raw": "https://ifix-dev.ifix.org.in/ifix-master-data/expenditure/v1/_search",
+							"protocol": "https",
+							"host": [
+								"ifix-dev",
+								"ifix",
+								"org",
+								"in"
+							],
+							"path": [
+								"ifix-master-data",
+								"expenditure",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "create_project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "<token>",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPQUVaem05WEpRT0J0dkVHcTB4dklMeVBmbjlfUkVBUnBUUDNJY09hWjlvIn0.eyJleHAiOjE2MzI0OTA2MjYsImlhdCI6MTYyOTg5ODYyNiwianRpIjoiNmNjOTZhOGYtMGUwZC00ZjE3LTg3YzUtYWJhMGQ4MDQwZWEwIiwiaXNzIjoiaHR0cHM6Ly9pZml4LWRldi5pZml4Lm9yZy5pbi9hdXRoL3JlYWxtcy9pZml4IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjRmYWE5MTJkLWQ1MzEtNDg1Yi1hZDliLTBhOTg3OGY3OTJiMCIsInR5cCI6IkJlYXJlciIsImF6cCI6Im1ncmFtc2V2YSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZmlzY2FsLWV2ZW50LXByb2R1Y2VyIiwiZGVmYXVsdC1yb2xlcy1pZml4Il19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiY2xpZW50SWQiOiJtZ3JhbXNldmEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInRlbmFudElkIjoicGIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtbWdyYW1zZXZhIn0.dodHtCYpVQ5TU8hdbzLNwSA43hCj4QaD15iLjzgqdNpAKIHlbtWvlbxjD1AZZII-9mFgMknCLRMHnf4YGPQs06ACg-ClgEcpN0tIuOarnwRxlpc5CNNfWYUPI4Oqs9Dq-fnhOLF2asNVdgvtn5-oIbAbZMMf8cANBwa_Czo4sWCgQYivQxEjEq1vXczrF5vUGybsxrY53odYktu8XrALyoms8yCi6aO3g6lGLR9MvPfBK6ObUebDOUVtE0K6g8ukVrnNaNDz54EuCuYAg4tSJX0hevDQ09mWc-7vQOWf1MSoXmy98Z1NZqMPoLmftZbCLaJ-ZRO4cEYHEqOmvbDKfw"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestHeader\": {\n     \"ts\": 1627193067,\n    \"version\": \"0.1.0\",\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\n  },\n  \"project\": {\n    \"tenantId\": \"pb\",\n    \"code\": \"DIV23\",\n    \"name\": \"Sri Anandpur Sahib\",\n    \"expenditureId\": \"910f4d23-fc63-48fb-a8fb-f0ad567b788a\",\n    \"departmentEntitytId\": \"901f76a8-1911-4960-b389-57b62bd4dcdb\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8030/ifix-master-data/project/v1/_create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8030",
+							"path": [
+								"ifix-master-data",
+								"project",
+								"v1",
+								"_create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search_project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"requestHeader\": {\n    \"ts\": 1627193067,\n    \"version\": \"0.1.0\",\n    \"msgId\": \"ek9d96e8-3b6b-4e36-9503-0f14a01af74n\"\n  },\n  \"criteria\": {\n    \"Ids\": [\n      \"3d9ef18a-361a-40cf-b142-dd6f998e1ac4\",\"3d9ef18a-361a-40cf-b142-dd6f998e1ac5\"\n    ],\n    \"tenantId\": \"pb\",\n    \"locationId\": \"2c8d44e8-cf2e-4974-97d7-f3ce848b543b\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8030/ifix-master-data/project/v1/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8030",
+							"path": [
+								"ifix-master-data",
+								"project",
+								"v1",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

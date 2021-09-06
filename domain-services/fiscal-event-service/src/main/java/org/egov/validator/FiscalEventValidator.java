@@ -41,7 +41,7 @@ public class FiscalEventValidator {
      */
     public void validateFiscalEventPushPost(FiscalEventRequest fiscalEventRequest) {
         if (fiscalEventRequest != null && fiscalEventRequest.getRequestHeader() != null
-                                                        && fiscalEventRequest.getFiscalEvent() != null) {
+                && fiscalEventRequest.getFiscalEvent() != null) {
             Map<String, String> errorMap = new HashMap<>();
 
             if (StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getReferenceId())) {
@@ -59,7 +59,7 @@ public class FiscalEventValidator {
             validateTenantId(fiscalEventRequest, errorMap);
             validateProjectId(fiscalEventRequest, errorMap);
             validateFiscalEventAmountDetails(fiscalEventRequest, errorMap);
-            validateParentEventId(fiscalEventRequest,errorMap);
+            validateParentEventId(fiscalEventRequest, errorMap);
 
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
@@ -98,7 +98,6 @@ public class FiscalEventValidator {
         if (StringUtils.isBlank(requestHeader.getUserInfo().getUuid()))
             throw new CustomException("USER_INFO", "User info is missing in request header");
     }
-
 
 
     /**
@@ -142,8 +141,8 @@ public class FiscalEventValidator {
      * @param fiscalEventRequest
      */
     public void validateTenantId(FiscalEventRequest fiscalEventRequest, Map<String, String> errorMap) {
-        if(StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getTenantId())){
-            errorMap.put(MasterDataConstants.TENANT_ID,"Tenant id is missing in request");
+        if (StringUtils.isBlank(fiscalEventRequest.getFiscalEvent().getTenantId())) {
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request");
         }
         boolean isValidTenant = false;
         if (fiscalEventRequest.getFiscalEvent() != null && StringUtils.isNotBlank(fiscalEventRequest.getFiscalEvent().getTenantId())) {

@@ -37,6 +37,7 @@ public class ChartOfAccountService {
 
     /**
      * upsert a COA in the Master data system.
+     *
      * @param coaRequest
      * @return
      */
@@ -51,6 +52,7 @@ public class ChartOfAccountService {
 
     /**
      * Search the Chart of Account based on search criteria
+     *
      * @param coaSearchRequest
      * @return
      */

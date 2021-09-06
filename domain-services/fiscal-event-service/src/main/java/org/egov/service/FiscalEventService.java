@@ -1,7 +1,6 @@
 package org.egov.service;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventConfiguration;
@@ -44,13 +43,14 @@ public class FiscalEventService {
 
     /**
      * Validate , enrich and push the fiscal Event request to topic
+     *
      * @param fiscalEventRequest
      * @return
      */
     public FiscalEventRequest fiscalEventsV1PushPost(FiscalEventRequest fiscalEventRequest) {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
-        producer.push(eventConfiguration.getFiscalPushRequest(),fiscalEventRequest);
+        producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequest);
         return fiscalEventRequest;
     }
 

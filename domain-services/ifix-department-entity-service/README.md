@@ -1,5 +1,8 @@
 # iFIX-Department-Entity-Service
 
+## [API-Contract Link](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-department-entity-service/ifix-department-entity-service-0.1.0.yaml)
+
+
 ## Department Hierarchy
 It defines hierarchy definition for department.
 

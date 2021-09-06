@@ -3,7 +3,9 @@ package org.egov.service;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.util.MasterDataServiceUtil;
-import org.egov.web.models.*;
+import org.egov.web.models.DepartmentEntity;
+import org.egov.web.models.Project;
+import org.egov.web.models.ProjectRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +29,10 @@ public class ProjectEnrichmentService {
 
         AuditDetails auditDetails = null;
 
-        if(project.getAuditDetails() == null){
+        if (project.getAuditDetails() == null) {
             auditDetails = enrichAuditDetails
                     .enrichAuditDetails(requestHeader.getUserInfo().getUuid(), project.getAuditDetails(), true);
-        }else{
+        } else {
             auditDetails = enrichAuditDetails
                     .enrichAuditDetails(requestHeader.getUserInfo().getUuid(), project.getAuditDetails(), false);
         }
@@ -43,7 +45,7 @@ public class ProjectEnrichmentService {
         Project project = projectRequest.getProject();
         DepartmentEntity departmentEntity =
                 projectDepartmentEntityIntegration.getDepartmentEntityForId(projectRequest.getRequestHeader(),
-                project.getTenantId(), project.getDepartmentEntitytId());
+                        project.getTenantId(), project.getDepartmentEntitytId());
         project.setDepartmentEntity(departmentEntity);
     }
 

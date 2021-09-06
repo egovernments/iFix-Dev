@@ -8,7 +8,6 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityUtil;
-import org.egov.web.models.DepartmentEntitySearchCriteria;
 import org.egov.web.models.DepartmentHierarchyLevel;
 import org.egov.web.models.DepartmentHierarchyLevelRequest;
 import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
@@ -31,6 +30,7 @@ public class DepartmentHierarchyLevelEnrichmentService {
 
     /**
      * Enrich the Department hierarchy level request
+     *
      * @param request
      */
     public void enrichHierarchyLevelCreatePost(DepartmentHierarchyLevelRequest request) {

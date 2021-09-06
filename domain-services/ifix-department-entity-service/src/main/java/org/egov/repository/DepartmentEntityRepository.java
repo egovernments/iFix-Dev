@@ -34,7 +34,7 @@ public class DepartmentEntityRepository {
         Criteria criteria = Criteria.where("children").all(Collections.singletonList(childId));
         Query query = Query.query(criteria);
         List<DepartmentEntity> results = mongoTemplate.find(query, DepartmentEntity.class, "departmentEntity");
-        if(!results.isEmpty())
+        if (!results.isEmpty())
             return results.get(0);
         return null;
     }

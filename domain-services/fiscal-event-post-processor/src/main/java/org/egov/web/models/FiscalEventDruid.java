@@ -1,6 +1,9 @@
 package org.egov.web.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -12,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @AllArgsConstructor
-//@NoArgsConstructor
 @Builder
 public class FiscalEventDruid {
 

@@ -16,16 +16,17 @@ public class FiscalEventUnbundleService {
 
     /**
      * Unbundled the dereference fiscal event
+     *
      * @param fiscalEventDeReferenced
      * @return
      */
     public List<FiscalEventLineItemUnbundled> unbundle(FiscalEventDeReferenced fiscalEventDeReferenced) {
-        List<FiscalEventLineItemUnbundled> fiscalEventLineItemUnbundledList =  new ArrayList<>();
+        List<FiscalEventLineItemUnbundled> fiscalEventLineItemUnbundledList = new ArrayList<>();
         List<AmountDetailsDeReferenced> amountDetails = fiscalEventDeReferenced.getAmountDetails();
-        if(amountDetails != null && !amountDetails.isEmpty()){
-            for(AmountDetailsDeReferenced amountDetailsDeReferenced : amountDetails){
+        if (amountDetails != null && !amountDetails.isEmpty()) {
+            for (AmountDetailsDeReferenced amountDetailsDeReferenced : amountDetails) {
                 fiscalEventLineItemUnbundledList.add(getUnbundleFiscalEventFromDereferenceEvent(
-                        amountDetailsDeReferenced,fiscalEventDeReferenced));
+                        amountDetailsDeReferenced, fiscalEventDeReferenced));
             }
         }
 
@@ -33,14 +34,13 @@ public class FiscalEventUnbundleService {
     }
 
     /**
-     *
      * @param amountDetailsDeReferenced
      * @param fiscalEventDeReferenced
      * @return
      */
     private FiscalEventLineItemUnbundled getUnbundleFiscalEventFromDereferenceEvent(AmountDetailsDeReferenced amountDetailsDeReferenced,
                                                                                     FiscalEventDeReferenced fiscalEventDeReferenced) {
-        FiscalEventLineItemUnbundled fiscalEventLineItemUnbundled =  new FiscalEventLineItemUnbundled();
+        FiscalEventLineItemUnbundled fiscalEventLineItemUnbundled = new FiscalEventLineItemUnbundled();
 
         fiscalEventLineItemUnbundled.setId(amountDetailsDeReferenced.getId());
         fiscalEventLineItemUnbundled.setEventId(fiscalEventDeReferenced.getId());

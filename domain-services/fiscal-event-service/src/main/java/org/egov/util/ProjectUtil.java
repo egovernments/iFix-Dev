@@ -43,12 +43,12 @@ public class ProjectUtil {
 
             Object response = serviceRequestRepository.fetchResult(createSearchProjectUrl(), ProjectMap);
 
-            try{
+            try {
                 List list = JsonPath.read(response, MasterDataConstants.PROJECT_LIST);
 
                 return list != null && !list.isEmpty();
-            }catch (Exception e){
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR,"Failed to parse project response for projectId");
+            } catch (Exception e) {
+                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse project response for projectId");
             }
         }
         return false;
