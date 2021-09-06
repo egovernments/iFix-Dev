@@ -44,6 +44,10 @@ public class DepartmentHierarchyLevelEnrichmentService {
             auditDetails = departmentEntityUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), departmentHierarchyLevel.getAuditDetails(), false);
         }
 
+        if(StringUtils.isBlank(departmentHierarchyLevel.getParent())){
+            departmentHierarchyLevel.setLevel(0);
+            departmentHierarchyLevel.setParent(null);
+        }
         enrichDepartmentLevel(departmentHierarchyLevel);
 
         departmentHierarchyLevel.setId(UUID.randomUUID().toString());

@@ -5,11 +5,9 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.repository.DepartmentEntityRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityConstant;
+import org.egov.util.DepartmentHierarchyUtil;
 import org.egov.util.GovernmentUtil;
-import org.egov.web.models.DepartmentEntity;
-import org.egov.web.models.DepartmentEntityRequest;
-import org.egov.web.models.DepartmentEntitySearchCriteria;
-import org.egov.web.models.DepartmentEntitySearchRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +24,11 @@ public class DepartmentEntityValidator {
     @Autowired
     DepartmentEntityRepository departmentEntityRepository;
 
+    @Autowired
+    private DepartmentHierarchyUtil hierarchyUtil;
+
     /**
-     * TODO: validation of HierarchyLevel and department id check.
+     *
      * Both combination should be checked in Department Hierarchy Level meta data.
      *
      * @param departmentEntityRequest
@@ -98,7 +99,17 @@ public class DepartmentEntityValidator {
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
             }
-
+            if (StringUtils.isNotBlank(departmentEntity.getDepartmentId())
+                    && departmentEntity.getHierarchyLevel() != null
+                    && StringUtils.isNotBlank(departmentEntity.getTenantId())) {
+                List<DepartmentHierarchyLevel> departmentHierarchyLevels = hierarchyUtil.validateHierarchyLevelMetaData(departmentEntity.getDepartmentId()
+                        , departmentEntity.getHierarchyLevel()
+                        , departmentEntity.getTenantId());
+                if (departmentHierarchyLevels == null || departmentHierarchyLevels.isEmpty()) {
+                    errorMap.put(DepartmentEntityConstant.INVALID_HIERARCHY_LEVEL, "Given Hierarchy level of this department id : "
+                            + departmentEntity.getDepartmentId() + " doesn't exist in the system.");
+                }
+            }
         } else {
             throw new CustomException(DepartmentEntityConstant.REQUEST_PAYLOAD_MISSING, "Request payload is missing some value");
         }

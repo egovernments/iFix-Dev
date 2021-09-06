@@ -30,4 +30,9 @@ public class DepartmentHierarchyLevelRepository {
         Query searchQuery = queryBuilder.buildSearchQuery(searchCriteria);
         return (mongoTemplate.find(searchQuery, DepartmentHierarchyLevel.class));
     }
+
+    public List<DepartmentHierarchyLevel> searchParentDeptHierarchyLevel(String departmentId, String tenantId, String parent) {
+        Query searchQuery = queryBuilder.buildParentDeptHierarchyLevelSearchQuery(departmentId,tenantId,parent);
+        return (mongoTemplate.find(searchQuery, DepartmentHierarchyLevel.class));
+    }
 }

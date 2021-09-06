@@ -30,4 +30,15 @@ public class DepartmentHierarchyLevelQueryBuilder {
 
         return new Query(criteria);
     }
+
+    public Query buildParentDeptHierarchyLevelSearchQuery(String departmentId, String tenantId, String parent) {
+        Criteria criteria = Criteria.where("tenantId").is(tenantId);
+
+        if (StringUtils.isNotBlank(departmentId)) {
+            criteria.and("departmentId").is(departmentId);
+        }
+        criteria.and("parent").is(parent);
+
+        return new Query(criteria);
+    }
 }

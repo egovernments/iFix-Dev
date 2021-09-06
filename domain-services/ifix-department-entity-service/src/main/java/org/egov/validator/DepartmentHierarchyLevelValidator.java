@@ -3,6 +3,7 @@ package org.egov.validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityConstant;
 import org.egov.util.DepartmentUtil;
@@ -27,6 +28,9 @@ public class DepartmentHierarchyLevelValidator {
 
     @Autowired
     private DepartmentUtil departmentUtil;
+
+    @Autowired
+    private DepartmentHierarchyLevelRepository levelRepository;
 
     public void validateHierarchyLevelCreatePost(DepartmentHierarchyLevelRequest request) {
         DepartmentHierarchyLevel departmentHierarchyLevel = request.getDepartmentHierarchyLevel();
@@ -68,6 +72,21 @@ public class DepartmentHierarchyLevelValidator {
             if (departments.isEmpty())
                 errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevel.getDepartmentId()
                         + " doesn't exist in the system");
+        }
+
+        if(StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())
+                && StringUtils.isNotBlank(departmentHierarchyLevel.getDepartmentId())
+                && StringUtils.isBlank(departmentHierarchyLevel.getParent())) {
+
+            List<DepartmentHierarchyLevel> dbDepartmentHierarchyLevels = levelRepository.searchParentDeptHierarchyLevel(
+                    departmentHierarchyLevel.getDepartmentId()
+                    , departmentHierarchyLevel.getTenantId()
+                    , departmentHierarchyLevel.getParent());
+            if (dbDepartmentHierarchyLevels != null && !dbDepartmentHierarchyLevels.isEmpty()) {
+                errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevel.getDepartmentId()
+                        + " is not valid for given parent");
+
+            }
         }
 
         if (!errorMap.isEmpty()) {
