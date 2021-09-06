@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DepartmentEntityRepository {
@@ -43,6 +44,21 @@ public class DepartmentEntityRepository {
             Query searchQuery = queryBuilder.buildPlainSearchQuery(departmentEntitySearchRequest.getCriteria());
             return (mongoTemplate.find(searchQuery, DepartmentEntity.class));
         }
+        return Collections.emptyList();
+    }
+
+    /**
+     * @param childIdList
+     * @param hierarchyLevel
+     * @return
+     */
+    public List<DepartmentEntity> searchChildDepartment(List<String> childIdList, Integer hierarchyLevel) {
+        Optional<Query> optionalQuery = queryBuilder.buildChildrenValidationQuery(childIdList, hierarchyLevel);
+
+        if (optionalQuery.isPresent()) {
+            return mongoTemplate.find(optionalQuery.get(), DepartmentEntity.class);
+        }
+
         return Collections.emptyList();
     }
 }

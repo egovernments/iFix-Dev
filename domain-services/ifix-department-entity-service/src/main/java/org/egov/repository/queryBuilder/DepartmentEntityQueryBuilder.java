@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Component
 @Slf4j
 public class DepartmentEntityQueryBuilder {
@@ -31,5 +34,20 @@ public class DepartmentEntityQueryBuilder {
             criteria.and("id").in(searchCriteria.getIds());
 
         return new Query(criteria);
+    }
+
+    /**
+     * @param childIdList
+     * @param hierarchyLevel
+     * @return
+     */
+    public Optional<Query> buildChildrenValidationQuery(List<String> childIdList, Integer hierarchyLevel) {
+        if (childIdList != null && !childIdList.isEmpty() && hierarchyLevel != null) {
+            hierarchyLevel += 1;
+            return Optional.ofNullable(new Query(Criteria.where("hierarchyLevel").is(hierarchyLevel)
+                                        .and("id").in(childIdList)));
+        }
+
+        return Optional.empty();
     }
 }

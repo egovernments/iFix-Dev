@@ -2,6 +2,7 @@ package org.egov.validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.repository.DepartmentEntityRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityConstant;
 import org.egov.util.GovernmentUtil;
@@ -21,6 +22,9 @@ public class DepartmentEntityValidator {
 
     @Autowired
     private GovernmentUtil governmentUtil;
+
+    @Autowired
+    DepartmentEntityRepository departmentEntityRepository;
 
     /**
      * TODO: validation of HierarchyLevel and department id check.
@@ -81,7 +85,16 @@ public class DepartmentEntityValidator {
 
             if (departmentEntity.getChildren() == null) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_CHILDREN, "Department children information is missing");
+            }else {
+                List<DepartmentEntity> departmentEntityList = departmentEntityRepository
+                        .searchChildDepartment(departmentEntity.getChildren(), departmentEntity.getHierarchyLevel());
+
+                if (departmentEntityList == null || departmentEntityList.isEmpty()
+                        || (departmentEntityList.size() != departmentEntity.getChildren().size())) {
+                    errorMap.put(DepartmentEntityConstant.DEPARTMENT_CHILDREN, "Invalid children id list");
+                }
             }
+
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
             }
