@@ -1,6 +1,7 @@
 package org.egov.validator;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -157,10 +158,28 @@ public class FiscalEventValidator {
      * @param fiscalEventRequest
      */
     public void validateProjectId(FiscalEventRequest fiscalEventRequest, Map<String, String> errorMap) {
-        boolean isValidProject = projectUtil.validateProjectId(fiscalEventRequest);
+        Optional<JsonNode> optionalJsonNode = projectUtil.validateProjectId(fiscalEventRequest);
 
-        if (!isValidProject) {
+        if (!optionalJsonNode.isPresent()) {
             errorMap.put(MasterDataConstants.PROJECT_ID, "Project id doesn't exist in the system");
+        }else {
+            JsonNode jsonNode = optionalJsonNode.get();
+            JsonNode projectListNode = jsonNode.get("project");
+
+            if (projectListNode != null && !projectListNode.isEmpty()) {
+                JsonNode projectNode = projectListNode.get(0);
+
+                if (projectNode.get("expenditureId") == null) {
+                    errorMap.put(MasterDataConstants.PROJECT_ID_EXPENDITURE_ID, "Expenditure details is missing in project");
+                }
+
+                if (projectNode.get("departmentEntity") == null
+                        || projectNode.get("departmentEntity").get("departmentId") == null) {
+                    errorMap.put(MasterDataConstants.PROJECT_ID_DEPARTMENT_ENTITY_ID, "Department entity details doesn't exist in the project");
+                }
+            } else {
+                errorMap.put(MasterDataConstants.PROJECT_ID, "Project doesn't exist in the system");
+            }
         }
     }
 

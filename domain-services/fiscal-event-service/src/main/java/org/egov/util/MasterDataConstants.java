@@ -31,5 +31,9 @@ public class MasterDataConstants {
 
     public static final String SEARCH_CRITERIA = "SEARCH_CRITERIA";
 
+    public static final String PROJECT_ID_EXPENDITURE_ID = "PROJECT_ID-EXPENDITURE_ID";
+    public static final String PROJECT_ID_DEPARTMENT_ENTITY_ID = "PROJECT_ID-EXPENDITURE_ID";
+
+
 
 }

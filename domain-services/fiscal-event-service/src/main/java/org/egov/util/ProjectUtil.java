@@ -1,5 +1,7 @@
 package org.egov.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventConfiguration;
@@ -9,10 +11,7 @@ import org.egov.web.models.FiscalEventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ProjectUtil {
@@ -22,11 +21,14 @@ public class ProjectUtil {
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     /**
      * @param fiscalEventRequest
      * @return
      */
-    public boolean validateProjectId(FiscalEventRequest fiscalEventRequest) {
+    public Optional<JsonNode> validateProjectId(FiscalEventRequest fiscalEventRequest) {
         if (fiscalEventRequest != null && fiscalEventRequest.getRequestHeader() != null
                 && fiscalEventRequest.getFiscalEvent() != null
                 && !StringUtils.isEmpty(fiscalEventRequest.getFiscalEvent().getProjectId())) {
@@ -42,16 +44,10 @@ public class ProjectUtil {
             ProjectMap.put(MasterDataConstants.CRITERIA, projectValueMap);
 
             Object response = serviceRequestRepository.fetchResult(createSearchProjectUrl(), ProjectMap);
-
-            try {
-                List list = JsonPath.read(response, MasterDataConstants.PROJECT_LIST);
-
-                return list != null && !list.isEmpty();
-            } catch (Exception e) {
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse project response for projectId");
-            }
+            JsonNode jsonNode = objectMapper.convertValue(response, JsonNode.class);
+            return Optional.ofNullable(jsonNode);
         }
-        return false;
+        return Optional.empty();
     }
 
     private String createSearchProjectUrl() {
