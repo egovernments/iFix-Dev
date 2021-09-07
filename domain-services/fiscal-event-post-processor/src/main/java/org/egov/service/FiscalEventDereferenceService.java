@@ -112,11 +112,14 @@ public class FiscalEventDereferenceService {
                 String expenditureId = null;
                 String departmentId = null;
                 if (projectNode != null && !projectNode.isEmpty()) {
-                    expenditureId = projectNode.get("expenditureId").asText();
-                    departmentId = projectNode.get("departmentEntity").get("departmentId").asText();
+                    expenditureId = projectNode.get("expenditureId") != null ? projectNode.get("expenditureId").asText() : null;
+                    departmentId = projectNode.get("departmentEntity") != null && projectNode.get("departmentEntity").get("departmentId") != null
+                            ? projectNode.get("departmentEntity").get("departmentId").asText() : null;
 
                     fiscalEventDeReferenced.setProject(getProjectDetails(projectNode));
-                    fiscalEventDeReferenced.setDepartmentEntity(projectUtil.getDepartmentEntityFromProject(projectNode.get("departmentEntity")));
+                    if (projectNode.get("departmentEntity") != null) {
+                        fiscalEventDeReferenced.setDepartmentEntity(projectUtil.getDepartmentEntityFromProject(projectNode.get("departmentEntity")));
+                    }
                 }
 
                 List<Expenditure> expenditureList = null;
@@ -144,9 +147,9 @@ public class FiscalEventDereferenceService {
     }
 
     private Project getProjectDetails(JsonNode projectNode) {
-        return Project.builder().id(projectNode.get("id").asText())
-                .code(projectNode.get("code").asText())
-                .name(projectNode.get("name").asText()).build();
+        return Project.builder().id(projectNode.get("id") != null ? projectNode.get("id").asText() : null)
+                .code(projectNode.get("code") != null ? projectNode.get("code").asText() : null)
+                .name(projectNode.get("name") != null ? projectNode.get("name").asText() : null).build();
     }
 
     /**
