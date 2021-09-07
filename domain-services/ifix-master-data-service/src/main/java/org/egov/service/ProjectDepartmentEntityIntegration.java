@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.repository.ServiceRequestRepository;
+import org.egov.tracer.model.CustomException;
+import org.egov.util.MasterDataConstants;
 import org.egov.web.models.DepartmentEntity;
 import org.egov.web.models.DepartmentEntityAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +63,25 @@ public class ProjectDepartmentEntityIntegration {
     }
 
     private DepartmentEntity getCurrentDepartmentEntity(JsonNode departmentEntityDetails) {
-        while (departmentEntityDetails.get("children").size() != 0) {
-            departmentEntityDetails = departmentEntityDetails.get("children").get(0);
+        if (departmentEntityDetails != null) {
+            while (departmentEntityDetails.get("children").size() != 0) {
+                departmentEntityDetails = departmentEntityDetails.get("children").get(0);
+            }
+            DepartmentEntity departmentEntity = DepartmentEntity.builder()
+                    .id(departmentEntityDetails.get("id") != null ? departmentEntityDetails.get("id").asText() : null)
+                    .code(departmentEntityDetails.get("code") != null
+                            ? departmentEntityDetails.get("code").asText() : null)
+                    .name(departmentEntityDetails.get("name") != null
+                            ? departmentEntityDetails.get("name").asText() : null)
+                    .hierarchyLevel(departmentEntityDetails.get("hierarchyLevel") != null
+                            ? departmentEntityDetails.get("hierarchyLevel").asInt() : null)
+                    .departmentId(departmentEntityDetails.get("departmentId") != null
+                            ? departmentEntityDetails.get("departmentId").asText() : null)
+                    .build();
+            return departmentEntity;
+        } else {
+            throw new CustomException(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Department entity details are missing");
         }
-        DepartmentEntity departmentEntity = DepartmentEntity.builder()
-                .id(departmentEntityDetails.get("id").asText())
-                .code(departmentEntityDetails.get("code").asText())
-                .name(departmentEntityDetails.get("name").asText())
-                .hierarchyLevel(departmentEntityDetails.get("hierarchyLevel").asInt())
-                .departmentId(departmentEntityDetails.get("departmentId").asText())
-                .build();
-        return departmentEntity;
     }
 
     private List<DepartmentEntityAttributes> createAncestryArrayFor(JsonNode departmentEntityDetails) {
