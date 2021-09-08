@@ -41,6 +41,7 @@ public class FiscalEventDereferenceConsumer {
             producer.push(processorConfig.getFiscalEventDereferenceTopic(), fiscalEventDeReferenced);
         } catch (Exception e) {
             log.error("Error occurred while processing the record from topic : " + topic, e);
+            throw new RuntimeException(e);
         }
     }
 }

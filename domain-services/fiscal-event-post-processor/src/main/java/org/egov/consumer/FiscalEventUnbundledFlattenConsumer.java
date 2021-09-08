@@ -54,6 +54,7 @@ public class FiscalEventUnbundledFlattenConsumer {
             }
         } catch (Exception e) {
             log.error("Error occurred while processing the record from topic : " + topic, e);
+            throw new RuntimeException(e);
         }
     }
 }
