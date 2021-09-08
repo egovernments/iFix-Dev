@@ -46,8 +46,8 @@ config:
       - work-dir: "reference-adapter"
         image-name: "ifix-reference-adapter"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/reference-dashboard/aggregator"
+  - name: "builds/iFix/reference-dashboard/fiscal-event-aggregator"
     build:
-      - work-dir: "aggregator"
-        image-name: "aggregator"
-        dockerfile: "reference-dashboard/aggregator/Dockerfile"
+      - work-dir: "reference-dashboard/fiscal-event-aggregator"
+        image-name: "fiscal-event-aggregator"
+        dockerfile: "reference-dashboard/fiscal-event-aggregator/Dockerfile"
