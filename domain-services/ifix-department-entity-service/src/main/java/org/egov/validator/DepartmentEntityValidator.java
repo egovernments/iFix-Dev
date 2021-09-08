@@ -79,9 +79,6 @@ public class DepartmentEntityValidator {
             if (departmentEntity.getHierarchyLevel() == null) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_HIERARCHY_ID, "Department hierarchy id" +
                         " is missing in request data");
-            } else if (departmentEntity.getHierarchyLevel() < 1 || departmentEntity.getHierarchyLevel() > 256) {
-                errorMap.put(DepartmentEntityConstant.DEPARTMENT_HIERARCHY_ID, "Department hierarchy id " +
-                        "length is invalid. Length range [2-256]");
             }
 
             if (departmentEntity.getChildren() == null) {
