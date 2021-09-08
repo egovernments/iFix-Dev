@@ -86,7 +86,7 @@ public class DepartmentEntityValidator {
 
             if (departmentEntity.getChildren() == null) {
                 errorMap.put(DepartmentEntityConstant.DEPARTMENT_CHILDREN, "Department children information is missing");
-            }else {
+            }else if (!departmentEntity.getChildren().isEmpty()) {
                 List<DepartmentEntity> departmentEntityList = departmentEntityRepository
                         .searchChildDepartment(departmentEntity.getChildren(), departmentEntity.getHierarchyLevel());
 
