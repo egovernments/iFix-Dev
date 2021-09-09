@@ -61,7 +61,6 @@ public class FiscalEventValidator {
             validateProjectId(fiscalEventRequest, errorMap);
             validateFiscalEventAmountDetails(fiscalEventRequest, errorMap);
             validateParentEventId(fiscalEventRequest, errorMap);
-            validateFiscalEventAmountDetails(fiscalEventRequest,errorMap);
 
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
