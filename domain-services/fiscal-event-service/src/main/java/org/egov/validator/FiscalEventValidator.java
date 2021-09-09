@@ -122,6 +122,8 @@ public class FiscalEventValidator {
                 errorMap.put("AMOUNT-" + index++, "Amount is missing for coaId : " + amount.getCoaId());
             if (StringUtils.isNotBlank(amount.getCoaId()))
                 coaIds.add(amount.getCoaId());
+            else
+                throw new CustomException("COA_ID","COA id is missing in the request data");
         }
 
         List<String> responseCoaIds = coaUtil.getCOAIdsFromCOAService(requestHeader, fiscalEventRequest.getFiscalEvent());
