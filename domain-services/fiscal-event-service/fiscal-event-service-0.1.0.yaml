@@ -178,7 +178,7 @@ components:
       - tenantId
       type: object
       properties:
-        ids:
+        Ids:
           type: array
           description: List of event ids
           items:

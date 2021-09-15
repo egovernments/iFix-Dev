@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Criteria {
-    @JsonProperty("ids")
+    @JsonProperty("Ids")
     @Valid
     private List<String> ids = null;
 
