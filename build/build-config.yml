@@ -53,8 +53,8 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "reference-dashboard/fiscal-event-aggregator/src/main/resources/db"
         image-name: "fiscal-event-aggregator-db"
-   - name: "builds/iFix/utilities/mongodb-kafka-source-connector"
-     build:
-      - work-dir: "utilities/mongodb-kafka-source-connector"
-        image-name: "mongodb-kafka-source-connector"
-        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/utilities/mongodb-kafka-source-connector"
+    build:
+     - work-dir: "utilities/mongodb-kafka-source-connector"
+       image-name: "mongodb-kafka-source-connector"
+       dockerfile: "build/maven/Dockerfile"
