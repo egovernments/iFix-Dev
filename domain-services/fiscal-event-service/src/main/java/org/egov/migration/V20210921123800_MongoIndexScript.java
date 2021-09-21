@@ -38,6 +38,7 @@ public class V20210921123800_MongoIndexScript {
         mongoCollection.createIndex(Indexes.ascending("project.id"));
         mongoCollection.createIndex(Indexes.ascending("parentEventId"));
         mongoCollection.createIndex(Indexes.ascending("amountDetails.coa.id"));
+        mongoCollection.createIndex(Indexes.ascending("amountDetails.amount"));
     }
 
 }
