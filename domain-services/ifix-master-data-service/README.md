@@ -24,7 +24,7 @@ use <db-name>
 ```
 
 ### Indexes
-The list of necessary indexes are stored in the [migrations directory](./src/main/resources/db/migration).
+When application get started, indexes will be created by mongoCK script.
 
 ### Sample data
 The commands to insert the sample data are stored in [seed directory](./src/main/resources/db/seed). Please follow 
