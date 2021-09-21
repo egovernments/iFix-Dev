@@ -81,7 +81,13 @@ public class V20210915104900_MongoIndexScript {
         mongoCollection.createIndex(Indexes.ascending("code"));
         mongoCollection.createIndex(Indexes.ascending("tenantId"));
         mongoCollection.createIndex(Indexes.ascending("expenditureId"));
-        mongoCollection.createIndex(Indexes.ascending("departmentId"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.code"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.name"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.departmentId"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.hierarchyLevel"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.ancestry.code"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.ancestry.name"));
+        mongoCollection.createIndex(Indexes.ascending("departmentEntity.ancestry.hierarchyLevel"));
     }
 
 }
