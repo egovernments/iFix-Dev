@@ -23,12 +23,6 @@ Mongo shell
 use <db-name>
 ```
 
-### Indexes
-When application get started, indexes will be created by mongoCK script.
-
-### Sample data
+### Sample data *[Optional]*
 The commands to insert the sample data are stored in [seed directory](./src/main/resources/db/seed). Please follow 
 the order of the list of files while inserting this data. 
-
-We can use the same sample data as an example to insert the actual data for whichever master data the create APIs 
-haven't been implemented yet.
