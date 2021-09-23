@@ -6,7 +6,7 @@
   <groupId>org.egov.services</groupId>
   <artifactId>ifix-services-common</artifactId>
   <name>ifix-services-common</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <description>Shared classes among services</description>
 
   <properties>
