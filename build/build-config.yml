@@ -41,3 +41,18 @@ config:
       - work-dir: "domain-services/ifix-department-entity-service"
         image-name: "ifix-department-entity-service"
         dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-adapter"
+    build:
+      - work-dir: "reference-adapter"
+        image-name: "ifix-reference-adapter"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-dashboard/fiscal-event-aggregator"
+    build:
+      - work-dir: "reference-dashboard/fiscal-event-aggregator"
+        image-name: "fiscal-event-aggregator"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/utilities/mongodb-kafka-source-connector"
+    build:
+     - work-dir: "utilities/mongodb-kafka-source-connector"
+       image-name: "mongodb-kafka-source-connector"
+       dockerfile: "build/maven/Dockerfile"
