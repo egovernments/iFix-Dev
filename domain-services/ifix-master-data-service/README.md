@@ -1,6 +1,6 @@
 # iFIX-Master-Data-Service
 
-## [API-Contract Link](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-master-data-service/ifix-master-data-service-0.1.0.yaml)
+## [API-Contract Link](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-master-data-service/ifix-master-data-service-1.0.0.yaml)
 ## [Postman Collection Link](https://www.getpostman.com/collections/6a3b9e0f07d03934725a)
 
 ## Connect to MongoDB through Playground pod
