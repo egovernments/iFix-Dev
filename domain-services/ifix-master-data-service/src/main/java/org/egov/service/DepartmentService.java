@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.repository.DepartmentRepository;
 import org.egov.validator.DepartmentValidator;
 import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.DepartmentSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,17 @@ public class DepartmentService {
             Collections.emptyList();
 
         return departments;
+    }
+
+    /**
+     * @param departmentRequest
+     * @return
+     */
+    public DepartmentRequest createDepartment(DepartmentRequest departmentRequest) {
+        validator.validateCreateRequestData(departmentRequest);
+        enricher.enrichDepartmentData(departmentRequest);
+        departmentRepo.save(departmentRequest.getDepartment());
+
+        return departmentRequest;
     }
 }

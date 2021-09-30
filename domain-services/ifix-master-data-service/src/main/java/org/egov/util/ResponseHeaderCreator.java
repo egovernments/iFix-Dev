@@ -15,7 +15,7 @@ public class ResponseHeaderCreator {
         Long ts = null;
         if (requestInfo != null)
             ts = requestInfo.getTs();
-        final String sign = requestInfo.getSignature()!= null ? requestInfo.getSignature() : "" ;
+        final String sign = requestInfo.getSignature() != null ? requestInfo.getSignature() : "";
         final String msgId = requestInfo != null ? requestInfo.getMsgId() : "";
         final String responseStatus = success ? "successful" : "failed";
 

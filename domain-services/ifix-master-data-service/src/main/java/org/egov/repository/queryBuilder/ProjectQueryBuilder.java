@@ -27,11 +27,11 @@ public class ProjectQueryBuilder {
         }
 
         if (!StringUtils.isEmpty(projectSearchCriteria.getExpenditureId())) {
-            criteria.and("eatId").is(projectSearchCriteria.getExpenditureId());
+            criteria.and("expenditureId").is(projectSearchCriteria.getExpenditureId());
         }
 
-        if (!StringUtils.isEmpty(projectSearchCriteria.getDepartmentId())) {
-            criteria.and("departmentId").is(projectSearchCriteria.getDepartmentId());
+        if (!StringUtils.isEmpty(projectSearchCriteria.getGetDepartmentEntitytId())) {
+            criteria.and("departmentEntitytId").is(projectSearchCriteria.getGetDepartmentEntitytId());
         }
 
         if (projectSearchCriteria.getIds() != null && !projectSearchCriteria.getIds().isEmpty())

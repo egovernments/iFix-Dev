@@ -38,8 +38,8 @@ public class ProjectSearchCriteria {
     @JsonProperty("expenditureId")
     private String expenditureId = null;
 
-    @JsonProperty("departmentId")
-    private String departmentId = null;
+    @JsonProperty("departmentEntitytId")
+    private String getDepartmentEntitytId = null;
 
     @JsonProperty("locationId")
     private String locationId = null;

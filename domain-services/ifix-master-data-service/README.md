@@ -1,5 +1,8 @@
 # iFIX-Master-Data-Service
 
+## [API-Contract Link](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/egovernments/iFix-Dev/develop/domain-services/ifix-master-data-service/ifix-master-data-service-1.0.0.yaml)
+## [Postman Collection Link](https://www.getpostman.com/collections/6a3b9e0f07d03934725a)
+
 ## Connect to MongoDB through Playground pod
 Check the correct running mongodb pod and execute the below command
 ```
@@ -20,12 +23,6 @@ Mongo shell
 use <db-name>
 ```
 
-### Indexes
-The list of necessary indexes are stored in the [migrations directory](./src/main/resources/db/migration).
-
-### Sample data
+### Sample data *[Optional]*
 The commands to insert the sample data are stored in [seed directory](./src/main/resources/db/seed). Please follow 
 the order of the list of files while inserting this data. 
-
-We can use the same sample data as an example to insert the actual data for whichever master data the create APIs 
-haven't been implemented yet.

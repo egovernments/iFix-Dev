@@ -7,6 +7,7 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.repository.ChartOfAccountRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.CoaUtil;
+import org.egov.util.MasterDataConstants;
 import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,13 @@ public class ChartOfAccountValidator {
             throw new CustomException("INVALID_REQUEST", "COA request is invalid");
         }
 
+        //Tenant id validation
+        if (StringUtils.isBlank(chartOfAccount.getTenantId())) {
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is mandatory");
+        }
+        if (StringUtils.isNotBlank(chartOfAccount.getTenantId())
+                && (chartOfAccount.getTenantId().length() < 2 || chartOfAccount.getTenantId().length() > 64))
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id's length is invalid");
         //code validation
         if (StringUtils.isBlank(chartOfAccount.getGroupHead())) {
             throw new CustomException("GROUP_HEAD", "Group head Code is mandatory for chart of account");
@@ -117,7 +125,7 @@ public class ChartOfAccountValidator {
             //call the Tenant Service for search, if doesn't exist add in the error map
             List<Government> governments = coaUtil.searchTenants(requestHeader, chartOfAccount);
             if (governments == null || governments.isEmpty()) {
-                errorMap.put("TENANT_ID", "Tenant id doesn't exist in the system");
+                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
             }
         }
 
@@ -179,7 +187,7 @@ public class ChartOfAccountValidator {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
         }
         if (StringUtils.isNotBlank(searchCriteria.getCoaCode()) && (searchCriteria.getCoaCode().length() < 1
-                || searchCriteria.getCoaCode().length()>64) ) {
+                || searchCriteria.getCoaCode().length() > 64)) {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
         }
 

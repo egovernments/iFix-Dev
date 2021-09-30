@@ -3,12 +3,13 @@ package org.egov.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.MasterDataServiceConfiguration;
-import org.egov.repository.ChartOfAccountRepository;
 import org.egov.repository.ServiceRequestRepository;
-import org.egov.web.models.*;
+import org.egov.web.models.ChartOfAccount;
+import org.egov.web.models.Government;
+import org.egov.web.models.GovernmentSearchCriteria;
+import org.egov.web.models.GovernmentSearchRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,12 +38,12 @@ public class CoaUtil {
     public List<Government> searchTenants(RequestHeader requestHeader, ChartOfAccount chartOfAccount) {
         GovernmentSearchRequest govtSearchRequest = createSearchTenantRequest(requestHeader, chartOfAccount);
         String url = createSearchTenantUrl();
-        Object response = searchRequestRepository.fetchResult(url,govtSearchRequest);
-       if(response != null){
-           LinkedHashMap linkedHashMap = (LinkedHashMap) response;
-           List<Government> governments = (List<Government>) linkedHashMap.get("government");
-           return governments;
-       }
+        Object response = searchRequestRepository.fetchResult(url, govtSearchRequest);
+        if (response != null) {
+            LinkedHashMap linkedHashMap = (LinkedHashMap) response;
+            List<Government> governments = (List<Government>) linkedHashMap.get("government");
+            return governments;
+        }
 
         return Collections.emptyList();
     }

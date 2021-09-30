@@ -25,4 +25,8 @@ public class ExpenditureRepository {
     public List<Expenditure> findAllByCriteria(ExpenditureSearchCriteria expenditureSearchCriteria) {
         return mongoTemplate.find(expenditureQueryBuilder.buildQuerySearch(expenditureSearchCriteria), Expenditure.class);
     }
+
+    public void save(Expenditure expenditure) {
+        mongoTemplate.save(expenditure);
+    }
 }

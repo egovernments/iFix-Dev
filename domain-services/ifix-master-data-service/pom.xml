@@ -53,12 +53,12 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>ifix-tracer</artifactId>
-      <version>0.0.2-SNAPSHOT</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>ifix-services-common</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -81,7 +81,30 @@
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.github.cloudyrock.mongock</groupId>
+      <artifactId>mongock-spring-v5</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.cloudyrock.mongock</groupId>
+      <artifactId>mongodb-springdata-v2-driver</artifactId>
+    </dependency>
+
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.cloudyrock.mongock</groupId>
+        <artifactId>mongock-bom</artifactId>
+        <version>4.1.19</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <repositories>
     <repository>
       <id>repo.digit.org</id>

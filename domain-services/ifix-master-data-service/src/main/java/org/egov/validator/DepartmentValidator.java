@@ -5,8 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
+import org.egov.util.MasterDataConstants;
+import org.egov.util.TenantUtil;
+import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.DepartmentSearchRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -16,6 +21,8 @@ import java.util.Map;
 @Slf4j
 public class DepartmentValidator {
 
+    @Autowired
+    private TenantUtil tenantUtil;
 
     /**
      * Validate the department search attribute(s)
@@ -60,6 +67,56 @@ public class DepartmentValidator {
             errorMap.put("DEPARTMENT_CODE", "Department code's length is invalid");
 
         log.info("Exit from DepartmentValidator.validateSearchPost()");
+        if (!errorMap.isEmpty())
+            throw new CustomException(errorMap);
+    }
+
+    /**
+     * @param departmentRequest
+     */
+    public void validateCreateRequestData(DepartmentRequest departmentRequest) {
+        Map<String, String> errorMap = new HashMap<>();
+
+        if (departmentRequest != null && departmentRequest.getDepartment() != null
+                && departmentRequest.getRequestHeader() != null) {
+            RequestHeader requestHeader = departmentRequest.getRequestHeader();
+
+            if (requestHeader.getUserInfo() == null || StringUtils.isEmpty(requestHeader.getUserInfo().getUuid())) {
+                errorMap.put(MasterDataConstants.USER_INFO, "User information is missing");
+            }
+
+            Department department = departmentRequest.getDepartment();
+
+            if (StringUtils.isEmpty(department.getTenantId())) {
+                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");
+            } else if (department.getTenantId().length() < 2 || department.getTenantId().length() > 64) {
+                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id length is invalid. " +
+                        "Length range [2-64]");
+            } else if (!tenantUtil.validateTenant(department.getTenantId(), requestHeader)) {
+                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id : " + department.getTenantId()
+                        + " doesn't exist in the system");
+            }
+
+            if (StringUtils.isEmpty(department.getCode())) {
+                errorMap.put(MasterDataConstants.DEPARTMENT_CODE, "Department code is missing in request data");
+            } else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
+                errorMap.put(MasterDataConstants.DEPARTMENT_CODE, "Department code length is invalid. " +
+                        "Length range [1-64]");
+            }
+
+            if (StringUtils.isEmpty(department.getCode())) {
+                errorMap.put(MasterDataConstants.DEPARTMENT_NAME, "Department name is missing in request data");
+            } else if (department.getCode().length() < 1 || department.getCode().length() > 64) {
+                errorMap.put(MasterDataConstants.DEPARTMENT_NAME, "Department name length is invalid. " +
+                        "Length range [1-64]");
+            }
+
+            if (StringUtils.isNotBlank(department.getParent())
+                    && (department.getParent().length() < 2 || department.getParent().length() > 64))
+                errorMap.put(MasterDataConstants.DEPARTMENT_PARENT, "Department parent length is invalid. " +
+                        "Length range [1-64]");
+        }
+
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
     }
