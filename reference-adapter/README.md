@@ -1,5 +1,5 @@
 # Ifix Refernce Adatpter Service
-Ifix-Adapter is a system which works as mediator between ifix and its clients. This system will receive requests from client system and convert the data in the Ifix required format This  document contains the details about how to setup ifix-adapter service and describes the functionalities it provides   
+Ifix-Adapter is a system which works as mediator between ifix and its clients. This system will receive requests from client system and convert the data in the Ifix required format. This document contains the details about how to setup ifix-adapter service and describes the functionalities it provides.   
 ### DB UML Diagram
 
 - NA
@@ -8,6 +8,8 @@ Ifix-Adapter is a system which works as mediator between ifix and its clients. T
 - mgramseva-ifix-adapter
 - IFIX- fiscal-event-service
 - IFIX-keycloak
+- IFIX-domain-services
+
  
 
 
@@ -38,8 +40,8 @@ Ifix-Adapter is a system which works as mediator between ifix and its clients. T
 
 | Environment Variables                     | Description                                                                                                                                               | Value                                             |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| `state.goverment.code`                  | The top level tenant    id                                                                                        | pb                                         |
-                                                                                                             | 
+| `state.goverment.code`                  | The top level tenant    id                                                                                        | statelevel tenant                                    |
+                                                                                                              | 
 ### API Details
 
 `BasePath` /ifix-reference-adapter/v1/[API endpoint]
