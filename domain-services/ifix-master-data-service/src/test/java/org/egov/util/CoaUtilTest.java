@@ -5,10 +5,7 @@ import org.egov.common.contract.request.UserInfo;
 import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.config.TestDataFormatter;
 import org.egov.repository.ServiceRequestRepository;
-import org.egov.web.models.ChartOfAccount;
-import org.egov.web.models.Government;
-import org.egov.web.models.GovernmentResponse;
-import org.egov.web.models.GovernmentSearchRequest;
+import org.egov.web.models.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -40,6 +37,8 @@ class CoaUtilTest {
     private MasterDataServiceConfiguration mdsConfiguration;
 
     private GovernmentResponse governmentCreateResponse;
+    private COASearchRequest coaSearchRequest;
+    private COARequest coaRequest;
 
     @Autowired
     private TestDataFormatter testDataFormatter;
@@ -47,14 +46,14 @@ class CoaUtilTest {
     @BeforeAll
     void init() throws IOException {
         governmentCreateResponse = testDataFormatter.getGovernmentCreateResponseData();
+        coaSearchRequest = testDataFormatter.getCoaSearchRequestData();
+        coaRequest = testDataFormatter.getCoaRequestData();
     }
 
     @Test
     void searchTenants() {
-        ChartOfAccount chartOfAccount = mock(ChartOfAccount.class);
-        chartOfAccount.setTenantId("pb");
-        RequestHeader requestHeader = mock(RequestHeader.class);
-        when(requestHeader.getUserInfo()).thenReturn(new UserInfo());
+        ChartOfAccount chartOfAccount = coaRequest.getChartOfAccount();
+        RequestHeader requestHeader = coaSearchRequest.getRequestHeader();
 
         LinkedHashMap<String, List<Government>> listLinkedHashMap = new LinkedHashMap<>();
         listLinkedHashMap.put("government", governmentCreateResponse.getGovernment());
@@ -65,5 +64,33 @@ class CoaUtilTest {
 
         assertNotNull(actualResult);
         assertTrue(actualResult.size() > 0);
+    }
+
+    @Test
+    void searchTenantInvalid() {
+        ChartOfAccount chartOfAccount = coaRequest.getChartOfAccount();
+        RequestHeader requestHeader = coaSearchRequest.getRequestHeader();
+        chartOfAccount.setTenantId("Asia");
+
+        doReturn(null).when(serviceRequestRepository).fetchResult((String) any(), (GovernmentSearchRequest) any());
+
+        List<Government> actualResult = coaUtil.searchTenants(requestHeader, chartOfAccount);
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.size() == 0);
+    }
+
+    @Test
+    void searchTenantNull() {
+        ChartOfAccount chartOfAccount = coaRequest.getChartOfAccount();
+        RequestHeader requestHeader = coaSearchRequest.getRequestHeader();
+        chartOfAccount.setTenantId(null);
+
+        doReturn(null).when(serviceRequestRepository).fetchResult((String) any(), (GovernmentSearchRequest) any());
+
+        List<Government> actualResult = coaUtil.searchTenants(requestHeader, chartOfAccount);
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.size() == 0);
     }
 }
