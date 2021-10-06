@@ -41,6 +41,7 @@ class COAEnrichmentServiceTest {
     private COAResponse coaResponse;
     private COARequest headlessCoaRequest;
     private COAResponse coaCreateResponse;
+    private AuditDetails auditDetails;
 
     @BeforeAll
     public void init() throws IOException {
@@ -50,16 +51,33 @@ class COAEnrichmentServiceTest {
 
         coaCreateResponse = testDataFormatter.getCoaCreateResponseData();
         coaResponse = testDataFormatter.getCoaSearchResponseData();
+        Long time = System.currentTimeMillis();
+        auditDetails = new AuditDetails();
+        auditDetails.setCreatedBy(coaRequest.getRequestHeader().getUserInfo().getUuid());
+        auditDetails.setLastModifiedBy(coaRequest.getRequestHeader().getUserInfo().getUuid());
+        auditDetails.setCreatedTime(time);
+        auditDetails.setLastModifiedTime(time);
     }
 
     @Test
-    void testEnrichCreatePost() {
+    void testEnrichCreatePostWithAuditDetails() {
         when(this.masterDataServiceUtil.enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any()))
-                .thenReturn(coaResponse.getChartOfAccounts().get(0).getAuditDetails());
+                .thenReturn(auditDetails);
+        doNothing().when(this.chartOfAccountValidator).validateCoaCode((org.egov.web.models.COASearchCriteria) any());
+
+        coaRequest.getChartOfAccount().setAuditDetails(auditDetails);
+        this.cOAEnrichmentService.enrichCreatePost(coaRequest);
+        verify(this.masterDataServiceUtil).enrichAuditDetails((String) any(), (AuditDetails) any(), any(Boolean.FALSE.getClass()));
+        verify(this.chartOfAccountValidator).validateCoaCode((org.egov.web.models.COASearchCriteria) any());
+    }
+    @Test
+    void testEnrichCreatePostWithoutAuditDetails() {
+        when(this.masterDataServiceUtil.enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any()))
+                .thenReturn(auditDetails);
         doNothing().when(this.chartOfAccountValidator).validateCoaCode((org.egov.web.models.COASearchCriteria) any());
 
         this.cOAEnrichmentService.enrichCreatePost(coaRequest);
-        verify(this.masterDataServiceUtil).enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any());
+        verify(this.masterDataServiceUtil).enrichAuditDetails((String) any(), (AuditDetails) any(),any(Boolean.TRUE.getClass()));
         verify(this.chartOfAccountValidator).validateCoaCode((org.egov.web.models.COASearchCriteria) any());
     }
 
