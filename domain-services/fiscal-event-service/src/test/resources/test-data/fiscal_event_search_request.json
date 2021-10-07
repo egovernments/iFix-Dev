@@ -1,0 +1,17 @@
+{
+  "requestHeader": {
+    "ts": 1627193067,
+    "version": "1.0.0",
+    "msgId": "ek9d96e8-3b6b-4e36-9503-0f14a01af74n",
+    "userInfo": {
+      "uuid": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d"
+    }
+  },
+  "criteria": {
+    "tenantId": "pb",
+    "fromEventTime": 1622876350000,
+    "toEventTime": 1633417150000,
+    "eventType":"DEMAND",
+    "referenceId":["WS/400/2021-22/0434"]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "fiscalEvent": {
+    "tenantId": "pb",
+    "projectId": "568513ee-d7fb-4b00-ae50-3f7704b22840",
+    "eventType": "RECEIPT",
+    "eventTime": 1628177497000,
+    "referenceId": "013e9c56-8207-4dac-9f4d-f1e20bd824e7",
+    "amountDetails": [
+      {
+        "amount": 221,
+        "coaId": "6cbcb4a1-2431-4f78-89d7-b4f0565aba37",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      },
+      {
+        "amount": 331,
+        "coaId": "c8b3b027-7fdd-4403-a4e9-81f257c16422",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      },
+      {
+        "amount": 441,
+        "coaId": "f19287a7-80a2-411f-91de-f70194c37260",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      },
+      {
+        "amount":551,
+        "coaId": "71c53395-04d2-4375-a1b7-c24924e97fd9",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      },
+      {
+        "amount": 661,
+        "coaId": "36f36709-bf15-407d-8d3e-3185d2b79d87",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      },
+      {
+        "amount": 771,
+        "coaId": "9153ef60-5c6e-4ff1-b4a9-46b6fcc84249",
+        "fromBillingPeriod": 1622907239000,
+        "toBillingPeriod": 1628177643000
+      }
+    ],
+    "attributes": {}
+  }
+}
