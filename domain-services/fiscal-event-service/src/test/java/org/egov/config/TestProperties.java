@@ -12,4 +12,19 @@ public class TestProperties {
 
     @Value("${test.data.package}")
     private String testDataPackage;
+
+    @Value("${fiscal.event.search.request.data}")
+    private String fiscalEventSearchRequest;
+
+    @Value("${fiscal.event.search.response.data}")
+    private String fiscalEventSearchResponse;
+
+    @Value("${fiscal.event.push.request.data}")
+    private String fiscalEventPushRequest;
+
+    @Value("${fiscal.event.push.response.data}")
+    private String fiscalEventPushResponse;
+
+    @Value("${fiscal.event.push.headless.request.data}")
+    private String fiscalEventPushHeadlessRequest;
 }
