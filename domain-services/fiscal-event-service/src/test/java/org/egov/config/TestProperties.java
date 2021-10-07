@@ -27,7 +27,4 @@ public class TestProperties {
 
     @Value("${fiscal.event.push.headless.request.data}")
     private String fiscalEventPushHeadlessRequest;
-
-
-
 }

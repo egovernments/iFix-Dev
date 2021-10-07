@@ -148,4 +148,125 @@ public class TestDataFormatter {
         return coaResponse;
     }
 
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ProjectSearchRequest getProjectSearchRequestData() throws IOException {
+        ProjectSearchRequest projectSearchRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getProjectSearchRequestData()),
+                        ProjectSearchRequest.class);
+
+        return projectSearchRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ProjectResponse getProjectSearchReponseData() throws IOException {
+        ProjectResponse projectResponse = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getProjectSearchResponseData()),
+                        ProjectResponse.class);
+
+        return projectResponse;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ProjectRequest getProjectCreateRequestData() throws IOException {
+        ProjectRequest projectRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getProjectCreateRequestData()),
+                        ProjectRequest.class);
+
+        return projectRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public DepartmentRequest getDepartmentCreateRequestData() throws IOException {
+        DepartmentRequest departmentRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getDepartmentCreateRequestData()),
+                        DepartmentRequest.class);
+
+        return departmentRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public DepartmentSearchRequest getDepartmentSearchRequestData() throws IOException {
+        DepartmentSearchRequest departmentSearchRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getDepartmentSearchRequestData()),
+                        DepartmentSearchRequest.class);
+
+        return departmentSearchRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public DepartmentResponse getDepartmentSearchResponseData() throws IOException {
+        DepartmentResponse departmentResponse = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getDepartmentSearchResponseData()),
+                        DepartmentResponse.class);
+
+        return departmentResponse;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ExpenditureSearchRequest getExpenditureSearchRequestData() throws IOException {
+        ExpenditureSearchRequest expenditureSearchRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getExpenditureSearchRequestData()),
+                        ExpenditureSearchRequest.class);
+
+        return expenditureSearchRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ExpenditureResponse getExpenditureSearchResponseData() throws IOException {
+        ExpenditureResponse expenditureResponse = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getExpenditureSearchResponseData()),
+                        ExpenditureResponse.class);
+
+        return expenditureResponse;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ExpenditureRequest getExpenditureCreateRequestData() throws IOException {
+        ExpenditureRequest expenditureRequest = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getExpenditureCreateRequestData()),
+                        ExpenditureRequest.class);
+
+        return expenditureRequest;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     */
+    public ExpenditureResponse getExpenditureCreateResponseData() throws IOException {
+        ExpenditureResponse expenditureResponse = new ObjectMapper()
+                .readValue(getFileFromClassLoaderResource(testProperties.getExpenditureCreateResponseData()),
+                        ExpenditureResponse.class);
+
+        return expenditureResponse;
+    }
+
+
 }

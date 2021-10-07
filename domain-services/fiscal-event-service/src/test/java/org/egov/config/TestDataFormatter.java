@@ -57,8 +57,6 @@ public class TestDataFormatter {
         return fiscalEventResponse;
     }
 
-    ///
-
     /**
      * @return
      * @throws IOException

@@ -1,0 +1,17 @@
+{
+  "requestHeader": {
+    "ts": 1627193067,
+    "version": "V1",
+    "msgId": "Unknown",
+    "signature": "NON",
+    "userInfo": {
+      "uuid": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d"
+    }
+  },
+  "criteria": {
+    "Ids": [
+      "fe668fc3-1c59-49e5-acf9-cea34b2efd83","3d9ef18a-361a-40cf-b142-dd6f998e1ac5"
+    ],
+    "tenantId": "pb"
+  }
+}
