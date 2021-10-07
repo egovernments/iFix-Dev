@@ -27,4 +27,8 @@ public class TestProperties {
 
     @Value("${fiscal.event.push.headless.request.data}")
     private String fiscalEventPushHeadlessRequest;
+
+    @Value("${gov.search.response.data}")
+    private String govSearchResponseData;
+
 }
