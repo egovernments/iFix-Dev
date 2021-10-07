@@ -2,16 +2,12 @@ package org.egov.service;
 
 import org.egov.config.TestDataFormatter;
 import org.egov.repository.GovernmentRepository;
-import org.egov.service.GovernmentEnrichmentService;
-import org.egov.service.GovernmentService;
-import org.egov.tracer.model.CustomException;
 import org.egov.validator.GovernmentValidator;
 import org.egov.web.models.Government;
 import org.egov.web.models.GovernmentRequest;
 import org.egov.web.models.GovernmentResponse;
 import org.egov.web.models.GovernmentSearchRequest;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
@@ -23,8 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest()
@@ -59,11 +55,6 @@ class GovernmentServiceTest {
         governmentSearchResponse = testDataFormatter.getGovernmentSearchResponseData();
     }
 
-    @BeforeEach
-    public void setUp() {
-//        governmentService = new GovernmentService(governmentValidator, governmentRepository, governmentEnrichmentService);
-    }
-
 
     @Test
     void addGovernment() {
@@ -74,16 +65,6 @@ class GovernmentServiceTest {
         GovernmentRequest savedGovernmentRequest = governmentService.addGovernment(governmentRequest);
 
         assertEquals(savedGovernmentRequest, governmentRequest);
-    }
-
-    @Test
-    void addGovernmentValidationException() {
-        doThrow(new CustomException()).when(governmentValidator).validateGovernmentRequestData(headlessGovernmentRequest);
-
-        assertThrows(CustomException.class,
-                () -> governmentValidator.validateGovernmentRequestData(headlessGovernmentRequest),
-                () -> "Without header information, It should be throwing exception");
-
     }
 
     @Test

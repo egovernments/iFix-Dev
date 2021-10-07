@@ -1,0 +1,60 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": "acaa0aac-e36f-43d8-b1cf-455b77dd0455",
+    "msgId": "Unknown",
+    "status": "successful",
+    "signature": "NON",
+    "version": "V1"
+  },
+  "project": [
+    {
+      "id": "fe668fc3-1c59-49e5-acf9-cea34b2efd83",
+      "tenantId": "pb",
+      "code": "Sukhsal-Project",
+      "name": "Sukhsal-Project",
+      "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
+      "departmentEntitytId": "901f76a8-1911-4960-b389-57b62bd4dcdb",
+      "departmentEntity": {
+        "id": "901f76a8-1911-4960-b389-57b62bd4dcdb",
+        "code": "DIV23",
+        "name": "Sri Anandpur Sahib",
+        "departmentId": "b32f0cc1-f4b1-4503-95d6-fdf04d0ea2d4",
+        "hierarchyLevel": 3,
+        "ancestry": [
+          {
+            "id": "07fea07c-9ca9-4474-b6bc-c3a9456b181e",
+            "code": "DWSS",
+            "name": "Department of Water Supply and Sanitation",
+            "hierarchyLevel": 0
+          },
+          {
+            "id": "5ac4d271-1a00-47b9-94e6-f44fe17ae1b6",
+            "code": "Z02",
+            "name": "South",
+            "hierarchyLevel": 1
+          },
+          {
+            "id": "525f7b94-1755-426e-982f-430904554dd3",
+            "code": "C05",
+            "name": "Chandigarh",
+            "hierarchyLevel": 2
+          },
+          {
+            "id": "901f76a8-1911-4960-b389-57b62bd4dcdb",
+            "code": "DIV23",
+            "name": "Sri Anandpur Sahib",
+            "hierarchyLevel": 3
+          }
+        ]
+      },
+      "locationIds": [],
+      "auditDetails": {
+        "createdBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "lastModifiedBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "createdTime": 1631014867513,
+        "lastModifiedTime": 1631014867513
+      }
+    }
+  ]
+}
