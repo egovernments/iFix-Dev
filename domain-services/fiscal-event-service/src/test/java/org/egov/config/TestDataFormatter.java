@@ -1,6 +1,7 @@
 package org.egov.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.beans.binding.ObjectExpression;
 import org.egov.web.models.FiscalEventGetRequest;
 import org.egov.web.models.FiscalEventRequest;
 import org.egov.web.models.FiscalEventResponse;
@@ -15,6 +16,11 @@ public class TestDataFormatter {
     @Autowired
     private TestProperties testProperties;
 
+    private ObjectMapper objectMapper;
+
+    public TestDataFormatter(){
+        objectMapper = new ObjectMapper();
+    }
     /**
      * @param fileName
      * @return
@@ -38,7 +44,7 @@ public class TestDataFormatter {
      * @throws IOException
      */
     public FiscalEventGetRequest getFiscalEventSearchRequestData() throws IOException {
-        FiscalEventGetRequest fiscalEventGetRequest = new ObjectMapper()
+        FiscalEventGetRequest fiscalEventGetRequest = objectMapper
                 .readValue(getFileFromClassLoaderResource(testProperties.getFiscalEventSearchRequest()),
                         FiscalEventGetRequest.class);
 
@@ -50,7 +56,7 @@ public class TestDataFormatter {
      * @throws IOException
      */
     public FiscalEventResponse getFiscalEventSearchResponseData() throws IOException {
-        FiscalEventResponse fiscalEventResponse = new ObjectMapper()
+        FiscalEventResponse fiscalEventResponse = objectMapper
                 .readValue(getFileFromClassLoaderResource(testProperties.getFiscalEventSearchResponse()),
                         FiscalEventResponse.class);
 
@@ -62,7 +68,7 @@ public class TestDataFormatter {
      * @throws IOException
      */
     public FiscalEventRequest getFiscalEventPushRequestData() throws IOException {
-        FiscalEventRequest fiscalEventRequest = new ObjectMapper()
+        FiscalEventRequest fiscalEventRequest = objectMapper
                 .readValue(getFileFromClassLoaderResource(testProperties.getFiscalEventPushRequest()),
                         FiscalEventRequest.class);
 
@@ -74,7 +80,7 @@ public class TestDataFormatter {
      * @throws IOException
      */
     public FiscalEventResponse getFiscalEventPushResponseData() throws IOException {
-        FiscalEventResponse fiscalEventResponse = new ObjectMapper()
+        FiscalEventResponse fiscalEventResponse = objectMapper
                 .readValue(getFileFromClassLoaderResource(testProperties.getFiscalEventPushResponse()),
                         FiscalEventResponse.class);
 
@@ -86,7 +92,7 @@ public class TestDataFormatter {
      * @throws IOException
      */
     public FiscalEventRequest getFiscalEventHeadlessPushData() throws IOException {
-        FiscalEventRequest fiscalEventRequest = new ObjectMapper()
+        FiscalEventRequest fiscalEventRequest = objectMapper
                 .readValue(getFileFromClassLoaderResource(testProperties.getFiscalEventPushHeadlessRequest()),
                         FiscalEventRequest.class);
 
