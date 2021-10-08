@@ -26,22 +26,22 @@
           {
             "type": "expression",
             "name": "bill",
-            "expression": "if(\"eventType\" == 'BILL', \"amount\", 0)"
+            "expression": "if(\"eventType\" == 'Bill', \"amount\", 0)"
           },
           {
             "type": "expression",
             "name": "receipt",
-            "expression": "if(\"eventType\" == 'RECEIPT', \"amount\", 0)"
+            "expression": "if(\"eventType\" == 'Receipt', \"amount\", 0)"
           },
           {
             "type": "expression",
             "name": "payment",
-            "expression": "if(\"eventType\" == 'PAYMENT', \"amount\", 0)"
+            "expression": "if(\"eventType\" == 'Payment', \"amount\", 0)"
           },
           {
             "type": "expression",
             "name": "demand",
-            "expression": "if(\"eventType\" == 'DEMAND', \"amount\", 0)"
+            "expression": "if(\"eventType\" == 'Demand', \"amount\", 0)"
           }
         ]
       },
