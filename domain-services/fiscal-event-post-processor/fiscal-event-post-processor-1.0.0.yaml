@@ -247,7 +247,7 @@ components:
           example: 090d1d25-8b88-46a3-b4c9-95b66483beb5
         eventType:
           type: string
-          description: Captures the event type (eg- Sanction(B), Appropriation(B), Allocation(Fin-AD-BCO-DDO)(B), IntraTransfer (C), Inter Transfer (C), Demand(A), Receipt (C), Bill(A),Payment (C)
+          description: Captures the event type (eg- Sanction(B), Appropriation(B), Allocation(Fin-AD-BCO-DDO)(B), Intra_Transfer (C), Inter_Transfer (C), Demand(A), Receipt (C), Bill(A),Payment (C)
           nullable: false
           example: Appropriation
         ingestionTime:
