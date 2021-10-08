@@ -39,7 +39,7 @@ public class DepartmentEntitySearchCriteria {
     private String name = null;
 
     @JsonProperty("hierarchyLevel")
-    private String hierarchyLevel = null;
+    private Integer hierarchyLevel = null;
 
     @JsonProperty("getAncestry")
     private boolean getAncestry = false;
