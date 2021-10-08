@@ -27,7 +27,7 @@ public class DepartmentEntityQueryBuilder {
         if (StringUtils.isNotBlank(searchCriteria.getName()))
             criteria.and("name").is(searchCriteria.getName());
 
-        if (StringUtils.isNotBlank(searchCriteria.getHierarchyLevel()))
+        if (searchCriteria.getHierarchyLevel() != null)
             criteria.and("hierarchyLevel").is(searchCriteria.getHierarchyLevel());
 
         if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
