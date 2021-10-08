@@ -238,8 +238,8 @@ components:
         name:
           type: string
           description: Captures the department entity name
-        level:
-          type: string
+        hierarchyLevel:
+          type: integer
           description: Capture the level of department entity
         getAncestry:
           type: boolean
