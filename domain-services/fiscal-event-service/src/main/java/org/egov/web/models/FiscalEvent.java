@@ -64,15 +64,15 @@ public class FiscalEvent {
 
 
     public enum EventTypeEnum {
-        SANCTION("SANCTION"),
-        APPROPRIATION("APPROPRIATION"),
-        ALLOCATION("ALLOCATION"),
-        INTRA_TRANSFER("INTRA_TRANSFER"),
-        INTER_TRANSFER("INTER_TRANSFER"),
-        DEMAND("DEMAND"),
-        RECEIPT("RECEIPT"),
-        BILL("BILL"),
-        PAYMENT("PAYMENT");
+        Sanction("SANCTION"),
+        Appropriation("APPROPRIATION"),
+        Allocation("ALLOCATION"),
+        Intra_Transfer("INTRA_TRANSFER"),
+        Inter_Transfer("INTER_TRANSFER"),
+        Demand("DEMAND"),
+        Receipt("RECEIPT"),
+        Bill("BILL"),
+        Payment("PAYMENT");
 
         private String value;
 
@@ -93,7 +93,7 @@ public class FiscalEvent {
         @Override
         @JsonValue
         public String toString() {
-            return String.valueOf(value);
+            return name();
         }
     }
 
