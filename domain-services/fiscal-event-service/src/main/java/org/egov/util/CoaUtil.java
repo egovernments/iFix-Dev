@@ -70,8 +70,10 @@ public class CoaUtil {
     }
 
     private String createCoaSearchUrl() {
-        StringBuilder uriBuilder = new StringBuilder(configuration.getIfixMasterCoaHost())
-                .append(configuration.getIfixMasterCoaContextPath()).append(configuration.getIfixMasterCoaSearchPath());
+        StringBuilder uriBuilder = new StringBuilder()
+                .append(configuration.getIfixMasterCoaHost())
+                .append(configuration.getIfixMasterCoaContextPath())
+                .append(configuration.getIfixMasterCoaSearchPath());
         return uriBuilder.toString();
     }
 }

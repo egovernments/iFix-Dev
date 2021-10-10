@@ -121,10 +121,15 @@ public class TestDataFormatter {
     }
 
     public JsonNode getProjectSearchResponse() throws IOException {
-        ObjectNode projectSearchResponse =
-                (ObjectNode) new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getProjectSearchResponseData()));
-
+        JsonNode projectSearchResponse =
+                new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getProjectSearchResponseData()));
         return projectSearchResponse;
+    }
+
+    public JsonNode getCOASearchResponse() throws IOException {
+        JsonNode coaSearchResponse =
+                new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getCoaSearchResponseData()));
+        return coaSearchResponse;
     }
 
 }

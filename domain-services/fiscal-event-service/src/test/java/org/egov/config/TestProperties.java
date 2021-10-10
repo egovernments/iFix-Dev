@@ -34,4 +34,7 @@ public class TestProperties {
     @Value("${project.search.response.data}")
     private String projectSearchResponseData;
 
+    @Value("${coa.search.response.data}")
+    private String coaSearchResponseData;
+
 }
