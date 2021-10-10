@@ -3,8 +3,6 @@ package org.egov.config;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javafx.beans.binding.ObjectExpression;
-
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -121,4 +119,12 @@ public class TestDataFormatter {
 
         return invalidGovernmentResponse;
     }
+
+    public JsonNode getProjectSearchResponse() throws IOException {
+        ObjectNode projectSearchResponse =
+                (ObjectNode) new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getProjectSearchResponseData()));
+
+        return projectSearchResponse;
+    }
+
 }
