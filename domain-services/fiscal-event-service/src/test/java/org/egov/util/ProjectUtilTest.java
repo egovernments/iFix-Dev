@@ -35,15 +35,13 @@ class ProjectUtilTest {
 
     @Autowired
     private TestDataFormatter testDataFormatter;
-    @Autowired
-    private ObjectMapper mapper;
 
     @Mock
     private FiscalEventConfiguration fiscalEventConfiguration;
     @Mock
     private ServiceRequestRepository serviceRequestRepository;
     @Spy
-    private ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private ProjectUtil projectUtil;
@@ -64,7 +62,7 @@ class ProjectUtilTest {
 
     @Test
     void testValidateProjectIdWithValidProjectId() {
-        Map<String, Object> map = mapper.convertValue(projectSearchResponse, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> map = objectMapper.convertValue(projectSearchResponse, new TypeReference<Map<String, Object>>() {});
         doReturn(map).when(serviceRequestRepository).fetchResult(any(), any());
         Optional<JsonNode> response = projectUtil.validateProjectId(fiscalEventRequest);
         assertTrue(response.isPresent());
