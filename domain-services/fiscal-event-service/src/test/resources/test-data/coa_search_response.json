@@ -1,0 +1,36 @@
+{
+  "responseHeader": {
+    "ts": 0,
+    "correlationId": "5fa62684-b1e9-4a95-8025-f7f76f959dfa",
+    "msgId": "string",
+    "status": "successful",
+    "signature": "string",
+    "version": "string"
+  },
+  "chartOfAccounts": [
+    {
+      "id": "6cbcb4a1-2431-4f78-89d7-b4f0565aba37",
+      "coaCode": "0215-01-102-00-00-01",
+      "tenantId": "pb",
+      "majorHead": "0215",
+      "majorHeadName": "Water Supply and Sanitation",
+      "majorHeadType": "Revenue",
+      "subMajorHead": "01",
+      "subMajorHeadName": "Water Supply",
+      "minorHead": "102",
+      "minorHeadName": "Rural Water Supply",
+      "subHead": "00",
+      "subHeadName": "Rural Water Supply",
+      "groupHead": "00",
+      "groupHeadName": "Rural Water Supply",
+      "objectHead": "01",
+      "objectHeadName": "Water Charges",
+      "auditDetails": {
+        "createdBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "lastModifiedBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "createdTime": 1631095768526,
+        "lastModifiedTime": 1631095768526
+      }
+    }
+  ]
+}
