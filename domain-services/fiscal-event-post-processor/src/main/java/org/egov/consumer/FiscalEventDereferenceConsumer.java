@@ -4,10 +4,10 @@ package org.egov.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.config.FiscalEventPostProcessorConfig;
+import org.egov.models.FiscalEventDeReferenced;
+import org.egov.models.FiscalEventRequest;
 import org.egov.producer.Producer;
 import org.egov.service.FiscalEventDereferenceService;
-import org.egov.web.models.FiscalEventDeReferenced;
-import org.egov.web.models.FiscalEventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -37,7 +37,6 @@ public class FiscalEventDereferenceConsumer {
         try {
             FiscalEventRequest fiscalEventRequest = mapper.convertValue(record, FiscalEventRequest.class);
             FiscalEventDeReferenced fiscalEventDeReferenced = dereferenceService.dereference(fiscalEventRequest);
-            producer.push(processorConfig.getFiscalEventMongoDbSink(), fiscalEventDeReferenced);
             producer.push(processorConfig.getFiscalEventDereferenceTopic(), fiscalEventDeReferenced);
         } catch (Exception e) {
             log.error("Error occurred while processing the record from topic : " + topic, e);

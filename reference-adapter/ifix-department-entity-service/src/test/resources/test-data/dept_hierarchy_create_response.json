@@ -1,0 +1,26 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": "20a94c6a-22d9-459d-bcf8-a657cd38f142",
+    "msgId": "Unknown",
+    "status": "successful",
+    "signature": "NON",
+    "version": "V1"
+  },
+  "departmentHierarchyLevel": [
+    {
+      "id": "2a032bd3-1763-43a3-b142-7f53c876f0b4",
+      "tenantId": "pb",
+      "departmentId": "5fe2fecb-4f36-4259-b769-23263b4e11f0",
+      "label": "Zone",
+      "parent": "ac12996f-c832-4bdd-8cb1-c3d84fc693d1",
+      "level": 1,
+      "auditDetails": {
+        "createdBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "lastModifiedBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "createdTime": 1637563430488,
+        "lastModifiedTime": 1637563430488
+      }
+    }
+  ]
+}

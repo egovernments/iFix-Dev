@@ -1,0 +1,84 @@
+{
+  "responseHeader": {
+    "ts": null,
+    "correlationId": "0a510992-8283-4e52-9cb2-0eacb9c03e87",
+    "msgId": null,
+    "status": "successful",
+    "signature": "",
+    "version": null
+  },
+  "project": [
+    {
+      "id": "5455881a-1748-4c07-bc44-18dc911beb14",
+      "tenantId": "pb",
+      "code": "DummyProject7",
+      "name": "DummyProject7",
+      "expenditureId": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
+      "departmentEntitytId": "86077574-3325-416c-83e2-9cd2f01f8813",
+      "departmentEntity": {
+        "id": "86077574-3325-416c-83e2-9cd2f01f8813",
+        "code": "Dummy-7",
+        "name": "Dummy-7",
+        "departmentId": "b32f0cc1-f4b1-4503-95d6-fdf04d0ea2d4",
+        "hierarchyLevel": 7,
+        "ancestry": [
+          {
+            "id": "07fea07c-9ca9-4474-b6bc-c3a9456b181e",
+            "code": "DWSS",
+            "name": "Department of Water Supply and Sanitation",
+            "hierarchyLevel": 0
+          },
+          {
+            "id": "5ac4d271-1a00-47b9-94e6-f44fe17ae1b6",
+            "code": "Z02",
+            "name": "South",
+            "hierarchyLevel": 1
+          },
+          {
+            "id": "525f7b94-1755-426e-982f-430904554dd3",
+            "code": "C05",
+            "name": "Chandigarh",
+            "hierarchyLevel": 2
+          },
+          {
+            "id": "901f76a8-1911-4960-b389-57b62bd4dcdb",
+            "code": "DIV23",
+            "name": "Sri Anandpur Sahib",
+            "hierarchyLevel": 3
+          },
+          {
+            "id": "69c418a6-1bbf-4ef9-9bd2-bd26243d7c53",
+            "code": "DIV23SD02",
+            "name": "Sub Division Sri Anandpur Sahib",
+            "hierarchyLevel": 4
+          },
+          {
+            "id": "905399a1-c1cd-42c1-8c7c-6295aced0952",
+            "code": "S557",
+            "name": "Kiratpur Sahib",
+            "hierarchyLevel": 5
+          },
+          {
+            "id": "e75e4840-2586-42f8-b8bd-841b8637da06",
+            "code": "7378",
+            "name": "MAJHER",
+            "hierarchyLevel": 6
+          },
+          {
+            "id": "86077574-3325-416c-83e2-9cd2f01f8813",
+            "code": "Dummy-7",
+            "name": "Dummy-7",
+            "hierarchyLevel": 7
+          }
+        ]
+      },
+      "locationIds": null,
+      "auditDetails": {
+        "createdBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "lastModifiedBy": "4faa912d-d531-485b-ad9b-0a9878f792b0",
+        "createdTime": 1633778356275,
+        "lastModifiedTime": 1633778356275
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Local Setup
 
-To setup the ifix master data service in your local system, clone the [ifix-master-data-service](https://github.com/egovernments/iFix-Dev/tree/develop/domain-services/ifix-master-data-service).
+To setup the ifix master data service in your local system, clone the [ifix-master-data-service](https://github.com/misdwss/iFix-Dev/tree/master/domain-services/ifix-master-data-service).
 
 
 ## Infra Dependency

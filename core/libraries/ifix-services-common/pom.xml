@@ -6,10 +6,11 @@
   <groupId>org.egov.services</groupId>
   <artifactId>ifix-services-common</artifactId>
   <name>ifix-services-common</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>Shared classes among services</description>
 
   <properties>
+    <log4j2.version>2.17.1</log4j2.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,0 +1,516 @@
+---
+openapi: 3.0.0
+info:
+  title: ifix-department-entity-service
+  version: 1.1.0
+servers:
+- url: https://<server_address>/ifix-department-entity
+  description: SwaggerHub API Auto Mocking
+paths:
+  /departmentEntity/v1/_create:
+    post:
+      tags:
+      - DepartmentEntity
+      summary: Create/Add new Department Entity on iFix for a tenant
+      description: Create/Add new Department Entity on iFix for a tenant
+      requestBody:
+        description: Details for the new Department Entity + RequestHeader (meta data of the API).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentEntityRequest'
+        required: true
+      responses:
+        "202":
+          description: Request has been accepted for processing
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DepartmentEntityResponse'
+        "400":
+          description: Failed to process the request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /departmentEntity/v1/_update:
+    post:
+      tags:
+        - DepartmentEntity
+      summary: Update existing Department Entity on iFix for a tenant
+      description: Update existing Department Entity on iFix for a tenant
+      requestBody:
+        description: Details for the update Department Entity + RequestHeader (meta data of the API).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentEntityUpdateRequest'
+        required: true
+      responses:
+        "202":
+          description: Request has been accepted for processing
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DepartmentEntityResponse'
+        "400":
+          description: Failed to process the request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /departmentEntity/v1/_search:
+    post:
+      tags:
+      - DepartmentEntity
+      summary: Get Department Entity details.
+      description: |
+        Based on the criteria get the list of department entities.
+      requestBody:
+        description: RequestHeader meta data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentEntitySearchRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DepartmentEntityResponse'
+        "400":
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /departmentEntity/hierarchyLevel/v1/_create:
+    post:
+      tags:
+      - DepartmentHierarchyLevel
+      summary: Create/Add new DepartmentHierarchyLevel on iFix for a tenant
+      description: Create/Add new DepartmentHierarchyLevel on iFix for a tenant
+      requestBody:
+        description: Details for the new DepartmentHierarchyLevel + RequestHeader (meta data of the API).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentHierarchyLevelRequest'
+        required: true
+      responses:
+        "202":
+          description: Request has been accepted for processing
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DepartmentHierarchyLevelResponse'
+        "400":
+          description: Failed to process the request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /departmentEntity/hierarchyLevel/v1/_search:
+    post:
+      tags:
+      - DepartmentHierarchyLevel
+      summary: Get DepartmentHierarchyLevel.
+      description: |
+        Based on the criteria get the list of Department Hierarchy Levels.
+      requestBody:
+        description: RequestHeader meta data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentHierarchyLevelSearchRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DepartmentHierarchyLevelResponse'
+        "400":
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    DepartmentEntity:
+      type: object
+      properties:
+        id:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique system generated UUID
+        tenantId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique tenant identifier
+        departmentId:
+          type: string
+          description: Department id from department master
+        code:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: Unique the department entity code
+        name:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: Captures the department entity name
+        hierarchyLevel:
+          maxLength: 256
+          minLength: 1
+          type: number
+          description: Capture the level of the given department entity
+        children:
+          type: array
+          items:
+            type: string
+            description: Department Entity ids of the children
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+      description: This object captures the information for department entity
+    DepartmentEntityRequest:
+      required:
+      - departmentEntity
+      - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        DepartmentEntity:
+          properties:
+            id:
+              readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/DepartmentEntity'
+          - required:
+            - children
+            - code
+            - hierarchyLevelId
+            - name
+            - tenantId
+
+      description: Department Entity request along with request metadata
+    DepartmentEntityUpdateRequest:
+      required:
+      - DepartmentEntity
+      - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        DepartmentEntity:
+          allOf:
+          - $ref: '#/components/schemas/DepartmentEntity'
+          - required:
+            - id
+            - tenantId
+      description: Department Entity Update request along with request metadata
+    DepartmentEntityResponse:
+      properties:
+        responseHeader:
+          $ref: '#/components/schemas/ResponseHeader'
+        departmentEntity:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepartmentEntity'
+      description: Contains the ResponseHeader and the enriched Department Entity information
+    DepartmentEntitySearchRequest:
+      required:
+      - criteria
+      - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        criteria:
+          $ref: '#/components/schemas/DepartmentEntitySearchCriteria'
+      description: Department Entity search request along with request metadata
+    DepartmentEntitySearchCriteria:
+      required:
+      - tenantId
+      type: object
+      properties:
+        Ids:
+          type: array
+          description: Department Entity Ids
+          items:
+            maxItems: 50
+            type: string
+        tenantId:
+          type: string
+          description: Tenant Id
+        departmentId:
+          type: string
+          description: Department id from department master
+        code:
+          type: string
+          description: Unique the department entity code
+        name:
+          type: string
+          description: Captures the department entity name
+        hierarchyLevel:
+          type: integer
+          description: Capture the level of department entity
+        getAncestry:
+          type: boolean
+          description: If set to true, it will return all the department entity hierarchy details starting from the root to the specified department entity id.
+      description: The object contains all the search criteria of Department Entity
+    DepartmentHierarchyLevel:
+      required:
+      - departmentId
+      - id
+      - label
+      - tenantId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique system generated UUID
+          readOnly: true
+        tenantId:
+          type: string
+          description: Unique tenant identifier
+        departmentId:
+          type: string
+          description: Department id from department master
+        label:
+          type: string
+          description: Unique department hierarchy level code
+          example: state, zone, city etc
+        parent:
+          type: string
+          description: Capture the department hierarchy level of the parent id (UUID). If it is the root level it will not have any parent. There can only be one root element for a given department.
+          nullable: true
+        level:
+          type: number
+          description: The level of current DepartmentHierarchyLevel will be set as 1 greater than it\'s parent\'s
+          readOnly: true
+          example: 2
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+      description: This object captures the information for level of the department hierarchy and it's alias
+    DepartmentHierarchyLevelRequest:
+      required:
+      - departmentHierarchyLevel
+      - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        departmentHierarchyLevel:
+          $ref: '#/components/schemas/DepartmentHierarchyLevel'
+      description: Department Hierarchy Level request along with request metadata
+    DepartmentHierarchyLevelResponse:
+      properties:
+        responseHeader:
+          $ref: '#/components/schemas/ResponseHeader'
+        departmentHierarchyLevel:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepartmentHierarchyLevel'
+      description: Contains the ResponseHeader and the enriched Department Hierarchy Level information
+    DepartmentHierarchyLevelSearchRequest:
+      required:
+      - criteria
+      - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        criteria:
+          $ref: '#/components/schemas/DepartmentHierarchyLevelSearchCriteria'
+      description: Department Hierarchy Level search request along with request metadata
+    DepartmentHierarchyLevelSearchCriteria:
+      required:
+      - tenantId
+      type: object
+      properties:
+        Ids:
+          type: array
+          description: Department Hierarchy Level Ids
+          items:
+            maxItems: 50
+            type: string
+        tenantId:
+          type: string
+          description: Tenant Id
+        departmentId:
+          type: string
+          description: Department id from department master
+        label:
+          type: string
+          description: Unique department hierarchy label like state, district, etc.
+        level:
+          type: number
+          description: The level of the department hierarchy level
+      description: The object contains all the search criteria of Department Hierarchy Level
+    ErrorResponse:
+      required:
+      - ResponseHeader
+      type: object
+      properties:
+        ResponseHeader:
+          $ref: '#/components/schemas/ResponseHeader'
+        Errors:
+          minLength: 1
+          type: array
+          description: Error response array to return multiple error for single request
+          items:
+            $ref: '#/components/schemas/Error'
+      description: All APIs will return ErrorRes in case of failure which will carry ResponseHeader as metadata and Error object as actual representation of error.
+    ResponseHeader:
+      type: object
+      properties:
+        ts:
+          type: integer
+          description: response time in epoch
+          format: int64
+        correlationId:
+          maxLength: 256
+          type: string
+          description: unique response message id (UUID) - will usually be the correlation id from the server
+        msgId:
+          maxLength: 256
+          type: string
+          description: message id of the request
+        status:
+          type: string
+          description: status of request processing
+          enum:
+          - SUCCESS
+          - FAILED
+        signature:
+          type: string
+          description: Hash describing the current Request
+        version:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: The version of the API
+          nullable: false
+      description: ResponseHeader should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseHeader should always correspond to the same values in respective request's RequestHeader.
+      readOnly: true
+    Error:
+      required:
+      - code
+      - description
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error Code will be service specific error label/code to identiffy the error. Example for error code would be User.NotFound to indicate User Not Found by User/Authentication service. All services must declare their possible Error Codes with brief description in the error response section of their API path.
+        message:
+          type: string
+          description: Human readable error message
+        description:
+          type: string
+          description: technical description of the error which can help developer to debug the error if error is unexpected.
+      description: Error object will be returned as a part of reponse body in conjunction with ResponseHeader as part of ErrorResponse whenever the request processing status in the ResponseHeader is FAILED. HTTP return in this scenario will usually be HTTP 400.
+    AuditDetails:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          description: UUID (preferred) or userid of the user that created the object
+          readOnly: true
+        lastModifiedBy:
+          type: string
+          description: UUID (preferred) or userid of the user that last modified the object
+          readOnly: true
+        createdTime:
+          type: integer
+          description: epoch of the time object is created
+          format: int64
+          readOnly: true
+        lastModifiedTime:
+          type: integer
+          description: epoch of the time object is last modified
+          format: int64
+          readOnly: true
+      description: Collection of audit related fields used by most models
+      readOnly: true
+    RequestHeader:
+      type: object
+      properties:
+        ts:
+          type: integer
+          description: time in epoch
+          format: int64
+          nullable: false
+        version:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: The version of the API
+          nullable: false
+        msgId:
+          maxLength: 256
+          type: string
+          description: Unique request message id from the caller
+        userInfo:
+          $ref: '#/components/schemas/UserInfo'
+        correlationId:
+          type: string
+          readOnly: true
+        signature:
+          type: string
+          description: Hash describing the current RequestHeader
+      description: RequestHeader should be used to carry meta information about the requests to the server as described in the fields below. All eGov APIs will use requestHeader as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseHeader in the response body to ensure correlation.
+    UserInfo:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: System Generated User id of the authenticated user.
+        roles:
+          type: array
+          description: List of roles assigned to a user
+          items:
+            type: string
+        tenants:
+          type: array
+          description: List of tenants assigned to a user
+          items:
+            type: string
+        attributes:
+          type: object
+      description: Capture the user information
+      readOnly: true

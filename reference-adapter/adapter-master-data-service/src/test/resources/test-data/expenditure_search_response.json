@@ -1,0 +1,26 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": "86a41e4d-0262-420a-b342-70eba1f5595e",
+    "msgId": "Unknown",
+    "status": "successful",
+    "signature": "NON",
+    "version": "V1"
+  },
+  "expenditure": [
+    {
+      "id": "910f4d23-fc63-48fb-a8fb-f0ad567b788a",
+      "tenantId": "pb",
+      "code": "JJM",
+      "name": "Jal Jeevan Mission",
+      "type": "Scheme",
+      "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
+      "auditDetails": {
+        "createdBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime": 1628155293725,
+        "lastModifiedTime": 1628155293725
+      }
+    }
+  ]
+}

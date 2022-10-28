@@ -152,9 +152,6 @@ public class ChartOfAccountValidator {
         if (requestHeader == null) {
             throw new CustomException("REQUEST_HEADER", "Request header is missing");
         }
-        if (requestHeader.getUserInfo() == null || requestHeader.getUserInfo().getUuid() == null) {
-            errorMap.put("USER_INFO", "User info is missing");
-        }
 
         if (searchCriteria == null) {
             throw new CustomException("INVALID_SEARCH_CRITERIA", "Search criteria is missing");
@@ -186,11 +183,14 @@ public class ChartOfAccountValidator {
         if (StringUtils.isNotBlank(searchCriteria.getSubMajorHead()) && searchCriteria.getSubMajorHead().length() != 2) {
             errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
         }
-        if (StringUtils.isNotBlank(searchCriteria.getCoaCode()) && (searchCriteria.getCoaCode().length() < 1
-                || searchCriteria.getCoaCode().length() > 64)) {
-            errorMap.put("SUB_MAJOR_HEAD_CODE_LENGTH", "Sub major head Code should be of length 2");
+        if (searchCriteria.getCoaCodes() != null && !searchCriteria.getCoaCodes().isEmpty()) {
+            for (String coaCode : searchCriteria.getCoaCodes()) {
+                if (coaCode.length() < 1 || coaCode.length() > 64) {
+                    errorMap.put("COA_CODE_LENGTH", "COA Code should be of length from 1 to 64");
+                    break;
+                }
+            }
         }
-
 
         log.info("Exit from ChartOfAccountValidator.validateSearchPost()");
 

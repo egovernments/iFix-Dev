@@ -1,0 +1,27 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": "98a9db39-cc7e-4e07-8161-693e1c208008",
+    "msgId": "ek9d96e8-3b6b-4e36-9503-0f14a01af74n",
+    "status": "successful",
+    "signature": "",
+    "version": "0.1.0"
+  },
+  "departmentEntity": [
+    {
+      "id": "901f76a8-1911-4960-b389-57b62bd4dcdb",
+      "tenantId": "pb",
+      "departmentId": "b32f0cc1-f4b1-4503-95d6-fdf04d0ea2d4",
+      "code": "DIV23",
+      "name": "Sri Anandpur Sahib",
+      "hierarchyLevel": 3,
+      "auditDetails": {
+        "createdBy": "40abff21-9405-4a61-9aa1-d141cb95fb28",
+        "lastModifiedBy": "40abff21-9405-4a61-9aa1-d141cb95fb28",
+        "createdTime": 1629793685000,
+        "lastModifiedTime": 1629793685000
+      },
+      "children": []
+    }
+  ]
+}

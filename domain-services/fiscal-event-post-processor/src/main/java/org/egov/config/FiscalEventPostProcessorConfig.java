@@ -38,9 +38,6 @@ public class FiscalEventPostProcessorConfig {
         return converter;
     }
 
-    @Value("${fiscal.event.processor.kafka.mongodb.topic}")
-    private String fiscalEventMongoDbSink;
-
     @Value("${fiscal.event.kafka.dereferenced.topic}")
     private String fiscalEventDereferenceTopic;
 
@@ -68,30 +65,4 @@ public class FiscalEventPostProcessorConfig {
     @Value("${ifix.master.government.search.path}")
     private String ifixMasterGovernmentSearchPath;
 
-    @Value("${ifix.master.project.host}")
-    private String ifixMasterProjectHost;
-
-    @Value("${ifix.master.project.context.path}")
-    private String ifixMasterProjectContextPath;
-
-    @Value("${ifix.master.project.search.path}")
-    private String ifixMasterProjectSearchPath;
-
-    @Value("${ifix.master.expenditure.host}")
-    private String ifixMasterExpenditureHost;
-
-    @Value("${ifix.master.expenditure.context.path}")
-    private String ifixMasterExpenditureContextPath;
-
-    @Value("${ifix.master.expenditure.search.path}")
-    private String ifixMasterExpenditureSearchPath;
-
-    @Value("${ifix.master.department.host}")
-    private String ifixMasterDepartmentHost;
-
-    @Value("${ifix.master.department.context.path}")
-    private String ifixMasterDepartmentContextPath;
-
-    @Value("${ifix.master.department.search.path}")
-    private String ifixMasterDepartmentSearchPath;
 }
