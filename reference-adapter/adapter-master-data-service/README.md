@@ -1,2 +1,0 @@
-# Adapter master data
-

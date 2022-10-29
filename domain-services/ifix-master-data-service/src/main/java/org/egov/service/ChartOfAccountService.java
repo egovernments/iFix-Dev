@@ -44,6 +44,7 @@ public class ChartOfAccountService {
     public COARequest chartOfAccountV1CreatePost(COARequest coaRequest) {
         validator.validateCreatePost(coaRequest);
         enricher.enrichCreatePost(coaRequest);
+        //producer.push(mdsConfig.getCoaSaveTopic(),coaRequest);
         coaRepository.save(coaRequest.getChartOfAccount());
         return coaRequest;
     }

@@ -50,8 +50,8 @@ public class COASearchCriteria {
     @JsonProperty("objectHead")
     private String objectHead = null;
 
-    @JsonProperty("coaCodes")
-    private List<String> coaCodes = null;
+    @JsonProperty("coaCode")
+    private String coaCode = null;
 
 
     public COASearchCriteria addIdsItem(String idsItem) {
@@ -65,7 +65,7 @@ public class COASearchCriteria {
     public boolean isEmpty() {
         return (StringUtils.isBlank(tenantId) && StringUtils.isBlank(majorHead) && StringUtils.isBlank(minorHead)
                 && StringUtils.isBlank(subHead) && StringUtils.isBlank(subMajorHead) && StringUtils.isBlank(groupHead)
-                && StringUtils.isBlank(objectHead) && (ids == null || ids.isEmpty()) && (coaCodes == null || coaCodes.isEmpty()));
+                && StringUtils.isBlank(objectHead) && (ids == null || ids.isEmpty()) && StringUtils.isBlank(coaCode));
     }
 
 }

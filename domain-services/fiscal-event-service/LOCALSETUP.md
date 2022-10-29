@@ -1,6 +1,6 @@
 # Local Setup
 
-To setup the fiscal event service in your local system, clone the [fiscal-event-service](https://github.com/misdwss/iFix-Dev/tree/master/domain-services/fiscal-event-service).
+To setup the fiscal event service in your local system, clone the [fiscal-event-service](https://github.com/egovernments/iFix-Dev/tree/develop/domain-services/fiscal-event-service).
 
 
 ## Infra Dependency

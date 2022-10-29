@@ -25,5 +25,6 @@ public class FiscalEventGetRequest {
     @JsonProperty("criteria")
     private Criteria criteria = null;
 
+
 }
 

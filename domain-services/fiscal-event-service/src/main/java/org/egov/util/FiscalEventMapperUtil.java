@@ -1,7 +1,6 @@
 package org.egov.util;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +18,6 @@ import java.util.List;
 @Component
 @Slf4j
 public class FiscalEventMapperUtil {
-
-    public static final String AUDIT_DETAILS = "auditDetails";
-    public static final String AMOUNT_DETAILS = "amountDetails";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -50,28 +46,26 @@ public class FiscalEventMapperUtil {
                 .eventType(node.get("eventType") != null ? FiscalEvent.EventTypeEnum.valueOf(node.get("eventType").asText()) : null)
                 .eventTime(node.get("eventTime") != null ? node.get("eventTime").asLong() : null)
                 .referenceId(node.get("referenceId") != null ? node.get("referenceId").asText() : null)
-                .linkedReferenceId(node.get("linkedReferenceId") != null ? node.get("linkedReferenceId").asText() : null)
-                .linkedEventId(node.get("linkedEventId") != null ? node.get("linkedEventId").asText() : null)
+                .parentReferenceId(node.get("parentReferenceId") != null ? node.get("parentReferenceId").asText() : null)
+                .parentEventId(node.get("parentEventId") != null ? node.get("parentEventId").asText() : null)
                 .ingestionTime(node.get("ingestionTime") != null ? node.get("ingestionTime").asLong() : null)
-                .receivers(node.get("receivers") != null && node.get("receivers").isArray() ? objectMapper.convertValue(node.get("receivers"), new TypeReference<List<String>>() {
-                }) : null)
                 .attributes(node.get("attributes"))
                 .build();
 
         //audit details
-        if (node.get(AUDIT_DETAILS) != null) {
+        if (node.get("auditDetails") != null) {
             AuditDetails auditDetails = AuditDetails.builder()
-                    .createdBy(node.get(AUDIT_DETAILS).get("createdBy") != null ? node.get(AUDIT_DETAILS).get("createdBy").asText() : null)
-                    .lastModifiedBy(node.get(AUDIT_DETAILS).get("lastModifiedBy") != null ? node.get(AUDIT_DETAILS).get("lastModifiedBy").asText() : null)
-                    .createdTime(node.get(AUDIT_DETAILS).get("createdTime") != null ? node.get(AUDIT_DETAILS).get("createdTime").asLong() : null)
-                    .lastModifiedTime(node.get(AUDIT_DETAILS).get("lastModifiedTime") != null ? node.get(AUDIT_DETAILS).get("lastModifiedTime").asLong() : null)
+                    .createdBy(node.get("auditDetails").get("createdBy") != null ? node.get("auditDetails").get("createdBy").asText() : null)
+                    .lastModifiedBy(node.get("auditDetails").get("lastModifiedBy") != null ? node.get("auditDetails").get("lastModifiedBy").asText() : null)
+                    .createdTime(node.get("auditDetails").get("createdTime") != null ? node.get("auditDetails").get("createdTime").asLong() : null)
+                    .lastModifiedTime(node.get("auditDetails").get("lastModifiedTime") != null ? node.get("auditDetails").get("lastModifiedTime").asLong() : null)
                     .build();
             fiscalEvent.setAuditDetails(auditDetails);
         }
         //Amount Details
-        if (node.get(AMOUNT_DETAILS) != null && !node.get(AMOUNT_DETAILS).isEmpty()) {
+        if (node.get("amountDetails") != null && !node.get("amountDetails").isEmpty()) {
             List<Amount> amountDetails = new ArrayList<>();
-            Iterator<JsonNode> amtIterator = node.get(AMOUNT_DETAILS).iterator();
+            Iterator<JsonNode> amtIterator = node.get("amountDetails").iterator();
             while (amtIterator.hasNext()) {
                 JsonNode amountNode = amtIterator.next();
                 Amount amount = Amount.builder()
@@ -85,6 +79,10 @@ public class FiscalEventMapperUtil {
                 amountDetails.add(amount);
             }
             fiscalEvent.setAmountDetails(amountDetails);
+        }
+        //project
+        if (node.get("project") != null && node.get("project").get("id") != null) {
+            fiscalEvent.setProjectId(node.get("project").get("id").asText());
         }
         return fiscalEvent;
     }

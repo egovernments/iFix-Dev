@@ -26,34 +26,29 @@ public class FiscalEventEnrichmentService {
 
     public void enrichFiscalEventPushPost(FiscalEventRequest fiscalEventRequest) {
         RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-        List<FiscalEvent> fiscalEvents = fiscalEventRequest.getFiscalEvent();
-        if (fiscalEvents != null && !fiscalEvents.isEmpty()) {
-            Long ingestionTime = System.currentTimeMillis();
-            for (FiscalEvent fiscalEvent : fiscalEvents) {
-                //set the id
-                fiscalEvent.setId(UUID.randomUUID().toString());
+        FiscalEvent fiscalEvent = fiscalEventRequest.getFiscalEvent();
+        //set the id
+        fiscalEvent.setId(UUID.randomUUID().toString());
 
-                List<Amount> amounts = new ArrayList<>();
-                for (Amount amount : fiscalEvent.getAmountDetails()) {
-                    Amount newAmount = new Amount();
-                    BeanUtils.copyProperties(amount, newAmount);
-                    //set the amount id
-                    newAmount.setId(UUID.randomUUID().toString());
-                    amounts.add(newAmount);
-                }
-                fiscalEvent.setAmountDetails(amounts);
-
-                AuditDetails auditDetails = null;
-                if (fiscalEvent.getAuditDetails() == null) {
-                    auditDetails = fiscalEventUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), fiscalEvent.getAuditDetails(), true);
-                } else {
-                    auditDetails = fiscalEventUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), fiscalEvent.getAuditDetails(), false);
-                }
-
-                //set the audit details
-                fiscalEvent.setAuditDetails(auditDetails);
-                fiscalEvent.setIngestionTime(ingestionTime);
-            }
+        List<Amount> amounts = new ArrayList<>();
+        for (Amount amount : fiscalEvent.getAmountDetails()) {
+            Amount newAmount = new Amount();
+            BeanUtils.copyProperties(amount, newAmount);
+            //set the amount id
+            newAmount.setId(UUID.randomUUID().toString());
+            amounts.add(newAmount);
         }
+        fiscalEvent.setAmountDetails(amounts);
+
+        AuditDetails auditDetails = null;
+        if (fiscalEvent.getAuditDetails() == null) {
+            auditDetails = fiscalEventUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), fiscalEvent.getAuditDetails(), true);
+        } else {
+            auditDetails = fiscalEventUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), fiscalEvent.getAuditDetails(), false);
+        }
+
+        //set the audit details
+        fiscalEvent.setAuditDetails(auditDetails);
+        fiscalEvent.setIngestionTime(System.currentTimeMillis());
     }
 }

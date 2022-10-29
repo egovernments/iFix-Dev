@@ -1,4 +1,4 @@
-FROM dwssio/alpine-maven-builder-jdk-8:1-master-NA-6036091e AS build
+FROM egovio/alpine-maven-builder-jdk-8:1-master-NA-6036091e AS build
 ARG WORK_DIR
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN mvn -B -f /app/pom.xml package
 
 
 # Create runtime image
-FROM dwssio/8-openjdk-alpine
+FROM egovio/8-openjdk-alpine
 
 
 WORKDIR /opt/egov

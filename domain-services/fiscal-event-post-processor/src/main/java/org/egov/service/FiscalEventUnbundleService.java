@@ -2,9 +2,9 @@ package org.egov.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.models.AmountDetailsDeReferenced;
-import org.egov.models.FiscalEventDeReferenced;
-import org.egov.models.FiscalEventLineItemUnbundled;
+import org.egov.web.models.AmountDetailsDeReferenced;
+import org.egov.web.models.FiscalEventDeReferenced;
+import org.egov.web.models.FiscalEventLineItemUnbundled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,19 +50,19 @@ public class FiscalEventUnbundleService {
         fiscalEventLineItemUnbundled.setFromBillingPeriod(amountDetailsDeReferenced.getFromBillingPeriod());
         fiscalEventLineItemUnbundled.setToBillingPeriod(amountDetailsDeReferenced.getToBillingPeriod());
 
+        fiscalEventLineItemUnbundled.setDepartment(fiscalEventDeReferenced.getDepartment());
         fiscalEventLineItemUnbundled.setIngestionTime(fiscalEventDeReferenced.getIngestionTime());
         fiscalEventLineItemUnbundled.setEventTime(fiscalEventDeReferenced.getEventTime());
         fiscalEventLineItemUnbundled.setEventType(fiscalEventDeReferenced.getEventType());
+        fiscalEventLineItemUnbundled.setExpenditure(fiscalEventDeReferenced.getExpenditure());
         fiscalEventLineItemUnbundled.setGovernment(fiscalEventDeReferenced.getGovernment());
-        fiscalEventLineItemUnbundled.setLinkedEventId(fiscalEventDeReferenced.getLinkedEventId());
-        fiscalEventLineItemUnbundled.setLinkedReferenceId(fiscalEventDeReferenced.getLinkedReferenceId());
+        fiscalEventLineItemUnbundled.setParentEventId(fiscalEventDeReferenced.getParentEventId());
+        fiscalEventLineItemUnbundled.setParentReferenceId(fiscalEventDeReferenced.getParentReferenceId());
+        fiscalEventLineItemUnbundled.setProject(fiscalEventDeReferenced.getProject());
         fiscalEventLineItemUnbundled.setReferenceId(fiscalEventDeReferenced.getReferenceId());
         fiscalEventLineItemUnbundled.setTenantId(fiscalEventDeReferenced.getTenantId());
         fiscalEventLineItemUnbundled.setVersion(fiscalEventDeReferenced.getVersion());
-
-        fiscalEventLineItemUnbundled.setAuditDetails(fiscalEventDeReferenced.getAuditDetails());
-        fiscalEventLineItemUnbundled.setAttributes(fiscalEventDeReferenced.getAttributes());
-
+        fiscalEventLineItemUnbundled.setDepartmentEntity(fiscalEventDeReferenced.getDepartmentEntity());
         return fiscalEventLineItemUnbundled;
     }
 }

@@ -35,8 +35,8 @@ public class ChartOfAccountQueryBuilder {
         if (StringUtils.isNotBlank(searchCriteria.getSubMajorHead()))
             criteria.and("subMajorHead").is(searchCriteria.getSubMajorHead());
 
-        if (searchCriteria.getCoaCodes() != null && !searchCriteria.getCoaCodes().isEmpty())
-            criteria.and("coaCode").in(searchCriteria.getCoaCodes());
+        if (StringUtils.isNotBlank(searchCriteria.getCoaCode()))
+            criteria.and("coaCode").is(searchCriteria.getCoaCode());
 
         if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
             criteria.and("id").in(searchCriteria.getIds());

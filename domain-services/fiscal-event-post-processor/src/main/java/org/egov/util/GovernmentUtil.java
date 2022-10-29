@@ -6,10 +6,10 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventPostProcessorConfig;
-import org.egov.models.FiscalEventRequest;
-import org.egov.models.Government;
 import org.egov.resposioty.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
+import org.egov.web.models.FiscalEventRequest;
+import org.egov.web.models.Government;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

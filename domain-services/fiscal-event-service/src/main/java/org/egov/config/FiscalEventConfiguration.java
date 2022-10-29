@@ -29,9 +29,6 @@ public class FiscalEventConfiguration {
     @Value("${fiscal.kafka.push.topic}")
     private String fiscalPushRequest;
 
-    @Value("${fiscal.event.kafka.mongodb.topic}")
-    private String fiscalEventPushToMongoSink;
-
     @Value("${ifix.master.coa.host}")
     private String ifixMasterCoaHost;
 
@@ -50,6 +47,12 @@ public class FiscalEventConfiguration {
     @Value("${ifix.master.government.search.path}")
     private String ifixMasterGovernmentSearchPath;
 
-    @Value("${fiscal.event.push.request.max.size}")
-    private String fiscalEventPushReqMaxSize;
+    @Value("${ifix.master.project.host}")
+    private String ifixMasterProjectHost;
+
+    @Value("${ifix.master.project.context.path}")
+    private String ifixMasterProjectContextPath;
+
+    @Value("${ifix.master.project.search.path}")
+    private String ifixMasterProjectSearchPath;
 }

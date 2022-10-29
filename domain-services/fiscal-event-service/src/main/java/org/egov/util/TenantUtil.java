@@ -26,15 +26,16 @@ public class TenantUtil {
     ServiceRequestRepository serviceRequestRepository;
 
     /**
-     * @param tenantIds
+     * @param tenantId
      * @param requestHeader
      * @return
      */
-    public boolean validateTenant(List<String> tenantIds, RequestHeader requestHeader) {
-        if (tenantIds!= null && !tenantIds.isEmpty() && requestHeader != null) {
+    public boolean validateTenant(String tenantId, RequestHeader requestHeader) {
+        if (StringUtils.isNotBlank(tenantId) && requestHeader != null) {
 
             Map<String, Object> tenantValueMap = new HashMap<>();
-            tenantValueMap.put(MasterDataConstants.IDS,tenantIds);
+            tenantValueMap.put(MasterDataConstants.IDS,
+                    Collections.singletonList(tenantId));
 
             Map<String, Object> tenantMap = new HashMap<>();
             tenantMap.put(MasterDataConstants.REQUEST_HEADER, requestHeader);
@@ -45,7 +46,7 @@ public class TenantUtil {
             try {
                 List list = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
 
-                return (list != null && !list.isEmpty() && (list.size() == tenantIds.size()));
+                return list != null && !list.isEmpty();
             } catch (Exception e) {
                 throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse government response for tenantId");
             }

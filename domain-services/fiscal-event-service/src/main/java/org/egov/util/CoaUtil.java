@@ -1,7 +1,6 @@
 package org.egov.util;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,8 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
+import org.egov.web.models.Amount;
+import org.egov.web.models.FiscalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,31 +33,33 @@ public class CoaUtil {
      * Get the COA Details from master data service
      *
      * @param requestHeader
-     * @param coaCodes
-     * @param tenantId
+     * @param fiscalEvent
      * @return
      */
-    public JsonNode fetchCoaDetailsByCoaCodes(RequestHeader requestHeader, Set<String> coaCodes, String tenantId) {
+    public List<String> getCOAIdsFromCOAService(RequestHeader requestHeader, FiscalEvent fiscalEvent) {
         String url = createCoaSearchUrl();
-        Map<String, Object> coaSearchRequest = createSearchCoaRequest(requestHeader, coaCodes, tenantId);
+        Map<String, Object> coaSearchRequest = createSearchCoaRequest(requestHeader, fiscalEvent);
 
         Object response = serviceRequestRepository.fetchResult(url, coaSearchRequest);
-        JsonNode jsonNode = null;
+        List<String> responseCoaIds = null;
         try {
-            List<Object> chartOfAccounts = JsonPath.read(response, MasterDataConstants.COA_JSON_PATH);
-            jsonNode = objectMapper.convertValue(chartOfAccounts, JsonNode.class);
+            responseCoaIds = JsonPath.read(response, MasterDataConstants.COA_IDS_JSON_PATH);
         } catch (Exception e) {
-            throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse coa response for coaCodes");
+            throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse coa response for coaIds");
         }
-        return jsonNode;
+        return responseCoaIds;
     }
 
-    private Map<String, Object> createSearchCoaRequest(RequestHeader requestHeader, Set<String> coaCodes, String tenantId) {
-        if (StringUtils.isNotBlank(tenantId)) {
+    private Map<String, Object> createSearchCoaRequest(RequestHeader requestHeader, FiscalEvent fiscalEvent) {
+        if (!StringUtils.isEmpty(fiscalEvent.getTenantId())) {
+            List<String> coaIds = new ArrayList<>();
+            for (Amount amount : fiscalEvent.getAmountDetails()) {
+                coaIds.add(amount.getCoaId());
+            }
             Map<String, Object> coaSearchRequest = new HashMap<>();
             Map<String, Object> criteria = new HashMap<>();
-            criteria.put("coaCodes", coaCodes);
-            criteria.put("tenantId", tenantId);
+            criteria.put("Ids", coaIds);
+            criteria.put("tenantId", fiscalEvent.getTenantId());
 
             coaSearchRequest.put("requestHeader", requestHeader);
             coaSearchRequest.put("criteria", criteria);
@@ -67,8 +70,7 @@ public class CoaUtil {
     }
 
     private String createCoaSearchUrl() {
-        StringBuilder uriBuilder = new StringBuilder();
-        uriBuilder.append(configuration.getIfixMasterCoaHost())
+        StringBuilder uriBuilder = new StringBuilder(configuration.getIfixMasterCoaHost())
                 .append(configuration.getIfixMasterCoaContextPath()).append(configuration.getIfixMasterCoaSearchPath());
         return uriBuilder.toString();
     }

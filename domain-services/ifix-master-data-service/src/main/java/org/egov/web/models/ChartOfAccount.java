@@ -72,8 +72,6 @@ public class ChartOfAccount {
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;
 
-    @JsonProperty("attributes")
-    private Object attributes = null;
 
 }
 

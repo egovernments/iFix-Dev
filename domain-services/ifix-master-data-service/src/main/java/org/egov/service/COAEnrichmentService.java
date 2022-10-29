@@ -13,8 +13,6 @@ import org.egov.web.models.ChartOfAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -60,9 +58,7 @@ public class COAEnrichmentService {
     private COASearchCriteria createCOASearchCriteria(ChartOfAccount chartOfAccount) {
         COASearchCriteria searchCriteria = new COASearchCriteria();
         searchCriteria.setTenantId(chartOfAccount.getTenantId());
-        List<String> coaCodes = new ArrayList<>();
-        coaCodes.add(chartOfAccount.getCoaCode());
-        searchCriteria.setCoaCodes(coaCodes);
+        searchCriteria.setCoaCode(chartOfAccount.getCoaCode());
         return searchCriteria;
     }
 
