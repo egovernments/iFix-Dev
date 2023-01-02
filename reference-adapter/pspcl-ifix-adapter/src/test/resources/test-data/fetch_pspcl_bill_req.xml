@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <GetBills xmlns="http://tempuri.org/">
+            <accountNo>3005754414</accountNo>
+        </GetBills>
+    </soap:Body>
+</soap:Envelope>

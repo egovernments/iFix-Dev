@@ -1,0 +1,29 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": null,
+    "msgId": "Unknown",
+    "status": "successful",
+    "signature": "NON",
+    "version": "V1"
+  },
+  "departmentEntity": [
+    {
+      "id": "580bf1c2-0ac7-4a93-bc10-c3fbc632a363",
+      "tenantId": "PB",
+      "departmentId": "3d9ef18a-361a-40cf-b142-dd6f998e1ad2",
+      "code": "Kartarpur shahib",
+      "name": "KS",
+      "hierarchyLevel": 5,
+      "auditDetails": {
+        "createdBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime": 1629873034074,
+        "lastModifiedTime": 1629873034074
+      },
+      "children": [
+        "3d9ef18a-361a-40cf-b142-dd6f998e1ad3"
+      ]
+    }
+  ]
+}

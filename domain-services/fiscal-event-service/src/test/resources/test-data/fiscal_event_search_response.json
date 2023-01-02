@@ -1,0 +1,64 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": "35b5b770-c319-4ee9-b255-50cfb71f0c83",
+    "msgId": "ek9d96e8-3b6b-4e36-9503-0f14a01af74n",
+    "status": "successful",
+    "signature": "",
+    "version": "1.0.0"
+  },
+  "fiscalEvent": [
+    {
+      "id": "a0531aaa-97f1-4376-92a5-d55699dc16f3",
+      "tenantId": "pb",
+      "eventType": "DEMAND",
+      "ingestionTime": 1631182113487,
+      "eventTime": 1631179754099,
+      "referenceId": "WS/400/2021-22/0434",
+      "linkedEventId": null,
+      "linkedReferenceId": null,
+      "amountDetails": [
+        {
+          "id": "3795618f-f217-4bda-8a3c-f21b22f3b855",
+          "amount": 6500,
+          "coaCode": "null",
+          "fromBillingPeriod": 1617235200000,
+          "toBillingPeriod": 1628793000000
+        }
+      ],
+      "auditDetails": {
+        "createdBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "lastModifiedBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "createdTime": 1631179754254,
+        "lastModifiedTime": 1631182113487
+      },
+      "attributes": null
+    },
+    {
+      "id": "26392ac9-6b0d-4f2d-969a-83481f8c3597",
+      "tenantId": "pb",
+      "eventType": "DEMAND",
+      "ingestionTime": 1631181591015,
+      "eventTime": 1631179754099,
+      "referenceId": "WS/400/2021-22/0434",
+      "linkedEventId": null,
+      "linkedReferenceId": null,
+      "amountDetails": [
+        {
+          "id": "3178532e-fefd-43d1-9df0-5da8c7451357",
+          "amount": 6500,
+          "coaCode": "null",
+          "fromBillingPeriod": 1617235200000,
+          "toBillingPeriod": 1628793000000
+        }
+      ],
+      "auditDetails": {
+        "createdBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "lastModifiedBy": "ba28ebe8-ed9c-4cdb-9328-b8e227eb0342",
+        "createdTime": 1631179754254,
+        "lastModifiedTime": 1631181591015
+      },
+      "attributes": null
+    }
+  ]
+}

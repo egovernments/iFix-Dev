@@ -27,6 +27,12 @@ public class FiscalEventQueryBuilder {
         if (searchCriteria.getFromEventTime() != null && searchCriteria.getToEventTime() != null)
             criteria.and("eventTime").gte(searchCriteria.getFromEventTime()).lte(searchCriteria.getToEventTime());
 
+        if (StringUtils.isNotBlank(searchCriteria.getReceiver()))
+            criteria.and("receivers").is(searchCriteria.getReceiver());
+
+        if (searchCriteria.getFromIngestionTime() != null && searchCriteria.getToIngestionTime() != null)
+            criteria.and("ingestionTime").gte(searchCriteria.getFromIngestionTime()).lte(searchCriteria.getToIngestionTime());
+
         return new Query(criteria);
     }
 }

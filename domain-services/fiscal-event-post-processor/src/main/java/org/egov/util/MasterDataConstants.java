@@ -6,7 +6,6 @@ public class MasterDataConstants {
     public static final String FISCAL_EVENT = "FISCAL_EVENT";
     public static final String REFERENCE_ID = "REFERENCE_ID";
     public static final String EVENT_TYPE = "EVENT_TYPE";
-    public static final String FISCAL_EVENT_VERSION = "1.0.0";
 
     private MasterDataConstants() {
     }

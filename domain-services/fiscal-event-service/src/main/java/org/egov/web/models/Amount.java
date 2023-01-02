@@ -1,5 +1,6 @@
 package org.egov.web.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
@@ -26,7 +27,12 @@ public class Amount {
     @JsonProperty("amount")
     private BigDecimal amount = null;
 
+    @JsonProperty("coaCode")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String coaCode = null;
+
     @JsonProperty("coaId")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String coaId = null;
 
     @JsonProperty("fromBillingPeriod")

@@ -42,6 +42,16 @@ public class Criteria {
     @Valid
     private List<String> referenceId = null;
 
+    @JsonProperty("receiver")
+    @Valid
+    private String receiver = null;
+
+    @JsonProperty("fromIngestionTime")
+    private Long fromIngestionTime = null;
+
+    @JsonProperty("toIngestionTime")
+    private Long toIngestionTime = null;
+
 
     public Criteria addIdsItem(String idsItem) {
         if (this.ids == null) {
@@ -58,6 +68,7 @@ public class Criteria {
         this.referenceId.add(referenceIdItem);
         return this;
     }
+
 
 }
 

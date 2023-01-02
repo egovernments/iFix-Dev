@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-09T17:28:42.515+05:30")
@@ -45,12 +44,12 @@ public class FiscalApiController {
         this.request = request;
     }
 
-    @RequestMapping(value = "/_push", method = RequestMethod.POST)
+    @RequestMapping(value = "/_publish", method = RequestMethod.POST)
     public ResponseEntity<FiscalEventResponse> fiscalEventsV1PushPost(@ApiParam(value = "Details for the new fiscal event + RequestHeader (meta data of the API).", required = true) @Valid @RequestBody FiscalEventRequest body) {
         FiscalEventRequest fiscalEventRequest = fiscalEventService.fiscalEventsV1PushPost(body);
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         FiscalEventResponse fiscalEventResponse = FiscalEventResponse.builder().responseHeader(responseHeader)
-                .fiscalEvent(Collections.singletonList(fiscalEventRequest.getFiscalEvent())).build();
+                .fiscalEvent(fiscalEventRequest.getFiscalEvent()).build();
         return new ResponseEntity<FiscalEventResponse>(fiscalEventResponse, HttpStatus.ACCEPTED);
     }
 

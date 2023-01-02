@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventPostProcessorConfig;
+import org.egov.models.Amount;
+import org.egov.models.ChartOfAccount;
+import org.egov.models.FiscalEvent;
 import org.egov.resposioty.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.Amount;
-import org.egov.web.models.ChartOfAccount;
-import org.egov.web.models.FiscalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
