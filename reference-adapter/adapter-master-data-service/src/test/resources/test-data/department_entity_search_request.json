@@ -1,0 +1,16 @@
+{
+  "requestHeader": {
+    "ts": 1627193067,
+    "version": "0.1.0",
+    "msgId": "ek9d96e8-3b6b-4e36-9503-0f14a01af74n",
+    "userInfo": {
+      "uuid": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d"
+    }
+  },
+  "criteria": {
+    "Ids": [
+      "901f76a8-1911-4960-b389-57b62bd4dcdb"
+    ],
+    "tenantId": "pb"
+  }
+}

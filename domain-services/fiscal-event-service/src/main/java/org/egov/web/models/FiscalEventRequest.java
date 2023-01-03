@@ -6,6 +6,8 @@ import lombok.*;
 import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 
 /**
  * Fiscal event request along with request metadata
@@ -24,8 +26,7 @@ public class FiscalEventRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("fiscalEvent")
-    private FiscalEvent fiscalEvent = null;
-
+    private List<FiscalEvent> fiscalEvent = null;
 
 }
 

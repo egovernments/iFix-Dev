@@ -25,14 +25,22 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FiscalEvent {
+
+    @JsonProperty("version")
+    private String version = null;
+
     @JsonProperty("id")
     private String id = null;
 
     @JsonProperty("tenantId")
     private String tenantId = null;
 
-    @JsonProperty("projectId")
-    private String projectId = null;
+    @JsonProperty("sender")
+    private String sender = null;
+
+    @JsonProperty("receivers")
+    @Valid
+    private List<String> receivers = new ArrayList<>();
 
     @JsonProperty("eventType")
     private EventTypeEnum eventType = null;
@@ -46,11 +54,11 @@ public class FiscalEvent {
     @JsonProperty("referenceId")
     private String referenceId = null;
 
-    @JsonProperty("parentEventId")
-    private String parentEventId = null;
+    @JsonProperty("linkedEventId")
+    private String linkedEventId = null;
 
-    @JsonProperty("parentReferenceId")
-    private String parentReferenceId = null;
+    @JsonProperty("linkedReferenceId")
+    private String linkedReferenceId = null;
 
     @JsonProperty("amountDetails")
     @Valid

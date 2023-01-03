@@ -1,0 +1,17 @@
+{
+  "requestHeader": {
+    "ts": 1627193067,
+    "version": "V1",
+    "msgId": "Unknown",
+    "signature": "NON",
+    "userInfo": {
+      "uuid": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d"
+    }
+  },
+  "departmentHierarchyLevel": {
+    "tenantId": "pb",
+    "departmentId": "5fe2fecb-4f36-4259-b769-23263b4e11f0",
+    "label": "Zone",
+    "parent":"ac12996f-c832-4bdd-8cb1-c3d84fc693d1"
+  }
+}

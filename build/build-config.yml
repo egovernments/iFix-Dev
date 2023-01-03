@@ -36,16 +36,38 @@ config:
       - work-dir: "core/ifix-zuul"
         image-name: "ifix-zuul"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/domain-services/ifix-department-entity-service"
+  - name: "builds/iFix/core/egov-indexer"
     build:
-      - work-dir: "domain-services/ifix-department-entity-service"
+      - work-dir: "core/egov-indexer"
+        image-name: "egov-indexer"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/core/dashboard-analytics"
+    build:
+      - work-dir: "core/dashboard-analytics"
+        image-name: "dashboard-analytics"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/domain-services/ifix-es-pipeline"
+    build:
+      - work-dir: "domain-services/ifix-es-pipeline"
+        image-name: "ifix-es-pipeline"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/domain-services/ifix-migration-toolkit"
+    build:
+      - work-dir: "domain-services/ifix-migration-toolkit"
+        image-name: "ifix-migration-toolkit"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-adapter/ifix-department-entity-service"
+    build:
+      - work-dir: "reference-adapter/ifix-department-entity-service"
         image-name: "ifix-department-entity-service"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/reference-adapter"
+  - name: "builds/iFix/reference-adapter/mgramseva-ifix-adapter"
     build:
-      - work-dir: "reference-adapter"
+      - work-dir: "reference-adapter/mgramseva-ifix-adapter"
         image-name: "ifix-reference-adapter"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "reference-adapter/mgramseva-ifix-adapter/src/main/resources/db"
+        image-name: "ifix-reference-adapter-db"
   - name: "builds/iFix/reference-dashboard/fiscal-event-aggregator"
     build:
       - work-dir: "reference-dashboard/fiscal-event-aggregator"
@@ -56,3 +78,18 @@ config:
      - work-dir: "utilities/mongodb-kafka-source-connector"
        image-name: "mongodb-kafka-source-connector"
        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-adapter/adapter-master-data-service"
+    build:
+      - work-dir: "reference-adapter/adapter-master-data-service"
+        image-name: "adapter-master-data-service"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/reference-adapter/pspcl-ifix-adapter"
+    build:
+      - work-dir: "reference-adapter/pspcl-ifix-adapter"
+        image-name: "pspcl-ifix-adapter"
+        dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/frontend/micro-ui/digit-ui"
+    build:
+      - work-dir: frontend/micro-ui/
+        image-name: digit-ui
+        dockerfile: frontend/micro-ui/web/docker/Dockerfile

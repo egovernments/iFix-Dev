@@ -1,0 +1,36 @@
+{
+  "responseHeader": {
+    "ts": 1627193067,
+    "correlationId": null,
+    "msgId": "Unknown",
+    "status": "successful",
+    "signature": "NON",
+    "version": "V1"
+  },
+  "chartOfAccounts": [
+    {
+      "id": "512db21b-9d2b-4ae4-84d0-da1afe87db13",
+      "coaCode": "8984-12-347-56-78-90",
+      "tenantId": "pb",
+      "majorHead": "8984",
+      "majorHeadName": "majorHeadName89",
+      "majorHeadType": null,
+      "subMajorHead": "12",
+      "subMajorHeadName": "subMajorHeadName",
+      "minorHead": "347",
+      "minorHeadName": "minorHeadName347",
+      "subHead": "56",
+      "subHeadName": "subHeadName",
+      "groupHead": "78",
+      "groupHeadName": "groupHeadName",
+      "objectHead": "90",
+      "objectHeadName": "objectHeadName",
+      "auditDetails": {
+        "createdBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "lastModifiedBy": "e4fd96e8-3b6b-4e36-9503-0f14a01af39d",
+        "createdTime": 1628319687417,
+        "lastModifiedTime": 1628319687417
+      }
+    }
+  ]
+}

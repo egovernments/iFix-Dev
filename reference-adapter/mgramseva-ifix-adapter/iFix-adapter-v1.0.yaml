@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: eGov iFix adapter 
+  description: |
+    APIs for tenant master. This supports below features 
+    * Push events
+    * Pull events
+    * Get reconcilation report 
+    * Get failed events details
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: iFix adaptor
+paths:
+   /event/v1/_push:
+    post:
+      summary: Push the fiscal event on iFix
+      description: Push the fiscal event on iFix
+      responses:
+        '202':
+          description: Request has been accepted for processing
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '400':
+          description: Failed to process the request
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/GhanshyamRawat92/iFix-core/main/docs/common-contract-v1.0.0.yaml#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/GhanshyamRawat92/iFix-core/main/docs/common-contract-v1.0.0.yaml#/components/schemas/ErrorResponse'
+      tags:
+        - Event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+        description: Details for the events + RequestHeader (meta data of the API).
+        required: true
+  
+        
+servers:
+  - url: 'https://iFix.org'
+components:
+  schemas:
+
+    Event:
+      type: object
+      description: Captures the finacial event attributes 
+      properties:
+        id:
+          type: string
+          description: Unique system generated UUID
+          minLength: 1
+          maxLength: 64
+          readOnly: true
+        tenantId:
+          type: string
+          description: Unique tenant identifier
+          minLength: 1
+          maxLength: 64
+        eventType:
+          type: string
+          description: Capture event type
+          enum:
+            - DEMAND
+            - BILL
+            - RECEIPT
+            - PAYMENT
+        entity:
+          type: array
+          description: Capture event type entity object
+          items:
+            type: object
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/GhanshyamRawat92/iFix-core/main/docs/common-contract-v1.0.0.yaml#/components/schemas/AuditDetails'
+        
+      required:
+        - tenantId
+        - eventType
+        - entity
+   
+    EventRequest:
+      description: Project request along with request metadata
+      properties:
+        requestHeader:
+          $ref: 'https://raw.githubusercontent.com/GhanshyamRawat92/iFix-core/main/docs/common-contract-v1.0.0.yaml#/components/schemas/RequestHeader'
+        event:
+          $ref: '#/components/schemas/Event'
+      required:
+        - requestHeader
+        - event
+        
+    EventResponse:
+      description: Contains the ResponseHeader and the enriched Project information
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/GhanshyamRawat92/iFix-core/main/docs/common-contract-v1.0.0.yaml#/components/schemas/ResponseHeader'
+        event:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+            
+    
+        
