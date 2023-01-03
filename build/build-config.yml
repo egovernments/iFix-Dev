@@ -64,7 +64,7 @@ config:
         image-name: "ifix-department-entity-service"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "reference-adapter/ifix-department-entity-service/src/main/resources/db"
-        image-name: "ifix-department-entity-db"
+        image-name: "ifix-department-entity-service-db"
   - name: "builds/iFix/reference-adapter/mgramseva-ifix-adapter"
     build:
       - work-dir: "reference-adapter/mgramseva-ifix-adapter"
