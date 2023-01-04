@@ -28,14 +28,14 @@ public class DepartmentHierarchyLevelResponse {
 
     @JsonProperty("departmentHierarchyLevel")
     @Valid
-    private List<DepartmentHierarchyLevel> departmentHierarchyLevel = null;
+    private List<DepartmentHierarchyLevelDTO> departmentHierarchyLevelDTO = null;
 
 
-    public DepartmentHierarchyLevelResponse addDepartmentHierarchyLevelItem(DepartmentHierarchyLevel departmentHierarchyLevelItem) {
-        if (this.departmentHierarchyLevel == null) {
-            this.departmentHierarchyLevel = new ArrayList<>();
+    public DepartmentHierarchyLevelResponse addDepartmentHierarchyLevelItem(DepartmentHierarchyLevelDTO departmentHierarchyLevelDTOItem) {
+        if (this.departmentHierarchyLevelDTO == null) {
+            this.departmentHierarchyLevelDTO = new ArrayList<>();
         }
-        this.departmentHierarchyLevel.add(departmentHierarchyLevelItem);
+        this.departmentHierarchyLevelDTO.add(departmentHierarchyLevelDTOItem);
         return this;
     }
 

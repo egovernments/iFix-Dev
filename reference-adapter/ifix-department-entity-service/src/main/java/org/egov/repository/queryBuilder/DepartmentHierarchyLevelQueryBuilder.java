@@ -2,43 +2,86 @@ package org.egov.repository.queryBuilder;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.egov.repository.criteriaBuilder.DepartmentQueryCriteria;
 import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.egov.web.models.persist.DepartmentHierarchyLevel;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import static org.egov.util.DepartmentEntityConstant.DepartmentEntity.TENANT_ID;
+import static org.egov.util.DepartmentEntityConstant.DepartmentHierarchyLevel.*;
 
 @Component
 @Slf4j
 public class DepartmentHierarchyLevelQueryBuilder {
 
-    public Query buildSearchQuery(DepartmentHierarchyLevelSearchCriteria searchCriteria) {
+    public String getQueryByParamExistence(@NonNull DepartmentHierarchyLevelSearchCriteria searchCriteria) {
+        DepartmentQueryCriteria departmentQueryCriteria = DepartmentQueryCriteria.builder(DepartmentHierarchyLevel.class);
 
-        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+        departmentQueryCriteria.where(TENANT_ID).is(searchCriteria.getTenantId());
 
-        if (StringUtils.isNotBlank(searchCriteria.getDepartmentId()))
-            criteria.and("departmentId").is(searchCriteria.getDepartmentId());
+        if (!StringUtils.isEmpty(searchCriteria.getDepartmentId())) {
+            departmentQueryCriteria.and(DEPARTMENT_ID).is(searchCriteria.getDepartmentId());
+        }
 
-        if (StringUtils.isNotBlank(searchCriteria.getLabel()))
-            criteria.and("label").is(searchCriteria.getLabel());
+        if (!StringUtils.isEmpty(searchCriteria.getLabel())) {
+            departmentQueryCriteria.and(LABEL).is(searchCriteria.getLabel());
+        }
 
-        if (searchCriteria.getLevel() != null)
-            criteria.and("level").is(searchCriteria.getLevel());
+        if (!StringUtils.isEmpty(searchCriteria.getLevel())) {
+            departmentQueryCriteria.and(LEVEL).is(searchCriteria.getLevel());
+        }
 
-        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
-            criteria.and("id").in(searchCriteria.getIds());
+        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty()) {
+            departmentQueryCriteria.and(ID).in(searchCriteria.getIds());
+        }
 
-        return new Query(criteria);
+        return departmentQueryCriteria.build();
     }
 
-    public Query buildParentDeptHierarchyLevelSearchQuery(String departmentId, String tenantId, String parent) {
-        Criteria criteria = Criteria.where("tenantId").is(tenantId);
-
-        if (StringUtils.isNotBlank(departmentId)) {
-            criteria.and("departmentId").is(departmentId);
+    public String findByDepartmentIdAndTenantIdAndParent(String departmentId, String tenantId,
+                                                                          String parent) {
+        if (!StringUtils.isEmpty(departmentId) && !StringUtils.isEmpty(tenantId) && !StringUtils.isEmpty(parent)) {
+            return DepartmentQueryCriteria.builder(DepartmentHierarchyLevel.class)
+                    .where(DEPARTMENT_ID).is(departmentId)
+                    .and(TENANT_ID).is(tenantId)
+                    .and(PARENT).is(parent)
+                    .build();
         }
-        criteria.and("parent").is(parent);
+        return null;
+    }
 
-        return new Query(criteria);
+    /**
+     * @param departmentId
+     * @param tenantId
+     * @param level
+     * @return
+     */
+    public String findByDepartmentIdAndTenantIdAndLevel(String departmentId, String tenantId, Integer level) {
+        if (!StringUtils.isEmpty(departmentId) && !StringUtils.isEmpty(tenantId) && level != null) {
+            return DepartmentQueryCriteria.builder(DepartmentHierarchyLevel.class)
+                    .where(DEPARTMENT_ID).is(departmentId)
+                    .and(TENANT_ID).is(tenantId)
+                    .and(LEVEL).is(level)
+                    .build();
+        }
+        return null;
+    }
+
+    /**
+     * @param id
+     * @param tenantId
+     * @return
+     */
+    public String findByIdAndTenantId(String id, String tenantId) {
+        if (!StringUtils.isEmpty(id) && !StringUtils.isEmpty(tenantId)) {
+            return DepartmentQueryCriteria.builder(DepartmentHierarchyLevel.class)
+                    .where(ID).is(id)
+                    .and(TENANT_ID).is(tenantId)
+                    .build();
+        }
+
+        return null;
     }
 }

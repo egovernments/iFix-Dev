@@ -1,16 +1,14 @@
 package org.egov.repository;
 
-import org.apache.commons.lang3.StringUtils;
 import org.egov.repository.queryBuilder.DepartmentEntityQueryBuilder;
-import org.egov.web.models.DepartmentEntity;
-import org.egov.web.models.DepartmentEntitySearchRequest;
+import org.egov.repository.rowmapper.DepartmentEntityRowMapper;
+import org.egov.web.models.DepartmentEntitySearchCriteria;
+import org.egov.web.models.persist.DepartmentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,55 +16,55 @@ import java.util.Optional;
 public class DepartmentEntityRepository {
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private DepartmentEntityQueryBuilder queryBuilder;
+    private DepartmentEntityRowMapper departmentEntityRowMapper;
 
-    /**
-     * @param departmentEntity
-     */
-    public void save(DepartmentEntity departmentEntity) {
-        mongoTemplate.save(departmentEntity);
+    @Autowired
+    private DepartmentEntityQueryBuilder departmentEntityQueryBuilder;
+
+    public List<DepartmentEntity> getDepartmentEntitiesByParamsExistence(DepartmentEntitySearchCriteria departmentEntitySearchCriteria) {
+        return jdbcTemplate.query(
+                departmentEntityQueryBuilder
+                        .getQueryByParamExistence(departmentEntitySearchCriteria), departmentEntityRowMapper
+        );
     }
 
-    public DepartmentEntity getParent(String childId) {
-        Criteria criteria = Criteria.where("children").all(Collections.singletonList(childId));
-        Query query = Query.query(criteria);
-        List<DepartmentEntity> results = mongoTemplate.find(query, DepartmentEntity.class, "departmentEntity");
-        if (!results.isEmpty())
-            return results.get(0);
-        return null;
-    }
-
-    public List<DepartmentEntity> searchEntity(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
-        if (StringUtils.isNotBlank(departmentEntitySearchRequest.getCriteria().getTenantId())) {
-            Query searchQuery = queryBuilder.buildPlainSearchQuery(departmentEntitySearchRequest.getCriteria());
-            return (mongoTemplate.find(searchQuery, DepartmentEntity.class));
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * @param childIdList
-     * @param hierarchyLevel
-     * @return
-     */
-    public List<DepartmentEntity> searchChildDepartment(List<String> childIdList, Integer hierarchyLevel) {
-        Optional<Query> optionalQuery = queryBuilder.buildChildrenValidationQuery(childIdList, hierarchyLevel);
-
-        if (optionalQuery.isPresent()) {
-            return mongoTemplate.find(optionalQuery.get(), DepartmentEntity.class);
-        }
-
-        return Collections.emptyList();
+    public List<DepartmentEntity> findByIdsAndHierarchyLevel(List<String> ids, Integer hierarchyLevel) {
+        return jdbcTemplate.query(
+                departmentEntityQueryBuilder
+                        .getQueryByIdsAndHierarchy(ids, hierarchyLevel), departmentEntityRowMapper
+        );
     }
 
     /**
      * @param id
-     * @return
+     * @return It should be returning only one department entity against provided id.
      */
     public Optional<DepartmentEntity> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, DepartmentEntity.class));
+        List<DepartmentEntity> departmentEntityList = jdbcTemplate.query(departmentEntityQueryBuilder.findById(id),
+                departmentEntityRowMapper);
+
+        if (!CollectionUtils.isEmpty(departmentEntityList) && departmentEntityList.size() == 1) {
+            return Optional.ofNullable(departmentEntityList.get(0));
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * @param childId
+     * @return It should be returning only one department entity against provided id.
+     */
+    public Optional<DepartmentEntity> getParent(String childId) {
+        List<DepartmentEntity> departmentEntityList = jdbcTemplate
+                .query(departmentEntityQueryBuilder.findByChildren(childId), departmentEntityRowMapper);
+
+        if (!CollectionUtils.isEmpty(departmentEntityList) && departmentEntityList.size() == 1) {
+            return Optional.ofNullable(departmentEntityList.get(0));
+        }
+
+        return Optional.empty();
     }
 }
