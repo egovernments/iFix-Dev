@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,5 +141,26 @@ public class DepartmentEntityService {
 
         }
         return departmentEntityRequest;
+    }
+
+    /**
+     * @param body
+     * @return
+     */
+    public Long getDepartmentEntityCount(DepartmentEntityPlainSearchRequest body) {
+        return entityRepository.getDepartmentEntityCount(body.getCriteria());
+    }
+
+    /**
+     * @param plainSearchRequest
+     * @return
+     */
+    public List<DepartmentEntity> departmentEntityPlainSearchPost(DepartmentEntityPlainSearchRequest plainSearchRequest) {
+        List<DepartmentEntity> plainDepartmentEntityList = entityRepository.plainSearchDepartmentEntity(plainSearchRequest.getCriteria());
+
+        if (plainDepartmentEntityList == null || plainDepartmentEntityList.isEmpty())
+            return Collections.emptyList();
+        else
+            return plainDepartmentEntityList;
     }
 }

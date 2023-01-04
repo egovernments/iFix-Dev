@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.validator.DepartmentHierarchyLevelValidator;
-import org.egov.web.models.DepartmentHierarchyLevel;
-import org.egov.web.models.DepartmentHierarchyLevelRequest;
-import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
-import org.egov.web.models.DepartmentHierarchyLevelSearchRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,5 +62,29 @@ public class DepartmentHierarchyLevelService {
             return Collections.emptyList();
 
         return departmentHierarchyLevels;
+    }
+
+    /**
+     * @param body
+     * @return
+     */
+    public Long getDepartmentHierarchyLevelCount(DepartmentEntityPlainSearchRequest body) {
+        return hierarchyLevelRepository.getDepartmentHierarchyLevelCount(body.getCriteria());
+    }
+
+    /**
+     * @param plainSearchRequest
+     * @return
+     */
+    public List<DepartmentHierarchyLevel> departmentHierarchyPlainSearchPost(
+            DepartmentEntityPlainSearchRequest plainSearchRequest) {
+
+        List<DepartmentHierarchyLevel> plainDepartmentHierarchyList = hierarchyLevelRepository
+                .plainSearchDepartmentEntity(plainSearchRequest.getCriteria());
+
+        if (plainDepartmentHierarchyList == null || plainDepartmentHierarchyList.isEmpty())
+            return Collections.emptyList();
+        else
+            return plainDepartmentHierarchyList;
     }
 }

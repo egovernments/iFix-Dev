@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.DepartmentHierarchyLevelService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.DepartmentHierarchyLevel;
-import org.egov.web.models.DepartmentHierarchyLevelRequest;
-import org.egov.web.models.DepartmentHierarchyLevelResponse;
-import org.egov.web.models.DepartmentHierarchyLevelSearchRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +58,38 @@ public class DepartmentHierarchyLevelApiController {
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         DepartmentHierarchyLevelResponse departmentHierarchyLevelResponse = DepartmentHierarchyLevelResponse.builder().responseHeader(responseHeader)
                 .departmentHierarchyLevel(departmentHierarchyLevels).build();
+        return new ResponseEntity<DepartmentHierarchyLevelResponse>(departmentHierarchyLevelResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_count", method = RequestMethod.POST)
+    public ResponseEntity<DepartmentEntityCountResponse> departmentEntityV1Count(
+            @Valid @RequestBody DepartmentEntityPlainSearchRequest body) {
+
+        Long count = hierarchyLevelService.getDepartmentHierarchyLevelCount(body);
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+
+        DepartmentEntityCountResponse departmentEntityCountResponse = DepartmentEntityCountResponse.builder()
+                .responseHeader(responseHeader)
+                .count(count).build();
+
+        return new ResponseEntity<DepartmentEntityCountResponse>(departmentEntityCountResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<DepartmentHierarchyLevelResponse> departmentEntityV1PlainSearchPost(
+            @Valid @RequestBody DepartmentEntityPlainSearchRequest body) {
+
+        List<DepartmentHierarchyLevel> departmenHierarchyLevelList = hierarchyLevelService
+                .departmentHierarchyPlainSearchPost(body);
+
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+
+        DepartmentHierarchyLevelResponse departmentHierarchyLevelResponse = DepartmentHierarchyLevelResponse.builder()
+                .responseHeader(responseHeader)
+                .departmentHierarchyLevel(departmenHierarchyLevelList).build();
+
         return new ResponseEntity<DepartmentHierarchyLevelResponse>(departmentHierarchyLevelResponse, HttpStatus.OK);
     }
 }

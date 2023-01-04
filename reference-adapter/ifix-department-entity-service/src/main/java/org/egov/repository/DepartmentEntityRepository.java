@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.repository.queryBuilder.DepartmentEntityQueryBuilder;
 import org.egov.web.models.DepartmentEntity;
 import org.egov.web.models.DepartmentEntitySearchRequest;
+import org.egov.web.models.PlainSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -68,5 +69,24 @@ public class DepartmentEntityRepository {
      */
     public Optional<DepartmentEntity> findById(String id) {
         return Optional.ofNullable(mongoTemplate.findById(id, DepartmentEntity.class));
+    }
+
+    /**
+     * @PARAM CRITERIA
+     * @return
+     */
+    public long getDepartmentEntityCount(PlainSearchCriteria criteria) {
+        criteria.setIsCountCall(Boolean.TRUE);
+        Query countQuery = queryBuilder.buildChunkSearchQuery(criteria);
+        return mongoTemplate.count(countQuery, Integer.class, "departmentEntity");
+    }
+
+    /**
+     * @param criteria
+     * @return
+     */
+    public List<DepartmentEntity> plainSearchDepartmentEntity(PlainSearchCriteria criteria) {
+        Query searchQuery = queryBuilder.buildChunkSearchQuery(criteria);
+        return mongoTemplate.find(searchQuery, DepartmentEntity.class);
     }
 }
