@@ -1,53 +1,74 @@
 package org.egov.repository.queryBuilder;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.egov.repository.criteriaBuilder.DepartmentQueryCriteria;
 import org.egov.web.models.DepartmentEntitySearchCriteria;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.egov.web.models.persist.DepartmentEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
+
+import static org.egov.util.DepartmentEntityConstant.DepartmentEntity.*;
 
 @Component
 @Slf4j
 public class DepartmentEntityQueryBuilder {
 
-    public Query buildPlainSearchQuery(DepartmentEntitySearchCriteria searchCriteria) {
+    public String getQueryByParamExistence(@NonNull DepartmentEntitySearchCriteria departmentEntitySearchCriteria) {
+        DepartmentQueryCriteria departmentQueryCriteria = DepartmentQueryCriteria.builder(DepartmentEntity.class);
 
-        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+        departmentQueryCriteria.where(TENANT_ID).is(departmentEntitySearchCriteria.getTenantId());
 
-        if (StringUtils.isNotBlank(searchCriteria.getDepartmentId()))
-            criteria.and("departmentId").is(searchCriteria.getDepartmentId());
-
-        if (StringUtils.isNotBlank(searchCriteria.getCode()))
-            criteria.and("code").is(searchCriteria.getCode());
-
-        if (StringUtils.isNotBlank(searchCriteria.getName()))
-            criteria.and("name").is(searchCriteria.getName());
-
-        if (searchCriteria.getHierarchyLevel() != null)
-            criteria.and("hierarchyLevel").is(searchCriteria.getHierarchyLevel());
-
-        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
-            criteria.and("id").in(searchCriteria.getIds());
-
-        return new Query(criteria);
-    }
-
-    /**
-     * @param childIdList
-     * @param hierarchyLevel
-     * @return
-     */
-    public Optional<Query> buildChildrenValidationQuery(List<String> childIdList, Integer hierarchyLevel) {
-        if (childIdList != null && !childIdList.isEmpty() && hierarchyLevel != null) {
-            hierarchyLevel += 1;
-            return Optional.ofNullable(new Query(Criteria.where("hierarchyLevel").is(hierarchyLevel)
-                                        .and("id").in(childIdList)));
+        if (!StringUtils.isEmpty(departmentEntitySearchCriteria.getDepartmentId())) {
+            departmentQueryCriteria.and(DEPARTMENT_ID).is(departmentEntitySearchCriteria.getDepartmentId());
         }
 
-        return Optional.empty();
+        if (!StringUtils.isEmpty(departmentEntitySearchCriteria.getCode())) {
+            departmentQueryCriteria.and(CODE).is(departmentEntitySearchCriteria.getCode());
+        }
+
+        if (!StringUtils.isEmpty(departmentEntitySearchCriteria.getName())) {
+            departmentQueryCriteria.and(NAME).is(departmentEntitySearchCriteria.getName());
+        }
+
+        if (!StringUtils.isEmpty(departmentEntitySearchCriteria.getHierarchyLevel())) {
+            departmentQueryCriteria.and(HIERARCHY_LEVEL).is(departmentEntitySearchCriteria.getHierarchyLevel());
+        }
+
+        if (departmentEntitySearchCriteria.getIds() != null && !departmentEntitySearchCriteria.getIds().isEmpty()) {
+            departmentQueryCriteria.and(ID).in(departmentEntitySearchCriteria.getIds());
+        }
+
+        return departmentQueryCriteria.build();
+    }
+
+    public String getQueryByIdsAndHierarchy(List<String> ids, Integer hierarchyLevel) {
+        if (ids != null && !ids.isEmpty() && hierarchyLevel != null) {
+            return DepartmentQueryCriteria.builder(DepartmentEntity.class)
+                    .where(ID).in(ids)
+                    .and(HIERARCHY_LEVEL).is(hierarchyLevel)
+                    .build();
+        }
+        return null;
+    }
+
+    public String findById(String id) {
+        if (!StringUtils.isEmpty(id)) {
+            return DepartmentQueryCriteria.builder(DepartmentEntity.class)
+                    .where(ID).is(id)
+                    .build();
+        }
+        return null;
+    }
+
+    public String findByChildren(String childId) {
+        if (!StringUtils.isEmpty(childId)) {
+            return DepartmentQueryCriteria.builder(DepartmentEntity.class)
+                    .where(CHILDREN).like(childId)
+                    .build();
+        }
+        return null;
     }
 }

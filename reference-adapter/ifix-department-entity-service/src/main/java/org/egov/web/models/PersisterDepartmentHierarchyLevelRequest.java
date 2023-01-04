@@ -6,10 +6,12 @@ import lombok.*;
 import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 /**
- * Department Entity request along with request metadata
+ * Department Hierarchy Level request along with request metadata
  */
-@ApiModel(description = "Department Entity request along with request metadata")
+@ApiModel(description = "Department Hierarchy Level request along with request metadata")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-23T11:51:49.710+05:30")
 
@@ -18,12 +20,12 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DepartmentEntityRequest {
+public class PersisterDepartmentHierarchyLevelRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;
 
-    @JsonProperty("departmentEntity")
-    private DepartmentEntityDTO departmentEntityDTO = null;
+    @JsonProperty("departmentHierarchyLevel")
+    private List<PersisterDepartmentHierarchyLevelDTO> departmentHierarchyLevelDTO = null;
 
 
 }

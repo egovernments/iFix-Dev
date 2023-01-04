@@ -3,7 +3,6 @@ package org.egov.web.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -18,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DepartmentHierarchyLevel {
+public class PersisterDepartmentHierarchyLevelDTO {
     @JsonProperty("id")
     private String id = null;
 
@@ -37,8 +36,17 @@ public class DepartmentHierarchyLevel {
     @JsonProperty("level")
     private Integer level = null;
 
-    @JsonProperty("auditDetails")
-    private AuditDetails auditDetails = null;
+    @JsonProperty("createdBy")
+    private String createdBy = null;
+
+    @JsonProperty("lastModifiedBy")
+    private String lastModifiedBy = null;
+
+    @JsonProperty("createdTime")
+    private Long createdTime = null;
+
+    @JsonProperty("lastModifiedTime")
+    private Long lastModifiedTime = null;
 
 
 }

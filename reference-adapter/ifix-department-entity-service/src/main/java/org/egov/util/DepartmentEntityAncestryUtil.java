@@ -1,7 +1,7 @@
 package org.egov.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.web.models.DepartmentEntity;
+import org.egov.web.models.DepartmentEntityDTO;
 import org.egov.web.models.DepartmentEntityAncestry;
 import org.springframework.stereotype.Component;
 
@@ -11,15 +11,15 @@ import java.util.ArrayList;
 @Slf4j
 public class DepartmentEntityAncestryUtil {
 
-    public DepartmentEntityAncestry createDepartmentEntityAncestryFromDepartmentEntity(DepartmentEntity departmentEntity) {
+    public DepartmentEntityAncestry createDepartmentEntityAncestryFromDepartmentEntity(DepartmentEntityDTO departmentEntityDTO) {
         DepartmentEntityAncestry departmentEntityAncestry = DepartmentEntityAncestry.builder().build();
-        departmentEntityAncestry.setId(departmentEntity.getId());
-        departmentEntityAncestry.setTenantId(departmentEntity.getTenantId());
-        departmentEntityAncestry.setDepartmentId(departmentEntity.getDepartmentId());
-        departmentEntityAncestry.setCode(departmentEntity.getCode());
-        departmentEntityAncestry.setName(departmentEntity.getName());
-        departmentEntityAncestry.setHierarchyLevel(departmentEntity.getHierarchyLevel());
-        departmentEntityAncestry.setAuditDetails(departmentEntity.getAuditDetails());
+        departmentEntityAncestry.setId(departmentEntityDTO.getId());
+        departmentEntityAncestry.setTenantId(departmentEntityDTO.getTenantId());
+        departmentEntityAncestry.setDepartmentId(departmentEntityDTO.getDepartmentId());
+        departmentEntityAncestry.setCode(departmentEntityDTO.getCode());
+        departmentEntityAncestry.setName(departmentEntityDTO.getName());
+        departmentEntityAncestry.setHierarchyLevel(departmentEntityDTO.getHierarchyLevel());
+        departmentEntityAncestry.setAuditDetails(departmentEntityDTO.getAuditDetails());
 
         departmentEntityAncestry.setChildren(new ArrayList<>());
 

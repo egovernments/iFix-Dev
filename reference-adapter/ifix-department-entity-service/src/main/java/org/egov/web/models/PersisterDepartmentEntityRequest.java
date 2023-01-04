@@ -6,6 +6,8 @@ import lombok.*;
 import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 /**
  * Department Entity request along with request metadata
  */
@@ -18,12 +20,12 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DepartmentEntityRequest {
+public class PersisterDepartmentEntityRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;
 
     @JsonProperty("departmentEntity")
-    private DepartmentEntityDTO departmentEntityDTO = null;
+    private List<PersisterDepartmentEntityDTO> departmentEntityDTO = null;
 
 
 }

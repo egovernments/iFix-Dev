@@ -4,16 +4,17 @@ import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.DepartmentEntityRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityAncestryUtil;
+import org.egov.util.DtoWrapper;
+import org.egov.util.KafkaProducer;
 import org.egov.validator.DepartmentEntityValidator;
 import org.egov.web.models.*;
+import org.egov.web.models.persist.DepartmentEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DepartmentEntityService {
@@ -25,13 +26,19 @@ public class DepartmentEntityService {
     DepartmentEntityEnrichmentService entityEnrichmentService;
 
     @Autowired
-    DepartmentEntityRepository entityRepository;
+    private DepartmentEntityRepository departmentEntityRepository;
 
     @Autowired
     private IfixDepartmentEntityConfig ifixDepartmentEntityConfig;
 
     @Autowired
     private DepartmentEntityAncestryUtil departmentEntityAncestryUtil;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     /**
      * @param departmentEntityRequest
@@ -40,33 +47,50 @@ public class DepartmentEntityService {
     public DepartmentEntityRequest createDepartmentEntity(DepartmentEntityRequest departmentEntityRequest) {
         departmentEntityValidator.validateDepartmentEntityRequest(departmentEntityRequest);
         entityEnrichmentService.enrichDepartmentEntityData(departmentEntityRequest);
-        entityRepository.save(departmentEntityRequest.getDepartmentEntity());
+
+
+
+        kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityCreateTopic(),
+                dtoWrapper.wrapPersisterDepartmentEntityRequest(departmentEntityRequest));
+
+//        entityRepository.save(entityEnrichmentService.getEnrichedDepartmentEntityData(departmentEntityRequest));
 
         return departmentEntityRequest;
     }
 
     public List<? extends DepartmentEntityAbstract> findAllByCriteria(DepartmentEntitySearchRequest departmentEntitySearchRequest) {
         departmentEntityValidator.validateSearchDepartmentEntity(departmentEntitySearchRequest);
-        List<DepartmentEntity> departmentEntityList = entityRepository.searchEntity(departmentEntitySearchRequest);
+
+        List<DepartmentEntity> departmentEntityList = departmentEntityRepository
+                .getDepartmentEntitiesByParamsExistence(departmentEntitySearchRequest.getCriteria());
+
+        List<DepartmentEntityDTO> departmentEntityDTOList = dtoWrapper.wrapDepartmentEntityListIntoDTOs(departmentEntityList);
+
         if (departmentEntitySearchRequest.getCriteria().isGetAncestry()) {
             List<DepartmentEntityAncestry> departmentEntityAncestryList = new ArrayList<>();
-            for (DepartmentEntity departmentEntity : departmentEntityList) {
-                departmentEntityAncestryList.add(createAncestryFor(departmentEntity));
+
+            for (DepartmentEntityDTO departmentEntityDTO : departmentEntityDTOList) {
+                departmentEntityAncestryList.add(createAncestryFor(departmentEntityDTO));
             }
             return departmentEntityAncestryList;
         }
-        return departmentEntityList;
+        return departmentEntityDTOList;
     }
 
 
-    public DepartmentEntityAncestry createAncestryFor(DepartmentEntity departmentEntity) {
+    public DepartmentEntityAncestry createAncestryFor(DepartmentEntityDTO departmentEntityDTO) {
         int hierarchyCount = ifixDepartmentEntityConfig.getMaximumSupportedDepartmentHierarchy();
+
         DepartmentEntityAncestry ancestry =
-                departmentEntityAncestryUtil.createDepartmentEntityAncestryFromDepartmentEntity(departmentEntity);
+                departmentEntityAncestryUtil.createDepartmentEntityAncestryFromDepartmentEntity(departmentEntityDTO);
+
         while (hierarchyCount >= 0) {
-            DepartmentEntity parentEntity = entityRepository.getParent(ancestry.getId());
-            if (parentEntity == null)
+            Optional<DepartmentEntity> parentEntityOptional = departmentEntityRepository.getParent(ancestry.getId());
+
+            if (!parentEntityOptional.isPresent())
                 break;
+
+            DepartmentEntityDTO parentEntity = dtoWrapper.wrapDepartmentEntityIntoDTO(parentEntityOptional.get());
 
             DepartmentEntityAncestry parentAncestry =
                     departmentEntityAncestryUtil.createDepartmentEntityAncestryFromDepartmentEntity(parentEntity);
@@ -91,49 +115,61 @@ public class DepartmentEntityService {
         boolean isModified = false;
         departmentEntityValidator.validateUpdateDepartmentEntityRequest(departmentEntityRequest);
 
-        DepartmentEntity requestedDepartmentEntity = departmentEntityRequest.getDepartmentEntity();
+        DepartmentEntityDTO requestedDepartmentEntityDTO = departmentEntityRequest.getDepartmentEntityDTO();
 
-        Optional<DepartmentEntity> departmentEntityOptional = entityRepository
-                .findById(requestedDepartmentEntity.getId());
+        Optional<DepartmentEntity> departmentEntityOptional = departmentEntityRepository
+                .findById(requestedDepartmentEntityDTO.getId());
 
         if (departmentEntityOptional.isPresent()) {
             DepartmentEntity existingDepartmentEntity = departmentEntityOptional.get();
 
-            if (!StringUtils.isEmpty(requestedDepartmentEntity.getTenantId())) {
-                existingDepartmentEntity.setTenantId(requestedDepartmentEntity.getTenantId());
+            if (!StringUtils.isEmpty(requestedDepartmentEntityDTO.getTenantId())) {
+                existingDepartmentEntity.setTenantId(requestedDepartmentEntityDTO.getTenantId());
                 isModified = true;
             }
 
-            if (!StringUtils.isEmpty(requestedDepartmentEntity.getDepartmentId())) {
-                existingDepartmentEntity.setDepartmentId(requestedDepartmentEntity.getDepartmentId());
+            if (!StringUtils.isEmpty(requestedDepartmentEntityDTO.getDepartmentId())) {
+                existingDepartmentEntity.setDepartmentId(requestedDepartmentEntityDTO.getDepartmentId());
                 isModified = true;
             }
 
-            if (!StringUtils.isEmpty(requestedDepartmentEntity.getCode())) {
-                existingDepartmentEntity.setCode(requestedDepartmentEntity.getCode());
+            if (!StringUtils.isEmpty(requestedDepartmentEntityDTO.getCode())) {
+                existingDepartmentEntity.setCode(requestedDepartmentEntityDTO.getCode());
                 isModified = true;
             }
 
-            if (!StringUtils.isEmpty(requestedDepartmentEntity.getName())) {
-                existingDepartmentEntity.setName(requestedDepartmentEntity.getName());
+            if (!StringUtils.isEmpty(requestedDepartmentEntityDTO.getName())) {
+                existingDepartmentEntity.setName(requestedDepartmentEntityDTO.getName());
                 isModified = true;
             }
 
-            if (requestedDepartmentEntity.getHierarchyLevel() != null) {
-                existingDepartmentEntity.setHierarchyLevel(requestedDepartmentEntity.getHierarchyLevel());
+            if (requestedDepartmentEntityDTO.getHierarchyLevel() != null) {
+                existingDepartmentEntity.setHierarchyLevel(requestedDepartmentEntityDTO.getHierarchyLevel());
                 isModified = true;
             }
 
-            if (requestedDepartmentEntity.getChildren() != null && !requestedDepartmentEntity.getChildren().isEmpty()) {
-                existingDepartmentEntity.setChildren(requestedDepartmentEntity.getChildren());
+            if (requestedDepartmentEntityDTO.getChildren() != null && !requestedDepartmentEntityDTO.getChildren().isEmpty()) {
+                existingDepartmentEntity.setChildren(String.join(",", requestedDepartmentEntityDTO.getChildren()));
                 isModified = true;
             }
 
             if (isModified) {
-                existingDepartmentEntity.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
-                entityRepository.save(existingDepartmentEntity);
+                String userUUID = departmentEntityRequest.getRequestHeader().getUserInfo() != null
+                                    ? departmentEntityRequest.getRequestHeader().getUserInfo().getUuid()
+                                    : null;
 
-                BeanUtils.copyProperties(existingDepartmentEntity, departmentEntityRequest.getDepartmentEntity());
+                existingDepartmentEntity.setLastModifiedBy(userUUID);
+
+                existingDepartmentEntity.setLastModifiedTime(new Date().getTime());
+
+                PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = PersisterDepartmentEntityRequest.builder()
+                                .requestHeader(departmentEntityRequest.getRequestHeader())
+                                .departmentEntityDTO(Collections.singletonList(dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity)))
+                                .build();
+
+                kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityUpdateTopic(),persisterDepartmentEntityRequest);
+
+                BeanUtils.copyProperties(existingDepartmentEntity, departmentEntityRequest.getDepartmentEntityDTO());
             }
         } else {
             throw new CustomException("INVALID_DEPARTMENT_ENTITY_ID", "Unable to find department entity by given id");

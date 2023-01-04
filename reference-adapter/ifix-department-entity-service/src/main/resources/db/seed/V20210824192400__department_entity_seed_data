@@ -1,4 +1,4 @@
-db.departmentEntity.insertMany([
+db.departmentEntityDTO.insertMany([
   {
     "_id": "07fea07c-9ca9-4474-b6bc-c3a9456b181e",
     "tenantId": "pb",
@@ -13,7 +13,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "5ac4d271-1a00-47b9-94e6-f44fe17ae1b6",
@@ -29,7 +29,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "525f7b94-1755-426e-982f-430904554dd3",
@@ -45,7 +45,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "901f76a8-1911-4960-b389-57b62bd4dcdb",
@@ -61,7 +61,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "69c418a6-1bbf-4ef9-9bd2-bd26243d7c53",
@@ -77,7 +77,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "905399a1-c1cd-42c1-8c7c-6295aced0952",
@@ -93,7 +93,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "02c0cb3f-f3e0-4345-a2d4-f64bc27f9cd3",
@@ -109,7 +109,7 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
    "_id": "d77a856e-e637-4ac4-9f77-854b33ee6b6a",
@@ -125,7 +125,7 @@ db.departmentEntity.insertMany([
      "createdTime": 1629793685000,
      "lastModifiedTime": 1629793685000
    },
-   "_class" : "org.egov.web.models.DepartmentEntity"
+   "_class" : "org.egov.web.models.DepartmentEntityDTO"
   },
   {
     "_id": "e75e4840-2586-42f8-b8bd-841b8637da06",
@@ -141,6 +141,6 @@ db.departmentEntity.insertMany([
       "createdTime": 1629793685000,
       "lastModifiedTime": 1629793685000
     },
-    "_class" : "org.egov.web.models.DepartmentEntity"
+    "_class" : "org.egov.web.models.DepartmentEntityDTO"
   }
 ]);
