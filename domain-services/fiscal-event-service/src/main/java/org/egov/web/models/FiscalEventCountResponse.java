@@ -1,0 +1,21 @@
+package org.egov.web.models;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.egov.common.contract.response.ResponseHeader;
+
+import javax.validation.Valid;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class FiscalEventCountResponse {
+    @JsonProperty("responseHeader")
+    private ResponseHeader responseHeader = null;
+
+    @JsonProperty("count")
+    private Long count = null;
+
+}

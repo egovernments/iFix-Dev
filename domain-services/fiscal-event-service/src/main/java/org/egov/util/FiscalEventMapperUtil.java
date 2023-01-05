@@ -38,7 +38,13 @@ public class FiscalEventMapperUtil {
         List<FiscalEvent> fiscalEvents = new ArrayList<>();
         while (nodeIterator.hasNext()) {
             JsonNode node = nodeIterator.next();
-            fiscalEvents.add(getFiscalEvent(node));
+            try {
+                fiscalEvents.add(getFiscalEvent(node));
+            }catch (Exception e){
+                e.printStackTrace();
+                log.info(node.toPrettyString());
+                continue;
+            }
         }
         return fiscalEvents;
     }
@@ -81,6 +87,9 @@ public class FiscalEventMapperUtil {
                         .fromBillingPeriod(amountNode.get("fromBillingPeriod") != null ? amountNode.get("fromBillingPeriod").asLong() : null)
                         .toBillingPeriod(amountNode.get("toBillingPeriod") != null ? amountNode.get("toBillingPeriod").asLong() : null)
                         .build();
+                if(amountNode.get("coaId") != null){
+                    amount.setCoaId(amountNode.get("coaId").asText());
+                }
 
                 amountDetails.add(amount);
             }
