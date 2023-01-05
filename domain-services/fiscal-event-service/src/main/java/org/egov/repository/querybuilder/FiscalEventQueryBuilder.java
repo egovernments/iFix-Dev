@@ -1,38 +1,85 @@
 package org.egov.repository.querybuilder;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.egov.web.models.Criteria;
+import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class FiscalEventQueryBuilder {
 
-    public Query buildSearchQuery(org.egov.web.models.Criteria searchCriteria) {
+	public String buildSearchQuery(Criteria searchCriteria, List<Object> preparedStmtList) {
 
-        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+		StringBuilder query = new StringBuilder("SELECT fiscal_event.*, " + "amount.id as amountid, "
+				+ "amount.fiscaleventid, " + "amount.coaid, " + "amount.frombillingperiod, "
+				+ "amount.tobillingperiod, " + "amount.amount, " + "amount.coaid, " + "amount.attributes, "
+				+ "amount.createdtime as amountcreatedtime, " + "amount.createdby as amountcreatedby, "
+				+ "amount.lastmodifiedtime as amountlastmodifiedtime, "
+				+ "amount.lastmodifiedby as amountlastmodifiedby " + "FROM eg_ifix_fiscal_event as fiscal_event "
+				+ "INNER JOIN eg_ifix_amount_detail as amount ON "
+				+ "fiscal_event.id=amount.fiscaleventid WHERE fiscal_event.tenantid = ?");
 
-        if (StringUtils.isNotBlank(searchCriteria.getEventType()))
-            criteria.and("eventType").is(searchCriteria.getEventType());
+		preparedStmtList.add(searchCriteria.getTenantId());
 
-        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
-            criteria.and("id").in(searchCriteria.getIds());
+		if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty()) {
+			query.append(" AND fiscal_event.id IN ( ");
+			setValuesForList(query, preparedStmtList, searchCriteria.getIds());
+			query.append(")");
+		}
+		if (StringUtils.isNotBlank(searchCriteria.getEventType())) {
+			query.append(" AND fiscal_event.eventType = ?");
+			preparedStmtList.add(searchCriteria.getEventType());
+		}
+		if (searchCriteria.getFromEventTime() != null) {
+			query.append(" AND fiscal_event.fromEventTime >= ?");
+			preparedStmtList.add(searchCriteria.getFromEventTime());
+		}
+		if (searchCriteria.getToEventTime() != null) {
+			query.append(" AND fiscal_event.toEventTime <= ?");
+			preparedStmtList.add(searchCriteria.getToEventTime());
+		}
+		if (searchCriteria.getReferenceId() != null && !searchCriteria.getReferenceId().isEmpty()) {
+			query.append(" AND fiscal_event.referenceid IN ( ");
+			setValuesForList(query, preparedStmtList, searchCriteria.getReferenceId());
+			query.append(")");
+		}
+		if (StringUtils.isNotBlank(searchCriteria.getReceiver())) {
+			query.append(" AND (fiscal_event.receivers)::jsonb @> " + "'\""+searchCriteria.getReceiver()+"\"'");
+//			preparedStmtList.add("'"+searchCriteria.getReceiver()+"'");
 
-        if (searchCriteria.getReferenceId() != null && !searchCriteria.getReferenceId().isEmpty())
-            criteria.and("referenceId").in(searchCriteria.getReferenceId());
+		}
+		if (searchCriteria.getFromIngestionTime() != null) {
+			query.append(" AND fiscal_event.fromIngestionTime >= ?");
+			preparedStmtList.add(searchCriteria.getFromIngestionTime());
+		}
+		if (searchCriteria.getToIngestionTime() != null) {
+			query.append(" AND fiscal_event.toIngestionTime <= ?");
+			preparedStmtList.add(searchCriteria.getToIngestionTime());
+		}
+		
 
-        if (searchCriteria.getFromEventTime() != null && searchCriteria.getToEventTime() != null)
-            criteria.and("eventTime").gte(searchCriteria.getFromEventTime()).lte(searchCriteria.getToEventTime());
+		return query.toString();
+	}
 
-        if (StringUtils.isNotBlank(searchCriteria.getReceiver()))
-            criteria.and("receivers").is(searchCriteria.getReceiver());
+	/**
+	 * Sets prepared statement for values for a list
+	 * 
+	 * @param query
+	 * @param preparedStmtList
+	 * @param ids
+	 */
+	private void setValuesForList(StringBuilder query, List<Object> preparedStmtList, List<String> ids) {
+		int len = ids.size();
+		for (int i = 0; i < ids.size(); i++) {
+			query.append("?");
+			if (i != len - 1)
+				query.append(", ");
+			preparedStmtList.add(ids.get(i));
+		}
+	}
 
-        if (searchCriteria.getFromIngestionTime() != null && searchCriteria.getToIngestionTime() != null)
-            criteria.and("ingestionTime").gte(searchCriteria.getFromIngestionTime()).lte(searchCriteria.getToIngestionTime());
-
-        return new Query(criteria);
-    }
 }

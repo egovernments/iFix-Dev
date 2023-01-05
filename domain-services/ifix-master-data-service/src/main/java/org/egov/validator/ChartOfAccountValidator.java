@@ -1,20 +1,25 @@
 package org.egov.validator;
 
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.egov.common.contract.request.RequestHeader;
-import org.egov.repository.ChartOfAccountRepository;
-import org.egov.tracer.model.CustomException;
-import org.egov.util.CoaUtil;
-import org.egov.util.MasterDataConstants;
-import org.egov.web.models.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestHeader;
+import org.egov.tracer.model.CustomException;
+import org.egov.util.CoaUtil;
+import org.egov.util.MasterDataConstants;
+import org.egov.web.models.COARequest;
+import org.egov.web.models.COASearchCriteria;
+import org.egov.web.models.COASearchRequest;
+import org.egov.web.models.ChartOfAccount;
+import org.egov.web.models.Government;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -24,9 +29,9 @@ public class ChartOfAccountValidator {
     @Autowired
     private CoaUtil coaUtil;
 
-    @Autowired
-    private ChartOfAccountRepository coaRepository;
-
+	/*
+	 * @Autowired private ChartOfAccountRepository coaRepository;
+	 */
     public void validateCreatePost(COARequest coaRequest) {
         log.info("Enter into ChartOfAccountValidator.validateCreatePost()");
         ChartOfAccount chartOfAccount = coaRequest.getChartOfAccount();
@@ -121,14 +126,14 @@ public class ChartOfAccountValidator {
 
 
         //validate the tenant id is exist in the system or not
-        if (StringUtils.isNotBlank(chartOfAccount.getTenantId())) {
-            //call the Tenant Service for search, if doesn't exist add in the error map
-            List<Government> governments = coaUtil.searchTenants(requestHeader, chartOfAccount);
-            if (governments == null || governments.isEmpty()) {
-                errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
-            }
-        }
-
+		/*
+		 * if (StringUtils.isNotBlank(chartOfAccount.getTenantId())) { //call the Tenant
+		 * Service for search, if doesn't exist add in the error map List<Government>
+		 * governments = coaUtil.searchTenants(requestHeader, chartOfAccount); if
+		 * (governments == null || governments.isEmpty()) {
+		 * errorMap.put(MasterDataConstants.TENANT_ID,
+		 * "Tenant id doesn't exist in the system"); } }
+		 */
 
         log.info("Exit from ChartOfAccountValidator.validateCreatePost()");
         if (!errorMap.isEmpty())
@@ -137,7 +142,9 @@ public class ChartOfAccountValidator {
     }
 
     public void validateCoaCode(COASearchCriteria searchCriteria) {
-        List<ChartOfAccount> chartOfAccounts = coaRepository.search(searchCriteria);
+        List<ChartOfAccount> chartOfAccounts = new ArrayList<>();
+        		//coaRepository.search(searchCriteria);
+        		
         if (!chartOfAccounts.isEmpty())
             throw new CustomException("DUPLICATE_COA_CODE", "This coa code exists in the system");
     }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+
+import org.egov.common.contract.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Amount {
     @JsonProperty("id")
     private String id = null;
@@ -40,6 +43,9 @@ public class Amount {
 
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
+    
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
 
 
 }

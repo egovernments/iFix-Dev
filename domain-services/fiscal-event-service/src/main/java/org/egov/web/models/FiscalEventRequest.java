@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class FiscalEventRequest {
     @JsonProperty("requestHeader")
     private RequestHeader requestHeader = null;

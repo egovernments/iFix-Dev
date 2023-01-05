@@ -2,22 +2,20 @@ package org.egov.validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
-import org.egov.repository.GovernmentRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.MasterDataConstants;
 import org.egov.web.models.Government;
 import org.egov.web.models.GovernmentRequest;
 import org.egov.web.models.GovernmentSearchCriteria;
 import org.egov.web.models.GovernmentSearchRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GovernmentValidator {
 
-    @Autowired
-    GovernmentRepository governmentRepository;
-
+	/*
+	 * @Autowired GovernmentRepository governmentRepository;
+	 */
     public void validateGovernmentRequestData(GovernmentRequest governmentRequest) {
         if (governmentRequest != null && governmentRequest.getGovernment() != null
                 && governmentRequest.getRequestHeader() != null) {
@@ -41,7 +39,9 @@ public class GovernmentValidator {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_NAME, "Government name length is invalid");
             }
 
-            Government existingGovernment = governmentRepository.findById(government.getId());
+            Government existingGovernment = null;
+            		//governmentRepository.findById(government.getId());
+            
             if (existingGovernment != null) {
                 throw new CustomException(MasterDataConstants.GOVERNMENT_ID, "Duplicate government id");
             }
