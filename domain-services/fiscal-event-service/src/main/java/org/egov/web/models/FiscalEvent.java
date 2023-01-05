@@ -24,6 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class FiscalEvent {
 
     @JsonProperty("version")

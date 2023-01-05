@@ -1,26 +1,25 @@
 package org.egov.service;
 
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
-import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.producer.Producer;
 import org.egov.repository.FiscalEventRepository;
 import org.egov.util.FiscalEventMapperUtil;
 import org.egov.validator.FiscalEventValidator;
-import org.egov.web.models.*;
-import org.springframework.beans.BeanUtils;
+import org.egov.web.models.Criteria;
+import org.egov.web.models.FiscalEvent;
+import org.egov.web.models.FiscalEventGetRequest;
+import org.egov.web.models.FiscalEventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.egov.util.MasterDataConstants.FISCAL_EVENT_VERSION;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Slf4j
@@ -53,80 +52,20 @@ public class FiscalEventService {
      */
     public FiscalEventRequest fiscalEventsV1PushPost(FiscalEventRequest fiscalEventRequest) {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
+        //TODO: Enrich API version with data  
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
 
-        FiscalEventRequest fiscalEventRequestCopy = new FiscalEventRequest();
-        BeanUtils.copyProperties(fiscalEventRequest, fiscalEventRequestCopy);
-        //nullify the coaCode before pushing to topics
-        nullifyCoaCodeAndAddVersion(fiscalEventRequest);
-
-        if (fiscalEventRequest.getFiscalEvent() != null && !fiscalEventRequest.getFiscalEvent().isEmpty()) {
-            RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-            for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
-                ObjectNode fiscalEventRequestNode = JsonNodeFactory.instance.objectNode();
-                fiscalEventRequestNode.putPOJO("requestHeader", requestHeader);
-                fiscalEventRequestNode.putPOJO("fiscalEvent", fiscalEvent);
-
-                //push with request header details
-                producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequestNode);
-                //push without request header details
-                producer.push(eventConfiguration.getFiscalEventPushToMongoSink(), fiscalEvent);
-            }
+        if (!CollectionUtils.isEmpty(fiscalEventRequest.getFiscalEvent())) {
+            //push with request header details
+            producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequest);
+            //push without request header details
+            producer.push(eventConfiguration.getFiscalEventPushToMongoSink(), fiscalEventRequest);
         }
-        //nullify coaId before sending the response
-        nullifyCoaIdCodeAndAddVersion(fiscalEventRequestCopy);
-        return fiscalEventRequestCopy;
+
+        return fiscalEventRequest;
     }
 
-    private void nullifyCoaIdCodeAndAddVersion(FiscalEventRequest fiscalEventRequest) {
-        List<FiscalEvent> fiscalEvents = new ArrayList<>();
-
-        if (fiscalEventRequest.getFiscalEvent() != null && !fiscalEventRequest.getFiscalEvent().isEmpty()) {
-            for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
-                FiscalEvent fiscalEventCopy = new FiscalEvent();
-                BeanUtils.copyProperties(fiscalEvent, fiscalEventCopy);
-
-                if (fiscalEvent.getAmountDetails() != null && !fiscalEvent.getAmountDetails().isEmpty()) {
-                    List<Amount> amounts = new ArrayList<>();
-                    for (Amount amount : fiscalEvent.getAmountDetails()) {
-                        Amount amountCopy = new Amount();
-                        BeanUtils.copyProperties(amount, amountCopy);
-                        amountCopy.setCoaId(null);
-                        amounts.add(amountCopy);
-                    }
-                    fiscalEventCopy.setVersion(FISCAL_EVENT_VERSION);
-                    fiscalEventCopy.setAmountDetails(amounts);
-                }
-                fiscalEvents.add(fiscalEventCopy);
-            }
-            fiscalEventRequest.setFiscalEvent(fiscalEvents);
-        }
-    }
-
-    private void nullifyCoaCodeAndAddVersion(FiscalEventRequest fiscalEventRequest) {
-        List<FiscalEvent> fiscalEvents = new ArrayList<>();
-
-        if (fiscalEventRequest.getFiscalEvent() != null && !fiscalEventRequest.getFiscalEvent().isEmpty()) {
-            for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
-                FiscalEvent fiscalEventCopy = new FiscalEvent();
-                BeanUtils.copyProperties(fiscalEvent, fiscalEventCopy);
-
-                if (fiscalEvent.getAmountDetails() != null && !fiscalEvent.getAmountDetails().isEmpty()) {
-                    List<Amount> amounts = new ArrayList<>();
-                    for (Amount amount : fiscalEvent.getAmountDetails()) {
-                        Amount amountCopy = new Amount();
-                        BeanUtils.copyProperties(amount, amountCopy);
-                        amountCopy.setCoaCode(null);
-                        amounts.add(amountCopy);
-                    }
-                    fiscalEventCopy.setVersion(FISCAL_EVENT_VERSION);
-                    fiscalEventCopy.setAmountDetails(amounts);
-                }
-                fiscalEvents.add(fiscalEventCopy);
-            }
-            fiscalEventRequest.setFiscalEvent(fiscalEvents);
-        }
-    }
+  
 
     /**
      * Validate the request, search based on the criteria
@@ -145,13 +84,15 @@ public class FiscalEventService {
             return Collections.emptyList();
         }
 
-        List<Object> dereferencedFiscalEvents = eventRepository.searchFiscalEvent(searchCriteria);
+        List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(searchCriteria);
 
-        if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())
-            return Collections.emptyList();
-
-        List<FiscalEvent> fiscalEvents = mapperUtil.mapDereferencedFiscalEventToFiscalEvent(dereferencedFiscalEvents);
-
+		/*
+		 * if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())
+		 * return Collections.emptyList();
+		 * 
+		 * List<FiscalEvent> fiscalEvents =
+		 * mapperUtil.mapDereferencedFiscalEventToFiscalEvent(dereferencedFiscalEvents);
+		 */
         return fiscalEvents;
     }
 }
