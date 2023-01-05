@@ -25,7 +25,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class COASearchCriteria {
-    @JsonProperty("Ids")
+    @JsonProperty("ids")
     @Valid
     private List<String> ids = null;
 
