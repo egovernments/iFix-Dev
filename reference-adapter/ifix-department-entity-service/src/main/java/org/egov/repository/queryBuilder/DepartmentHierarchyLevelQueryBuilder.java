@@ -4,6 +4,10 @@ package org.egov.repository.queryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
+import org.egov.web.models.PlainSearchCriteria;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -40,5 +44,17 @@ public class DepartmentHierarchyLevelQueryBuilder {
         criteria.and("parent").is(parent);
 
         return new Query(criteria);
+    }
+
+    public Query buildChunkSearchQuery(PlainSearchCriteria searchCriteria) {
+        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+        Query finalQuery = new Query(criteria).with(Sort.by(Sort.Direction.ASC, "auditDetails.createdTime"));
+
+        if(!searchCriteria.getIsCountCall()) {
+            Pageable pageableRequest = PageRequest.of(searchCriteria.getOffset(), searchCriteria.getLimit());
+            return finalQuery.with(pageableRequest);
+        }
+
+        return finalQuery;
     }
 }

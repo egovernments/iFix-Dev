@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.DepartmentEntityService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.DepartmentEntityAbstract;
-import org.egov.web.models.DepartmentEntityRequest;
-import org.egov.web.models.DepartmentEntityResponse;
-import org.egov.web.models.DepartmentEntitySearchRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,6 +100,38 @@ public class DepartmentEntityApiController {
         DepartmentEntityResponse departmentEntityResponse = DepartmentEntityResponse.builder()
                 .responseHeader(responseHeader)
                 .departmentEntity(Collections.singletonList(departmentEntityRequest.getDepartmentEntity())).build();
+
+        return new ResponseEntity<DepartmentEntityResponse>(departmentEntityResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_count", method = RequestMethod.POST)
+    public ResponseEntity<DepartmentEntityCountResponse> departmentEntityV1Count(
+            @Valid @RequestBody DepartmentEntityPlainSearchRequest body) {
+
+        Long count = departmentEntityService.getDepartmentEntityCount(body);
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+
+        DepartmentEntityCountResponse departmentEntityCountResponse = DepartmentEntityCountResponse.builder()
+                .responseHeader(responseHeader)
+                .count(count).build();
+
+        return new ResponseEntity<DepartmentEntityCountResponse>(departmentEntityCountResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<DepartmentEntityResponse> departmentEntityV1PlainSearchPost(
+            @Valid @RequestBody DepartmentEntityPlainSearchRequest body) {
+
+        List<? extends DepartmentEntityAbstract> departmentEntityList = departmentEntityService
+                .departmentEntityPlainSearchPost(body);
+
+        ResponseHeader responseHeader = responseHeaderCreator
+                .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+
+        DepartmentEntityResponse departmentEntityResponse = DepartmentEntityResponse.builder()
+                .responseHeader(responseHeader)
+                .departmentEntity(departmentEntityList).build();
 
         return new ResponseEntity<DepartmentEntityResponse>(departmentEntityResponse, HttpStatus.OK);
     }

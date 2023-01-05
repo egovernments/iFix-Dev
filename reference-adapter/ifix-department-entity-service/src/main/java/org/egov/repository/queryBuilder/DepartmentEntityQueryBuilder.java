@@ -1,12 +1,19 @@
 package org.egov.repository.queryBuilder;
 
+import com.mongodb.client.model.Sorts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.web.models.DepartmentEntitySearchCriteria;
+import org.egov.web.models.PlainSearchCriteria;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +56,17 @@ public class DepartmentEntityQueryBuilder {
         }
 
         return Optional.empty();
+    }
+
+    public Query buildChunkSearchQuery(PlainSearchCriteria searchCriteria) {
+        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+        Query finalQuery = new Query(criteria).with(Sort.by(Sort.Direction.ASC, "auditDetails.createdTime"));
+
+        if(!searchCriteria.getIsCountCall()) {
+            Pageable pageableRequest = PageRequest.of(searchCriteria.getOffset(), searchCriteria.getLimit());
+            return finalQuery.with(pageableRequest);
+        }
+
+        return finalQuery;
     }
 }
