@@ -31,10 +31,10 @@ public class TenantUtil {
      * @return
      */
     public boolean validateTenant(List<String> tenantIds, RequestHeader requestHeader) {
-        if (tenantIds!= null && !tenantIds.isEmpty() && requestHeader != null) {
+        if (tenantIds != null && !tenantIds.isEmpty() && requestHeader != null) {
 
             Map<String, Object> tenantValueMap = new HashMap<>();
-            tenantValueMap.put(MasterDataConstants.IDS,tenantIds);
+            tenantValueMap.put(MasterDataConstants.IDS, tenantIds);
 
             Map<String, Object> tenantMap = new HashMap<>();
             tenantMap.put(MasterDataConstants.REQUEST_HEADER, requestHeader);

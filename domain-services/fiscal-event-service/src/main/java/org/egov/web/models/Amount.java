@@ -43,7 +43,7 @@ public class Amount {
 
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
-    
+
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails;
 

@@ -19,32 +19,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FiscalEventRepository {
 
-	/*
-	 * @Autowired private MongoTemplate mongoTemplate;
-	 */
+    /*
+     * @Autowired private MongoTemplate mongoTemplate;
+     */
 
     @Autowired
     private FiscalEventQueryBuilder eventQueryBuilder;
 
     @Autowired
     private FiscalEventRowMapper fiscalEventRowMapper;
-    
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
     public List<FiscalEvent> searchFiscalEvent(Criteria searchCriteria) {
-    	List<FiscalEvent> fiscalEvents = new ArrayList<>();
-    	List<Object> preparedStmtList = new ArrayList<>();
+        List<FiscalEvent> fiscalEvents = new ArrayList<>();
+        List<Object> preparedStmtList = new ArrayList<>();
 
-    	try {
-    		String fiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
-    		log.info("Fiscal event search query: " + fiscalEventSearchQuery);
-    		fiscalEvents = jdbcTemplate.query(fiscalEventSearchQuery, preparedStmtList.toArray(), fiscalEventRowMapper);
-    	} catch(Exception e) {
-    		log.error("Exception while fetching data from DB: " + e);
-			throw new CustomException("IFIX_FISCAL_EVENTS_SEARCH_ERR", "Some error occurred while running search operation.");
-    	}
+        try {
+            String fiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
+            log.info("Fiscal event search query: " + fiscalEventSearchQuery);
+            fiscalEvents = jdbcTemplate.query(fiscalEventSearchQuery, preparedStmtList.toArray(), fiscalEventRowMapper);
+        } catch (Exception e) {
+            log.error("Exception while fetching data from DB: " + e);
+            throw new CustomException("IFIX_FISCAL_EVENTS_SEARCH_ERR", "Some error occurred while running search operation.");
+        }
 
-    	return fiscalEvents;
+        return fiscalEvents;
     }
 }

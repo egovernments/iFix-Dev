@@ -36,7 +36,7 @@
           "toBillingPeriod": 1628177643000
         },
         {
-          "amount":551,
+          "amount": 551,
           "coaCode": "8246-12-373-56-78-90",
           "fromBillingPeriod": 1622907239000,
           "toBillingPeriod": 1628177643000
@@ -57,5 +57,4 @@
       "attributes": {}
     }
   ]
-
 }

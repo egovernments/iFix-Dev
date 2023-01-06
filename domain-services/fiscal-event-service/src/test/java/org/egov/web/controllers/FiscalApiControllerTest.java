@@ -74,8 +74,8 @@ public class FiscalApiControllerTest {
                 .createResponseHeaderFromRequestHeader(fiscalEventRequest.getRequestHeader(), true);
 
         mockMvc.perform(post("/events/v1/_publish")
-                        .accept(MediaType.APPLICATION_JSON).content(fiscalEventPushData)
-                        .contentType(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON).content(fiscalEventPushData)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
 
         verify(fiscalEventService, times(1)).fiscalEventsV1PushPost((FiscalEventRequest) any());
@@ -87,7 +87,7 @@ public class FiscalApiControllerTest {
     @Test
     public void fiscalEventsV1PushPostFailure() throws Exception {
         mockMvc.perform(post("/events/v1/_publish").contentType(MediaType
-                        .APPLICATION_JSON_UTF8))
+                .APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
     }
 
@@ -100,15 +100,15 @@ public class FiscalApiControllerTest {
                 .createResponseHeaderFromRequestHeader(fiscalEventGetRequest.getRequestHeader(), true);
 
         mockMvc.perform(post("/events/v1/_search")
-                        .accept(MediaType.APPLICATION_JSON).content(fiscalEventSearchData)
-                        .contentType(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON).content(fiscalEventSearchData)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void fiscalEventsV1SearchPostFailure() throws Exception {
         mockMvc.perform(post("/events/v1/_search").contentType(MediaType
-                        .APPLICATION_JSON_UTF8))
+                .APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
     }
 

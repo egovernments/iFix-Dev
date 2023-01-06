@@ -69,7 +69,7 @@ class ServiceRequestRepositoryTest {
         when(clientHttpRequestFactory.createRequest((java.net.URI) any(), (org.springframework.http.HttpMethod) any()))
                 .thenThrow(new HttpClientErrorException(HttpStatus.CONTINUE));
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-        ServiceRequestRepository serviceRequestRepository = new ServiceRequestRepository(objectMapper,restTemplate);
+        ServiceRequestRepository serviceRequestRepository = new ServiceRequestRepository(objectMapper, restTemplate);
         assertThrows(ServiceCallException.class,
                 () -> (serviceRequestRepository).fetchResult("Uri", "Request"));
         verify(objectMapper).configure((com.fasterxml.jackson.databind.SerializationFeature) any(), anyBoolean());

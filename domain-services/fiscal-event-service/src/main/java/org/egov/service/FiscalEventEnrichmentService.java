@@ -32,9 +32,9 @@ public class FiscalEventEnrichmentService {
 
     @Autowired
     private FiscalEventUtil fiscalEventUtil;
-    
+
     @Autowired
-	private CoaUtil coaUtil;
+    private CoaUtil coaUtil;
 
 
     public void enrichFiscalEventPushPost(FiscalEventRequest fiscalEventRequest) {
@@ -48,11 +48,11 @@ public class FiscalEventEnrichmentService {
                 fiscalEvent.setId(UUID.randomUUID().toString());
 
                 for (Amount amount : fiscalEvent.getAmountDetails()) {
-                  //  Amount newAmount = new Amount();
-                   // BeanUtils.copyProperties(amount, newAmount);
+                    //  Amount newAmount = new Amount();
+                    // BeanUtils.copyProperties(amount, newAmount);
                     //set the amount id
-                	amount.setId(UUID.randomUUID().toString());
-                	coaCodes.add(amount.getCoaCode());
+                    amount.setId(UUID.randomUUID().toString());
+                    coaCodes.add(amount.getCoaCode());
                     AuditDetails auditDetails = null;
                     if (fiscalEvent.getAuditDetails() == null) {
                         auditDetails = fiscalEventUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), amount.getAuditDetails(), true);
@@ -74,42 +74,43 @@ public class FiscalEventEnrichmentService {
                 fiscalEvent.setIngestionTime(ingestionTime);
             }
         }
-        
+
         validateAndEnrichCoa(fiscalEventRequest, coaCodes, fiscalEventRequest.getFiscalEvent().get(0).getTenantId());
-        
+
     }
+
     /**
-	 * @param fiscalEventRequest
-	 * @param errorMap
-	 */
-	public void validateAndEnrichCoa(FiscalEventRequest fiscalEventRequest, Set<String> coaCodes,  String tenantId) {
-		Map<String, String> errorMap = new HashMap<>();
-		List<String> errorCoaCodes = new ArrayList<>();
-		JsonNode jsonNode = coaUtil.fetchCoaDetailsByCoaCodes(fiscalEventRequest.getRequestHeader(), coaCodes, tenantId);
+     * @param fiscalEventRequest
+     * @param errorMap
+     */
+    public void validateAndEnrichCoa(FiscalEventRequest fiscalEventRequest, Set<String> coaCodes, String tenantId) {
+        Map<String, String> errorMap = new HashMap<>();
+        List<String> errorCoaCodes = new ArrayList<>();
+        JsonNode jsonNode = coaUtil.fetchCoaDetailsByCoaCodes(fiscalEventRequest.getRequestHeader(), coaCodes, tenantId);
 
-		for (String coaCode : coaCodes) {
-			boolean isPresent = false;
+        for (String coaCode : coaCodes) {
+            boolean isPresent = false;
 
-			if (jsonNode != null) {
-				for (JsonNode chartOfAccountJN : jsonNode) {
-					String coaCd = chartOfAccountJN.get("coaCode").asText();
-					if (StringUtils.isNotBlank(coaCd) && coaCode.equals(coaCd.trim())) {
-						isPresent = true;
-						break;
-					}
-				}
-			}
+            if (jsonNode != null) {
+                for (JsonNode chartOfAccountJN : jsonNode) {
+                    String coaCd = chartOfAccountJN.get("coaCode").asText();
+                    if (StringUtils.isNotBlank(coaCd) && coaCode.equals(coaCd.trim())) {
+                        isPresent = true;
+                        break;
+                    }
+                }
+            }
 
-			if (!isPresent) {
-				errorCoaCodes.add(coaCode);
-			}
-		}
-		if (!errorCoaCodes.isEmpty()) {
-			errorMap.put("COA_CODE_INVALID", "This chart of account Code : " + errorCoaCodes + " is invalid "
-					+ "(or) Combination of tenant id with this chart of account code doesn't exist");
-			throw new CustomException(errorMap);
-		}
+            if (!isPresent) {
+                errorCoaCodes.add(coaCode);
+            }
+        }
+        if (!errorCoaCodes.isEmpty()) {
+            errorMap.put("COA_CODE_INVALID", "This chart of account Code : " + errorCoaCodes + " is invalid "
+                    + "(or) Combination of tenant id with this chart of account code doesn't exist");
+            throw new CustomException(errorMap);
+        }
 
-		fiscalEventUtil.enrichCoaDetails(fiscalEventRequest, jsonNode);
-	}
+        fiscalEventUtil.enrichCoaDetails(fiscalEventRequest, jsonNode);
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * package org.egov.repository.querybuilder;
- * 
+ *
  * import org.bson.Document; import org.egov.config.TestDataFormatter; import
  * org.egov.web.models.Criteria; import
  * org.egov.web.models.FiscalEventGetRequest; import
@@ -11,29 +11,29 @@
  * org.springframework.boot.test.context.SpringBootTest; import
  * org.springframework.data.mongodb.core.query.Meta; import
  * org.springframework.data.mongodb.core.query.Query;
- * 
+ *
  * import java.io.IOException;
- * 
+ *
  * import static org.junit.jupiter.api.Assertions.*;
- * 
+ *
  * @TestInstance(TestInstance.Lifecycle.PER_CLASS)
- * 
+ *
  * @SpringBootTest class FiscalEventQueryBuilderTest {
- * 
+ *
  * @InjectMocks private FiscalEventQueryBuilder fiscalEventQueryBuilder;
- * 
+ *
  * @Autowired private TestDataFormatter testDataFormatter;
- * 
+ *
  * private FiscalEventGetRequest fiscalEventGetRequest; private
  * FiscalEventResponse fiscalEventSearchResponse;
- * 
- * 
+ *
+ *
  * @BeforeAll void init() throws IOException { fiscalEventGetRequest =
  * testDataFormatter.getFiscalEventSearchRequestData();
  * fiscalEventSearchResponse =
  * testDataFormatter.getFiscalEventSearchResponseData(); }
- * 
- * 
+ *
+ *
  * @Test void testBuildSearchQueryWithEmptyCriteria() { Query
  * actualBuildSearchQueryResult =
  * this.fiscalEventQueryBuilder.buildSearchQuery(new Criteria());
@@ -46,7 +46,7 @@
  * actualBuildSearchQueryResult.getFieldsObject()); Meta meta =
  * actualBuildSearchQueryResult.getMeta(); assertNull(meta.getMaxTimeMsec());
  * assertTrue(meta.getFlags().isEmpty()); }
- * 
+ *
  * @Test void testBuildSearchQueryWithCriteria() { Query
  * actualBuildSearchQueryResult = this.fiscalEventQueryBuilder
  * .buildSearchQuery(fiscalEventGetRequest.getCriteria());
@@ -59,5 +59,5 @@
  * actualBuildSearchQueryResult.getFieldsObject()); Meta meta =
  * actualBuildSearchQueryResult.getMeta(); assertNull(meta.getMaxTimeMsec());
  * assertTrue(meta.getFlags().isEmpty()); } }
- * 
+ *
  */

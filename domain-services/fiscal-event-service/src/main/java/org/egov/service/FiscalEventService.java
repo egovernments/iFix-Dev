@@ -65,7 +65,6 @@ public class FiscalEventService {
         return fiscalEventRequest;
     }
 
-  
 
     /**
      * Validate the request, search based on the criteria
@@ -86,13 +85,13 @@ public class FiscalEventService {
 
         List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(searchCriteria);
 
-		/*
-		 * if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())
-		 * return Collections.emptyList();
-		 * 
-		 * List<FiscalEvent> fiscalEvents =
-		 * mapperUtil.mapDereferencedFiscalEventToFiscalEvent(dereferencedFiscalEvents);
-		 */
+        /*
+         * if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())
+         * return Collections.emptyList();
+         *
+         * List<FiscalEvent> fiscalEvents =
+         * mapperUtil.mapDereferencedFiscalEventToFiscalEvent(dereferencedFiscalEvents);
+         */
         return fiscalEvents;
     }
 }

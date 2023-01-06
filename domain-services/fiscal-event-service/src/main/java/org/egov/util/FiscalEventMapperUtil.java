@@ -30,18 +30,17 @@ public class FiscalEventMapperUtil {
      * @param dereferencedFiscalEvents
      * @return
      */
-	/*
-	 * public List<FiscalEvent> mapDereferencedFiscalEventToFiscalEvent(List<Object>
-	 * dereferencedFiscalEvents) { if (dereferencedFiscalEvents == null ||
-	 * dereferencedFiscalEvents.isEmpty()) Collections.emptyList(); JsonNode
-	 * dereferencedFiscalEventNode =
-	 * objectMapper.convertValue(dereferencedFiscalEvents, JsonNode.class);
-	 * Iterator<JsonNode> nodeIterator = dereferencedFiscalEventNode.iterator();
-	 * List<FiscalEvent> fiscalEvents = new ArrayList<>(); while
-	 * (nodeIterator.hasNext()) { JsonNode node = nodeIterator.next();
-	 * fiscalEvents.add(getFiscalEvent(node)); } return fiscalEvents; }
-	 */
-
+    /*
+     * public List<FiscalEvent> mapDereferencedFiscalEventToFiscalEvent(List<Object>
+     * dereferencedFiscalEvents) { if (dereferencedFiscalEvents == null ||
+     * dereferencedFiscalEvents.isEmpty()) Collections.emptyList(); JsonNode
+     * dereferencedFiscalEventNode =
+     * objectMapper.convertValue(dereferencedFiscalEvents, JsonNode.class);
+     * Iterator<JsonNode> nodeIterator = dereferencedFiscalEventNode.iterator();
+     * List<FiscalEvent> fiscalEvents = new ArrayList<>(); while
+     * (nodeIterator.hasNext()) { JsonNode node = nodeIterator.next();
+     * fiscalEvents.add(getFiscalEvent(node)); } return fiscalEvents; }
+     */
     private FiscalEvent getFiscalEvent(JsonNode node) {
         FiscalEvent fiscalEvent = FiscalEvent.builder()
                 .id(node.get("id").asText())

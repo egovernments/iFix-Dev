@@ -260,7 +260,7 @@ class FiscalEventValidatorTest {
         verify(this.fiscalEventConfiguration).getFiscalEventPushReqMaxSize();
         verify(fiscalEventRequest, atLeast(1)).getFiscalEvent();
         verify(fiscalEventRequest, atLeast(1)).getRequestHeader();
-        verify(fiscalEvent,atLeast(1)).getEventType();
+        verify(fiscalEvent, atLeast(1)).getEventType();
         verify(fiscalEvent).getReferenceId();
     }
 
@@ -281,7 +281,7 @@ class FiscalEventValidatorTest {
         verify(this.fiscalEventConfiguration).getFiscalEventPushReqMaxSize();
         verify(fiscalEventRequest, atLeast(1)).getFiscalEvent();
         verify(fiscalEventRequest, atLeast(1)).getRequestHeader();
-        verify(fiscalEvent,atLeast(1)).getEventType();
+        verify(fiscalEvent, atLeast(1)).getEventType();
         verify(fiscalEvent).getReferenceId();
     }
 
@@ -303,7 +303,7 @@ class FiscalEventValidatorTest {
         verify(this.fiscalEventConfiguration).getFiscalEventPushReqMaxSize();
         verify(fiscalEventRequest, atLeast(1)).getFiscalEvent();
         verify(fiscalEventRequest, atLeast(1)).getRequestHeader();
-        verify(fiscalEvent,atLeast(1)).getEventType();
+        verify(fiscalEvent, atLeast(1)).getEventType();
         verify(fiscalEvent).getReferenceId();
     }
 
@@ -326,7 +326,7 @@ class FiscalEventValidatorTest {
         verify(this.fiscalEventConfiguration).getFiscalEventPushReqMaxSize();
         verify(fiscalEventRequest, atLeast(1)).getFiscalEvent();
         verify(fiscalEventRequest, atLeast(1)).getRequestHeader();
-        verify(fiscalEvent,atLeast(1)).getEventType();
+        verify(fiscalEvent, atLeast(1)).getEventType();
         verify(fiscalEvent).getReferenceId();
         verify(requestHeader, atLeast(1)).getUserInfo();
     }
