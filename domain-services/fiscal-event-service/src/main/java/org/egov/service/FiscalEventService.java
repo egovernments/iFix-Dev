@@ -154,4 +154,23 @@ public class FiscalEventService {
 
         return fiscalEvents;
     }
+
+    public List<FiscalEvent> fiscalEventsV1PlainSearchPost(FiscalEventPlainSearchRequest fiscalEventGetRequest) {
+        //validator.validateFiscalEventPlainSearch(fiscalEventGetRequest);
+
+        PlainsearchCriteria searchCriteria = fiscalEventGetRequest.getCriteria();
+
+        List<Object> dereferencedFiscalEvents = eventRepository.plainSearchFiscalEvent(searchCriteria);
+
+        if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())
+            return Collections.emptyList();
+
+        List<FiscalEvent> fiscalEvents = mapperUtil.mapDereferencedFiscalEventToFiscalEvent(dereferencedFiscalEvents);
+
+        return fiscalEvents;
+    }
+
+    public Long getFiscalEventsCount(FiscalEventPlainSearchRequest body) {
+        return eventRepository.getFiscalEventsCount(body.getCriteria());
+    }
 }

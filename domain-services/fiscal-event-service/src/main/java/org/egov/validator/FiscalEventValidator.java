@@ -13,6 +13,7 @@ import org.egov.util.*;
 import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 
@@ -278,5 +279,39 @@ public class FiscalEventValidator {
         if (!errorMap.isEmpty()) {
             throw new CustomException(errorMap);
         }
+    }
+
+    public void validateFiscalEventPlainSearch(FiscalEventPlainSearchRequest fiscalEventGetRequest) {
+        RequestHeader requestHeader = fiscalEventGetRequest.getRequestHeader();
+        PlainsearchCriteria criteria = fiscalEventGetRequest.getCriteria();
+
+        validateReqHeader(requestHeader);
+
+        if (criteria == null)
+            throw new CustomException(MasterDataConstants.SEARCH_CRITERIA, "Search criteria is missing.");
+
+        Map<String, String> errorMap = new HashMap<>();
+
+        //validation : tenant id
+        if (StringUtils.isBlank(criteria.getTenantId()))
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request");
+        boolean isValidTenant = false;
+        if (StringUtils.isNotBlank(criteria.getTenantId())) {
+            List<String> tenantIds = new ArrayList<>();
+            tenantIds.add(criteria.getTenantId());
+            isValidTenant = tenantUtil.validateTenant(tenantIds, requestHeader);
+        }
+        if (!isValidTenant)
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
+
+
+        if (ObjectUtils.isEmpty(criteria.getOffset()) || ObjectUtils.isEmpty(criteria.getLimit())) {
+            errorMap.put("IFIX_PLAINSEARCH_ERR", "Feeding offset and limit are mandatory in plainsearch request.");
+        }
+        if (!errorMap.isEmpty()) {
+            throw new CustomException(errorMap);
+        }
+
+
     }
 }
