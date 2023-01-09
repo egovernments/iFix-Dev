@@ -9,9 +9,7 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.CoaUtil;
 import org.egov.util.FiscalEventUtil;
-import org.egov.web.models.Amount;
-import org.egov.web.models.FiscalEvent;
-import org.egov.web.models.FiscalEventRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,5 +110,30 @@ public class FiscalEventEnrichmentService {
         }
 
         fiscalEventUtil.enrichCoaDetails(fiscalEventRequest, jsonNode);
+    }
+
+    public FiscalEventRequestDTO prepareFiscalEventDTOListForPersister(FiscalEventRequest fiscalEventRequest) {
+        List<FiscalEventDTO> listOfFiscalEvents = new ArrayList<>();
+        FiscalEventRequestDTO requestDTO = new FiscalEventRequestDTO();
+        requestDTO.setRequestHeader(fiscalEventRequest.getRequestHeader());
+
+        fiscalEventRequest.getFiscalEvent().forEach(fiscalEvent -> {
+            FiscalEventDTO fiscalEventDTO = new FiscalEventDTO();
+            BeanUtils.copyProperties(fiscalEvent, fiscalEventDTO);
+            List<ReceiverDTO> receiverList = new ArrayList<>();
+            fiscalEvent.getReceivers().forEach(receiver -> {
+                ReceiverDTO receiverDTO = new ReceiverDTO();
+                receiverDTO.setId(UUID.randomUUID().toString());
+                receiverDTO.setFiscalEventId(fiscalEvent.getId());
+                receiverDTO.setReceiver(receiver);
+                receiverList.add(receiverDTO);
+            });
+            fiscalEventDTO.setReceivers(receiverList);
+            listOfFiscalEvents.add(fiscalEventDTO);
+        });
+
+        requestDTO.setFiscalEvent(listOfFiscalEvents);
+
+        return requestDTO;
     }
 }

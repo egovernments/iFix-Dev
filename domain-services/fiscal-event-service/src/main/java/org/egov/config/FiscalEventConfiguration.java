@@ -29,8 +29,8 @@ public class FiscalEventConfiguration {
     @Value("${fiscal.kafka.push.topic}")
     private String fiscalPushRequest;
 
-    @Value("${fiscal.event.kafka.mongodb.topic}")
-    private String fiscalEventPushToMongoSink;
+    @Value("${fiscal.event.kafka.postgres.topic}")
+    private String fiscalEventPushToPostgresSink;
 
     @Value("${ifix.master.coa.host}")
     private String ifixMasterCoaHost;

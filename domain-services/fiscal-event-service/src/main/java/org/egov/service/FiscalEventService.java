@@ -10,11 +10,9 @@ import org.egov.config.FiscalEventConfiguration;
 import org.egov.producer.Producer;
 import org.egov.repository.FiscalEventRepository;
 import org.egov.util.FiscalEventMapperUtil;
+import org.egov.util.FiscalEventUtil;
 import org.egov.validator.FiscalEventValidator;
-import org.egov.web.models.Criteria;
-import org.egov.web.models.FiscalEvent;
-import org.egov.web.models.FiscalEventGetRequest;
-import org.egov.web.models.FiscalEventRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +39,7 @@ public class FiscalEventService {
     private FiscalEventRepository eventRepository;
 
     @Autowired
-    private FiscalEventMapperUtil mapperUtil;
+    private FiscalEventUtil fiscalEventUtil;
 
 
     /**
@@ -59,7 +57,8 @@ public class FiscalEventService {
             //push with request header details
             producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequest);
             //push without request header details
-            producer.push(eventConfiguration.getFiscalEventPushToMongoSink(), fiscalEventRequest);
+            FiscalEventRequestDTO enrichedFiscalEventRequest = enricher.prepareFiscalEventDTOListForPersister(fiscalEventRequest);
+            producer.push(eventConfiguration.getFiscalEventPushToPostgresSink(), enrichedFiscalEventRequest);
         }
 
         return fiscalEventRequest;
@@ -84,6 +83,7 @@ public class FiscalEventService {
         }
 
         List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(searchCriteria);
+        fiscalEventUtil.deduplicateReceivers(fiscalEvents);
 
         /*
          * if (dereferencedFiscalEvents == null || dereferencedFiscalEvents.isEmpty())

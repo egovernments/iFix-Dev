@@ -14,6 +14,7 @@ import org.egov.tracer.model.CustomException;
 import org.egov.web.models.Amount;
 import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEvent.EventTypeEnum;
+import org.egov.web.models.ReceiverDTO;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.micrometer.core.instrument.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 @Component
 public class FiscalEventRowMapper implements ResultSetExtractor<List<FiscalEvent>> {
@@ -55,7 +57,6 @@ public class FiscalEventRowMapper implements ResultSetExtractor<List<FiscalEvent
                             .id(rs.getString("id"))
                             .tenantId(rs.getString("tenantid"))
                             .sender(rs.getString("sender"))
-                            .receivers(nodeToList((PGobject) rs.getObject("receivers")))
                             .eventType(EventTypeEnum.valueOf(rs.getString("eventtype")))
                             .ingestionTime(rs.getLong("ingestiontime"))
                             .eventTime(rs.getLong("eventtime"))
@@ -69,11 +70,22 @@ public class FiscalEventRowMapper implements ResultSetExtractor<List<FiscalEvent
                 }
 
                 addAmountDetail(rs, currentEvent);
+                addReceivers(rs, currentEvent);
                 eventMap.put(currentId, currentEvent);
             }
 
         }
         return new ArrayList<>(eventMap.values());
+    }
+
+    private void addReceivers(ResultSet rs, FiscalEvent currentEvent) throws SQLException, DataAccessException {
+        if(CollectionUtils.isEmpty(currentEvent.getReceivers())){
+            List<String> receivers = new ArrayList<>();
+            receivers.add(rs.getString("receiver"));
+            currentEvent.setReceivers(receivers);
+        }else{
+            currentEvent.getReceivers().add(rs.getString("receiver"));
+        }
     }
 
     private void addAmountDetail(ResultSet rs, FiscalEvent event) throws SQLException, DataAccessException {

@@ -2,7 +2,6 @@ CREATE TABLE eg_ifix_fiscal_event (
     id varchar,
     tenantid varchar NOT NULL,
     sender varchar NOT NULL,
-    receivers JSONB,
     eventtype  varchar NOT NULL,
     ingestiontime bigint NOT NULL,
     eventtime bigint NOT NULL,
@@ -19,7 +18,17 @@ CREATE TABLE eg_ifix_fiscal_event (
     CONSTRAINT uk_ifix_fiscalevent UNIQUE(id)
 );
 
+CREATE TABLE eg_ifix_receivers(
+    id character varying(64),
+    fiscaleventid character varying(64),
+    receiver varchar NOT NULL,
 
+    CONSTRAINT uk_eg_ifix_receivers PRIMARY KEY (id),
+    CONSTRAINT fk_eg_ifix_receivers FOREIGN KEY (fiscaleventid) REFERENCES eg_ifix_fiscal_event (id)
+
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
 
 
 

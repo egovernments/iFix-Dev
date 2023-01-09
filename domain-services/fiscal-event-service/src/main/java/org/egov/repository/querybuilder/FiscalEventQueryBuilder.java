@@ -7,6 +7,7 @@ import org.egov.web.models.Criteria;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 @Component
 @Slf4j
@@ -14,55 +15,76 @@ public class FiscalEventQueryBuilder {
 
     public String buildSearchQuery(Criteria searchCriteria, List<Object> preparedStmtList) {
 
-        StringBuilder query = new StringBuilder("SELECT fiscal_event.*, " + "amount.id as amountid, "
+        StringBuilder query = new StringBuilder("SELECT fiscal_event.*, receivers.receiver, " + "amount.id as amountid, "
                 + "amount.fiscaleventid, " + "amount.coaid, " + "amount.frombillingperiod, "
                 + "amount.tobillingperiod, " + "amount.amount, " + "amount.coaid, " + "amount.attributes, "
                 + "amount.createdtime as amountcreatedtime, " + "amount.createdby as amountcreatedby, "
                 + "amount.lastmodifiedtime as amountlastmodifiedtime, "
                 + "amount.lastmodifiedby as amountlastmodifiedby " + "FROM eg_ifix_fiscal_event as fiscal_event "
                 + "INNER JOIN eg_ifix_amount_detail as amount ON "
-                + "fiscal_event.id=amount.fiscaleventid WHERE fiscal_event.tenantid = ?");
+                + "fiscal_event.id=amount.fiscaleventid "
+                + "LEFT JOIN eg_ifix_receivers as receivers ON "
+                + "fiscal_event.id=receivers.fiscaleventid ");
 
-        preparedStmtList.add(searchCriteria.getTenantId());
+        if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.tenantId = ?");
+            preparedStmtList.add(searchCriteria.getTenantId());
+        }
 
         if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty()) {
-            query.append(" AND fiscal_event.id IN ( ");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.id IN ( ");
             setValuesForList(query, preparedStmtList, searchCriteria.getIds());
             query.append(")");
         }
         if (StringUtils.isNotBlank(searchCriteria.getEventType())) {
-            query.append(" AND fiscal_event.eventType = ?");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.eventType = ?");
             preparedStmtList.add(searchCriteria.getEventType());
         }
         if (searchCriteria.getFromEventTime() != null) {
-            query.append(" AND fiscal_event.fromEventTime >= ?");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.fromEventTime >= ?");
             preparedStmtList.add(searchCriteria.getFromEventTime());
         }
         if (searchCriteria.getToEventTime() != null) {
-            query.append(" AND fiscal_event.toEventTime <= ?");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.toEventTime <= ?");
             preparedStmtList.add(searchCriteria.getToEventTime());
         }
         if (searchCriteria.getReferenceId() != null && !searchCriteria.getReferenceId().isEmpty()) {
-            query.append(" AND fiscal_event.referenceid IN ( ");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.referenceid IN ( ");
             setValuesForList(query, preparedStmtList, searchCriteria.getReferenceId());
             query.append(")");
         }
         if (StringUtils.isNotBlank(searchCriteria.getReceiver())) {
-            query.append(" AND (fiscal_event.receivers)::jsonb @> " + "'\"" + searchCriteria.getReceiver() + "\"'");
-//			preparedStmtList.add("'"+searchCriteria.getReceiver()+"'");
-
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" receivers.receiver = ?");
+			preparedStmtList.add(searchCriteria.getReceiver());
         }
         if (searchCriteria.getFromIngestionTime() != null) {
-            query.append(" AND fiscal_event.fromIngestionTime >= ?");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.fromIngestionTime >= ?");
             preparedStmtList.add(searchCriteria.getFromIngestionTime());
         }
         if (searchCriteria.getToIngestionTime() != null) {
-            query.append(" AND fiscal_event.toIngestionTime <= ?");
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.toIngestionTime <= ?");
             preparedStmtList.add(searchCriteria.getToIngestionTime());
         }
 
 
         return query.toString();
+    }
+
+    private void addClauseIfRequired(StringBuilder query, List<Object> preparedStmtList) {
+        if(CollectionUtils.isEmpty(preparedStmtList)){
+            query.append(" WHERE ");
+        }else{
+            query.append(" AND ");
+        }
     }
 
     /**
@@ -82,4 +104,9 @@ public class FiscalEventQueryBuilder {
         }
     }
 
+    public String addIdsWrapperToSearchQuery(String fiscalEventSearchQuery) {
+        String wrapperQuery = "SELECT DISTINCT(id) FROM ( {INNER_QUERY} ) as id";
+        fiscalEventSearchQuery = wrapperQuery.replace("{INNER_QUERY}", fiscalEventSearchQuery);
+        return fiscalEventSearchQuery;
+    }
 }

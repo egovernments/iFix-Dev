@@ -11,6 +11,7 @@ import org.egov.web.models.Criteria;
 import org.egov.web.models.FiscalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,16 @@ public class FiscalEventRepository {
         List<Object> preparedStmtList = new ArrayList<>();
 
         try {
+            // Fetch ids according to given criteria
             String fiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
-            log.info("Fiscal event search query: " + fiscalEventSearchQuery);
-            fiscalEvents = jdbcTemplate.query(fiscalEventSearchQuery, preparedStmtList.toArray(), fiscalEventRowMapper);
+            String idQuery = eventQueryBuilder.addIdsWrapperToSearchQuery(fiscalEventSearchQuery);
+            log.info("Fiscal event search query: " + idQuery);
+            List<String> fiscalEventIds = jdbcTemplate.query(idQuery, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+
+            // Fetch fiscal events based on returned ids
+            preparedStmtList.clear();
+            String finalFiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(Criteria.builder().ids(fiscalEventIds).build(), preparedStmtList);
+            fiscalEvents = jdbcTemplate.query(finalFiscalEventSearchQuery, preparedStmtList.toArray(), fiscalEventRowMapper);
         } catch (Exception e) {
             log.error("Exception while fetching data from DB: " + e);
             throw new CustomException("IFIX_FISCAL_EVENTS_SEARCH_ERR", "Some error occurred while running search operation.");
