@@ -82,7 +82,13 @@ public class FiscalEventService {
             return Collections.emptyList();
         }
 
-        List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(searchCriteria);
+        List<String> fiscalEventUuids = eventRepository.searchFiscalEventUuids(searchCriteria);
+
+        if(CollectionUtils.isEmpty(fiscalEventUuids)){
+            return new ArrayList<>();
+        }
+
+        List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(Criteria.builder().ids(fiscalEventUuids).build());
         fiscalEventUtil.deduplicateReceivers(fiscalEvents);
 
         /*

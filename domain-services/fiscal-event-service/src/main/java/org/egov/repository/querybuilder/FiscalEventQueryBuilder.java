@@ -3,15 +3,21 @@ package org.egov.repository.querybuilder;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.config.FiscalEventConfiguration;
 import org.egov.web.models.Criteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 @Component
 @Slf4j
 public class FiscalEventQueryBuilder {
+
+    @Autowired
+    private FiscalEventConfiguration configuration;
 
     public String buildSearchQuery(Criteria searchCriteria, List<Object> preparedStmtList) {
 
@@ -25,6 +31,45 @@ public class FiscalEventQueryBuilder {
                 + "fiscal_event.id=amount.fiscaleventid "
                 + "LEFT JOIN eg_ifix_receivers as receivers ON "
                 + "fiscal_event.id=receivers.fiscaleventid ");
+
+
+        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty()) {
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.id IN ( ");
+            setValuesForList(query, preparedStmtList, searchCriteria.getIds());
+            query.append(")");
+        }
+
+        return query.toString();
+    }
+
+    private void addClauseIfRequired(StringBuilder query, List<Object> preparedStmtList) {
+        if(CollectionUtils.isEmpty(preparedStmtList)){
+            query.append(" WHERE ");
+        }else{
+            query.append(" AND ");
+        }
+    }
+
+    /**
+     * Sets prepared statement for values for a list
+     *
+     * @param query
+     * @param preparedStmtList
+     * @param ids
+     */
+    private void setValuesForList(StringBuilder query, List<Object> preparedStmtList, List<String> ids) {
+        int len = ids.size();
+        for (int i = 0; i < ids.size(); i++) {
+            query.append("?");
+            if (i != len - 1)
+                query.append(", ");
+            preparedStmtList.add(ids.get(i));
+        }
+    }
+
+    public String buildUuidsSearchQuery(Criteria searchCriteria, List<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder("SELECT DISTINCT(fiscal_event.id) FROM eg_ifix_fiscal_event as fiscal_event LEFT OUTER JOIN eg_ifix_receivers as receivers ON fiscal_event.id=receivers.fiscaleventid ");
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(query, preparedStmtList);
@@ -62,7 +107,7 @@ public class FiscalEventQueryBuilder {
         if (StringUtils.isNotBlank(searchCriteria.getReceiver())) {
             addClauseIfRequired(query, preparedStmtList);
             query.append(" receivers.receiver = ?");
-			preparedStmtList.add(searchCriteria.getReceiver());
+            preparedStmtList.add(searchCriteria.getReceiver());
         }
         if (searchCriteria.getFromIngestionTime() != null) {
             addClauseIfRequired(query, preparedStmtList);
@@ -74,39 +119,20 @@ public class FiscalEventQueryBuilder {
             query.append(" fiscal_event.toIngestionTime <= ?");
             preparedStmtList.add(searchCriteria.getToIngestionTime());
         }
-
+        addPagination(query, searchCriteria, preparedStmtList);
 
         return query.toString();
     }
 
-    private void addClauseIfRequired(StringBuilder query, List<Object> preparedStmtList) {
-        if(CollectionUtils.isEmpty(preparedStmtList)){
-            query.append(" WHERE ");
-        }else{
-            query.append(" AND ");
-        }
+    private void addPagination(StringBuilder query, Criteria searchCriteria, List<Object> preparedStmtList) {
+        // Append offset
+        query.append(" OFFSET ? ");
+        preparedStmtList.add(ObjectUtils.isEmpty(searchCriteria.getOffSet()) ? configuration.getDefaultOffset() : searchCriteria.getOffSet());
+
+        // Append limit
+        query.append(" LIMIT ? ");
+        preparedStmtList.add(ObjectUtils.isEmpty(searchCriteria.getLimit()) ? configuration.getDefaultLimit() : searchCriteria.getLimit());
     }
 
-    /**
-     * Sets prepared statement for values for a list
-     *
-     * @param query
-     * @param preparedStmtList
-     * @param ids
-     */
-    private void setValuesForList(StringBuilder query, List<Object> preparedStmtList, List<String> ids) {
-        int len = ids.size();
-        for (int i = 0; i < ids.size(); i++) {
-            query.append("?");
-            if (i != len - 1)
-                query.append(", ");
-            preparedStmtList.add(ids.get(i));
-        }
-    }
 
-    public String addIdsWrapperToSearchQuery(String fiscalEventSearchQuery) {
-        String wrapperQuery = "SELECT DISTINCT(id) FROM ( {INNER_QUERY} ) as id";
-        fiscalEventSearchQuery = wrapperQuery.replace("{INNER_QUERY}", fiscalEventSearchQuery);
-        return fiscalEventSearchQuery;
-    }
 }

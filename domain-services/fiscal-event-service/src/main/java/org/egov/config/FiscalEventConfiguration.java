@@ -1,5 +1,6 @@
 package org.egov.config;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,4 +53,11 @@ public class FiscalEventConfiguration {
 
     @Value("${fiscal.event.push.request.max.size}")
     private String fiscalEventPushReqMaxSize;
+
+    @Value("${fiscal.event.default.offset}")
+    private Long defaultOffset;
+
+    @Value("${fiscal.event.default.limit}")
+    private Long defaultLimit;
+
 }

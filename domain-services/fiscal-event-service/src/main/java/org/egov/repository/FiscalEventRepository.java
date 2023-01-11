@@ -34,15 +34,8 @@ public class FiscalEventRepository {
         List<Object> preparedStmtList = new ArrayList<>();
 
         try {
-            // Fetch ids according to given criteria
-            String fiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
-            String idQuery = eventQueryBuilder.addIdsWrapperToSearchQuery(fiscalEventSearchQuery);
-            log.info("Fiscal event search query: " + idQuery);
-            List<String> fiscalEventIds = jdbcTemplate.query(idQuery, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
-
             // Fetch fiscal events based on returned ids
-            preparedStmtList.clear();
-            String finalFiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(Criteria.builder().ids(fiscalEventIds).build(), preparedStmtList);
+            String finalFiscalEventSearchQuery = eventQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
             fiscalEvents = jdbcTemplate.query(finalFiscalEventSearchQuery, preparedStmtList.toArray(), fiscalEventRowMapper);
         } catch (Exception e) {
             log.error("Exception while fetching data from DB: " + e);
@@ -50,5 +43,16 @@ public class FiscalEventRepository {
         }
 
         return fiscalEvents;
+    }
+
+    public List<String> searchFiscalEventUuids(Criteria searchCriteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+
+        // Fetch ids according to given criteria
+        String idQuery = eventQueryBuilder.buildUuidsSearchQuery(searchCriteria, preparedStmtList);
+        log.info("Fiscal event ids query: " + idQuery);
+        log.info("Parameters: " + preparedStmtList.toString());
+        List<String> fiscalEventIds = jdbcTemplate.query(idQuery, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+        return fiscalEventIds;
     }
 }

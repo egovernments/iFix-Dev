@@ -205,7 +205,6 @@ public class FiscalEventValidator {
         RequestHeader requestHeader = fiscalEventGetRequest.getRequestHeader();
         Criteria criteria = fiscalEventGetRequest.getCriteria();
 
-        // Ghanshyam validateReqHeader(requestHeader);
         if (criteria == null)
             throw new CustomException(MasterDataConstants.SEARCH_CRITERIA, "Search criteria is missing.");
 
@@ -215,12 +214,6 @@ public class FiscalEventValidator {
         if (StringUtils.isBlank(criteria.getTenantId()))
             errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request");
 
-        // validation : event type
-        /*
-         * if (StringUtils.isBlank(criteria.getEventType()))
-         * errorMap.put(MasterDataConstants.EVENT_TYPE,
-         * "Event type is missing in request");
-         */
         // validation : fromEventTime and toEventTime
         if (criteria.getFromEventTime() != null && criteria.getToEventTime() == null) {
             errorMap.put(MasterDataConstants.TO_EVENT_TIME,
