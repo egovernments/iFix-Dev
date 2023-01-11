@@ -69,7 +69,8 @@ public class FiscalEventQueryBuilder {
     }
 
     public String buildUuidsSearchQuery(Criteria searchCriteria, List<Object> preparedStmtList) {
-        StringBuilder query = new StringBuilder("SELECT DISTINCT(fiscal_event.id) FROM eg_ifix_fiscal_event as fiscal_event LEFT OUTER JOIN eg_ifix_receivers as receivers ON fiscal_event.id=receivers.fiscaleventid ");
+        String finalIdsQuery = "SELECT id FROM ( {INTERNAL_QUERY} ) AS id";
+        StringBuilder query = new StringBuilder("SELECT DISTINCT(fiscal_event.id), fiscal_event.createdtime FROM eg_ifix_fiscal_event as fiscal_event LEFT OUTER JOIN eg_ifix_receivers as receivers ON fiscal_event.id=receivers.fiscaleventid ");
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(query, preparedStmtList);
@@ -119,12 +120,15 @@ public class FiscalEventQueryBuilder {
             query.append(" fiscal_event.toIngestionTime <= ?");
             preparedStmtList.add(searchCriteria.getToIngestionTime());
         }
-        addPagination(query, searchCriteria, preparedStmtList);
+        addPaginationAndOrderClause(query, searchCriteria, preparedStmtList);
 
-        return query.toString();
+        return finalIdsQuery.replace("{INTERNAL_QUERY}", query);
     }
 
-    private void addPagination(StringBuilder query, Criteria searchCriteria, List<Object> preparedStmtList) {
+    private void addPaginationAndOrderClause(StringBuilder query, Criteria searchCriteria, List<Object> preparedStmtList) {
+        // Append default sorting clause
+        query.append(" ORDER BY fiscal_event.createdtime DESC ");
+
         // Append offset
         query.append(" OFFSET ? ");
         preparedStmtList.add(ObjectUtils.isEmpty(searchCriteria.getOffSet()) ? configuration.getDefaultOffset() : searchCriteria.getOffSet());
