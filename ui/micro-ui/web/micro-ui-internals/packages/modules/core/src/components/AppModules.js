@@ -20,9 +20,9 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
 
   const user = Digit.UserService.getUser();
 
-  if (!user || !user?.access_token || !user?.info) {
-    return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
-  }
+  // if (!user || !user?.access_token || !user?.info) {
+  //   return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
+  // }
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
