@@ -3,6 +3,8 @@ package org.egov.web.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -40,6 +42,9 @@ public class PersisterDepartmentEntityDTO {
 
     @JsonProperty("lastModifiedTime")
     private Long lastModifiedTime = null;
+
+    @JsonProperty("departmentEntityRelationship")
+    private List<PersisterDepartmentEntityRelationshipDTO> persisterDepartmentEntityRelationshipDTOS = null;
 
 }
 

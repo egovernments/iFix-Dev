@@ -58,8 +58,6 @@ public class DepartmentEntityService {
         kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityCreateTopic(),
                 dtoWrapper.wrapPersisterDepartmentEntityRequest(departmentEntityRequest));
 
-//        entityRepository.save(entityEnrichmentService.getEnrichedDepartmentEntityData(departmentEntityRequest));
-
         return departmentEntityRequest;
     }
 
@@ -162,16 +160,15 @@ public class DepartmentEntityService {
 
                 existingDepartmentEntity.setLastModifiedTime(new Date().getTime());
 
+                PersisterDepartmentEntityDTO persisterDepartmentEntityDTO =
+                        dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity);
+
+                persisterDepartmentEntityDTO.setPersisterDepartmentEntityRelationshipDTOS(
+                        getResolvedPersisterDepartmentRelationshipDtoList(requestedDepartmentEntityDTO));
+
                 PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = PersisterDepartmentEntityRequest.builder()
                         .requestHeader(departmentEntityRequest.getRequestHeader())
-                        .persisterDepartmentEntityDtoList(
-                                Collections.singletonList(
-                                        dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity)
-                                )
-                        )
-                        .persisterDepartmentEntityRelationshipDTOS(
-                                getResolvedPersisterDepartmentRelationshipDtoList(requestedDepartmentEntityDTO)
-                        )
+                        .persisterDepartmentEntityDtoList(Collections.singletonList(persisterDepartmentEntityDTO))
                         .build();
 
                 kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityUpdateTopic(),persisterDepartmentEntityRequest);
@@ -211,7 +208,7 @@ public class DepartmentEntityService {
                                         PersisterDepartmentEntityRelationshipDTO.builder()
                                                 .parentId(departmentEntityRelationship.getParentId())
                                                 .childId(departmentEntityRelationship.getChildId())
-                                                .isTrue(false)
+                                                .status(false)
                                                 .build()
                                 )
                                 .collect(Collectors.toList());

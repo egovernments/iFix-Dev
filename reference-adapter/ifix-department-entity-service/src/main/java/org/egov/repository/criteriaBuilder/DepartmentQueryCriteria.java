@@ -10,9 +10,14 @@ import java.util.stream.Collectors;
 
 
 public class DepartmentQueryCriteria {
-    private static String DEPARTMENT_ENTITY_SELECT_ALL = "SELECT * FROM department_entity";
-    private static String DEPARTMENT_HIERARCHY_SELECT_ALL = "SELECT * FROM department_hierarchy_level";
-    private static String DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL = "SELECT * FROM department_entity_relationship";
+    private static String DEPARTMENT_ENTITY_SELECT_ALL = "SELECT id, code, department_id, hierarchy_level, name, " +
+            "tenant_id, created_by, created_time, last_modified_by, last_modified_time FROM department_entity";
+
+    private static String DEPARTMENT_HIERARCHY_SELECT_ALL = "SELECT id, department_id, label, level, parent, " +
+            "tenant_id, created_by, created_time, last_modified_by, last_modified_time FROM department_hierarchy_level";
+
+    private static String DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL = "SELECT parent_id, child_id, status " +
+            "FROM department_entity_relationship";
 
     private StringBuilder criteriaQuery = new StringBuilder();
 

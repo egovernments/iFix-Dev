@@ -27,8 +27,6 @@ public class PersisterDepartmentEntityRequest {
     @JsonProperty("departmentEntity")
     private List<PersisterDepartmentEntityDTO> persisterDepartmentEntityDtoList = null;
 
-    @JsonProperty("departmentEntityRelationship")
-    private List<PersisterDepartmentEntityRelationshipDTO> persisterDepartmentEntityRelationshipDTOS = null;
 
 
 }

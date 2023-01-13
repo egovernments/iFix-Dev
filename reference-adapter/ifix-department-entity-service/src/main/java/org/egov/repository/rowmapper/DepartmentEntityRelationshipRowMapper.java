@@ -21,7 +21,7 @@ public class DepartmentEntityRelationshipRowMapper implements ResultSetExtractor
                     DepartmentEntityRelationship.builder()
                             .parentId(resultSet.getString("parent_id"))
                             .childId(resultSet.getString("child_id"))
-                            .isTrue(resultSet.getBoolean("is_true"))
+                            .status(resultSet.getBoolean("status"))
                             .build()
             );
         }

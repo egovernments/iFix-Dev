@@ -19,8 +19,8 @@ public class PersisterDepartmentEntityRelationshipDTO {
     @JsonProperty("childId")
     private String childId = null;
 
-    @JsonProperty("isTrue")
-    private Boolean isTrue = null;
+    @JsonProperty("status")
+    private Boolean status = null;
 
 }
 

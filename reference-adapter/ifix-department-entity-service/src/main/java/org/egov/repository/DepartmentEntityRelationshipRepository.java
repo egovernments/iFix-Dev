@@ -37,6 +37,12 @@ public class DepartmentEntityRelationshipRepository {
                 entityRelationShipQueryBuilder.findByParentId(parentId), entityRelationshipRowMapper);
     }
 
+    public List<DepartmentEntityRelationship> findByParentIdList(List<String> parentIdList) {
+
+        return jdbcTemplate.query(
+                entityRelationShipQueryBuilder.findByParentIdList(parentIdList), entityRelationshipRowMapper);
+    }
+
     /**
      * @param childId
      * @return

@@ -20,6 +20,6 @@ public class DepartmentEntityRelationship {
     private String childId = null;
 
     @Size(max = 64)
-    private Boolean isTrue = null;
+    private Boolean status = null;
 
 }

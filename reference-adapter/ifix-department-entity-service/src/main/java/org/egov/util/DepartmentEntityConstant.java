@@ -76,6 +76,6 @@ public class DepartmentEntityConstant {
     public class DepartmentEntityRelationshipConst {
         public static final String PARENT_ID = "parent_id";
         public static final String CHILD_ID = "child_id";
-        public static final String IS_TRUE = "is_true";
+        public static final String STATUS = "status";
     }
 }

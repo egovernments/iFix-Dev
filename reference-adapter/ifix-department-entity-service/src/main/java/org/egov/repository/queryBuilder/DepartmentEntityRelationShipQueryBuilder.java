@@ -6,6 +6,8 @@ import org.egov.web.models.persist.DepartmentEntityRelationship;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 import static org.egov.util.DepartmentEntityConstant.DepartmentEntityRelationshipConst.*;
 
 
@@ -17,7 +19,7 @@ public class DepartmentEntityRelationShipQueryBuilder {
         if (!StringUtils.isEmpty(id)) {
             return DepartmentQueryCriteria.builder(DepartmentEntityRelationship.class)
                     .where(PARENT_ID).is(id)
-                    .and(IS_TRUE).is(Boolean.TRUE)
+                    .and(STATUS).is(Boolean.TRUE)
                     .build();
         }
         return null;
@@ -27,7 +29,21 @@ public class DepartmentEntityRelationShipQueryBuilder {
         if (!StringUtils.isEmpty(childId)) {
             return DepartmentQueryCriteria.builder(DepartmentEntityRelationship.class)
                     .where(CHILD_ID).is(childId)
-                    .and(IS_TRUE).is(Boolean.TRUE)
+                    .and(STATUS).is(Boolean.TRUE)
+                    .build();
+        }
+        return null;
+    }
+
+    /**
+     * @param parentIdList
+     * @return
+     */
+    public String findByParentIdList(List<String> parentIdList) {
+        if (parentIdList != null && !parentIdList.isEmpty()) {
+            return DepartmentQueryCriteria.builder(DepartmentEntityRelationship.class)
+                    .where(PARENT_ID).in(parentIdList)
+                    .and(STATUS).is(Boolean.TRUE)
                     .build();
         }
         return null;

@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS public.department_entity_relationship
 (
     parent_id character varying(64) NOT NULL,
     child_id character varying(64),
-    is_true boolean,
+    status boolean,
 
     PRIMARY KEY (parent_id, child_id)
 );
