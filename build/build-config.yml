@@ -51,12 +51,12 @@ config:
       - work-dir: "domain-services/ifix-es-pipeline"
         image-name: "ifix-es-pipeline"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/domain-services/ifix-migration-toolkit"
+  - name: "builds/iFix/utilities/ifix-migration-toolkit"
     build:
-      - work-dir: "domain-services/ifix-migration-toolkit"
+      - work-dir: "utilities/ifix-migration-toolkit"
         image-name: "ifix-migration-toolkit"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "domain-services/ifix-migration-toolkit/src/main/resources/db"
+      - work-dir: "utilities/ifix-migration-toolkit/src/main/resources/db"
         image-name: "ifix-migration-toolkit-db"
   - name: "builds/iFix/reference-adapter/ifix-department-entity-service"
     build:
