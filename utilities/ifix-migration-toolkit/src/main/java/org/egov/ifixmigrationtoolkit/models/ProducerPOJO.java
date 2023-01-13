@@ -18,7 +18,7 @@ public class ProducerPOJO {
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
 
-    @JsonProperty("Records")
+    @JsonProperty("fiscalEvent")
     private List<FiscalEvent> records;
 
 }
