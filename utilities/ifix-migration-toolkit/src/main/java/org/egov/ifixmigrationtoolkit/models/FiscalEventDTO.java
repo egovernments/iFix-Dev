@@ -1,16 +1,11 @@
 package org.egov.ifixmigrationtoolkit.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
-import org.egov.common.contract.AuditDetails;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -18,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-public class FiscalEvent {
+public class FiscalEventDTO {
 
     @JsonProperty("version")
     private String version = null;
@@ -34,10 +29,10 @@ public class FiscalEvent {
 
     @JsonProperty("receivers")
     @Valid
-    private List<String> receivers = new ArrayList<>();
+    private List<ReceiverDTO> receivers = new ArrayList<>();
 
     @JsonProperty("eventType")
-    private EventTypeEnum eventType = null;
+    private FiscalEvent.EventTypeEnum eventType = null;
 
     @JsonProperty("ingestionTime")
     private Long ingestionTime = null;
@@ -65,41 +60,7 @@ public class FiscalEvent {
     private Object attributes = null;
 
 
-    public enum EventTypeEnum {
-        Sanction("SANCTION"),
-        Appropriation("APPROPRIATION"),
-        Allocation("ALLOCATION"),
-        Intra_Transfer("INTRA_TRANSFER"),
-        Inter_Transfer("INTER_TRANSFER"),
-        Demand("DEMAND"),
-        Receipt("RECEIPT"),
-        Bill("BILL"),
-        Payment("PAYMENT");
-
-        private String value;
-
-        EventTypeEnum(String value) {
-            this.value = value;
-        }
-
-        @JsonCreator
-        public static EventTypeEnum fromValue(String text) {
-            for (EventTypeEnum eventTypeEnum : EventTypeEnum.values()) {
-                if (String.valueOf(eventTypeEnum.value).equals(text)) {
-                    return eventTypeEnum;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        @JsonValue
-        public String toString() {
-            return name();
-        }
-    }
-
-    public FiscalEvent addAmountDetailsItem(Amount amountDetailsItem) {
+    public FiscalEventDTO addAmountDetailsItem(Amount amountDetailsItem) {
         this.amountDetails.add(amountDetailsItem);
         return this;
     }

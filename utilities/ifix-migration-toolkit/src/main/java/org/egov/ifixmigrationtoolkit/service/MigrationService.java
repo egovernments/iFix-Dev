@@ -10,6 +10,7 @@ import org.egov.ifixmigrationtoolkit.producer.Producer;
 import org.egov.ifixmigrationtoolkit.repository.MigrationRepository;
 import org.egov.ifixmigrationtoolkit.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class MigrationService {
 
     @Value("${ifix.migration.batch.push.topic}")
     private String batchMigrationPushTopic;
+
+    @Value("${ifix.migration.postgres.push.topic}")
+    private String postgresSinkPushTopic;
 
     @Value("${ifix.migration.progress.topic}")
     private String saveMigrationProgressTopic;
@@ -82,6 +86,8 @@ public class MigrationService {
             }
             totalNumberOfRecordsMigrated += response.getFiscalEvent().size();
             producer.push(batchMigrationPushTopic, ProducerPOJO.builder().requestInfo(new RequestInfo()).records(response.getFiscalEvent()).build());
+            // Send fiscal events to postgres sink
+            producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
             commitMigrationProgress(request.getTenantId(), i, batchSize, totalNumberOfRecordsMigrated);
             i += 1;
             lastPageNumber = i;
@@ -114,5 +120,30 @@ public class MigrationService {
                 .build();
         producer.push(saveMigrationProgressTopic, MigrationCountWrapper.builder().migrationCount(migrationCount).build());
 
+    }
+
+    public FiscalEventRequestDTO prepareFiscalEventDTOListForPersister(List<FiscalEvent> fiscalEventList) {
+        List<FiscalEventDTO> listOfFiscalEvents = new ArrayList<>();
+        FiscalEventRequestDTO requestDTO = new FiscalEventRequestDTO();
+
+
+        fiscalEventList.forEach(fiscalEvent -> {
+            FiscalEventDTO fiscalEventDTO = new FiscalEventDTO();
+            BeanUtils.copyProperties(fiscalEvent, fiscalEventDTO);
+            List<ReceiverDTO> receiverList = new ArrayList<>();
+            fiscalEvent.getReceivers().forEach(receiver -> {
+                ReceiverDTO receiverDTO = new ReceiverDTO();
+                receiverDTO.setId(UUID.randomUUID().toString());
+                receiverDTO.setFiscalEventId(fiscalEvent.getId());
+                receiverDTO.setReceiver(receiver);
+                receiverList.add(receiverDTO);
+            });
+            fiscalEventDTO.setReceivers(receiverList);
+            listOfFiscalEvents.add(fiscalEventDTO);
+        });
+
+        requestDTO.setFiscalEvent(listOfFiscalEvents);
+
+        return requestDTO;
     }
 }
