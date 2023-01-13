@@ -5,12 +5,14 @@ RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=7168"
+ENV GENERATE_SOURCEMAP "false"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
 
 #RUN node web/envs.js
 RUN cd web/ \
+    && chmod 777 install-deps.sh \
     && node envs.js \
     &&  ./install-deps.sh \
     && yarn install \
