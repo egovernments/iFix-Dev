@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 import org.egov.common.contract.AuditDetails;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -18,11 +19,21 @@ import java.util.List;
 @ToString
 public class FiscalEvent {
 
+    @JsonProperty("version")
+    private String version = null;
+
     @JsonProperty("id")
     private String id = null;
 
     @JsonProperty("tenantId")
     private String tenantId = null;
+
+    @JsonProperty("sender")
+    private String sender = null;
+
+    @JsonProperty("receivers")
+    @Valid
+    private List<String> receivers = new ArrayList<>();
 
     @JsonProperty("eventType")
     private EventTypeEnum eventType = null;
@@ -57,9 +68,6 @@ public class FiscalEvent {
 
     @JsonProperty("computedFields")
     private Object computedFields = null;
-
-    @JsonProperty("version")
-    private String version = null;
 
 
     public enum EventTypeEnum {
@@ -100,4 +108,5 @@ public class FiscalEvent {
         this.amountDetails.add(amountDetailsItem);
         return this;
     }
+
 }
