@@ -66,15 +66,15 @@ public class FiscalEvent {
 
 
     public enum EventTypeEnum {
-        Sanction("SANCTION"),
-        Appropriation("APPROPRIATION"),
-        Allocation("ALLOCATION"),
-        Intra_Transfer("INTRA_TRANSFER"),
-        Inter_Transfer("INTER_TRANSFER"),
-        Demand("DEMAND"),
-        Receipt("RECEIPT"),
-        Bill("BILL"),
-        Payment("PAYMENT");
+        Sanction("Sanction"),
+        Appropriation("Appropriation"),
+        Allocation("Allocation"),
+        Intra_Transfer("Intra_Transfer"),
+        Inter_Transfer("Inter_Transfer"),
+        Demand("Demand"),
+        Receipt("Receipt"),
+        Bill("Bill"),
+        Payment("Payment");
 
         private String value;
 
@@ -95,10 +95,9 @@ public class FiscalEvent {
         @Override
         @JsonValue
         public String toString() {
-            return name();
+            return String.valueOf(value);
         }
     }
-
     public FiscalEvent addAmountDetailsItem(Amount amountDetailsItem) {
         this.amountDetails.add(amountDetailsItem);
         return this;
