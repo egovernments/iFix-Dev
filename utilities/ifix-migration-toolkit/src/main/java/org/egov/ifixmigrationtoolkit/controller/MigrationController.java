@@ -41,7 +41,7 @@ public class MigrationController {
     @Autowired
     private MasterDataMigrationService masterDataMigrationService;
 
-    @RequestMapping(value="/v1/_migrate", method = RequestMethod.POST)
+    @RequestMapping(value="/fiscal_event/v1/_migrate", method = RequestMethod.POST)
     public ResponseEntity<?> migrateDataToES(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
         migrationService.migrateData(request);
         Map<String, Object> responseMap = new HashMap<>();
@@ -49,7 +49,7 @@ public class MigrationController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/v1/_migrate/department_entity", method = RequestMethod.POST)
+    @RequestMapping(value="/department_entity/v1/_migrate", method = RequestMethod.POST)
     public ResponseEntity<?> migrateDepartmentEntityToPostgres(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
         departmentEntityMigrationService.migrateDepartmentEntityData(request);
         Map<String, Object> responseMap = new HashMap<>();
@@ -57,7 +57,7 @@ public class MigrationController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/v1/_migrate/department_hierarchy", method = RequestMethod.POST)
+    @RequestMapping(value="/department_hierarchy/v1/_migrate", method = RequestMethod.POST)
     public ResponseEntity<?> migrateDepartmentHierarchyToPostgres(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
         departmentHierarchyLevelMigrationService.migrateDepartmentHieraryLevelData(request);
         Map<String, Object> responseMap = new HashMap<>();
