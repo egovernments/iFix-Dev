@@ -9,8 +9,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static org.egov.util.DepartmentEntityConstant.DepartmentEntity.TENANT_ID;
-import static org.egov.util.DepartmentEntityConstant.DepartmentHierarchyLevel.*;
+import static org.egov.util.DepartmentEntityConstant.DepartmentEntityConst.TENANT_ID;
+import static org.egov.util.DepartmentEntityConstant.DepartmentHierarchyLevelConst.*;
 
 @Component
 @Slf4j

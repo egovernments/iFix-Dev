@@ -46,7 +46,7 @@ public class DepartmentEntityConstant {
     public static final String DESC = " DESC ";
     public static final String SINGLE_QUOTE = "'";
 
-    public class DepartmentEntity {
+    public class DepartmentEntityConst {
         public static final String ID = "id";
         public static final String CHILDREN = "children";
         public static final String CODE = "code";
@@ -60,7 +60,7 @@ public class DepartmentEntityConstant {
         public static final String TENANT_ID = "tenant_id";
     }
 
-    public class DepartmentHierarchyLevel {
+    public class DepartmentHierarchyLevelConst {
         public static final String ID = "id";
         public static final String CREATED_BY = "created_by";
         public static final String CREATED_TIME = "created_time";
@@ -71,5 +71,11 @@ public class DepartmentEntityConstant {
         public static final String LEVEL = "level";
         public static final String PARENT = "parent";
         public static final String TENANT_ID = "tenant_id";
+    }
+
+    public class DepartmentEntityRelationshipConst {
+        public static final String PARENT_ID = "parent_id";
+        public static final String CHILD_ID = "child_id";
+        public static final String IS_TRUE = "is_true";
     }
 }

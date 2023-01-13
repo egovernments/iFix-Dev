@@ -2,8 +2,11 @@ package org.egov.repository;
 
 import org.egov.repository.queryBuilder.DepartmentEntityQueryBuilder;
 import org.egov.repository.rowmapper.DepartmentEntityRowMapper;
+import org.egov.tracer.model.CustomException;
+import org.egov.util.DepartmentEntityConstant;
 import org.egov.web.models.DepartmentEntitySearchCriteria;
 import org.egov.web.models.persist.DepartmentEntity;
+import org.egov.web.models.persist.DepartmentEntityRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,6 +26,10 @@ public class DepartmentEntityRepository {
 
     @Autowired
     private DepartmentEntityQueryBuilder departmentEntityQueryBuilder;
+
+
+    @Autowired
+    private DepartmentEntityRelationshipRepository entityRelationshipRepository;
 
     public List<DepartmentEntity> getDepartmentEntitiesByParamsExistence(DepartmentEntitySearchCriteria departmentEntitySearchCriteria) {
         return jdbcTemplate.query(
@@ -58,11 +65,11 @@ public class DepartmentEntityRepository {
      * @return It should be returning only one department entity against provided id.
      */
     public Optional<DepartmentEntity> getParent(String childId) {
-        List<DepartmentEntity> departmentEntityList = jdbcTemplate
-                .query(departmentEntityQueryBuilder.findByChildren(childId), departmentEntityRowMapper);
+        Optional<DepartmentEntityRelationship> entityRelationshipOptional =
+                entityRelationshipRepository.getParent(childId);
 
-        if (!CollectionUtils.isEmpty(departmentEntityList) && departmentEntityList.size() == 1) {
-            return Optional.ofNullable(departmentEntityList.get(0));
+        if (entityRelationshipOptional.isPresent()) {
+            return findById(entityRelationshipOptional.get().getParentId());
         }
 
         return Optional.empty();

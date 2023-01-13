@@ -29,9 +29,6 @@ public class PersisterDepartmentEntityDTO {
     @JsonProperty("hierarchyLevel")
     private Integer hierarchyLevel = null;
 
-    @JsonProperty("children")
-    private String children = null;
-
     @JsonProperty("createdBy")
     private String createdBy = null;
 

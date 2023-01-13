@@ -58,12 +58,7 @@ public class DtoWrapper {
 
                                 )
                                 .build()
-                )
-                .children(departmentEntity.getChildren() != null
-                        ? Arrays.asList(departmentEntity.getChildren().split(","))
-                        : Collections.emptyList()
-                )
-                .build();
+                ).build();
     }
 
     /**
@@ -120,13 +115,46 @@ public class DtoWrapper {
                     .lastModifiedBy(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getLastModifiedBy())
                     .createdTime(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getCreatedTime())
                     .lastModifiedTime(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getLastModifiedTime())
-                    .children(String.join(",", departmentEntityRequest.getDepartmentEntityDTO().getChildren()))
+//                    .children(String.join(",", departmentEntityRequest.getDepartmentEntityDTO().getChildren()))
                     .build();
 
-            persisterDepartmentEntityRequest.setDepartmentEntityDTO(Collections.singletonList(departmentEntityDTO));
+            persisterDepartmentEntityRequest
+                    .setPersisterDepartmentEntityDtoList(Collections.singletonList(departmentEntityDTO));
+
+            List<PersisterDepartmentEntityRelationshipDTO> departmentEntityRelationshipDTOList =
+                    wrapPersisterDepartmentEntityRelationshipDTOList(departmentEntityRequest.getDepartmentEntityDTO());
+
+            if (departmentEntityRelationshipDTOList != null && !departmentEntityRelationshipDTOList.isEmpty()) {
+                persisterDepartmentEntityRequest
+                        .setPersisterDepartmentEntityRelationshipDTOS(departmentEntityRelationshipDTOList);
+            }
         }
 
         return persisterDepartmentEntityRequest;
+    }
+
+    /**
+     * @param departmentEntityDTO
+     * @return
+     */
+    public List<PersisterDepartmentEntityRelationshipDTO> wrapPersisterDepartmentEntityRelationshipDTOList(
+            @NonNull DepartmentEntityDTO departmentEntityDTO) {
+
+        List<PersisterDepartmentEntityRelationshipDTO> departmentEntityRelationshipDTOList = new ArrayList<>();
+
+        if (departmentEntityDTO.getChildren() != null && !departmentEntityDTO.getChildren().isEmpty()) {
+
+            departmentEntityRelationshipDTOList = departmentEntityDTO.getChildren().stream()
+                            .map(child ->
+                                    PersisterDepartmentEntityRelationshipDTO.builder()
+                                            .parentId(departmentEntityDTO.getId())
+                                            .childId(child)
+                                            .isTrue(true)
+                                            .build()
+                            ).collect(Collectors.toList());
+        }
+
+        return departmentEntityRelationshipDTOList;
     }
 
     /**
@@ -145,8 +173,6 @@ public class DtoWrapper {
                 .createdTime(departmentEntity.getCreatedTime())
                 .lastModifiedBy(departmentEntity.getLastModifiedBy())
                 .lastModifiedTime(departmentEntity.getLastModifiedTime())
-                .children(departmentEntity.getChildren()
-                )
                 .build();
     }
 

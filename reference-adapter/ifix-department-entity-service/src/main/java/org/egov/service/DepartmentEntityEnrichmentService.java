@@ -55,7 +55,6 @@ public class DepartmentEntityEnrichmentService {
                 .lastModifiedBy(departmentEntityDTO.getAuditDetails().getLastModifiedBy())
                 .createdTime(departmentEntityDTO.getAuditDetails().getCreatedTime())
                 .lastModifiedTime(departmentEntityDTO.getAuditDetails().getLastModifiedTime())
-                .children(String.join(",", departmentEntityDTO.getChildren()))
                 .build();
 
 

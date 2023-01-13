@@ -25,7 +25,10 @@ public class PersisterDepartmentEntityRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("departmentEntity")
-    private List<PersisterDepartmentEntityDTO> departmentEntityDTO = null;
+    private List<PersisterDepartmentEntityDTO> persisterDepartmentEntityDtoList = null;
+
+    @JsonProperty("departmentEntityRelationship")
+    private List<PersisterDepartmentEntityRelationshipDTO> persisterDepartmentEntityRelationshipDTOS = null;
 
 
 }

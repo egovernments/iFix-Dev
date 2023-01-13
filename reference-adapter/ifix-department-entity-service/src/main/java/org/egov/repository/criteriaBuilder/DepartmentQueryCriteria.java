@@ -1,6 +1,7 @@
 package org.egov.repository.criteriaBuilder;
 
 import org.egov.web.models.persist.DepartmentEntity;
+import org.egov.web.models.persist.DepartmentEntityRelationship;
 import org.egov.web.models.persist.DepartmentHierarchyLevel;
 import org.springframework.util.StringUtils;
 
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class DepartmentQueryCriteria {
     private static String DEPARTMENT_ENTITY_SELECT_ALL = "SELECT * FROM department_entity";
     private static String DEPARTMENT_HIERARCHY_SELECT_ALL = "SELECT * FROM department_hierarchy_level";
+    private static String DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL = "SELECT * FROM department_entity_relationship";
 
     private StringBuilder criteriaQuery = new StringBuilder();
 
@@ -28,6 +30,10 @@ public class DepartmentQueryCriteria {
 
         if (DepartmentHierarchyLevel.class.getTypeName().equals(entityClass.getTypeName())) {
             return new DepartmentQueryCriteria(new StringBuilder(DEPARTMENT_HIERARCHY_SELECT_ALL));
+        }
+
+        if (DepartmentEntityRelationship.class.getTypeName().equals(entityClass.getTypeName())) {
+            return new DepartmentQueryCriteria(new StringBuilder(DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL));
         }
 
         return null;
@@ -55,6 +61,14 @@ public class DepartmentQueryCriteria {
     }
 
     public DepartmentQueryCriteria is(Integer attributeValue) {
+        if (attributeValue != null) {
+            this.criteriaQuery.append(" = " + attributeValue);
+            return this;
+        }
+        return null;
+    }
+
+    public DepartmentQueryCriteria is(Boolean attributeValue) {
         if (attributeValue != null) {
             this.criteriaQuery.append(" = " + attributeValue);
             return this;

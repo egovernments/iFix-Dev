@@ -1,6 +1,7 @@
 package org.egov.service;
 
 import org.egov.config.IfixDepartmentEntityConfig;
+import org.egov.repository.DepartmentEntityRelationshipRepository;
 import org.egov.repository.DepartmentEntityRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityAncestryUtil;
@@ -9,12 +10,15 @@ import org.egov.util.KafkaProducer;
 import org.egov.validator.DepartmentEntityValidator;
 import org.egov.web.models.*;
 import org.egov.web.models.persist.DepartmentEntity;
+import org.egov.web.models.persist.DepartmentEntityRelationship;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentEntityService {
@@ -27,6 +31,9 @@ public class DepartmentEntityService {
 
     @Autowired
     private DepartmentEntityRepository departmentEntityRepository;
+
+    @Autowired
+    private DepartmentEntityRelationshipRepository entityRelationshipRepository;
 
     @Autowired
     private IfixDepartmentEntityConfig ifixDepartmentEntityConfig;
@@ -47,8 +54,6 @@ public class DepartmentEntityService {
     public DepartmentEntityRequest createDepartmentEntity(DepartmentEntityRequest departmentEntityRequest) {
         departmentEntityValidator.validateDepartmentEntityRequest(departmentEntityRequest);
         entityEnrichmentService.enrichDepartmentEntityData(departmentEntityRequest);
-
-
 
         kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityCreateTopic(),
                 dtoWrapper.wrapPersisterDepartmentEntityRequest(departmentEntityRequest));
@@ -78,7 +83,7 @@ public class DepartmentEntityService {
     }
 
 
-    public DepartmentEntityAncestry createAncestryFor(DepartmentEntityDTO departmentEntityDTO) {
+    public DepartmentEntityAncestry createAncestryFor(@NotNull DepartmentEntityDTO departmentEntityDTO) {
         int hierarchyCount = ifixDepartmentEntityConfig.getMaximumSupportedDepartmentHierarchy();
 
         DepartmentEntityAncestry ancestry =
@@ -148,11 +153,6 @@ public class DepartmentEntityService {
                 isModified = true;
             }
 
-            if (requestedDepartmentEntityDTO.getChildren() != null && !requestedDepartmentEntityDTO.getChildren().isEmpty()) {
-                existingDepartmentEntity.setChildren(String.join(",", requestedDepartmentEntityDTO.getChildren()));
-                isModified = true;
-            }
-
             if (isModified) {
                 String userUUID = departmentEntityRequest.getRequestHeader().getUserInfo() != null
                                     ? departmentEntityRequest.getRequestHeader().getUserInfo().getUuid()
@@ -163,9 +163,16 @@ public class DepartmentEntityService {
                 existingDepartmentEntity.setLastModifiedTime(new Date().getTime());
 
                 PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = PersisterDepartmentEntityRequest.builder()
-                                .requestHeader(departmentEntityRequest.getRequestHeader())
-                                .departmentEntityDTO(Collections.singletonList(dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity)))
-                                .build();
+                        .requestHeader(departmentEntityRequest.getRequestHeader())
+                        .persisterDepartmentEntityDtoList(
+                                Collections.singletonList(
+                                        dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity)
+                                )
+                        )
+                        .persisterDepartmentEntityRelationshipDTOS(
+                                getResolvedPersisterDepartmentRelationshipDtoList(requestedDepartmentEntityDTO)
+                        )
+                        .build();
 
                 kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityUpdateTopic(),persisterDepartmentEntityRequest);
 
@@ -176,5 +183,43 @@ public class DepartmentEntityService {
 
         }
         return departmentEntityRequest;
+    }
+
+    private List<PersisterDepartmentEntityRelationshipDTO> getResolvedPersisterDepartmentRelationshipDtoList(
+            DepartmentEntityDTO departmentEntityDTO) {
+
+        List<PersisterDepartmentEntityRelationshipDTO> persisterDepartmentEntityRelationshipDTOList = new ArrayList<>();
+
+        if (departmentEntityDTO != null && departmentEntityDTO.getId() != null
+                && departmentEntityDTO.getChildren() != null && !departmentEntityDTO.getChildren().isEmpty()) {
+
+            persisterDepartmentEntityRelationshipDTOList =
+                    dtoWrapper.wrapPersisterDepartmentEntityRelationshipDTOList(departmentEntityDTO);
+
+            List<DepartmentEntityRelationship> existingEntityRelationshipList =
+                    entityRelationshipRepository.findByParentId(departmentEntityDTO.getId());
+
+            if (existingEntityRelationshipList != null && !existingEntityRelationshipList.isEmpty()) {
+                List<String> newChildList = departmentEntityDTO.getChildren();
+
+                List<PersisterDepartmentEntityRelationshipDTO> deactivatePersisterRelationshipDtoList =
+                        existingEntityRelationshipList.stream()
+                                .filter(departmentEntityRelationship ->
+                                        !newChildList.contains(departmentEntityRelationship.getChildId())
+                                )
+                                .map(departmentEntityRelationship ->
+                                        PersisterDepartmentEntityRelationshipDTO.builder()
+                                                .parentId(departmentEntityRelationship.getParentId())
+                                                .childId(departmentEntityRelationship.getChildId())
+                                                .isTrue(false)
+                                                .build()
+                                )
+                                .collect(Collectors.toList());
+
+                persisterDepartmentEntityRelationshipDTOList.addAll(deactivatePersisterRelationshipDtoList);
+            }
+        }
+
+        return persisterDepartmentEntityRelationshipDTOList;
     }
 }

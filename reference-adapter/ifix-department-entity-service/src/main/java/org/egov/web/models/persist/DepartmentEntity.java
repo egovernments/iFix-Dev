@@ -34,9 +34,6 @@ public class DepartmentEntity {
     private Long createdTime = null;
     private Long lastModifiedTime = null;
 
-    @Size(max = 5000)
-    private String children = null;
-
 }
 
 

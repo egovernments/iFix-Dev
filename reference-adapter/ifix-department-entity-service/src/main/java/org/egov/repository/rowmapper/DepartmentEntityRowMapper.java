@@ -25,7 +25,6 @@ public class DepartmentEntityRowMapper implements ResultSetExtractor<List<Depart
                             .code(resultSet.getString("code"))
                             .name(resultSet.getString("name"))
                             .hierarchyLevel(resultSet.getInt("hierarchy_level"))
-                            .children(resultSet.getString("children"))
                             .createdBy(resultSet.getString("created_by"))
                             .createdTime(resultSet.getLong("created_time"))
                             .lastModifiedBy(resultSet.getString("last_modified_by"))

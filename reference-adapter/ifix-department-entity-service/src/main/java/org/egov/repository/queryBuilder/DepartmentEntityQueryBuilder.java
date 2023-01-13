@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static org.egov.util.DepartmentEntityConstant.DepartmentEntity.*;
+import static org.egov.util.DepartmentEntityConstant.DepartmentEntityConst.*;
 
 @Component
 @Slf4j
