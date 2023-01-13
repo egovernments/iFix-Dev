@@ -30,7 +30,7 @@ public class MigrationRecordsListener {
     @Value("${fiscal.event.migration.origin.push.topic}")
     private String fiscalEventsIndexTopic;
 
-    @KafkaListener(topics = { "${fiscal.events.migration.topic}"})
+    @KafkaListener(topics = { "${fiscal.event.kafka.push.topic}", "${fiscal.events.migration.topic}"})
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             ProducerPOJO incomingData = objectMapper.convertValue(record, ProducerPOJO.class);
