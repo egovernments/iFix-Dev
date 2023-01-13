@@ -23,7 +23,6 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/fiscal-event-pipeline")
 public class MigrationController {
 
     @Autowired
