@@ -54,6 +54,7 @@ public class FiscalEventMapperUtil {
                 .id(node.get("id").asText())
                 .tenantId(node.get("tenantId") != null ? node.get("tenantId").asText() : null)
                 .eventType(node.get("eventType") != null ? FiscalEvent.EventTypeEnum.valueOf(node.get("eventType").asText()) : null)
+                .sender(node.get("sender") != null ? node.get("sender").asText() : null)
                 .eventTime(node.get("eventTime") != null ? node.get("eventTime").asLong() : null)
                 .referenceId(node.get("referenceId") != null ? node.get("referenceId").asText() : null)
                 .linkedReferenceId(node.get("linkedReferenceId") != null ? node.get("linkedReferenceId").asText() : null)
