@@ -1,5 +1,4 @@
 //HAVE TO CHANGE THI
-import { stringReplaceAll } from "@egovernments/digit-ui-module-pt/src/utils";
 import { ApiCacheService } from "../atoms/ApiCacheService";
 import Urls from "../atoms/urls";
 import { Request, ServiceRequest } from "../atoms/Utils/Request";
@@ -1124,30 +1123,6 @@ const getUsageCategory = (MdmsRes) =>
     };
   });
 
-const getPTPropertyType = (MdmsRes) =>
-  MdmsRes["PropertyTax"].UsageCategory.filter((PropertyType) => PropertyType.active).map((PTPropertyTypelist) => {
-    return {
-      ...UsageCategorylist,
-      i18nKey: `COMMON_PROPTYPE_${stringReplaceAll(PTPropertyTypelist.code, ".", "_")}`,
-    };
-  });
-
-const getTLStructureType = (MdmsRes) =>
-  MdmsRes["common-masters"].StructureType.filter((StructureType) => StructureType.active).map((TLStructureTypeList) => {
-    return {
-      ...TLStructureTypeList,
-      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(TLStructureTypeList.code, ".", "_")}`,
-    };
-  });
-
-const getTLAccessoriesType = (MdmsRes) =>
-  MdmsRes["TradeLicense"].AccessoriesCategory.filter((AccessoriesCategory) => AccessoriesCategory.active).map((TLAccessoryTypeList) => {
-    return {
-      ...TLAccessoryTypeList,
-      i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(TLAccessoryTypeList.code, ".", "_")}`,
-    };
-  });
-
 const getTLFinancialYear = (MdmsRes) =>
   MdmsRes["egf-master"].FinancialYear.filter((FinancialYear) => FinancialYear.active && FinancialYear.module === "TL").map((FinancialYearList) => {
     return {
@@ -1347,12 +1322,6 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getMapConfig(MdmsRes);
     case "UsageCategory":
       return getUsageCategory(MdmsRes);
-    case "PTPropertyType":
-      return getPTPropertyType(MdmsRes);
-    case "StructureType":
-      return getTLStructureType(MdmsRes);
-    case "AccessoryCategory":
-      return getTLAccessoriesType(MdmsRes);
     case "FinancialYear":
       return getTLFinancialYear(MdmsRes);
     case "Floor":
@@ -1587,15 +1556,6 @@ export const MdmsService = {
   },
   getUsageCategory: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getUsageCategoryList(tenantId, moduleCode), moduleCode);
-  },
-  getPTPropertyType: (tenantId, moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getPTPropertyTypeList(tenantId, moduleCode), moduleCode);
-  },
-  getTLStructureType: (tenantId, moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getTLStructureTypeList(tenantId, moduleCode), moduleCode);
-  },
-  getTLAccessoriesType: (tenantId, moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getTLAccessoriesTypeList(tenantId, moduleCode), moduleCode);
   },
   getTLFinancialYear: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getTLFinancialYearList(tenantId, moduleCode), moduleCode);
