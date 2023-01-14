@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 
@@ -139,6 +140,16 @@ public class MigrationService {
                 receiverList.add(receiverDTO);
             });
             fiscalEventDTO.setReceivers(receiverList);
+            fiscalEventDTO.getAmountDetails().forEach(amount -> {
+                if(ObjectUtils.isEmpty(amount.getAuditDetails())){
+                    String randomUUID = UUID.randomUUID().toString();
+                    Long currentTimeInMillis = System.currentTimeMillis();
+                    amount.getAuditDetails().setCreatedBy(randomUUID);
+                    amount.getAuditDetails().setCreatedTime(currentTimeInMillis);
+                    amount.getAuditDetails().setLastModifiedBy(randomUUID);
+                    amount.getAuditDetails().setLastModifiedTime(currentTimeInMillis);
+                }
+            });
             listOfFiscalEvents.add(fiscalEventDTO);
         });
 
