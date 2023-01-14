@@ -140,16 +140,6 @@ public class MigrationService {
                 receiverList.add(receiverDTO);
             });
             fiscalEventDTO.setReceivers(receiverList);
-            fiscalEventDTO.getAmountDetails().forEach(amount -> {
-                if(ObjectUtils.isEmpty(amount.getAuditDetails())){
-                    String randomUUID = UUID.randomUUID().toString();
-                    Long currentTimeInMillis = System.currentTimeMillis();
-                    amount.getAuditDetails().setCreatedBy(randomUUID);
-                    amount.getAuditDetails().setCreatedTime(currentTimeInMillis);
-                    amount.getAuditDetails().setLastModifiedBy(randomUUID);
-                    amount.getAuditDetails().setLastModifiedTime(currentTimeInMillis);
-                }
-            });
             listOfFiscalEvents.add(fiscalEventDTO);
         });
 

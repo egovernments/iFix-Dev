@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import org.egov.common.contract.AuditDetails;
 
 @Getter
 @Setter
