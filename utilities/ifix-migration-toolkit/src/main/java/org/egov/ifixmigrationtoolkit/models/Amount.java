@@ -2,6 +2,7 @@ package org.egov.ifixmigrationtoolkit.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.egov.common.contract.AuditDetails;
 
 import java.math.BigDecimal;
 
@@ -25,6 +26,9 @@ public class Amount {
 
     @JsonProperty("toBillingPeriod")
     private Long toBillingPeriod = null;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails = null;
 
 }
 

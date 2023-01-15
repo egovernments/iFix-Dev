@@ -119,7 +119,7 @@ public class MigrationService {
                 .batchSize(batchSize)
                 .totalNumberOfRecordsMigrated(totalNumberOfRecordsMigrated)
                 .build();
-        producer.push(saveMigrationProgressTopic, MigrationCountWrapper.builder().migrationCount(migrationCount).build());
+        //producer.push(saveMigrationProgressTopic, MigrationCountWrapper.builder().migrationCount(migrationCount).build());
 
     }
 
@@ -140,6 +140,9 @@ public class MigrationService {
                 receiverList.add(receiverDTO);
             });
             fiscalEventDTO.setReceivers(receiverList);
+            fiscalEventDTO.getAmountDetails().forEach(amount -> {
+                amount.setAuditDetails(fiscalEvent.getAuditDetails());
+            });
             listOfFiscalEvents.add(fiscalEventDTO);
         });
 
