@@ -112,12 +112,12 @@ public class FiscalEventQueryBuilder {
         }
         if (searchCriteria.getFromIngestionTime() != null) {
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" fiscal_event.fromIngestionTime >= ?");
+            query.append(" fiscal_event.ingestiontime >= ?");
             preparedStmtList.add(searchCriteria.getFromIngestionTime());
         }
         if (searchCriteria.getToIngestionTime() != null) {
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" fiscal_event.toIngestionTime <= ?");
+            query.append(" fiscal_event.ingestiontime <= ?");
             preparedStmtList.add(searchCriteria.getToIngestionTime());
         }
         addPaginationAndOrderClause(query, searchCriteria, preparedStmtList);
