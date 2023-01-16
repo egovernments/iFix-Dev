@@ -1,5 +1,6 @@
 package org.egov.service;
 
+import org.egov.common.contract.AuditDetails;
 import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.DepartmentEntityRelationshipRepository;
 import org.egov.repository.DepartmentEntityRepository;
@@ -13,11 +14,15 @@ import org.egov.web.models.persist.DepartmentEntity;
 import org.egov.web.models.persist.DepartmentEntityRelationship;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +61,7 @@ public class DepartmentEntityService {
         entityEnrichmentService.enrichDepartmentEntityData(departmentEntityRequest);
 
         kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityCreateTopic(),
-                dtoWrapper.wrapPersisterDepartmentEntityRequest(departmentEntityRequest));
+                departmentEntityRequest);
 
         return departmentEntityRequest;
     }
@@ -160,20 +165,11 @@ public class DepartmentEntityService {
 
                 existingDepartmentEntity.setLastModifiedTime(new Date().getTime());
 
-                PersisterDepartmentEntityDTO persisterDepartmentEntityDTO =
-                        dtoWrapper.wrapDepartmentEntityIntoPersisterDTO(existingDepartmentEntity);
+                copyUpdatedRecordInDepartmentEntiyRequest(existingDepartmentEntity,
+                        departmentEntityRequest.getDepartmentEntityDTO());
 
-                persisterDepartmentEntityDTO.setPersisterDepartmentEntityRelationshipDTOS(
-                        getResolvedPersisterDepartmentRelationshipDtoList(requestedDepartmentEntityDTO));
-
-                PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = PersisterDepartmentEntityRequest.builder()
-                        .requestHeader(departmentEntityRequest.getRequestHeader())
-                        .persisterDepartmentEntityDtoList(Collections.singletonList(persisterDepartmentEntityDTO))
-                        .build();
-
-                kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityUpdateTopic(),persisterDepartmentEntityRequest);
-
-                BeanUtils.copyProperties(existingDepartmentEntity, departmentEntityRequest.getDepartmentEntityDTO());
+                kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentEntityUpdateTopic(),
+                        departmentEntityRequest);
             }
         } else {
             throw new CustomException("INVALID_DEPARTMENT_ENTITY_ID", "Unable to find department entity by given id");
@@ -182,41 +178,22 @@ public class DepartmentEntityService {
         return departmentEntityRequest;
     }
 
-    private List<PersisterDepartmentEntityRelationshipDTO> getResolvedPersisterDepartmentRelationshipDtoList(
-            DepartmentEntityDTO departmentEntityDTO) {
 
-        List<PersisterDepartmentEntityRelationshipDTO> persisterDepartmentEntityRelationshipDTOList = new ArrayList<>();
-
-        if (departmentEntityDTO != null && departmentEntityDTO.getId() != null
-                && departmentEntityDTO.getChildren() != null && !departmentEntityDTO.getChildren().isEmpty()) {
-
-            persisterDepartmentEntityRelationshipDTOList =
-                    dtoWrapper.wrapPersisterDepartmentEntityRelationshipDTOList(departmentEntityDTO);
-
-            List<DepartmentEntityRelationship> existingEntityRelationshipList =
-                    entityRelationshipRepository.findByParentId(departmentEntityDTO.getId());
-
-            if (existingEntityRelationshipList != null && !existingEntityRelationshipList.isEmpty()) {
-                List<String> newChildList = departmentEntityDTO.getChildren();
-
-                List<PersisterDepartmentEntityRelationshipDTO> deactivatePersisterRelationshipDtoList =
-                        existingEntityRelationshipList.stream()
-                                .filter(departmentEntityRelationship ->
-                                        !newChildList.contains(departmentEntityRelationship.getChildId())
-                                )
-                                .map(departmentEntityRelationship ->
-                                        PersisterDepartmentEntityRelationshipDTO.builder()
-                                                .parentId(departmentEntityRelationship.getParentId())
-                                                .childId(departmentEntityRelationship.getChildId())
-                                                .status(false)
-                                                .build()
-                                )
-                                .collect(Collectors.toList());
-
-                persisterDepartmentEntityRelationshipDTOList.addAll(deactivatePersisterRelationshipDtoList);
-            }
-        }
-
-        return persisterDepartmentEntityRelationshipDTOList;
+    private void copyUpdatedRecordInDepartmentEntiyRequest(@NonNull DepartmentEntity existingDepartmentEntity,
+                                                           @NonNull DepartmentEntityDTO departmentEntityDTO) {
+        departmentEntityDTO.setId(existingDepartmentEntity.getId());
+        departmentEntityDTO.setTenantId(existingDepartmentEntity.getTenantId());
+        departmentEntityDTO.setDepartmentId(existingDepartmentEntity.getDepartmentId());
+        departmentEntityDTO.setCode(existingDepartmentEntity.getCode());
+        departmentEntityDTO.setName(existingDepartmentEntity.getName());
+        departmentEntityDTO.setHierarchyLevel(existingDepartmentEntity.getHierarchyLevel());
+        departmentEntityDTO.setAuditDetails(
+                AuditDetails.builder()
+                        .createdBy(existingDepartmentEntity.getCreatedBy())
+                        .lastModifiedBy(existingDepartmentEntity.getLastModifiedBy())
+                        .createdTime(existingDepartmentEntity.getCreatedTime())
+                        .lastModifiedTime(existingDepartmentEntity.getLastModifiedTime())
+                        .build()
+        );
     }
 }

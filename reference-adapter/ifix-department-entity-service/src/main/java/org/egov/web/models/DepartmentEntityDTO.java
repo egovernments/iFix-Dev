@@ -46,7 +46,7 @@ public class DepartmentEntityDTO extends DepartmentEntityAbstract {
 
     @JsonProperty("children")
     @Valid
-    private List<String> children = null;
+    private List<DepartmentEntityChildrenDTO> children = null;
 
 }
 

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -75,13 +77,18 @@ public class DtoWrapper {
      * @param entityRelationshipList
      * @return
      */
-    private List<String> resolveChildIdList(String parentId, List<DepartmentEntityRelationship> entityRelationshipList) {
-        List<String> childList = new ArrayList<>();
+    private List<DepartmentEntityChildrenDTO> resolveChildIdList(String parentId, List<DepartmentEntityRelationship> entityRelationshipList) {
+        List<DepartmentEntityChildrenDTO> childList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(parentId) && entityRelationshipList != null && !entityRelationshipList.isEmpty()) {
             childList = entityRelationshipList.stream()
                     .filter(departmentEntityRelationship -> parentId.equals(departmentEntityRelationship.getParentId()))
-                    .map(departmentEntityRelationship -> departmentEntityRelationship.getChildId())
+                    .map(departmentEntityRelationship ->
+                            DepartmentEntityChildrenDTO.builder()
+                                    .childId(departmentEntityRelationship.getChildId())
+                                    .status(departmentEntityRelationship.getStatus())
+                                    .build()
+                    )
                     .collect(Collectors.toList());
         }
 
@@ -138,8 +145,8 @@ public class DtoWrapper {
                 ).build();
     }
 
-    private List<String> getChildIdListFromDepartmentEntityRelationship(String departmentId) {
-        List<String> childList = new ArrayList<>();
+    private List<DepartmentEntityChildrenDTO> getChildIdListFromDepartmentEntityRelationship(String departmentId) {
+        List<DepartmentEntityChildrenDTO> childList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(departmentId)) {
             List<DepartmentEntityRelationship> existingEntityRelationshipList =
@@ -147,7 +154,12 @@ public class DtoWrapper {
 
             if (existingEntityRelationshipList != null && !existingEntityRelationshipList.isEmpty()) {
                 childList = existingEntityRelationshipList.stream()
-                        .map(departmentEntityRelationship -> departmentEntityRelationship.getChildId())
+                        .map(departmentEntityRelationship ->
+                                DepartmentEntityChildrenDTO.builder()
+                                        .childId(departmentEntityRelationship.getChildId())
+                                        .status(departmentEntityRelationship.getStatus())
+                                        .build()
+                        )
                         .collect(Collectors.toList());
             }
         }
@@ -183,116 +195,15 @@ public class DtoWrapper {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * @param departmentEntityRequest
-     * @return
-     */
     public @NonNull
-    PersisterDepartmentEntityRequest wrapPersisterDepartmentEntityRequest(
-            @NonNull DepartmentEntityRequest departmentEntityRequest) {
+    List<String> getChildListFromDepatmentEntityChildren(@NonNull List<DepartmentEntityChildrenDTO>
+                                                                 departmentEntityChildrenDTOList) {
+        List<String> childList = new ArrayList<>();
 
-        PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = PersisterDepartmentEntityRequest.builder()
-                .requestHeader(departmentEntityRequest.getRequestHeader())
-                .build();
+        childList = departmentEntityChildrenDTOList.stream()
+                .map(departmentEntityChildrenDTO -> departmentEntityChildrenDTO.getChildId())
+                .collect(Collectors.toList());
 
-        if (departmentEntityRequest.getDepartmentEntityDTO() != null
-                && departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails() != null) {
-
-            List<PersisterDepartmentEntityRelationshipDTO> departmentEntityRelationshipDTOList =
-                    wrapPersisterDepartmentEntityRelationshipDTOList(departmentEntityRequest.getDepartmentEntityDTO());
-
-            PersisterDepartmentEntityDTO departmentEntityDTO = PersisterDepartmentEntityDTO.builder()
-                    .id(departmentEntityRequest.getDepartmentEntityDTO().getId())
-                    .tenantId(departmentEntityRequest.getDepartmentEntityDTO().getTenantId())
-                    .departmentId(departmentEntityRequest.getDepartmentEntityDTO().getDepartmentId())
-                    .code(departmentEntityRequest.getDepartmentEntityDTO().getCode())
-                    .name(departmentEntityRequest.getDepartmentEntityDTO().getName())
-                    .hierarchyLevel(departmentEntityRequest.getDepartmentEntityDTO().getHierarchyLevel())
-                    .createdBy(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getCreatedBy())
-                    .lastModifiedBy(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getLastModifiedBy())
-                    .createdTime(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getCreatedTime())
-                    .lastModifiedTime(departmentEntityRequest.getDepartmentEntityDTO().getAuditDetails().getLastModifiedTime())
-                    .persisterDepartmentEntityRelationshipDTOS(departmentEntityRelationshipDTOList)
-                    .build();
-
-            persisterDepartmentEntityRequest
-                    .setPersisterDepartmentEntityDtoList(Collections.singletonList(departmentEntityDTO));
-
-        }
-
-        return persisterDepartmentEntityRequest;
-    }
-
-    /**
-     * @param departmentEntityDTO
-     * @return
-     */
-    public List<PersisterDepartmentEntityRelationshipDTO> wrapPersisterDepartmentEntityRelationshipDTOList(
-            @NonNull DepartmentEntityDTO departmentEntityDTO) {
-
-        List<PersisterDepartmentEntityRelationshipDTO> departmentEntityRelationshipDTOList = new ArrayList<>();
-
-        if (departmentEntityDTO.getChildren() != null && !departmentEntityDTO.getChildren().isEmpty()) {
-
-            departmentEntityRelationshipDTOList = departmentEntityDTO.getChildren().stream()
-                            .map(child ->
-                                    PersisterDepartmentEntityRelationshipDTO.builder()
-                                            .parentId(departmentEntityDTO.getId())
-                                            .childId(child)
-                                            .status(true)
-                                            .build()
-                            ).collect(Collectors.toList());
-        }
-
-        return departmentEntityRelationshipDTOList;
-    }
-
-    /**
-     * @param departmentEntity
-     * @return
-     */
-    public PersisterDepartmentEntityDTO wrapDepartmentEntityIntoPersisterDTO(@NonNull DepartmentEntity departmentEntity) {
-        return PersisterDepartmentEntityDTO.builder()
-                .id(departmentEntity.getId())
-                .departmentId(departmentEntity.getDepartmentId())
-                .name(departmentEntity.getName())
-                .hierarchyLevel(departmentEntity.getHierarchyLevel())
-                .code(departmentEntity.getCode())
-                .tenantId(departmentEntity.getTenantId())
-                .createdBy(departmentEntity.getCreatedBy())
-                .createdTime(departmentEntity.getCreatedTime())
-                .lastModifiedBy(departmentEntity.getLastModifiedBy())
-                .lastModifiedTime(departmentEntity.getLastModifiedTime())
-                .build();
-    }
-
-    public @NonNull
-    PersisterDepartmentHierarchyLevelRequest wrapPersisterDepartmentHierarchyLevelRequest(
-            @NonNull DepartmentHierarchyLevelRequest departmentHierarchyLevelRequest) {
-
-        PersisterDepartmentHierarchyLevelRequest persisterRequest = PersisterDepartmentHierarchyLevelRequest.builder()
-                .requestHeader(departmentHierarchyLevelRequest.getRequestHeader())
-                .build();
-
-        if (departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO() != null
-                && departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getAuditDetails() != null) {
-
-            PersisterDepartmentHierarchyLevelDTO hierarchyLevelDTO = PersisterDepartmentHierarchyLevelDTO.builder()
-                    .id(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getId())
-                    .tenantId(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getTenantId())
-                    .departmentId(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getDepartmentId())
-                    .label(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getLabel())
-                    .parent(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getParent())
-                    .level(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getLevel())
-                    .createdBy(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getAuditDetails().getCreatedBy())
-                    .lastModifiedBy(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getAuditDetails().getLastModifiedBy())
-                    .createdTime(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getAuditDetails().getCreatedTime())
-                    .lastModifiedTime(departmentHierarchyLevelRequest.getDepartmentHierarchyLevelDTO().getAuditDetails().getLastModifiedTime())
-                    .build();
-
-            persisterRequest.setDepartmentHierarchyLevelDTO(Collections.singletonList(hierarchyLevelDTO));
-        }
-
-        return persisterRequest;
+        return childList;
     }
 }

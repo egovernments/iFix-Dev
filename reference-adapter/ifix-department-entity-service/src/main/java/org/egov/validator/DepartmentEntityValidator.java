@@ -7,6 +7,7 @@ import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityConstant;
 import org.egov.util.DepartmentHierarchyUtil;
+import org.egov.util.DtoWrapper;
 import org.egov.web.models.*;
 import org.egov.web.models.persist.DepartmentEntity;
 import org.egov.web.models.persist.DepartmentHierarchyLevel;
@@ -28,6 +29,9 @@ public class DepartmentEntityValidator {
 
     @Autowired
     private DepartmentHierarchyUtil hierarchyUtil;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
 
     /**
      *
@@ -77,7 +81,8 @@ public class DepartmentEntityValidator {
             }else if (!departmentEntityDTO.getChildren().isEmpty()) {
 
                 List<DepartmentEntity> departmentEntityList = departmentEntityRepository
-                        .findByIdsAndHierarchyLevel(departmentEntityDTO.getChildren(),
+                        .findByIdsAndHierarchyLevel(
+                                dtoWrapper.getChildListFromDepatmentEntityChildren(departmentEntityDTO.getChildren()),
                                 departmentEntityDTO.getHierarchyLevel() + 1);
 
                 if (departmentEntityList == null || departmentEntityList.isEmpty()
@@ -169,7 +174,8 @@ public class DepartmentEntityValidator {
                             "while child exist");
                 } else {
                     List<DepartmentEntity> departmentEntityList = departmentEntityRepository
-                            .findByIdsAndHierarchyLevel(departmentEntityDTO.getChildren(),
+                            .findByIdsAndHierarchyLevel(
+                                    dtoWrapper.getChildListFromDepatmentEntityChildren(departmentEntityDTO.getChildren()),
                                     departmentEntityDTO.getHierarchyLevel() + 1);
 
                     if (departmentEntityList == null || departmentEntityList.isEmpty()

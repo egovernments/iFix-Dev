@@ -52,8 +52,7 @@ public class DepartmentHierarchyLevelService {
         validator.validateHierarchyLevelCreatePost(request);
         enricher.enrichHierarchyLevelCreatePost(request);
 
-        kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentHierarchyCreateTopic(),
-                dtoWrapper.wrapPersisterDepartmentHierarchyLevelRequest(request));
+        kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentHierarchyCreateTopic(), request);
 
         return request;
     }
