@@ -107,6 +107,9 @@ import useDssMdms from "./dss/useMDMS";
 import useDashboardConfig from "./dss/useDashboardConfig";
 import useDSSDashboard from "./dss/useDSSDashboard";
 import useGetChart from "./dss/useGetChart";
+import useGetHierarchy from "./dss/useGetHierarchy";
+import useGetHierarchyMetaData from "./dss/useGetHierarchyMetaData";
+import useGetDepartments from "./dss/useGetDepartments";
 
 import useMCollectMDMS from "./mcollect/useMCollectMDMS";
 import useMCollectSearch from "./mcollect/useMCollectSearch";
@@ -328,6 +331,9 @@ const dss = {
   useDashboardConfig,
   useDSSDashboard,
   useGetChart,
+  useGetHierarchy,
+  useGetHierarchyMetaData,
+  useGetDepartments
 };
 
 const mcollect = {

@@ -109,7 +109,7 @@ const MetricChartRow = ({ data, setChartDenomination, index, moduleCode }) => {
   };
 
   const getHeight = (data) => {
-    if (isMobile) return "auto";
+    if (isMobile || t(`TIP_${data.name}`).length > 30) return "auto";
     else return 50;
     // if (isMobile) return t(`TIP_${data.name}`).length < 50 ? 50 : "auto";
     // else return 50;
@@ -131,6 +131,7 @@ const MetricChartRow = ({ data, setChartDenomination, index, moduleCode }) => {
             width: getWidth(data),
             height: getHeight(data),
             whiteSpace: "normal",
+            zIndex: 100
           }}
         >
           <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>

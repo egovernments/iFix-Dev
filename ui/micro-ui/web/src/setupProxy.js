@@ -1,6 +1,7 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_URL,
+  // target: process.env.REACT_APP_PROXY_URL,
+  target: "https://ifix-qa.ifix.org.in",
   changeOrigin: true,
 });
 module.exports = function (app) {

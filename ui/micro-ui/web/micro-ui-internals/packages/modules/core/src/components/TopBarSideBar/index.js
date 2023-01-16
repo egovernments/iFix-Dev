@@ -53,8 +53,11 @@ const TopBarSideBar = ({
         mobileView={mobileView}
         userOptions={userOptions}
         handleUserDropdownSelection={handleUserDropdownSelection}
-        logoUrl={logoUrl}
-        showLanguageChange={showLanguageChange}
+        // Commenting language selector and hardcoding logo url for now
+        // logoUrl={logoUrl}
+        // showLanguageChange={showLanguageChange}
+        logoUrl="https://s3.ap-south-1.amazonaws.com/ifix-dev-assets/ifix-mgramseva-logo.png"
+        showLanguageChange={false}
       />
       {showDialog && (
         <LogoutDialog onSelect={handleOnSubmit} onCancel={handleOnCancel} onDismiss={handleOnCancel}></LogoutDialog>

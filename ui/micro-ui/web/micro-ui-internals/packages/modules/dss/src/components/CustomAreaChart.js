@@ -292,7 +292,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
             data={chartData}
             margin={{
               top: 15,
-              right: 5,
+              right: 10,
               left: 20,
               bottom: 5,
             }}
@@ -301,6 +301,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
             <XAxis dataKey="name" />
             <YAxis
               tickFormatter={yAxistickFormatter}
+              width={70}
               /*
             Removed this custom yaxis label for all line charts 
             label={{
