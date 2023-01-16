@@ -19,7 +19,7 @@ public class COARequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("chartOfAccount")
-    private List<ChartOfAccount> chartOfAccount = null;
+    private ChartOfAccount chartOfAccount = null;
 
 
 }

@@ -31,6 +31,8 @@ public class MasterDataMigrationService {
         COASearchRequest searchRequest = COASearchRequest.builder().criteria(criteria).requestHeader(request.getRequestHeader()).build();
         Object coaSearchResponse = serviceRequestRepository.fetchResult(new StringBuilder(ifixMasterDataServiceHost + "ifix-master-data/chartOfAccount/v1/_search"), searchRequest);
         COAResponse response = objectMapper.convertValue(coaSearchResponse, COAResponse.class);
-        producer.push("migrate-coa-data", COARequest.builder().chartOfAccount(response.getChartOfAccounts()).requestHeader(request.getRequestHeader()).build());
+        response.getChartOfAccounts().forEach(chartOfAccount -> {
+            producer.push("save-coa", COARequest.builder().chartOfAccount(chartOfAccount).requestHeader(request.getRequestHeader()).build());
+        });
     }
 }
