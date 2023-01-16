@@ -212,7 +212,10 @@ components:
           description: Start date of the billing period for which transaction is applicable
           format: int64
           example: 1628177643000
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
       description: Capture the transaction amount and chart of account corresponding to the transaction amount
+      
     Criteria:
       required:
         - eventType
