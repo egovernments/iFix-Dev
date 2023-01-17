@@ -5,3 +5,5 @@ iFIX is developed as a communication channel to facilitate tranfer of fiscal dat
 ## [Documentation](https://pfm.digit.org/)
 
 ## [Installation Guide](https://pfm.digit.org/platform/installation)
+
+## [Discuss with Community](https://github.com/egovernments/iFix-Dev/discussions)
