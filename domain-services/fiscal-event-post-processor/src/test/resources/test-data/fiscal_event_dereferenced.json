@@ -2,10 +2,6 @@
   "version": "2.0.1",
   "id": "10cd9034-59ce-424a-b6bf-6855b2b8c846",
   "tenantId": "pb",
-  "government": {
-    "id": "pb",
-    "name": "Punjab"
-  },
   "eventType": "Bill",
   "ingestionTime": 1636559855914,
   "eventTime": 1629286294000,

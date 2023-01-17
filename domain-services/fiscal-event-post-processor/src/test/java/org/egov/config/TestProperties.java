@@ -19,9 +19,6 @@ public class TestProperties {
     @Value("${fiscal.event.dereferenced.data}")
     private String fiscalEventDereferencedData;
 
-    @Value("${gov.search.response.data}")
-    private String govSearchResponseData;
-
     @Value("${coa.search.response.data}")
     private String coaSearchResponseData;
 }

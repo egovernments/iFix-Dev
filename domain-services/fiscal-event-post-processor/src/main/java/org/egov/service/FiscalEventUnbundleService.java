@@ -53,7 +53,6 @@ public class FiscalEventUnbundleService {
         fiscalEventLineItemUnbundled.setIngestionTime(fiscalEventDeReferenced.getIngestionTime());
         fiscalEventLineItemUnbundled.setEventTime(fiscalEventDeReferenced.getEventTime());
         fiscalEventLineItemUnbundled.setEventType(fiscalEventDeReferenced.getEventType());
-        fiscalEventLineItemUnbundled.setGovernment(fiscalEventDeReferenced.getGovernment());
         fiscalEventLineItemUnbundled.setLinkedEventId(fiscalEventDeReferenced.getLinkedEventId());
         fiscalEventLineItemUnbundled.setLinkedReferenceId(fiscalEventDeReferenced.getLinkedReferenceId());
         fiscalEventLineItemUnbundled.setReferenceId(fiscalEventDeReferenced.getReferenceId());

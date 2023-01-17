@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.TestDataFormatter;
 import org.egov.models.*;
-import org.egov.util.*;
+import org.egov.util.CoaUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -37,9 +37,6 @@ class FiscalEventDereferenceServiceTest {
     @InjectMocks
     private FiscalEventDereferenceService fiscalEventDereferenceService;
 
-    @Mock
-    private GovernmentUtil governmentUtil;
-
     @Autowired
     private ObjectMapper mapper;
 
@@ -47,15 +44,11 @@ class FiscalEventDereferenceServiceTest {
     private TestDataFormatter testDataFormatter;
 
     private FiscalEventRequest fiscalEventRequest;
-    private Government government;
     private ChartOfAccount chartOfAccount;
 
     @BeforeAll
     void init() throws IOException {
         fiscalEventRequest = testDataFormatter.getFiscalEventValidatedData();
-
-        JsonNode govtJsonNode = testDataFormatter.getValidGovernmentSearchResponse();
-        government = mapper.convertValue(govtJsonNode.get("government").get(0), Government.class);
 
         JsonNode coaJsonNode = testDataFormatter.getCOASearchResponse();
         chartOfAccount = mapper.convertValue(coaJsonNode.get("chartOfAccounts").get(0), ChartOfAccount.class);
@@ -63,8 +56,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereference() {
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(new ArrayList<Government>());
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
         when(this.coaUtil.getCOAIdsFromCOAService((org.egov.common.contract.request.RequestHeader) any(),
@@ -82,12 +73,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((org.egov.common.contract.request.RequestHeader) any(),
@@ -96,11 +85,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereferenceWithAllDataFromMasterServices() {
-        List<Government> governments = new ArrayList<>();
-        governments.add(government);
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(governments);
-
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
 
@@ -120,12 +104,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNotNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any());
@@ -133,8 +115,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereferenceWithDefaultFiscalEvent() {
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(new ArrayList<Government>());
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
 
@@ -157,12 +137,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((org.egov.common.contract.request.RequestHeader) any(),
@@ -171,8 +149,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereferenceWithFiscalEventData() {
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(new ArrayList<Government>());
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
         when(this.coaUtil.getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any()))
@@ -188,12 +164,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any());
@@ -201,8 +175,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereferenceWithProjectDetails() {
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(new ArrayList<Government>());
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
         when(this.coaUtil.getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any()))
@@ -224,12 +196,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any());
@@ -239,8 +209,6 @@ class FiscalEventDereferenceServiceTest {
 
     @Test
     void testDereferenceWithServiceReturnsProjectDetails() {
-        when(this.governmentUtil.getGovernmentFromGovernmentService((FiscalEventRequest) any()))
-                .thenReturn(new ArrayList<Government>());
         doNothing().when(this.fiscalEventDereferenceEnrichmentService)
                 .enrich((FiscalEventRequest) any(), (FiscalEventDeReferenced) any());
         when(this.coaUtil.getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any()))
@@ -255,12 +223,10 @@ class FiscalEventDereferenceServiceTest {
         assertNull(actualDereferenceResult.getLinkedEventId());
         assertNull(actualDereferenceResult.getIngestionTime());
         assertNull(actualDereferenceResult.getId());
-        assertNull(actualDereferenceResult.getGovernment());
         assertNull(actualDereferenceResult.getEventType());
         assertNull(actualDereferenceResult.getEventTime());
         assertNull(actualDereferenceResult.getAuditDetails());
         assertNull(actualDereferenceResult.getAttributes());
-        verify(this.governmentUtil).getGovernmentFromGovernmentService((FiscalEventRequest) any());
         verify(this.fiscalEventDereferenceEnrichmentService).enrich((FiscalEventRequest) any(),
                 (FiscalEventDeReferenced) any());
         verify(this.coaUtil).getCOAIdsFromCOAService((RequestHeader) any(), (FiscalEvent) any());

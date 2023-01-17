@@ -34,9 +34,6 @@ public class FiscalEventLineItemUnbundled {
     @JsonProperty("tenantId")
     private String tenantId = null;
 
-    @JsonProperty("government")
-    private Government government = null;
-
     @JsonProperty("eventType")
     private String eventType = null;
 

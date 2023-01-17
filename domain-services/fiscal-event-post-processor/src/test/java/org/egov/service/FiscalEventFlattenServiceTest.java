@@ -1,7 +1,8 @@
 package org.egov.service;
 
 import org.egov.common.contract.AuditDetails;
-import org.egov.models.*;
+import org.egov.models.ChartOfAccount;
+import org.egov.models.FiscalEventLineItemUnbundled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
@@ -47,7 +48,6 @@ class FiscalEventFlattenServiceTest {
     @Test
     void testGetFlattenData() {
         ArrayList<FiscalEventLineItemUnbundled> fiscalEventLineItemUnbundledList = new ArrayList<FiscalEventLineItemUnbundled>();
-        Government government = new Government("42", "Name");
 
         BigDecimal amount = BigDecimal.valueOf(1L);
         ChartOfAccount coa = new ChartOfAccount("42", "Coa Code", "Major Head", "Major Head Name", "Major Head Type",
@@ -55,14 +55,12 @@ class FiscalEventFlattenServiceTest {
                 "Group Head", "Group Head Name", "Object Head", "Object Head Name");
 
         fiscalEventLineItemUnbundledList
-                .add(new FiscalEventLineItemUnbundled("2.0.0", "42", "42", "42", government,
+                .add(new FiscalEventLineItemUnbundled("2.0.0", "42", "42", "42",
                         "Event Type", 1L, 1L, "42", "42", "42", amount, coa, 1L, 1L, new AuditDetails(), new Object()));
         List<String> actualFlattenData = this.fiscalEventFlattenService.getFlattenData(fiscalEventLineItemUnbundledList);
         assertEquals(1, actualFlattenData.size());
         assertEquals(
-                "{\"version\":\"2.0.0\",\"id\":\"42\",\"eventId\":\"42\",\"tenantId\":\"42\",\"government" +
-                        ".id\":\"42\",\"government.name\":"
-                        + "\"Name\",\"eventType\":\"Event Type\",\"ingestionTime"
+                "{\"version\":\"2.0.0\",\"id\":\"42\",\"eventId\":\"42\",\"tenantId\":\"42\",\"eventType\":\"Event Type\",\"ingestionTime"
                         + "\":1,\"eventTime\":1,\"referenceId\":\"42\",\"linkedEventId\":\"42\"," +
                         "\"linkedReferenceId\":\"42\",\"amount\":1,\"coa.id"
                         + "\":\"42\",\"coa.coaCode\":\"Coa Code\",\"coa.majorHead\":\"Major Head\",\"coa.majorHeadName\":\"Major Head"

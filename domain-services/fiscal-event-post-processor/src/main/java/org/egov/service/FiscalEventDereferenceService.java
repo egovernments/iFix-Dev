@@ -1,11 +1,9 @@
 package org.egov.service;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.egov.models.*;
-import org.egov.util.*;
+import org.egov.util.CoaUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,30 +15,18 @@ import java.util.List;
 @Slf4j
 public class FiscalEventDereferenceService {
 
-    public static final String DEPARTMENT_ENTITY = "departmentEntity";
     @Autowired
     private FiscalEventDereferenceEnrichmentService enricher;
 
     @Autowired
     private CoaUtil coaUtil;
 
-    @Autowired
-    private GovernmentUtil governmentUtil;
-
     public FiscalEventDeReferenced dereference(FiscalEventRequest fiscalEventRequest) {
         FiscalEventDeReferenced fiscalEventDeReferenced = new FiscalEventDeReferenced();
-        dereferenceTenantId(fiscalEventRequest, fiscalEventDeReferenced);
+        fiscalEventDeReferenced.setTenantId(fiscalEventRequest.getFiscalEvent().getTenantId());
         dereferenceCoaId(fiscalEventRequest, fiscalEventDeReferenced);
         enricher.enrich(fiscalEventRequest, fiscalEventDeReferenced);
         return fiscalEventDeReferenced;
-    }
-
-    private void dereferenceTenantId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {
-        List<Government> governments = governmentUtil.getGovernmentFromGovernmentService(fiscalEventRequest);
-        if (!governments.isEmpty()) {
-            fiscalEventDeReferenced.setGovernment(governments.get(0));
-        }
-        fiscalEventDeReferenced.setTenantId(fiscalEventRequest.getFiscalEvent().getTenantId());
     }
 
     private void dereferenceCoaId(FiscalEventRequest fiscalEventRequest, FiscalEventDeReferenced fiscalEventDeReferenced) {

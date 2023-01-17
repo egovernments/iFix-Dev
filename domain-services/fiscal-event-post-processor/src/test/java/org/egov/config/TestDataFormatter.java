@@ -2,8 +2,6 @@ package org.egov.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.egov.models.FiscalEventDeReferenced;
 import org.egov.models.FiscalEventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,23 +61,6 @@ public class TestDataFormatter {
                         FiscalEventDeReferenced.class);
 
         return fiscalEventDeReferenced;
-    }
-
-
-    public JsonNode getValidGovernmentSearchResponse() throws IOException {
-        JsonNode validGovernmentResponse =
-                new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()));
-        return validGovernmentResponse;
-    }
-
-    public JsonNode getEmptyGovernmentSearchResponse() throws IOException {
-        ObjectNode invalidGovernmentResponse =
-                (ObjectNode) new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()));
-
-        ArrayNode emptyArray = new ObjectMapper().createArrayNode();
-        invalidGovernmentResponse.set("government", emptyArray);
-
-        return invalidGovernmentResponse;
     }
 
     public JsonNode getCOASearchResponse() throws IOException {
