@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.department_entity
+CREATE TABLE IF NOT EXISTS department_entity
 (
     id character varying(255) NOT NULL,
     code character varying(64),
@@ -13,7 +13,16 @@ CREATE TABLE IF NOT EXISTS public.department_entity
     CONSTRAINT department_entity_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.department_hierarchy_level
+CREATE TABLE IF NOT EXISTS department_entity_children
+(
+    parent_id character varying(64) NOT NULL,
+    child_id character varying(64),
+    status boolean,
+
+    PRIMARY KEY (parent_id, child_id)
+);
+
+CREATE TABLE IF NOT EXISTS department_hierarchy_level
 (
     id character varying(255) NOT NULL,
     created_by character varying(255),
@@ -26,13 +35,4 @@ CREATE TABLE IF NOT EXISTS public.department_hierarchy_level
     parent character varying(64),
     tenant_id character varying(64),
     CONSTRAINT department_hierarchy_level_pkey PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS public.department_entity_relationship
-(
-    parent_id character varying(64) NOT NULL,
-    child_id character varying(64),
-    status boolean,
-
-    PRIMARY KEY (parent_id, child_id)
 );
