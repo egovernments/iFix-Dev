@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS department_entity
     last_modified_time bigint,
     name character varying(255),
     tenant_id character varying(64),
+    
     CONSTRAINT department_entity_pkey PRIMARY KEY (id)
 );
 
@@ -19,7 +20,13 @@ CREATE TABLE IF NOT EXISTS department_entity_children
     child_id character varying(64),
     status boolean,
 
-    PRIMARY KEY (parent_id, child_id)
+    CONSTRAINT department_entity_children_pkey PRIMARY KEY (parent_id, child_id),
+    
+    CONSTRAINT department_entity_children_parent_id FOREIGN KEY(parent_id) REFERENCES department_entity(id),
+    CONSTRAINT department_entity_children_child_id FOREIGN KEY(child_id) REFERENCES department_entity(id)
+    
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS department_hierarchy_level
@@ -34,5 +41,6 @@ CREATE TABLE IF NOT EXISTS department_hierarchy_level
     level integer,
     parent character varying(64),
     tenant_id character varying(64),
+    
     CONSTRAINT department_hierarchy_level_pkey PRIMARY KEY (id)
 );
