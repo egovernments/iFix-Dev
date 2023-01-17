@@ -2,19 +2,10 @@
 openapi: 3.0.0
 info:
   title: fiscal-event-post-processor
-  version: 2.0.0
+  version: 2.1.0
 paths: {}
 components:
   schemas:
-    Government:
-      type: object
-      properties:
-        id:
-          type: string
-          example: pb
-        name:
-          type: string
-          example: Punjab
     ChartOfAccount:
       type: object
       properties:
@@ -254,8 +245,6 @@ components:
           description: Tenant Id
           nullable: false
           example: pb
-        government:
-          $ref: '#/components/schemas/Government'
         sender:
           maxLength: 256
           minLength: 2
@@ -336,8 +325,6 @@ components:
           description: Tenant Id
           nullable: false
           example: pb
-        government:
-          $ref: '#/components/schemas/Government'
         sender:
           maxLength: 256
           minLength: 2

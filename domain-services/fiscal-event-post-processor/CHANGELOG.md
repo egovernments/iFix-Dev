@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 2.1.0 - 2023-01-17
+- Removed Government master data
+
 ## 2.0.1 - 2022-04-22
 - Removed the version addition into Fiscal Events. It'll get the version of fiscal events from fiscal-event-service as part of consumer.
 
