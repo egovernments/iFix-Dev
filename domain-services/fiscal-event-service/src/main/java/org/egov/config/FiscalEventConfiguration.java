@@ -55,7 +55,7 @@ public class FiscalEventConfiguration {
     private String ifixMasterGovernmentSearchPath;
 
     @Value("${fiscal.event.push.request.max.size}")
-    private String fiscalEventPushReqMaxSize;
+    private Integer fiscalEventPushReqMaxSize;
 
     @Value("${fiscal.event.default.offset}")
     private Long defaultOffset;

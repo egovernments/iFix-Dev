@@ -105,11 +105,9 @@ public class FiscalEventValidator {
     }
 
     private void validateBatchSize(FiscalEventRequest fiscalEventRequest) {
-        if (StringUtils.isNotBlank(fiscalEventConfiguration.getFiscalEventPushReqMaxSize())) {
-            int size = Integer.parseInt(fiscalEventConfiguration.getFiscalEventPushReqMaxSize());
-            if (fiscalEventRequest.getFiscalEvent().size() > size) {
-                throw new CustomException("PUSH_DATA_SIZE", "Fiscal event push data size should be at most : " + size);
-            }
+        if (fiscalEventRequest.getFiscalEvent().size() > fiscalEventConfiguration.getFiscalEventPushReqMaxSize()) {
+            throw new CustomException("PUSH_DATA_SIZE",
+                    "Fiscal event push data size should be at most : " + fiscalEventConfiguration.getFiscalEventPushReqMaxSize());
         }
     }
 
