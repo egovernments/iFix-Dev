@@ -9,6 +9,7 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.CoaUtil;
 import org.egov.util.FiscalEventUtil;
+import org.egov.util.MasterDataConstants;
 import org.egov.web.models.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class FiscalEventEnrichmentService {
         if (fiscalEvents != null && !fiscalEvents.isEmpty()) {
             Long ingestionTime = System.currentTimeMillis();
             for (FiscalEvent fiscalEvent : fiscalEvents) {
-                //set the id
+                fiscalEvent.setVersion(MasterDataConstants.FISCAL_EVENT_VERSION);
                 fiscalEvent.setId(UUID.randomUUID().toString());
 
                 for (Amount amount : fiscalEvent.getAmountDetails()) {

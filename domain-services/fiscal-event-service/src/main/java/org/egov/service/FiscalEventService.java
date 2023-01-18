@@ -50,7 +50,7 @@ public class FiscalEventService {
      */
     public FiscalEventRequest fiscalEventsV1PushPost(FiscalEventRequest fiscalEventRequest) {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
-        //TODO: Enrich API version with data  
+
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
 
         if (!CollectionUtils.isEmpty(fiscalEventRequest.getFiscalEvent())) {
