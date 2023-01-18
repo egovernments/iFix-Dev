@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS eg_ifix_amount_detail;
+DROP TABLE IF EXISTS eg_ifix_receivers;
+DROP TABLE IF EXISTS eg_ifix_fiscal_event;
+
 CREATE TABLE eg_ifix_fiscal_event (
     id varchar,
     tenantid varchar NOT NULL,
@@ -14,23 +18,20 @@ CREATE TABLE eg_ifix_fiscal_event (
     lastmodifiedtime bigint,
     lastmodifiedby varchar,
 
-    CONSTRAINT pk_ifix_fiscalevent PRIMARY KEY(id),
-    CONSTRAINT uk_ifix_fiscalevent UNIQUE(id)
+    CONSTRAINT pk_ifix_fiscalevent PRIMARY KEY(id)
 );
 
-CREATE TABLE eg_ifix_receivers(
+CREATE TABLE eg_ifix_receivers (
     id character varying(64),
     fiscaleventid character varying(64),
     receiver varchar NOT NULL,
 
-    CONSTRAINT uk_eg_ifix_receivers PRIMARY KEY (id),
+    CONSTRAINT pk_eg_ifix_receivers PRIMARY KEY (id),
     CONSTRAINT fk_eg_ifix_receivers FOREIGN KEY (fiscaleventid) REFERENCES eg_ifix_fiscal_event (id)
 
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
-
-
 
 CREATE TABLE eg_ifix_amount_detail (
     id varchar,
@@ -46,11 +47,9 @@ CREATE TABLE eg_ifix_amount_detail (
     lastmodifiedtime bigint NOT NULL,
     lastmodifiedby varchar NOT NULL,
 
-    CONSTRAINT pk_ifix_amount_detail PRIMARY KEY(id,tenantid),
-    CONSTRAINT fk_eg_ifix_fiscal_event
-    FOREIGN KEY(fiscaleventid)
-	REFERENCES eg_ifix_fiscal_event(id)
+    CONSTRAINT pk_ifix_amount_detail PRIMARY KEY(id),
+    CONSTRAINT fk_eg_ifix_amout_detail_fiscal_event FOREIGN KEY(fiscaleventid) REFERENCES eg_ifix_fiscal_event(id)
+
     ON UPDATE CASCADE
     ON DELETE CASCADE
-
 );
