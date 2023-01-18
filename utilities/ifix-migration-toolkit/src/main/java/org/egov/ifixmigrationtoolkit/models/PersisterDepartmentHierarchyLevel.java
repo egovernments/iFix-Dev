@@ -2,6 +2,7 @@ package org.egov.ifixmigrationtoolkit.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.egov.common.contract.AuditDetails;
 
 
 @Getter
@@ -28,17 +29,8 @@ public class PersisterDepartmentHierarchyLevel {
     @JsonProperty("level")
     private Integer level = null;
 
-    @JsonProperty("createdBy")
-    private String createdBy = null;
-
-    @JsonProperty("lastModifiedBy")
-    private String lastModifiedBy = null;
-
-    @JsonProperty("createdTime")
-    private Long createdTime = null;
-
-    @JsonProperty("lastModifiedTime")
-    private Long lastModifiedTime = null;
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails = null;
 
 
 }

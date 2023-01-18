@@ -9,9 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PersisterDepartmentEntityChildren {
-    @JsonProperty("parentId")
-    private String parentId = null;
-
     @JsonProperty("childId")
     private String childId = null;
 

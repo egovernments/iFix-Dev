@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class PersisterDepartmentEntityRequest {
     @JsonProperty("departmentEntity")
-    private List<PersisterDepartmentEntity> departmentEntity = null;
+    private PersisterDepartmentEntity departmentEntity = null;
 
 
 }
