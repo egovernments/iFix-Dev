@@ -1,9 +1,11 @@
 package org.egov.ifixmigrationtoolkit.util;
 
+import org.egov.common.contract.AuditDetails;
 import org.egov.ifixmigrationtoolkit.models.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +32,17 @@ public class ObjectWrapper {
                                     .departmentId(departmentEntity.getDepartmentId())
                                     .code(departmentEntity.getCode())
                                     .name(departmentEntity.getName())
+
                                     .hierarchyLevel(departmentEntity.getHierarchyLevel())
-                                    .createdBy(departmentEntity.getAuditDetails().getCreatedBy())
-                                    .lastModifiedBy(departmentEntity.getAuditDetails().getLastModifiedBy())
-                                    .createdTime(departmentEntity.getAuditDetails().getCreatedTime())
-                                    .lastModifiedTime(departmentEntity.getAuditDetails().getLastModifiedTime())
-                                    .children(String.join(",", departmentEntity.getChildren()))
+                                    .auditDetails(
+                                            AuditDetails.builder()
+                                                    .lastModifiedBy(departmentEntity.getAuditDetails().getLastModifiedBy())
+                                                    .lastModifiedTime(departmentEntity.getAuditDetails().getLastModifiedTime())
+                                                    .createdBy(departmentEntity.getAuditDetails().getCreatedBy())
+                                                    .createdTime(departmentEntity.getAuditDetails().getCreatedTime())
+                                                    .build()
+                                    )
+                                    .children(getDepartmentEntityChildren(departmentEntity.getId(),departmentEntity.getChildren()))
                                     .build()
 
                     ).collect(Collectors.toList());
@@ -44,6 +51,25 @@ public class ObjectWrapper {
         }
 
         return persisterDepartmentEntityRequest;
+    }
+
+    /**
+     * @param childList
+     * @return
+     */
+    private List<PersisterDepartmentEntityChildren> getDepartmentEntityChildren(String parentId, List<String> childList) {
+        if (childList != null && !childList.isEmpty()) {
+            return childList.stream()
+                    .filter(child -> child != null && !child.isEmpty())
+                    .map(child -> PersisterDepartmentEntityChildren.builder()
+                            .parentId(parentId)
+                            .childId(child)
+                            .status(true)
+                            .build()
+                    ).collect(Collectors.toList());
+        }
+
+        return null;
     }
 
     /**
