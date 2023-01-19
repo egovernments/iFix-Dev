@@ -17,7 +17,7 @@ public class DepartmentQueryCriteria {
             "tenant_id, created_by, created_time, last_modified_by, last_modified_time FROM department_hierarchy_level";
 
     private static String DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL = "SELECT parent_id, child_id, status " +
-            "FROM department_entity_relationship";
+            "FROM department_entity_children";
 
     private StringBuilder criteriaQuery = new StringBuilder();
 

@@ -16,17 +16,11 @@ CREATE TABLE IF NOT EXISTS department_entity
 
 CREATE TABLE IF NOT EXISTS department_entity_children
 (
-    parent_id character varying(64) NOT NULL,
+    parent_id character varying(64),
     child_id character varying(64),
     status boolean,
 
-    CONSTRAINT department_entity_children_pkey PRIMARY KEY (parent_id, child_id),
-    
-    CONSTRAINT department_entity_children_parent_id FOREIGN KEY(parent_id) REFERENCES department_entity(id),
-    CONSTRAINT department_entity_children_child_id FOREIGN KEY(child_id) REFERENCES department_entity(id)
-    
-    ON UPDATE CASCADE
-    ON DELETE CASCADE
+    CONSTRAINT department_entity_children_pkey PRIMARY KEY (parent_id, child_id)
 );
 
 CREATE TABLE IF NOT EXISTS department_hierarchy_level
