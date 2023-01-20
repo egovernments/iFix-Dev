@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.producer.Producer;
 import org.egov.repository.FiscalEventRepository;
@@ -50,12 +53,20 @@ public class FiscalEventService {
      */
     public FiscalEventRequest fiscalEventsV1PushPost(FiscalEventRequest fiscalEventRequest) {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
-
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
 
+        // unbundle the bulk request and push to fiscal-event-post-processor
+        // to be removed when deprecating Druid
         if (!CollectionUtils.isEmpty(fiscalEventRequest.getFiscalEvent())) {
-            //push with request header details
-            producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequest);
+            RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
+            for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
+                ObjectNode fiscalEventRequestNode = JsonNodeFactory.instance.objectNode();
+                fiscalEventRequestNode.putPOJO("requestHeader", requestHeader);
+                fiscalEventRequestNode.putPOJO("fiscalEvent", fiscalEvent);
+
+                //push with request header details
+                producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequestNode);
+            }
 
             //push to ES sink
             ProducerPOJO objectForEsSink = new ProducerPOJO();
