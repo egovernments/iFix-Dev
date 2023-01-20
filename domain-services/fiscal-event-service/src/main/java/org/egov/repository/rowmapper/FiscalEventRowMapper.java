@@ -54,6 +54,7 @@ public class FiscalEventRowMapper implements ResultSetExtractor<List<FiscalEvent
                             .createdTime(rs.getLong("createdtime")).lastModifiedBy(rs.getString("lastmodifiedby"))
                             .lastModifiedTime(rs.getLong("lastmodifiedtime")).build();
                     currentEvent = FiscalEvent.builder()
+                            .version(rs.getString("version"))
                             .id(rs.getString("id"))
                             .tenantId(rs.getString("tenantid"))
                             .sender(rs.getString("sender"))
