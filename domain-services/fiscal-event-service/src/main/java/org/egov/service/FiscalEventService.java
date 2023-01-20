@@ -69,9 +69,7 @@ public class FiscalEventService {
             }
 
             //push to ES sink
-            ProducerPOJO objectForEsSink = new ProducerPOJO();
-            objectForEsSink.setRecords(fiscalEventRequest.getFiscalEvent());
-            producer.push(eventConfiguration.getFiscalEventESSinkTopic(), objectForEsSink);
+            producer.push(eventConfiguration.getFiscalEventESSinkTopic(), fiscalEventRequest);
 
             //push without request header details
             FiscalEventRequestDTO enrichedFiscalEventRequest = enricher.prepareFiscalEventDTOListForPersister(fiscalEventRequest);
