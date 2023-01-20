@@ -111,9 +111,8 @@ public class DepartmentHierarchyLevelMigrationService {
 
                 totalNumberOfRecordsMigrated += response.getDepartmentHierarchyLevel().size();
 
-                publishToKafkaTopic(response);
-//                producer.push(persisterKafkaDepartmentHierarchyCreateTopic,
-//                        objectWrapper.wrapPersisterDepartmentHierarchyLevelRequest(response));
+                producer.push(persisterKafkaDepartmentHierarchyCreateTopic,
+                        objectWrapper.wrapPersisterDepartmentHierarchyLevelRequest(response));
 
                 commitMigrationProgress(migrationRequest.getTenantId(), resumeFrom, batchSize,
                         totalNumberOfRecordsMigrated);
@@ -132,18 +131,6 @@ public class DepartmentHierarchyLevelMigrationService {
             return responseMap;
         }
 
-    }
-
-    /**
-     * @param response
-     */
-    private void publishToKafkaTopic(@NonNull DepartmentHierarchyLevelResponse response) {
-        List<PersisterDepartmentHierarchyLevelRequest> departmentHierarchyLevelRequestList =
-                objectWrapper.wrapPersisterDepartmentHierarchyLevelRequest(response);
-
-        departmentHierarchyLevelRequestList.stream()
-                .forEach(persisterDepartmentHierarchyRequest ->
-                        producer.push(persisterKafkaDepartmentHierarchyCreateTopic, persisterDepartmentHierarchyRequest));
     }
 
     /**

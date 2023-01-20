@@ -17,7 +17,7 @@ public class PersisterDepartmentHierarchyLevelRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("departmentHierarchyLevel")
-    private PersisterDepartmentHierarchyLevel departmentHierarchyLevel = null;
+    private List<PersisterDepartmentHierarchyLevel> departmentHierarchyLevel = null;
 
 
 }
