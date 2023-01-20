@@ -65,7 +65,7 @@ public class IfixElasticSearchPipelineListener {
      * @param record
      * @param topic
      */
-    @KafkaListener(topics = { "${fiscal.event.migration.origin.push.topic}"})
+    @KafkaListener(topics = { "${fiscal.event.kafka.push.topic}" })
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             FiscalEventRequest incomingData = objectMapper.convertValue(record, FiscalEventRequest.class);
@@ -80,6 +80,7 @@ public class IfixElasticSearchPipelineListener {
             producer.push(indexFiscalEventsTopic, incomingData);
         }catch(Exception e) {
             log.error("Exception while reading from the queue: ", e);
+            throw new RuntimeException(e);
         }
     }
 

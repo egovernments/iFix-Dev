@@ -40,6 +40,7 @@ public class MigrationRecordsListener {
 
         }catch(Exception e) {
             log.error("Exception while reading from the queue: ", e);
+            throw new RuntimeException(e);
         }
     }
 
