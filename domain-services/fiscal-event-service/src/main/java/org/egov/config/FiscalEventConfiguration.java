@@ -1,6 +1,5 @@
 package org.egov.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +52,9 @@ public class FiscalEventConfiguration {
 
     @Value("${ifix.master.government.search.path}")
     private String ifixMasterGovernmentSearchPath;
+
+    @Value("${root.level.tenant.id}")
+    private String rootLevelTenantId;
 
     @Value("${fiscal.event.push.request.max.size}")
     private Integer fiscalEventPushReqMaxSize;

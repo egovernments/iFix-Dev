@@ -1,12 +1,6 @@
 package org.egov.validator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
@@ -17,15 +11,11 @@ import org.egov.util.FiscalEventMapperUtil;
 import org.egov.util.FiscalEventUtil;
 import org.egov.util.MasterDataConstants;
 import org.egov.util.TenantUtil;
-import org.egov.web.models.Amount;
-import org.egov.web.models.Criteria;
-import org.egov.web.models.FiscalEvent;
-import org.egov.web.models.FiscalEventGetRequest;
-import org.egov.web.models.FiscalEventRequest;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -61,20 +51,15 @@ public class FiscalEventValidator {
             Set<String> parentEventIds = new HashSet<>();
             String tenantId = fiscalEventRequest.getFiscalEvent().get(0).getTenantId();
 
-            //Set<String> coaCodes = new HashSet<>();
             for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
-                boolean isMissing = false;
-                validateFiscalEventRequiredFields(fiscalEvent, errorMap, isMissing);
+                validateFiscalEventRequiredFields(fiscalEvent, errorMap);
                 validateFiscalEventAmountDetails(fiscalEvent, errorMap);
-                if (isMissing) {
-                    break;
-                }
 
                 if (StringUtils.isNotBlank(fiscalEvent.getLinkedEventId()))
                     parentEventIds.add(fiscalEvent.getLinkedEventId());
             }
 
-            // validateTenantId(fiscalEventRequest, errorMap);
+            validateTenantId(fiscalEventRequest, errorMap);
 
             validateParentEventId(parentEventIds, tenantId, errorMap);
 
@@ -87,21 +72,16 @@ public class FiscalEventValidator {
         }
     }
 
-    private void validateFiscalEventRequiredFields(FiscalEvent fiscalEvent, Map<String, String> errorMap,
-                                                   boolean isMissing) {
+    private void validateFiscalEventRequiredFields(FiscalEvent fiscalEvent, Map<String, String> errorMap) {
         if (StringUtils.isBlank(fiscalEvent.getReferenceId())) {
             errorMap.put(MasterDataConstants.REFERENCE_ID, "Reference id is missing for event type  : "
                     + (fiscalEvent.getEventType() != null ? fiscalEvent.getEventType().name() : null));
-            isMissing = true;
         }
         if (fiscalEvent.getEventType() == null
                 || !EnumUtils.isValidEnum(FiscalEvent.EventTypeEnum.class, fiscalEvent.getEventType().name())) {
 
             errorMap.put(MasterDataConstants.EVENT_TYPE, "Fiscal event type is missing");
-            isMissing = true;
         }
-        // TODO: ADD tenant id not null check
-
     }
 
     private void validateBatchSize(FiscalEventRequest fiscalEventRequest) {
@@ -143,10 +123,6 @@ public class FiscalEventValidator {
                 errorMap.put(MasterDataConstants.PARENT_EVENT_ID,
                         "Linked event id(s) : " + parentEventIds + " doesn't exist in the system.");
             } else if (!fiscalEventList.isEmpty() && (fiscalEventList.size() != parentEventIds.size())) {
-                /*
-                 * List<FiscalEvent> dbFiscalEvents = mapperUtil
-                 * .mapDereferencedFiscalEventToFiscalEvent(fiscalEventList);
-                 */
                 Set<String> missingParentEventIds = new HashSet<>();
                 for (String parentEventId : parentEventIds) {
                     boolean isExist = false;
@@ -195,7 +171,7 @@ public class FiscalEventValidator {
                     fiscalEventRequest.getRequestHeader());
         }
         if (!isValidTenant) {
-            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
+            errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id " + tenantIds + " doesn't exist in the system");
         }
     }
 
