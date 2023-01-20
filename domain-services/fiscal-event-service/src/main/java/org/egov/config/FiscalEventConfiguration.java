@@ -29,7 +29,7 @@ public class FiscalEventConfiguration {
     @Value("${fiscal.kafka.push.topic}")
     private String fiscalPushRequest;
 
-    @Value("${fiscal.kafka.es.push.topic}")
+    @Value("${fiscal.event.kafka.es.push.topic}")
     private String fiscalEventESSinkTopic;
 
     @Value("${fiscal.event.kafka.postgres.topic}")
