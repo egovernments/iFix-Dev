@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS eg_ifix_fiscal_event;
 
 CREATE TABLE eg_ifix_fiscal_event (
     id varchar,
+    version varchar NOT NULL,
     tenantid varchar NOT NULL,
     sender varchar NOT NULL,
     eventtype  varchar NOT NULL,
