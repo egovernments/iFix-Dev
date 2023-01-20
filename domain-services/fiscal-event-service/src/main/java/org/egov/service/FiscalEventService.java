@@ -55,8 +55,7 @@ public class FiscalEventService {
         validator.validateFiscalEventPushPost(fiscalEventRequest);
         enricher.enrichFiscalEventPushPost(fiscalEventRequest);
 
-        // unbundle the bulk request and push to fiscal-event-post-processor
-        // to be removed when deprecating Druid
+        // unbundle the bulk request and push to fiscal-event-post-processor and es-pipeline
         if (!CollectionUtils.isEmpty(fiscalEventRequest.getFiscalEvent())) {
             RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
             for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
@@ -66,10 +65,10 @@ public class FiscalEventService {
 
                 //push with request header details
                 producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequestNode);
-            }
 
-            //push to ES sink
-            producer.push(eventConfiguration.getFiscalEventESSinkTopic(), fiscalEventRequest);
+                //push to ES sink
+                producer.push(eventConfiguration.getFiscalEventESSinkTopic(), fiscalEventRequestNode);
+            }
 
             //push without request header details
             FiscalEventRequestDTO enrichedFiscalEventRequest = enricher.prepareFiscalEventDTOListForPersister(fiscalEventRequest);
