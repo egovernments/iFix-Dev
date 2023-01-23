@@ -73,7 +73,7 @@ public class DepartmentEntityConstant {
         public static final String TENANT_ID = "tenant_id";
     }
 
-    public class DepartmentEntityRelationshipConst {
+    public class DepartmentEntityChildrenConst {
         public static final String PARENT_ID = "parent_id";
         public static final String CHILD_ID = "child_id";
         public static final String STATUS = "status";

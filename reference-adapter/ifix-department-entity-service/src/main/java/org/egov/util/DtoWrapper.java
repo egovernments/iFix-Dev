@@ -1,10 +1,10 @@
 package org.egov.util;
 
 import org.egov.common.contract.AuditDetails;
-import org.egov.repository.DepartmentEntityRelationshipRepository;
+import org.egov.repository.DepartmentEntityChildrenRepository;
 import org.egov.web.models.*;
 import org.egov.web.models.persist.DepartmentEntity;
-import org.egov.web.models.persist.DepartmentEntityRelationship;
+import org.egov.web.models.persist.DepartmentEntityChildren;
 import org.egov.web.models.persist.DepartmentHierarchyLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class DtoWrapper {
 
     @Autowired
-    private DepartmentEntityRelationshipRepository entityRelationshipRepository;
+    private DepartmentEntityChildrenRepository entityChildrenRepository;
 
     /**
      * @param departmentEntityList
@@ -31,11 +30,11 @@ public class DtoWrapper {
         List<DepartmentEntityDTO> departmentEntityDTOList = new ArrayList<>();
 
         if (departmentEntityList != null && !departmentEntityList.isEmpty()) {
-            List<DepartmentEntityRelationship> deRelationshipList = entityRelationshipRepository
+            List<DepartmentEntityChildren> deChildrenList = entityChildrenRepository
                     .findByParentIdList(getIdOfDepartmentEntity(departmentEntityList));
 
             departmentEntityDTOList = departmentEntityList.stream()
-                    .map(departmentEntity -> wrapDepartmentEntityIntoDTO(departmentEntity, deRelationshipList))
+                    .map(departmentEntity -> wrapDepartmentEntityIntoDTO(departmentEntity, deChildrenList))
                     .collect(Collectors.toList());
         }
 
@@ -43,7 +42,7 @@ public class DtoWrapper {
     }
 
     public DepartmentEntityDTO wrapDepartmentEntityIntoDTO(@NonNull DepartmentEntity departmentEntity,
-                                          @NonNull List<DepartmentEntityRelationship> deRelationshipList) {
+                                          @NonNull List<DepartmentEntityChildren> deChildrenList) {
 
         return DepartmentEntityDTO.builder()
                 .id(departmentEntity.getId())
@@ -52,7 +51,7 @@ public class DtoWrapper {
                 .hierarchyLevel(departmentEntity.getHierarchyLevel())
                 .code(departmentEntity.getCode())
                 .tenantId(departmentEntity.getTenantId())
-                .children(resolveChildIdList(departmentEntity.getId(), deRelationshipList))
+                .children(resolveChildIdList(departmentEntity.getId(), deChildrenList))
                 .auditDetails(
                         AuditDetails.builder()
                                 .lastModifiedBy(departmentEntity.getLastModifiedBy())
@@ -74,19 +73,19 @@ public class DtoWrapper {
 
     /**
      * @param parentId
-     * @param entityRelationshipList
+     * @param entityChildrenList
      * @return
      */
-    private List<DepartmentEntityChildrenDTO> resolveChildIdList(String parentId, List<DepartmentEntityRelationship> entityRelationshipList) {
+    private List<DepartmentEntityChildrenDTO> resolveChildIdList(String parentId, List<DepartmentEntityChildren> entityChildrenList) {
         List<DepartmentEntityChildrenDTO> childList = new ArrayList<>();
 
-        if (!StringUtils.isEmpty(parentId) && entityRelationshipList != null && !entityRelationshipList.isEmpty()) {
-            childList = entityRelationshipList.stream()
-                    .filter(departmentEntityRelationship -> parentId.equals(departmentEntityRelationship.getParentId()))
-                    .map(departmentEntityRelationship ->
+        if (!StringUtils.isEmpty(parentId) && entityChildrenList != null && !entityChildrenList.isEmpty()) {
+            childList = entityChildrenList.stream()
+                    .filter(departmentEntityChildren -> parentId.equals(departmentEntityChildren.getParentId()))
+                    .map(departmentEntityChildren ->
                             DepartmentEntityChildrenDTO.builder()
-                                    .childId(departmentEntityRelationship.getChildId())
-                                    .status(departmentEntityRelationship.getStatus())
+                                    .childId(departmentEntityChildren.getChildId())
+                                    .status(departmentEntityChildren.getStatus())
                                     .build()
                     )
                     .collect(Collectors.toList());
@@ -125,7 +124,7 @@ public class DtoWrapper {
                 .hierarchyLevel(departmentEntity.getHierarchyLevel())
                 .code(departmentEntity.getCode())
                 .tenantId(departmentEntity.getTenantId())
-                .children(getChildIdListFromDepartmentEntityRelationship(departmentEntity.getId()))
+                .children(getChildIdListFromDepartmentEntityChildren(departmentEntity.getId()))
                 .auditDetails(
                         AuditDetails.builder()
                                 .lastModifiedBy(departmentEntity.getLastModifiedBy())
@@ -145,19 +144,19 @@ public class DtoWrapper {
                 ).build();
     }
 
-    private List<DepartmentEntityChildrenDTO> getChildIdListFromDepartmentEntityRelationship(String departmentId) {
+    private List<DepartmentEntityChildrenDTO> getChildIdListFromDepartmentEntityChildren(String departmentId) {
         List<DepartmentEntityChildrenDTO> childList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(departmentId)) {
-            List<DepartmentEntityRelationship> existingEntityRelationshipList =
-                    entityRelationshipRepository.findByParentId(departmentId);
+            List<DepartmentEntityChildren> existingEntityChildrenList =
+                    entityChildrenRepository.findByParentId(departmentId);
 
-            if (existingEntityRelationshipList != null && !existingEntityRelationshipList.isEmpty()) {
-                childList = existingEntityRelationshipList.stream()
-                        .map(departmentEntityRelationship ->
+            if (existingEntityChildrenList != null && !existingEntityChildrenList.isEmpty()) {
+                childList = existingEntityChildrenList.stream()
+                        .map(departmentEntityChildren ->
                                 DepartmentEntityChildrenDTO.builder()
-                                        .childId(departmentEntityRelationship.getChildId())
-                                        .status(departmentEntityRelationship.getStatus())
+                                        .childId(departmentEntityChildren.getChildId())
+                                        .status(departmentEntityChildren.getStatus())
                                         .build()
                         )
                         .collect(Collectors.toList());

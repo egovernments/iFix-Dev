@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepartmentEntityRelationship {
+public class DepartmentEntityChildren {
 
     @Size(max = 64)
     private String parentId = null;

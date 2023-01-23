@@ -2,7 +2,7 @@ package org.egov.service;
 
 import org.egov.common.contract.AuditDetails;
 import org.egov.config.IfixDepartmentEntityConfig;
-import org.egov.repository.DepartmentEntityRelationshipRepository;
+import org.egov.repository.DepartmentEntityChildrenRepository;
 import org.egov.repository.DepartmentEntityRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityAncestryUtil;
@@ -11,8 +11,6 @@ import org.egov.util.KafkaProducer;
 import org.egov.validator.DepartmentEntityValidator;
 import org.egov.web.models.*;
 import org.egov.web.models.persist.DepartmentEntity;
-import org.egov.web.models.persist.DepartmentEntityRelationship;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DepartmentEntityService {
@@ -38,7 +35,7 @@ public class DepartmentEntityService {
     private DepartmentEntityRepository departmentEntityRepository;
 
     @Autowired
-    private DepartmentEntityRelationshipRepository entityRelationshipRepository;
+    private DepartmentEntityChildrenRepository entityChildrenRepository;
 
     @Autowired
     private IfixDepartmentEntityConfig ifixDepartmentEntityConfig;

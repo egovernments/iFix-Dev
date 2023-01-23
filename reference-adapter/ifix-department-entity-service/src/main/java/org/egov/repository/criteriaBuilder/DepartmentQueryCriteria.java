@@ -1,7 +1,7 @@
 package org.egov.repository.criteriaBuilder;
 
 import org.egov.web.models.persist.DepartmentEntity;
-import org.egov.web.models.persist.DepartmentEntityRelationship;
+import org.egov.web.models.persist.DepartmentEntityChildren;
 import org.egov.web.models.persist.DepartmentHierarchyLevel;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +16,7 @@ public class DepartmentQueryCriteria {
     private static String DEPARTMENT_HIERARCHY_SELECT_ALL = "SELECT id, department_id, label, level, parent, " +
             "tenant_id, created_by, created_time, last_modified_by, last_modified_time FROM department_hierarchy_level";
 
-    private static String DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL = "SELECT parent_id, child_id, status " +
+    private static String DEPARTMENT_ENTITY_CHILDREN_SELECT_ALL = "SELECT parent_id, child_id, status " +
             "FROM department_entity_children";
 
     private StringBuilder criteriaQuery = new StringBuilder();
@@ -37,8 +37,8 @@ public class DepartmentQueryCriteria {
             return new DepartmentQueryCriteria(new StringBuilder(DEPARTMENT_HIERARCHY_SELECT_ALL));
         }
 
-        if (DepartmentEntityRelationship.class.getTypeName().equals(entityClass.getTypeName())) {
-            return new DepartmentQueryCriteria(new StringBuilder(DEPARTMENT_ENTITY_RELATIONSHIP_SELECT_ALL));
+        if (DepartmentEntityChildren.class.getTypeName().equals(entityClass.getTypeName())) {
+            return new DepartmentQueryCriteria(new StringBuilder(DEPARTMENT_ENTITY_CHILDREN_SELECT_ALL));
         }
 
         return null;

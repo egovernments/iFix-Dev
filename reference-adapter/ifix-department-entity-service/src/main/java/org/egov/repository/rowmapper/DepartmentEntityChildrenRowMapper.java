@@ -1,6 +1,6 @@
 package org.egov.repository.rowmapper;
 
-import org.egov.web.models.persist.DepartmentEntityRelationship;
+import org.egov.web.models.persist.DepartmentEntityChildren;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DepartmentEntityRelationshipRowMapper implements ResultSetExtractor<List<DepartmentEntityRelationship>> {
+public class DepartmentEntityChildrenRowMapper implements ResultSetExtractor<List<DepartmentEntityChildren>> {
     @Override
-    public List<DepartmentEntityRelationship> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-        List<DepartmentEntityRelationship> departmentEntityRelationshipList = new ArrayList<>();
+    public List<DepartmentEntityChildren> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+        List<DepartmentEntityChildren> departmentEntityChildrenList = new ArrayList<>();
 
         while (resultSet.next()) {
-            departmentEntityRelationshipList.add(
-                    DepartmentEntityRelationship.builder()
+            departmentEntityChildrenList.add(
+                    DepartmentEntityChildren.builder()
                             .parentId(resultSet.getString("parent_id"))
                             .childId(resultSet.getString("child_id"))
                             .status(resultSet.getBoolean("status"))
@@ -26,6 +26,6 @@ public class DepartmentEntityRelationshipRowMapper implements ResultSetExtractor
             );
         }
 
-        return departmentEntityRelationshipList;
+        return departmentEntityChildrenList;
     }
 }
