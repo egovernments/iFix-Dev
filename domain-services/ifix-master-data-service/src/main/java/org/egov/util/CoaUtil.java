@@ -1,10 +1,16 @@
 package org.egov.util;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.config.MasterDataServiceConfiguration;
+import org.egov.mdms.model.*;
+import org.egov.mdms.service.MdmsClientService;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.web.models.ChartOfAccount;
 import org.egov.web.models.Government;
@@ -24,59 +30,34 @@ import java.util.List;
 public class CoaUtil {
 
     @Autowired
-    private ServiceRequestRepository searchRequestRepository;
-
-    @Autowired
     private MasterDataServiceConfiguration mdsConfiguration;
+    @Autowired
+    private MdmsClientService mdmsClientService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    /**
-     * Search the Government service based on search criteria
-     *
-     * @param requestHeader
-     * @param chartOfAccount
-     */
-    public List<Government> searchTenants(RequestHeader requestHeader, ChartOfAccount chartOfAccount) {
-        GovernmentSearchRequest govtSearchRequest = createSearchTenantRequest(requestHeader, chartOfAccount);
-        String url = createSearchTenantUrl();
-        Object response = searchRequestRepository.fetchResult(url, govtSearchRequest);
-        if (response != null) {
-            LinkedHashMap linkedHashMap = (LinkedHashMap) response;
-            List<Government> governments = (List<Government>) linkedHashMap.get("government");
-            return governments;
+    final private static String TENANT_MODULE_NAME = "tenant";
+    final private static String TENANT_MASTER_NAME = "tenants";
+
+    public boolean validateTenant(String tenantId, RequestHeader requestHeader) {
+        if (tenantId != null && !tenantId.isEmpty() && requestHeader != null) {
+
+            MasterDetail masterDetail = MasterDetail.builder().name(TENANT_MASTER_NAME).filter("$.*.code").build();
+            ModuleDetail moduleDetail =
+                    ModuleDetail.builder().moduleName(TENANT_MODULE_NAME).masterDetails(Collections.singletonList(masterDetail)).build();
+            MdmsCriteria mdmsCriteria =
+                    MdmsCriteria.builder().moduleDetails(Collections.singletonList(moduleDetail)).tenantId(mdsConfiguration.getRootLevelTenantId()).build();
+            MdmsCriteriaReq mdmsCriteriaReq =
+                    MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build()).mdmsCriteria(mdmsCriteria).build();
+
+            MdmsResponse mdmsResponse = mdmsClientService.getMaster(mdmsCriteriaReq);
+            JSONArray tenantCodes = mdmsResponse.getMdmsRes().get(TENANT_MODULE_NAME).get(TENANT_MASTER_NAME);
+
+            List<String> validTenantIds = objectMapper.convertValue(tenantCodes, new TypeReference<List<String>>() {});
+
+            return validTenantIds.contains(tenantId);
         }
-
-        return Collections.emptyList();
+        return false;
     }
 
-    /**
-     * Create the government search Url
-     *
-     * @return
-     */
-    private String createSearchTenantUrl() {
-        StringBuilder uriBuilder = new StringBuilder();
-        uriBuilder.append(mdsConfiguration.getIfixMasterGovernmentHost())
-                .append(mdsConfiguration.getIfixMasterGovernmentContextPath())
-                .append(mdsConfiguration.getIfixMasterGovernmentSearchPath());
-        return uriBuilder.toString();
-    }
-
-    private GovernmentSearchRequest createSearchTenantRequest(RequestHeader requestHeader, ChartOfAccount chartOfAccount) {
-        GovernmentSearchRequest govtSearchRequest = new GovernmentSearchRequest();
-        GovernmentSearchCriteria govtSearchCriteria = new GovernmentSearchCriteria();
-        RequestHeader newRequestHeader = new RequestHeader();
-
-        BeanUtils.copyProperties(requestHeader, newRequestHeader);
-
-        List<String> ids = new ArrayList<>();
-        if (StringUtils.isNotBlank(chartOfAccount.getTenantId())) {
-            ids.add(chartOfAccount.getTenantId());
-        }
-
-        govtSearchCriteria.setIds(ids);
-        govtSearchRequest.setCriteria(govtSearchCriteria);
-        govtSearchRequest.setRequestHeader(newRequestHeader);
-
-        return govtSearchRequest;
-    }
 }
