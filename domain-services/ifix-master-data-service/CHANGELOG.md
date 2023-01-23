@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 2.1.0 - 2023-01-23
+- Migrated database from MongoDB to PostgreSQL
+- Removed Government master data from this service
+
 ## 2.0.0 - 2022-02-15
 - Removed project, department and expenditure service
 - Added the list of CoaCode search criteria

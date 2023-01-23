@@ -3,76 +3,8 @@ openapi: 3.0.0
 info:
   title: iFIX-Master-Data
   description: iFIX-Master-Data
-  version: 2.0.0
-servers:
-  - url: https://virtserver.swaggerhub.com/rushang.dhanesha/iFIX-Master-Data/2.0.0
-    description: SwaggerHub API Auto Mocking
+  version: 2.1.0
 paths:
-  /government/v1/_create:
-    post:
-      tags:
-        - Government
-      summary: Create/Add new tenant on iFix
-      description: Create/Add the new tenant
-      requestBody:
-        description: Details for the new fiscal event + RequestHeader (meta data of the API).
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GovernmentRequest'
-        required: true
-      responses:
-        "202":
-          description: Request has been accepted for processing
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/GovernmentResponse'
-        "400":
-          description: Failed to process the request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /government/v1/_search:
-    post:
-      tags:
-        - Government
-      summary: Get the list fiscal events.
-      description: |
-        Based on the criteria get the list of events.
-      requestBody:
-        description: RequestHeader meta data.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GovernmentSearchRequest'
-        required: true
-      responses:
-        "200":
-          description: Successful response
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/GovernmentResponse'
-        "400":
-          description: Invalid input.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /chartOfAccount/v1/_create:
     post:
       tags:
@@ -140,27 +72,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Government:
-      required:
-        - id
-        - name
-      type: object
-      properties:
-        id:
-          maxLength: 64
-          minLength: 1
-          type: string
-          description: Unique tenant id(eg- pb)
-        name:
-          maxLength: 256
-          minLength: 2
-          type: string
-          description: name of the tenant
-        auditDetails:
-          $ref: '#/components/schemas/AuditDetails'
-        attributes:
-          type: object
-      description: This object captures the fiscal information of external systems.
     ChartOfAccount:
       required:
         - groupHead
@@ -261,45 +172,6 @@ components:
         attributes:
           type: object
       description: Captures the COA data as map
-    GovernmentRequest:
-      required:
-        - government
-        - requestHeader
-      properties:
-        requestHeader:
-          $ref: '#/components/schemas/RequestHeader'
-        government:
-          $ref: '#/components/schemas/Government'
-      description: Tenant request along with request metadata
-    GovernmentResponse:
-      properties:
-        responseHeader:
-          $ref: '#/components/schemas/ResponseHeader'
-        government:
-          type: array
-          items:
-            $ref: '#/components/schemas/Government'
-      description: Contains the ResponseHeader and the enriched tenant information
-    GovernmentSearchRequest:
-      required:
-        - criteria
-        - requestHeader
-      properties:
-        requestHeader:
-          $ref: '#/components/schemas/RequestHeader'
-        criteria:
-          $ref: '#/components/schemas/GovernmentSearchCriteria'
-      description: Tenant search request along with request metadata
-    GovernmentSearchCriteria:
-      type: object
-      properties:
-        Ids:
-          type: array
-          description: List of fund ids
-          items:
-            maxItems: 50
-            type: string
-      description: The object contains all the search criteria of the tenant
     COARequest:
       required:
         - coa
