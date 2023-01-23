@@ -1,4 +1,3 @@
-
 package org.egov.repository;
 
 import java.util.ArrayList;
@@ -39,26 +38,20 @@ public class ChartOfAccountRepository {
 	
 	@Autowired
 	private COARowMapper coaRowMapper;
-	
-	// Ghanshyam
-	/*
-	 * public void save(ChartOfAccount chartOfAccount) {
-	 * mongoTemplate.save(chartOfAccount); }
-	 */
 
 	public List<ChartOfAccount> search(COASearchCriteria searchCriteria) {
-		List<ChartOfAccount> caos = new ArrayList<>();
+		List<ChartOfAccount> chartOfAccounts = new ArrayList<>();
 		List<Object> preparedStmtList = new ArrayList<>();
 		try {
 			String coaSearchQuery = chartOfAccountQueryBuilder.buildSearchQuery(searchCriteria, preparedStmtList);
-			caos = jdbcTemplate.query(coaSearchQuery, preparedStmtList.toArray(), coaRowMapper);
-			if(CollectionUtils.isEmpty(caos))
+			chartOfAccounts = jdbcTemplate.query(coaSearchQuery, preparedStmtList.toArray(), coaRowMapper);
+			if(CollectionUtils.isEmpty(chartOfAccounts))
 				return new ArrayList<>();
 		}catch(Exception e) {
 			log.error("Exception while fetching from DB: " + e);
-			return caos;
+			return chartOfAccounts;
 		}
 
-		return caos;
+		return chartOfAccounts;
 	}
 }
