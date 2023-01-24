@@ -2,29 +2,38 @@ package org.egov.repository.queryBuilder;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.egov.repository.criteriaBuilder.QueryCriteria;
 import org.egov.web.models.DepartmentSearchCriteria;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.egov.web.models.persist.Department;
 import org.springframework.stereotype.Component;
+
+import static org.egov.util.MasterDataConstants.DepartmentConst.*;
 
 @Component
 @Slf4j
 public class DepartmentQueryBuilder {
 
-    public Query buildSearchQuery(DepartmentSearchCriteria searchCriteria) {
+    /**
+     * @param searchCriteria
+     * @return
+     */
+    public String buildSearchQuery(DepartmentSearchCriteria searchCriteria) {
+        QueryCriteria queryCriteria = QueryCriteria.builder(Department.class);
 
-        Criteria criteria = Criteria.where("tenantId").is(searchCriteria.getTenantId());
+        queryCriteria.where(TENANT_ID).is(searchCriteria.getTenantId());
 
-        if (StringUtils.isNotBlank(searchCriteria.getCode()))
-            criteria.and("code").is(searchCriteria.getCode());
+        if (!org.springframework.util.StringUtils.isEmpty(searchCriteria.getCode())) {
+            queryCriteria.and(CODE).is(searchCriteria.getCode());
+        }
 
-        if (StringUtils.isNotBlank(searchCriteria.getName()))
-            criteria.and("name").is(searchCriteria.getName());
+        if (!org.springframework.util.StringUtils.isEmpty(searchCriteria.getName())) {
+            queryCriteria.and(NAME).is(searchCriteria.getName());
+        }
 
-        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty())
-            criteria.and("id").in(searchCriteria.getIds());
+        if (searchCriteria.getIds() != null && !searchCriteria.getIds().isEmpty()) {
+            queryCriteria.and(ID).in(searchCriteria.getIds());
+        }
 
-        return new Query(criteria);
+        return queryCriteria.build();
     }
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.util.MasterDataServiceUtil;
-import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentDTO;
 import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.DepartmentSearchRequest;
@@ -36,7 +36,7 @@ public class DepartmentEnrichmentService {
      * @param departmentRequest
      */
     public void enrichDepartmentData(DepartmentRequest departmentRequest) {
-        Department department = departmentRequest.getDepartment();
+        DepartmentDTO department = departmentRequest.getDepartmentDTO();
         RequestHeader requestHeader = departmentRequest.getRequestHeader();
 
         AuditDetails auditDetails = null;

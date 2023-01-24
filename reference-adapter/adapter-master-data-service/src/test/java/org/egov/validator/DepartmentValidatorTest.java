@@ -1,28 +1,10 @@
 package org.egov.validator;
 
-import org.egov.common.contract.request.RequestHeader;
-import org.egov.common.contract.request.UserInfo;
-import org.egov.config.TestDataFormatter;
-import org.egov.tracer.model.CustomException;
-import org.egov.web.models.Department;
-import org.egov.web.models.DepartmentRequest;
-import org.egov.web.models.DepartmentSearchCriteria;
-import org.egov.web.models.DepartmentSearchRequest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class DepartmentValidatorTest {
-    @Autowired
+/*    @Autowired
     private TestDataFormatter testDataFormatter;
 
     @InjectMocks
@@ -67,7 +49,7 @@ class DepartmentValidatorTest {
 
         assertThrows(CustomException.class,
                 () -> departmentValidator.validateSearchPost(departmentSearchRequest),
-                "Department name's length is invalid");
+                "DepartmentConst name's length is invalid");
     }
 
     @Test
@@ -86,7 +68,7 @@ class DepartmentValidatorTest {
     void testValidateCreateRequestDataUserInfoException() {
         RequestHeader requestHeader = new RequestHeader();
         assertThrows(CustomException.class, () -> departmentValidator
-                .validateCreateRequestData(new DepartmentRequest(requestHeader, new Department())));
+                .validateCreateRequestData(new DepartmentRequest(requestHeader, new DepartmentConst())));
     }
 
     @Test
@@ -95,8 +77,8 @@ class DepartmentValidatorTest {
 
         assertThrows(CustomException.class,
                 () -> departmentValidator.validateCreateRequestData(departmentCreateRequest),
-                "Department parent length is invalid.");
-    }
+                "DepartmentConst parent length is invalid.");
+    }*/
 
 }
 

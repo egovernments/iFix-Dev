@@ -53,4 +53,16 @@ public class MasterDataServiceConfiguration {
     @Value("${ifix.master.department.search.path}")
     private String ifixMasterDepartmentSearchPath;
 
+    @Value("${persister.kafka.project.create.topic}")
+    private String persisterKafkaProjectCreateTopic;
+
+    @Value("${persister.kafka.project.update.topic}")
+    private String persisterKafkaProjectUpdateTopic;
+
+    @Value("${persister.kafka.department.create.topic}")
+    private String persisterKafkaDepartmentCreateTopic;
+
+    @Value("${persister.kafka.expenditure.create.topic}")
+    private String persisterKafkaExpenditureCreateTopic;
+
 }

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.ProjectService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.Project;
+import org.egov.web.models.ProjectDTO;
 import org.egov.web.models.ProjectRequest;
 import org.egov.web.models.ProjectResponse;
 import org.egov.web.models.ProjectSearchRequest;
@@ -38,7 +38,7 @@ public class ProjectApiController {
      * @return
      */
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
-    public ResponseEntity<ProjectResponse> projectV1CreatePost(@ApiParam(value = "Details for the new Project " +
+    public ResponseEntity<ProjectResponse> projectV1CreatePost(@ApiParam(value = "Details for the new ProjectConst " +
             "RequestHeader (meta data of the API).", required = true) @Valid @RequestBody ProjectRequest body) {
 
         ProjectRequest projectRequest = projectService.createProject(body);
@@ -47,7 +47,7 @@ public class ProjectApiController {
                 .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         ProjectResponse projectResponse = ProjectResponse.builder().responseHeader(responseHeader)
-                .project(Collections.singletonList(projectRequest.getProject())).build();
+                .projectDTO(Collections.singletonList(projectRequest.getProjectDTO())).build();
 
         return new ResponseEntity<>(projectResponse, HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class ProjectApiController {
      * @return
      */
     @RequestMapping(value = "/_update", method = RequestMethod.POST)
-    public ResponseEntity<ProjectResponse> projectV1UpdatePost(@ApiParam(value = "Details to update the existing Project " +
+    public ResponseEntity<ProjectResponse> projectV1UpdatePost(@ApiParam(value = "Details to update the existing ProjectConst " +
             "RequestHeader (meta data of the API).", required = true) @Valid @RequestBody ProjectRequest body) {
 
         ProjectRequest projectRequest = projectService.updateProject(body);
@@ -67,7 +67,7 @@ public class ProjectApiController {
                 .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         ProjectResponse projectResponse = ProjectResponse.builder().responseHeader(responseHeader)
-                .project(Collections.singletonList(projectRequest.getProject())).build();
+                .projectDTO(Collections.singletonList(projectRequest.getProjectDTO())).build();
 
         return new ResponseEntity<>(projectResponse, HttpStatus.OK);
     }
@@ -77,17 +77,17 @@ public class ProjectApiController {
      * @return
      */
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
-    public ResponseEntity<ProjectResponse> projectV1SearchPost(@ApiParam(value = "Details for the Project search " +
+    public ResponseEntity<ProjectResponse> projectV1SearchPost(@ApiParam(value = "Details for the ProjectConst search " +
             "criteria RequestHeader (meta data of the API).", required = true)
                                                                @Valid @RequestBody ProjectSearchRequest body) {
 
-        List<Project> projectList = projectService.findAllByCriteria(body);
+        List<ProjectDTO> projectDTOList = projectService.findAllByCriteria(body);
 
         ResponseHeader responseHeader = responseHeaderCreator
                 .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         ProjectResponse projectResponse = ProjectResponse.builder().responseHeader(responseHeader)
-                .project(projectList).build();
+                .projectDTO(projectDTOList).build();
 
         return new ResponseEntity<>(projectResponse, HttpStatus.ACCEPTED);
     }

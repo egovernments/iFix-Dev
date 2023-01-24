@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The object contains all the search criteria of the Department
+ * The object contains all the search criteria of the DepartmentConst
  */
-@ApiModel(description = "The object contains all the search criteria of the Department")
+@ApiModel(description = "The object contains all the search criteria of the DepartmentConst")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 

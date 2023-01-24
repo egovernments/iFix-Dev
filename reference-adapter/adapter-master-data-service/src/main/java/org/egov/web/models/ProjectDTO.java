@@ -10,9 +10,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Captures the Project attributes
+ * Captures the ProjectConst attributes
  */
-@ApiModel(description = "Captures the Project attributes")
+@ApiModel(description = "Captures the ProjectConst attributes")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Project {
+public class ProjectDTO {
     @JsonProperty("id")
     private String id = null;
 
@@ -38,11 +38,11 @@ public class Project {
     private String expenditureId = null;
 
     @JsonProperty("departmentEntityIds")
-    private List<String> departmentEntityIds = null;
+    private List<ProjectDepartmentEntityRelationshipDTO> departmentEntityIds = null;
 
     @JsonProperty("locationIds")
     @Valid
-    private List<String> locationIds = null;
+    private List<ProjectLocationRelationshipDTO> locationIds = null;
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails = null;

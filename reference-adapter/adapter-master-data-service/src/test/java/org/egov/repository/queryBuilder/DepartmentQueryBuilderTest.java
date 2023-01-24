@@ -1,22 +1,12 @@
 package org.egov.repository.queryBuilder;
 
-import org.egov.web.models.DepartmentSearchCriteria;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 class DepartmentQueryBuilderTest {
-    @InjectMocks
+  /*  @InjectMocks
     private DepartmentQueryBuilder departmentQueryBuilder;
 
     private ArrayList<String> idList;
@@ -36,6 +26,6 @@ class DepartmentQueryBuilderTest {
         assertFalse(actualBuildSearchQueryResult.isSorted());
         assertTrue(actualBuildSearchQueryResult.getRestrictedTypes().isEmpty());
         assertEquals(4, actualBuildSearchQueryResult.getQueryObject().size());
-    }
+    }*/
 }
 

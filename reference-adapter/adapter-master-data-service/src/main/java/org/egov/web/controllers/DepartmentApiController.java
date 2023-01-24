@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.DepartmentService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentDTO;
 import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentResponse;
 import org.egov.web.models.DepartmentSearchRequest;
@@ -59,7 +59,7 @@ public class DepartmentApiController {
                 .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
 
         DepartmentResponse departmentResponse = DepartmentResponse.builder().responseHeader(responseHeader)
-                .department(Collections.singletonList(departmentRequest.getDepartment())).build();
+                .department(Collections.singletonList(departmentRequest.getDepartmentDTO())).build();
 
         return new ResponseEntity<DepartmentResponse>(departmentResponse, HttpStatus.ACCEPTED);
     }
@@ -69,7 +69,7 @@ public class DepartmentApiController {
             "search criteria + RequestHeader (meta data of the API).",
             required = true) @Valid @RequestBody DepartmentSearchRequest body) {
 
-        List<Department> departments = departmentService.departmentV1SearchPost(body);
+        List<DepartmentDTO> departments = departmentService.departmentV1SearchPost(body);
         ResponseHeader responseHeader = responseHeaderCreator
                 .createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         DepartmentResponse departmentResponse = DepartmentResponse.builder().responseHeader(responseHeader)
