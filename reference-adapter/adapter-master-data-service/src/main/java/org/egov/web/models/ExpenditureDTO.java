@@ -22,7 +22,7 @@ import org.springframework.validation.annotation.Validated;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class ExpenditureDTO { //TODO change name to DTO
+public class ExpenditureDTO {
     @JsonProperty("id")
     private String id = null;
 

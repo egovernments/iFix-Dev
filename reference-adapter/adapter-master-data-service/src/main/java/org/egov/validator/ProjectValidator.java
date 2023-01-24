@@ -120,7 +120,6 @@ public class ProjectValidator {
                 errorMap.put(MasterDataConstants.PROJECT_NAME, "Project name length is invalid. Length range [1-64]");
             }
 
-//            TODO: incomplete expenditure search
             if (!StringUtils.isEmpty(projectDTO.getExpenditureId())) {
                 if (projectDTO.getExpenditureId().length() < 2 || projectDTO.getExpenditureId().length() > 64) {
                     errorMap.put(MasterDataConstants.EXPENDITURE_ID, "Expenditure id length is invalid. Length range [2-64]");
@@ -161,7 +160,6 @@ public class ProjectValidator {
             if (StringUtils.isBlank(projectDTO.getId())) {
                 errorMap.put(MasterDataConstants.ID, "Project id is missing in request data");
             } else {
-//                TODO: project id correction
                 Optional<Project> optionalProject = projectRepository.findByProjectId(projectDTO.getId());
                 if (!optionalProject.isPresent()) {
                     errorMap.put(MasterDataConstants.INVALID_ID, "Invalid project id");

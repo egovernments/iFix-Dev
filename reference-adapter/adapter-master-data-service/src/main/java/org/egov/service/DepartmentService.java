@@ -48,7 +48,6 @@ public class DepartmentService {
      */
     public List<DepartmentDTO> departmentV1SearchPost(DepartmentSearchRequest searchRequest) {
         validator.validateSearchPost(searchRequest);
-        enricher.enrichSearchPost(searchRequest);
 
         DepartmentSearchCriteria searchCriteria = searchRequest.getCriteria();
         if (searchCriteria.isEmpty())

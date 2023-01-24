@@ -22,17 +22,6 @@ public class DepartmentEnrichmentService {
     MasterDataServiceUtil enrichAuditDetails;
 
     /**
-     * Enrich the department search request
-     *
-     * @param searchRequest
-     */
-    public void enrichSearchPost(DepartmentSearchRequest searchRequest) {
-        DepartmentSearchCriteria searchCriteria = searchRequest.getCriteria();
-        //TODO- fill if any default search criteria
-
-    }
-
-    /**
      * @param departmentRequest
      */
     public void enrichDepartmentData(DepartmentRequest departmentRequest) {
