@@ -84,7 +84,7 @@ public class MigrationService {
 
             // send fiscal events to ES-Pipeline
             for(FiscalEvent fiscalEvent : response.getFiscalEvent()) {
-                producer.push(fiscalEventESPushTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent));
+                producer.push(fiscalEventESPushTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
             }
 
             // Send fiscal events to postgres sink
