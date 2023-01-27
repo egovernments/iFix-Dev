@@ -1,7 +1,5 @@
 package org.egov.ifixespipeline.consumers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestHeader;
@@ -15,9 +13,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
@@ -45,8 +41,8 @@ public class IfixElasticSearchPipelineListener {
     @Value("${ifix.master.data.service.host}")
     private String ifixMasterDataServiceHost;
 
-    @Value("${ifix.master.data.service.search.endpoint}")
-    private String ifixMasterDataServiceSearchEndpoint;
+    @Value("${ifix.coa.search.endpoint}")
+    private String ifixCoaSearchEndpoint;
 
     @Value("${coa.electricity.head.name}")
     private String electricityCoaHeadName;
@@ -115,7 +111,7 @@ public class IfixElasticSearchPipelineListener {
 
     private StringBuilder getIfixMasterDataUri() {
         StringBuilder uri = new StringBuilder(ifixMasterDataServiceHost);
-        uri.append(ifixMasterDataServiceSearchEndpoint);
+        uri.append(ifixCoaSearchEndpoint);
         return uri;
     }
 }

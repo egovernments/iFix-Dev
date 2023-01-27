@@ -1,7 +1,5 @@
 # Local Setup
 
-To setup the national-dashboard-kafka-pipeline service in your local system, clone the [Core Service repository](https://github.com/egovernments/core-services).
-
 ## Dependencies
 
 ### Infra Dependency
@@ -15,4 +13,4 @@ To setup the national-dashboard-kafka-pipeline service in your local system, clo
 
 ## Running Locally
 
-To run the national-dashboard-kafka-pipeline service locally, you need to run kafka.
+To run the ifix-es-pipeline service locally, you need to run kafka.
