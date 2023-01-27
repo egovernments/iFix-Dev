@@ -22,6 +22,6 @@ CREATE TABLE IF NOT EXISTS eg_ifix_chartofaccount
     createdby character varying COLLATE pg_catalog."default",
     lastmodifiedtime bigint,
     lastmodifiedby character varying COLLATE pg_catalog."default",
-    CONSTRAINT pk_ifix_chartofaccount PRIMARY KEY (id, tenantid),
+    CONSTRAINT pk_ifix_chartofaccount PRIMARY KEY (id),
     CONSTRAINT eg_ifix_chartofaccount_coacode_key UNIQUE (coacode)
 );
