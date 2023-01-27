@@ -1,88 +1,118 @@
 package org.egov.ifixmigrationtoolkit.util;
 
+import org.egov.common.contract.AuditDetails;
 import org.egov.ifixmigrationtoolkit.models.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class ObjectWrapper {
+
     /**
      * @param departmentEntityResponse
      * @return
      */
     public @NonNull
-    PersisterDepartmentEntityRequest wrapPersisterDepartmentEntityRequest(
+    List<PersisterDepartmentEntityRequest> wrapPersisterDepartmentEntityRequest(
             @NonNull DepartmentEntityResponse departmentEntityResponse) {
 
-        PersisterDepartmentEntityRequest persisterDepartmentEntityRequest = new PersisterDepartmentEntityRequest();
+        List<PersisterDepartmentEntityRequest> persisterDepartmentEntityRequest = new ArrayList<>();
 
         if (departmentEntityResponse.getDepartmentEntity() != null && !departmentEntityResponse.getDepartmentEntity().isEmpty()) {
             List<DepartmentEntity> departmentEntityList = departmentEntityResponse.getDepartmentEntity();
 
-            List<PersisterDepartmentEntity> persisterDepartmentEntityList = departmentEntityList.stream()
+            persisterDepartmentEntityRequest = departmentEntityList.stream()
                     .map(departmentEntity ->
-                            PersisterDepartmentEntity.builder()
+                        PersisterDepartmentEntityRequest.builder()
+                            .departmentEntity(
+                                PersisterDepartmentEntity.builder()
                                     .id(departmentEntity.getId())
                                     .tenantId(departmentEntity.getTenantId())
                                     .departmentId(departmentEntity.getDepartmentId())
                                     .code(departmentEntity.getCode())
                                     .name(departmentEntity.getName())
                                     .hierarchyLevel(departmentEntity.getHierarchyLevel())
-                                    .createdBy(departmentEntity.getAuditDetails().getCreatedBy())
-                                    .lastModifiedBy(departmentEntity.getAuditDetails().getLastModifiedBy())
-                                    .createdTime(departmentEntity.getAuditDetails().getCreatedTime())
-                                    .lastModifiedTime(departmentEntity.getAuditDetails().getLastModifiedTime())
-                                    .children(String.join(",", departmentEntity.getChildren()))
+                                    .auditDetails(
+                                            AuditDetails.builder()
+                                                    .lastModifiedBy(departmentEntity.getAuditDetails().getLastModifiedBy())
+                                                    .lastModifiedTime(departmentEntity.getAuditDetails().getLastModifiedTime())
+                                                    .createdBy(departmentEntity.getAuditDetails().getCreatedBy())
+                                                    .createdTime(departmentEntity.getAuditDetails().getCreatedTime())
+                                                    .build()
+                                    )
+                                    .children(getDepartmentEntityChildren(departmentEntity.getChildren()))
                                     .build()
+                                )
+                                .build()
 
                     ).collect(Collectors.toList());
 
-            persisterDepartmentEntityRequest.setDepartmentEntity(persisterDepartmentEntityList);
         }
 
         return persisterDepartmentEntityRequest;
     }
 
     /**
+     * @param childList
+     * @return
+     */
+    private List<PersisterDepartmentEntityChildren> getDepartmentEntityChildren(List<String> childList) {
+        if (childList != null && !childList.isEmpty()) {
+            return childList.stream()
+                    .filter(child -> child != null && !child.isEmpty())
+                    .map(child -> PersisterDepartmentEntityChildren.builder()
+                            .childId(child)
+                            .status(true)
+                            .build()
+                    ).collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+
+    /**
      * @param departmentHierarchyLevelResponse
      * @return
      */
     public @NonNull
-    PersisterDepartmentHierarchyLevelRequest wrapPersisterDepartmentHierarchyLevelRequest(
+    List<PersisterDepartmentHierarchyLevelRequest> wrapPersisterDepartmentHierarchyLevelRequest(
             @NonNull DepartmentHierarchyLevelResponse departmentHierarchyLevelResponse) {
 
-        PersisterDepartmentHierarchyLevelRequest persisterDepartmentHierarchyLevelRequest =
-                new PersisterDepartmentHierarchyLevelRequest();
+        List<PersisterDepartmentHierarchyLevelRequest> persisterDepartmentHierarchyLevelsList = new ArrayList<>();
 
         if (departmentHierarchyLevelResponse.getDepartmentHierarchyLevel() != null
                 && !departmentHierarchyLevelResponse.getDepartmentHierarchyLevel().isEmpty()) {
             List<DepartmentHierarchyLevel> departmentHierarchyLevelList = departmentHierarchyLevelResponse
                     .getDepartmentHierarchyLevel();
 
-            List<PersisterDepartmentHierarchyLevel> persisterDepartmentHierarchyLevelsList =
-                    departmentHierarchyLevelList.stream()
+            persisterDepartmentHierarchyLevelsList = departmentHierarchyLevelList.stream()
                     .map(departmentHierarchyLevel ->
-                            PersisterDepartmentHierarchyLevel.builder()
+                        PersisterDepartmentHierarchyLevelRequest.builder()
+                            .departmentHierarchyLevel(
+                                PersisterDepartmentHierarchyLevel.builder()
                                     .id(departmentHierarchyLevel.getId())
                                     .tenantId(departmentHierarchyLevel.getTenantId())
                                     .departmentId(departmentHierarchyLevel.getDepartmentId())
                                     .label(departmentHierarchyLevel.getLabel())
                                     .parent(departmentHierarchyLevel.getParent())
                                     .level(departmentHierarchyLevel.getLevel())
-                                    .createdBy(departmentHierarchyLevel.getAuditDetails().getCreatedBy())
-                                    .lastModifiedBy(departmentHierarchyLevel.getAuditDetails().getLastModifiedBy())
-                                    .createdTime(departmentHierarchyLevel.getAuditDetails().getCreatedTime())
-                                    .lastModifiedTime(departmentHierarchyLevel.getAuditDetails().getLastModifiedTime())
+                                    .auditDetails(
+                                        AuditDetails.builder()
+                                            .lastModifiedBy(departmentHierarchyLevel.getAuditDetails().getLastModifiedBy())
+                                            .lastModifiedTime(departmentHierarchyLevel.getAuditDetails().getLastModifiedTime())
+                                            .createdBy(departmentHierarchyLevel.getAuditDetails().getCreatedBy())
+                                            .createdTime(departmentHierarchyLevel.getAuditDetails().getCreatedTime())
+                                            .build()
+                                    )
                                     .build()
-
+                            ).build()
                     ).collect(Collectors.toList());
-
-            persisterDepartmentHierarchyLevelRequest.setDepartmentHierarchyLevel(persisterDepartmentHierarchyLevelsList);
         }
-
-        return persisterDepartmentHierarchyLevelRequest;
+        return persisterDepartmentHierarchyLevelsList;
     }
 }

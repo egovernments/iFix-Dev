@@ -2,7 +2,6 @@ package org.egov.ifixmigrationtoolkit.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.ifixmigrationtoolkit.models.*;
 import org.egov.ifixmigrationtoolkit.producer.Producer;
 import org.egov.ifixmigrationtoolkit.repository.DepartmentEntityMigrationRepository;
@@ -111,8 +110,9 @@ public class DepartmentEntityMigrationService {
 
                 totalNumberOfRecordsMigrated += response.getDepartmentEntity().size();
 
-                producer.push(persisterKafkaDepartmentEntityCreateTopic,
-                        objectWrapper.wrapPersisterDepartmentEntityRequest(response));
+                publishToKafkaTopic(response);
+//                producer.push(persisterKafkaDepartmentEntityCreateTopic,
+//                        objectWrapper.wrapPersisterDepartmentEntityRequest(response));
 
                 commitMigrationProgress(migrationRequest.getTenantId(), resumeFrom, batchSize,
                         totalNumberOfRecordsMigrated);
@@ -130,6 +130,18 @@ public class DepartmentEntityMigrationService {
 
             return responseMap;
         }
+    }
+
+    /**
+     * @param response
+     */
+    private void publishToKafkaTopic(@NonNull DepartmentEntityResponse response) {
+        List<PersisterDepartmentEntityRequest> departmentEntityRequestList =
+                objectWrapper.wrapPersisterDepartmentEntityRequest(response);
+
+        departmentEntityRequestList.stream()
+                        .forEach(persisterDepartmentEntityRequest ->
+                            producer.push(persisterKafkaDepartmentEntityCreateTopic, persisterDepartmentEntityRequest));
     }
 
     /**
