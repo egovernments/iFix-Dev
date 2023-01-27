@@ -36,7 +36,7 @@ public class IfixElasticSearchPipelineListener {
     @Autowired
     private Producer producer;
 
-    @Value("${fiscal.event.es.push.topic}")
+    @Value("${fiscal.event.index.topic}")
     private String indexFiscalEventsTopic;
 
     @Value("${fiscal.event.kafka.push.topic}")
@@ -68,16 +68,20 @@ public class IfixElasticSearchPipelineListener {
     @KafkaListener(topics = { "${fiscal.event.kafka.push.topic}" })
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
-            FiscalEventRequest incomingData = objectMapper.convertValue(record, FiscalEventRequest.class);
+            FiscalEventBulkRequest fiscalEventBulkRequest = objectMapper.convertValue(record, FiscalEventBulkRequest.class);
 
-            // Enrich hierarchy map according to the tenantid encountered by this pipeline to avoid redundant network calls
-            if(!tenantIdVsExpenditureTypeVsUuidsMap.containsKey(incomingData.getFiscalEvent().getTenantId()))
-                tenantIdVsExpenditureTypeVsUuidsMap.put(incomingData.getFiscalEvent().getTenantId(), loadExpenditureTypeVsUuidMap(incomingData.getFiscalEvent().getTenantId()));
+            for(FiscalEvent fiscalEvent : fiscalEventBulkRequest.getFiscalEvent()) {
+                // Enrich hierarchy map according to the tenantid encountered by this pipeline to avoid redundant network calls
+                if(!tenantIdVsExpenditureTypeVsUuidsMap.containsKey(fiscalEvent.getTenantId()))
+                    tenantIdVsExpenditureTypeVsUuidsMap.put(fiscalEvent.getTenantId(),
+                            loadExpenditureTypeVsUuidMap(fiscalEvent.getTenantId()));
 
-            fiscalDataEnrichmentService.enrichFiscalData(incomingData);
-            fiscalDataEnrichmentService.enrichComputedFields(incomingData, tenantIdVsExpenditureTypeVsUuidsMap.get(incomingData.getFiscalEvent().getTenantId()));
+                fiscalDataEnrichmentService.enrichFiscalData(fiscalEvent);
+                fiscalDataEnrichmentService.enrichComputedFields(fiscalEvent,
+                        tenantIdVsExpenditureTypeVsUuidsMap.get(fiscalEvent.getTenantId()));
 
-            producer.push(indexFiscalEventsTopic, incomingData);
+                producer.push(indexFiscalEventsTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
+            }
         }catch(Exception e) {
             log.error("Exception while reading from the queue: ", e);
             throw new RuntimeException(e);

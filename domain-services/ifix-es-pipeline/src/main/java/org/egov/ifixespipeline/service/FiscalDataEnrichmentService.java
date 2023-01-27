@@ -54,8 +54,8 @@ public class FiscalDataEnrichmentService {
         return hierarchyLevelVsLabelMap;
     }
 
-    public void enrichFiscalData(FiscalEventRequest incomingData){
-        HashMap<String, Object> attributes = (HashMap<String, Object>) incomingData.getFiscalEvent().getAttributes();
+    public void enrichFiscalData(FiscalEvent fiscalEvent){
+        HashMap<String, Object> attributes = (HashMap<String, Object>) fiscalEvent.getAttributes();
 
         HashMap<String, Object> departmentEntity = new HashMap<>();
 
@@ -69,18 +69,20 @@ public class FiscalDataEnrichmentService {
 
         HashMap<String, String> hierarchyMap = new HashMap<>();
 
-        if(!tenantIdVshierarchyLevelVsLabelMap.containsKey(incomingData.getFiscalEvent().getTenantId())){
-            tenantIdVshierarchyLevelVsLabelMap.put(incomingData.getFiscalEvent().getTenantId(), loadDepartmentHierarchyLevel(incomingData.getFiscalEvent().getTenantId()));
+        if(!tenantIdVshierarchyLevelVsLabelMap.containsKey(fiscalEvent.getTenantId())){
+            tenantIdVshierarchyLevelVsLabelMap.put(fiscalEvent.getTenantId(),
+                    loadDepartmentHierarchyLevel(fiscalEvent.getTenantId()));
         }
 
         ancestryList.forEach(ancestry -> {
             if(ancestry.containsKey("hierarchyLevel") && ancestry.containsKey("code"))
-                hierarchyMap.put(tenantIdVshierarchyLevelVsLabelMap.get(incomingData.getFiscalEvent().getTenantId()).get(ancestry.get("hierarchyLevel")), (String)ancestry.get("code"));
+                hierarchyMap.put(tenantIdVshierarchyLevelVsLabelMap.get(fiscalEvent.getTenantId()).get(ancestry.get(
+                        "hierarchyLevel")), (String)ancestry.get("code"));
         });
 
-        incomingData.getFiscalEvent().setHierarchyMap(hierarchyMap);
+        fiscalEvent.setHierarchyMap(hierarchyMap);
 
-        log.info(incomingData.getFiscalEvent().toString());
+        log.info(fiscalEvent.toString());
     }
 
     private StringBuilder getIfixDepartmentEntityUri(){
@@ -89,24 +91,24 @@ public class FiscalDataEnrichmentService {
         return uri;
     }
 
-    public void enrichComputedFields(FiscalEventRequest incomingData, Map<String, HashSet<String>> expenditureTypeVsUuidsMap) {
+    public void enrichComputedFields(FiscalEvent fiscalEvent, Map<String, HashSet<String>> expenditureTypeVsUuidsMap) {
         Map<String, Object> computedFieldsMap = new HashMap<>();
-        if(incomingData.getFiscalEvent().getEventType().equals(FiscalEvent.EventTypeEnum.Demand)){
+        if(fiscalEvent.getEventType().equals(FiscalEvent.EventTypeEnum.Demand)){
             BigDecimal totalDemandAmount = new BigDecimal(0);
-            for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++){
-                totalDemandAmount = totalDemandAmount.add(incomingData.getFiscalEvent().getAmountDetails().get(i).getAmount());
+            for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++){
+                totalDemandAmount = totalDemandAmount.add(fiscalEvent.getAmountDetails().get(i).getAmount());
             }
             computedFieldsMap.put("netAmount", totalDemandAmount);
-        }else if(incomingData.getFiscalEvent().getEventType().equals(FiscalEvent.EventTypeEnum.Bill)){
+        }else if(fiscalEvent.getEventType().equals(FiscalEvent.EventTypeEnum.Bill)){
             BigDecimal totalBillAmount = new BigDecimal(0);
-            for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++){
-                totalBillAmount = totalBillAmount.subtract(incomingData.getFiscalEvent().getAmountDetails().get(i).getAmount());
+            for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++){
+                totalBillAmount = totalBillAmount.subtract(fiscalEvent.getAmountDetails().get(i).getAmount());
             }
             computedFieldsMap.put("netAmount", totalBillAmount);
-        }else if(incomingData.getFiscalEvent().getEventType().equals(FiscalEvent.EventTypeEnum.Receipt)){
+        }else if(fiscalEvent.getEventType().equals(FiscalEvent.EventTypeEnum.Receipt)){
             BigDecimal totalCollectionAmount = new BigDecimal(0);
-            for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++){
-                totalCollectionAmount = totalCollectionAmount.subtract(incomingData.getFiscalEvent().getAmountDetails().get(i).getAmount());
+            for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++){
+                totalCollectionAmount = totalCollectionAmount.subtract(fiscalEvent.getAmountDetails().get(i).getAmount());
             }
             computedFieldsMap.put("netAmount", totalCollectionAmount);
         }
@@ -116,8 +118,8 @@ public class FiscalDataEnrichmentService {
         BigDecimal salaryHeadAmount = new BigDecimal(0);
         BigDecimal otherHeadAmount = new BigDecimal(0);
 
-        for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++) {
-            Amount amount = incomingData.getFiscalEvent().getAmountDetails().get(i);
+        for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++) {
+            Amount amount = fiscalEvent.getAmountDetails().get(i);
             if(expenditureTypeVsUuidsMap.get(electricityCoaHeadName).contains(amount.getCoaId()))
                 electricityHeadAmount = electricityHeadAmount.add(amount.getAmount());
             else if(expenditureTypeVsUuidsMap.get(operationsCoaHeadName).contains(amount.getCoaId()))
@@ -133,24 +135,24 @@ public class FiscalDataEnrichmentService {
         computedFieldsMap.put("salaryHeadAmount", salaryHeadAmount);
         computedFieldsMap.put("otherHeadAmount", otherHeadAmount);
 
-        if(incomingData.getFiscalEvent().getEventType().equals(FiscalEvent.EventTypeEnum.Payment)){
+        if(fiscalEvent.getEventType().equals(FiscalEvent.EventTypeEnum.Payment)){
             BigDecimal electricityPaymentAmount = new BigDecimal(0);
-            for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++) {
-                Amount amount = incomingData.getFiscalEvent().getAmountDetails().get(i);
+            for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++) {
+                Amount amount = fiscalEvent.getAmountDetails().get(i);
                 if(expenditureTypeVsUuidsMap.get(electricityCoaHeadName).contains(amount.getCoaId()))
                     electricityPaymentAmount = electricityPaymentAmount.subtract(amount.getAmount());
             }
             computedFieldsMap.put("electricityExpenseNetAmount", electricityPaymentAmount);
-        }else if(incomingData.getFiscalEvent().getEventType().equals(FiscalEvent.EventTypeEnum.Bill)){
+        }else if(fiscalEvent.getEventType().equals(FiscalEvent.EventTypeEnum.Bill)){
             BigDecimal electricityBillAmount = new BigDecimal(0);
-            for(int i = 0; i < incomingData.getFiscalEvent().getAmountDetails().size(); i++) {
-                Amount amount = incomingData.getFiscalEvent().getAmountDetails().get(i);
+            for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++) {
+                Amount amount = fiscalEvent.getAmountDetails().get(i);
                 if(expenditureTypeVsUuidsMap.get(electricityCoaHeadName).contains(amount.getCoaId()))
                     electricityBillAmount = electricityBillAmount.add(amount.getAmount());
             }
             computedFieldsMap.put("electricityExpenseNetAmount", electricityBillAmount);
         }
 
-        incomingData.getFiscalEvent().setComputedFields(computedFieldsMap);
+        fiscalEvent.setComputedFields(computedFieldsMap);
     }
 }
