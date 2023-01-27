@@ -16,7 +16,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class MigrationService {
+public class FiscalEventMigrationService {
 
     @Autowired
     private MigrationRepository repository;
@@ -33,8 +33,8 @@ public class MigrationService {
     @Value("${ifix.migration.batch.size}")
     private Integer batchSize;
 
-    @Value("${fiscal.event.es.topic}")
-    private String fiscalEventESPushTopic;
+    @Value("${fiscal.event.push.topic}")
+    private String fiscalEventPushTopic;
 
     @Value("${ifix.migration.postgres.push.topic}")
     private String postgresSinkPushTopic;
@@ -82,10 +82,9 @@ public class MigrationService {
             }
             totalNumberOfRecordsMigrated += response.getFiscalEvent().size();
 
-            // send fiscal events to ES-Pipeline
-            for(FiscalEvent fiscalEvent : response.getFiscalEvent()) {
-                producer.push(fiscalEventESPushTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
-            }
+            // send fiscal events to request validated topic
+            producer.push(fiscalEventPushTopic,
+                    FiscalEventBulkRequest.builder().fiscalEvent(response.getFiscalEvent()).build());
 
             // Send fiscal events to postgres sink
             producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
@@ -119,8 +118,7 @@ public class MigrationService {
                 .batchSize(batchSize)
                 .totalNumberOfRecordsMigrated(totalNumberOfRecordsMigrated)
                 .build();
-        //producer.push(saveMigrationProgressTopic, MigrationCountWrapper.builder().migrationCount(migrationCount).build());
-
+        producer.push(saveMigrationProgressTopic, MigrationCountWrapper.builder().migrationCount(migrationCount).build());
     }
 
     public FiscalEventRequestDTO prepareFiscalEventDTOListForPersister(List<FiscalEvent> fiscalEventList) {

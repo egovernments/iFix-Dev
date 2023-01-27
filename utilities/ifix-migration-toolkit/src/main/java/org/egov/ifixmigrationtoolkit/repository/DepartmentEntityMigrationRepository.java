@@ -1,6 +1,6 @@
 package org.egov.ifixmigrationtoolkit.repository;
 
-import org.egov.ifixmigrationtoolkit.util.MigrationEnum;
+import org.egov.ifixmigrationtoolkit.models.DepartmentEntityMigrationEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,16 +19,16 @@ public class DepartmentEntityMigrationRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Integer getPageNumberToResumeFrom(String tenantId, MigrationEnum migrationEnum) {
+    public Integer getPageNumberToResumeFrom(String tenantId, DepartmentEntityMigrationEnum departmentEntityMigrationEnum) {
         RESUME_FROM_QUERY = RESUME_FROM_QUERY.replace("{TENANTID_PLACEHOLDER}", tenantId);
-        RESUME_FROM_QUERY = RESUME_FROM_QUERY.replace("{SERVICE_TYPE}", migrationEnum.name());
+        RESUME_FROM_QUERY = RESUME_FROM_QUERY.replace("{SERVICE_TYPE}", departmentEntityMigrationEnum.name());
         Integer resumeFrom = jdbcTemplate.queryForObject(RESUME_FROM_QUERY, Integer.class);
         return resumeFrom;
     }
 
-    public Long getTotalNumberOfRecordsMigrated(String tenantId, MigrationEnum migrationEnum) {
+    public Long getTotalNumberOfRecordsMigrated(String tenantId, DepartmentEntityMigrationEnum departmentEntityMigrationEnum) {
         TOTAL_RECORDS_QUERY = TOTAL_RECORDS_QUERY.replace("{TENANTID_PLACEHOLDER}", tenantId);
-        TOTAL_RECORDS_QUERY = TOTAL_RECORDS_QUERY.replace("{SERVICE_TYPE}", migrationEnum.name());
+        TOTAL_RECORDS_QUERY = TOTAL_RECORDS_QUERY.replace("{SERVICE_TYPE}", departmentEntityMigrationEnum.name());
         Long numberOfRecordsMigrated = jdbcTemplate.queryForObject(TOTAL_RECORDS_QUERY, Long.class);
         return numberOfRecordsMigrated;
     }

@@ -3,12 +3,11 @@ package org.egov.ifixmigrationtoolkit.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.egov.ifixmigrationtoolkit.models.FiscalEvent;
 import org.egov.ifixmigrationtoolkit.models.MigrationRequest;
 import org.egov.ifixmigrationtoolkit.service.DepartmentEntityMigrationService;
 import org.egov.ifixmigrationtoolkit.service.DepartmentHierarchyLevelMigrationService;
 import org.egov.ifixmigrationtoolkit.service.MasterDataMigrationService;
-import org.egov.ifixmigrationtoolkit.service.MigrationService;
+import org.egov.ifixmigrationtoolkit.service.FiscalEventMigrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class MigrationController {
     ObjectMapper objectMapper;
 
     @Autowired
-    private MigrationService migrationService;
+    private FiscalEventMigrationService fiscalEventMigrationService;
 
     @Autowired
     private DepartmentEntityMigrationService departmentEntityMigrationService;
@@ -42,7 +41,7 @@ public class MigrationController {
 
     @RequestMapping(value="/fiscal_event/v1/_migrate", method = RequestMethod.POST)
     public ResponseEntity<?> migrateDataToES(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
-        migrationService.migrateData(request);
+        fiscalEventMigrationService.migrateData(request);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("SUCCESS", "Fiscal Event data migration job created successfully");
         return new ResponseEntity<>(responseMap, HttpStatus.OK);

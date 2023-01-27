@@ -6,7 +6,7 @@ import org.egov.ifixmigrationtoolkit.models.*;
 import org.egov.ifixmigrationtoolkit.producer.Producer;
 import org.egov.ifixmigrationtoolkit.repository.DepartmentEntityMigrationRepository;
 import org.egov.ifixmigrationtoolkit.repository.ServiceRequestRepository;
-import org.egov.ifixmigrationtoolkit.util.MigrationEnum;
+import org.egov.ifixmigrationtoolkit.models.DepartmentEntityMigrationEnum;
 import org.egov.ifixmigrationtoolkit.util.ObjectWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,10 +51,10 @@ public class DepartmentEntityMigrationService {
         Map<String, Object> responseMap = new HashMap<>();
 
         Integer resumeFrom = migrationRepository
-                .getPageNumberToResumeFrom(migrationRequest.getTenantId(), MigrationEnum.DEPARTMENT_ENTITY);
+                .getPageNumberToResumeFrom(migrationRequest.getTenantId(), DepartmentEntityMigrationEnum.DEPARTMENT_ENTITY);
 
         Long numberOfRecordsMigrated = migrationRepository
-                .getTotalNumberOfRecordsMigrated(migrationRequest.getTenantId(), MigrationEnum.DEPARTMENT_ENTITY);
+                .getTotalNumberOfRecordsMigrated(migrationRequest.getTenantId(), DepartmentEntityMigrationEnum.DEPARTMENT_ENTITY);
 
         PlainsearchCriteria criteria = PlainsearchCriteria.builder().tenantId(migrationRequest.getTenantId()).build();
         DepartmentPlainSearchRequest plainSearchRequest = DepartmentPlainSearchRequest.builder()
@@ -179,7 +179,7 @@ public class DepartmentEntityMigrationService {
                 .pageNumber(pageNumber)
                 .batchSize(batchSize)
                 .totalNumberOfRecordsMigrated(totalNumberOfRecordsMigrated)
-                .serviceType(MigrationEnum.DEPARTMENT_ENTITY.name())
+                .serviceType(DepartmentEntityMigrationEnum.DEPARTMENT_ENTITY.name())
                 .build();
 
         producer.push(persistMigrationDataTopic, DepartmentEntityMigrationCountWrapper.builder()

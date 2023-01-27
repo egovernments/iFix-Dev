@@ -11,7 +11,7 @@
 	<groupId>org.egov</groupId>
 	<artifactId>ifix-migration-toolkit</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>ifix-es-pipeline</name>
+	<name>ifix-migration-toolkit</name>
 	<description>Helps in migration of ifix data to elasticsearch</description>
 	<properties>
 		<java.version>1.8</java.version>
