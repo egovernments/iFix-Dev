@@ -3,6 +3,7 @@ package org.egov.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.config.FiscalEventPostProcessorConfig;
 import org.egov.config.TestDataFormatter;
+import org.egov.models.FiscalEventBulkRequest;
 import org.egov.models.FiscalEventDeReferenced;
 import org.egov.models.FiscalEventRequest;
 import org.egov.producer.Producer;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,10 +46,15 @@ class FiscalEventDereferenceConsumerTest {
     private TestDataFormatter testDataFormatter;
 
     private FiscalEventRequest fiscalEventRequest;
+    private FiscalEventBulkRequest fiscalEventBulkRequest;
 
     @BeforeAll
     void init() throws IOException {
         fiscalEventRequest = testDataFormatter.getFiscalEventValidatedData();
+        fiscalEventBulkRequest = FiscalEventBulkRequest.builder()
+                .requestHeader(fiscalEventRequest.getRequestHeader())
+                .fiscalEvent(Collections.singletonList(fiscalEventRequest.getFiscalEvent()))
+                .build();
     }
 
     @Test
@@ -62,7 +69,7 @@ class FiscalEventDereferenceConsumerTest {
     @Test
     void testListenWithValidFiscalEventData() throws IllegalArgumentException {
         doNothing().when(this.producer).push((String) any(), (Object) any());
-        when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(fiscalEventRequest);
+        when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(fiscalEventBulkRequest);
         when(this.fiscalEventPostProcessorConfig.getFiscalEventDereferenceTopic())
                 .thenReturn("Fiscal Event Dereference Topic");
         when(this.fiscalEventDereferenceService.dereference((FiscalEventRequest) any()))
@@ -77,7 +84,7 @@ class FiscalEventDereferenceConsumerTest {
     @Test
     void testListenWithUnknownTopic() throws IllegalArgumentException {
         doNothing().when(this.producer).push((String) any(), (Object) any());
-        when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(fiscalEventRequest);
+        when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(fiscalEventBulkRequest);
         when(this.fiscalEventPostProcessorConfig.getFiscalEventDereferenceTopic()).thenThrow(new RuntimeException("foo"));
         when(this.fiscalEventDereferenceService.dereference((FiscalEventRequest) any()))
                 .thenReturn(new FiscalEventDeReferenced());
