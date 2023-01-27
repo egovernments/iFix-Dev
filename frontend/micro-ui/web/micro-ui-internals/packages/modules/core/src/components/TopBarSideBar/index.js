@@ -53,10 +53,9 @@ const TopBarSideBar = ({
         mobileView={mobileView}
         userOptions={userOptions}
         handleUserDropdownSelection={handleUserDropdownSelection}
-        // Commenting language selector and hardcoding logo url for now
-        // logoUrl={logoUrl}
+        logoUrl={logoUrl}
+        // Commenting language selector for now
         // showLanguageChange={showLanguageChange}
-        logoUrl="https://s3.ap-south-1.amazonaws.com/ifix-dev-assets/ifix-mgramseva-logo.png"
         showLanguageChange={false}
       />
       {showDialog && (
