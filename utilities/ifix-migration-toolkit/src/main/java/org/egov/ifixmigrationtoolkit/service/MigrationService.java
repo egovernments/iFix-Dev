@@ -1,21 +1,16 @@
 package org.egov.ifixmigrationtoolkit.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.RequestHeader;
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.ifixmigrationtoolkit.models.*;
 import org.egov.ifixmigrationtoolkit.producer.Producer;
 import org.egov.ifixmigrationtoolkit.repository.MigrationRepository;
 import org.egov.ifixmigrationtoolkit.repository.ServiceRequestRepository;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 
@@ -38,8 +33,8 @@ public class MigrationService {
     @Value("${ifix.migration.batch.size}")
     private Integer batchSize;
 
-    @Value("${ifix.migration.batch.push.topic}")
-    private String batchMigrationPushTopic;
+    @Value("${fiscal.event.es.topic}")
+    private String fiscalEventESPushTopic;
 
     @Value("${ifix.migration.postgres.push.topic}")
     private String postgresSinkPushTopic;
@@ -86,7 +81,12 @@ public class MigrationService {
                 seekPointerToAvoidDuplication(response, totalNumberOfRecordsMigrated, batchSize);
             }
             totalNumberOfRecordsMigrated += response.getFiscalEvent().size();
-            producer.push(batchMigrationPushTopic, ProducerPOJO.builder().requestInfo(new RequestInfo()).records(response.getFiscalEvent()).build());
+
+            // send fiscal events to ES-Pipeline
+            for(FiscalEvent fiscalEvent : response.getFiscalEvent()) {
+                producer.push(fiscalEventESPushTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
+            }
+
             // Send fiscal events to postgres sink
             producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
             commitMigrationProgress(request.getTenantId(), i, batchSize, totalNumberOfRecordsMigrated);
