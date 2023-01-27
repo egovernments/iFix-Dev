@@ -11,8 +11,6 @@ public class MasterDataConstants {
 
 
     public static final String USER_INFO = "USER_INFO";
-    public static final String GOVERNMENT_ID = "GOVERNMENT_ID";
-    public static final String GOVERNMENT_NAME = "GOVERNMENT_NAME";
     public static final String TENANT_ID = "TENANT_ID";
     public static final String EXPENDITURE_NAME = "EXPENDITURE_NAME";
     public static final String EXPENDITURE_CODE = "EXPENDITURE_CODE";
@@ -27,7 +25,6 @@ public class MasterDataConstants {
     public static final String IDS = "Ids";
     public static final String REQUEST_HEADER = "requestHeader";
     public static final String CRITERIA = "criteria";
-    public static final String TENANT_LIST = "$.government.*";
     public static final String EXPENDITURE_LIST = "$.expenditure.*";
     public static final String DEPARTMENT_ENTITY_LIST = "$.departmentEntity.*";
     public static final String DEPARTMENT_JSON_PATH = "$.department.*";
