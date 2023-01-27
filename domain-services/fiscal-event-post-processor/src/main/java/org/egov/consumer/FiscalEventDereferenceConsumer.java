@@ -4,7 +4,9 @@ package org.egov.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.config.FiscalEventPostProcessorConfig;
+import org.egov.models.FiscalEventBulkRequest;
 import org.egov.models.FiscalEventDeReferenced;
+import org.egov.models.FiscalEvent;
 import org.egov.models.FiscalEventRequest;
 import org.egov.producer.Producer;
 import org.egov.service.FiscalEventDereferenceService;
@@ -35,9 +37,14 @@ public class FiscalEventDereferenceConsumer {
     @KafkaListener(topics = {"${fiscal.event.kafka.push.topic}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
-            FiscalEventRequest fiscalEventRequest = mapper.convertValue(record, FiscalEventRequest.class);
-            FiscalEventDeReferenced fiscalEventDeReferenced = dereferenceService.dereference(fiscalEventRequest);
-            producer.push(processorConfig.getFiscalEventDereferenceTopic(), fiscalEventDeReferenced);
+            FiscalEventBulkRequest fiscalEventBulkRequest = mapper.convertValue(record, FiscalEventBulkRequest.class);
+            for (FiscalEvent fiscalEvent : fiscalEventBulkRequest.getFiscalEvent()) {
+                FiscalEventRequest fiscalEventRequest =
+                        FiscalEventRequest.builder().requestHeader(fiscalEventBulkRequest.getRequestHeader())
+                                .fiscalEvent(fiscalEvent).build();
+                FiscalEventDeReferenced fiscalEventDeReferenced = dereferenceService.dereference(fiscalEventRequest);
+                producer.push(processorConfig.getFiscalEventDereferenceTopic(), fiscalEventDeReferenced);
+            }
         } catch (Exception e) {
             log.error("Error occurred while processing the record from topic : " + topic, e);
             throw new RuntimeException(e);
