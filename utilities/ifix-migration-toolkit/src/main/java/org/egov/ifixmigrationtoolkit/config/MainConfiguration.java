@@ -6,6 +6,7 @@ import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
@@ -13,6 +14,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @Import({TracerConfiguration.class})
+@Configuration
 public class MainConfiguration {
 
     @Value("${app.timezone}")
