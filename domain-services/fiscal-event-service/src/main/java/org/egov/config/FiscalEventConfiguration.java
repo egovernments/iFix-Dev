@@ -27,10 +27,7 @@ public class FiscalEventConfiguration {
     }
 
     @Value("${fiscal.kafka.push.topic}")
-    private String fiscalPushRequest;
-
-    @Value("${fiscal.event.kafka.es.push.topic}")
-    private String fiscalEventESSinkTopic;
+    private String fiscalPushRequestTopic;
 
     @Value("${fiscal.event.kafka.postgres.topic}")
     private String fiscalEventPushToPostgresSink;
@@ -43,15 +40,6 @@ public class FiscalEventConfiguration {
 
     @Value("${ifix.master.coa.search.path}")
     private String ifixMasterCoaSearchPath;
-
-    @Value("${ifix.master.government.host}")
-    private String ifixMasterGovernmentHost;
-
-    @Value("${ifix.master.government.context.path}")
-    private String ifixMasterGovernmentContextPath;
-
-    @Value("${ifix.master.government.search.path}")
-    private String ifixMasterGovernmentSearchPath;
 
     @Value("${root.level.tenant.id}")
     private String rootLevelTenantId;
