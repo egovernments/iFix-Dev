@@ -44,7 +44,7 @@ public class MigrationController {
     public ResponseEntity<?> migrateDataToES(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
         migrationService.migrateData(request);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("SUCCESS", "Department Entity data migration job created successfully");
+        responseMap.put("SUCCESS", "Fiscal Event data migration job created successfully");
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
