@@ -3,10 +3,7 @@ package org.egov.ifixmigrationtoolkit.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.ifixmigrationtoolkit.models.MigrationRequest;
-import org.egov.ifixmigrationtoolkit.models.adaptermasterdata.DepartmentRequest;
-import org.egov.ifixmigrationtoolkit.models.adaptermasterdata.DepartmentResponse;
-import org.egov.ifixmigrationtoolkit.models.adaptermasterdata.DepartmentSearchCriteria;
-import org.egov.ifixmigrationtoolkit.models.adaptermasterdata.DepartmentSearchRequest;
+import org.egov.ifixmigrationtoolkit.models.adaptermasterdata.*;
 import org.egov.ifixmigrationtoolkit.producer.Producer;
 import org.egov.ifixmigrationtoolkit.repository.ServiceRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +49,21 @@ public class AdapterMasterDataMigrationService {
 
     public void migrateExpenditure(MigrationRequest migrationRequest) {
         log.info("Starting migration of expenditure master data....");
+        ExpenditureSearchCriteria expenditureSearchCriteria = ExpenditureSearchCriteria.builder()
+                .tenantId(migrationRequest.getTenantId())
+                .build();
+        ExpenditureSearchRequest expenditureSearchRequest = ExpenditureSearchRequest.builder()
+                .requestHeader(migrationRequest.getRequestHeader())
+                .criteria(expenditureSearchCriteria)
+                .build();
+        Object response = serviceRequestRepository.fetchResult(
+                new StringBuilder(adapterMasterDataServiceHost + "adapter-master-data/expenditure/v1/_search"),
+                expenditureSearchRequest);
+        ExpenditureResponse expenditureResponse = objectMapper.convertValue(response, ExpenditureResponse.class);
+        expenditureResponse.getExpenditure().forEach(expenditure -> {
+            producer.push("save-department-application",
+                    ExpenditureRequest.builder().expenditure(expenditure).requestHeader(migrationRequest.getRequestHeader()).build());
+        });
     }
 
     public void migrateProject(MigrationRequest migrationRequest) {
