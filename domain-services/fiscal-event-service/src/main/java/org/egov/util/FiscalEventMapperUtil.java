@@ -52,6 +52,7 @@ public class FiscalEventMapperUtil {
     private FiscalEvent getFiscalEvent(JsonNode node) {
         FiscalEvent fiscalEvent = FiscalEvent.builder()
                 .id(node.get("id").asText())
+                .version(node.get("version") != null ? node.get("version").asText() : null)
                 .tenantId(node.get("tenantId") != null ? node.get("tenantId").asText() : null)
                 .eventType(node.get("eventType") != null ? FiscalEvent.EventTypeEnum.valueOf(node.get("eventType").asText()) : null)
                 .sender(node.get("sender") != null ? node.get("sender").asText() : null)
