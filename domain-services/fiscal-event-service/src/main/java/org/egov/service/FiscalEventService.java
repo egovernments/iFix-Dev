@@ -12,7 +12,6 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.producer.Producer;
 import org.egov.repository.FiscalEventRepository;
-import org.egov.util.FiscalEventMapperUtil;
 import org.egov.util.FiscalEventUtil;
 import org.egov.validator.FiscalEventValidator;
 import org.egov.web.models.*;
@@ -57,20 +56,9 @@ public class FiscalEventService {
 
         // unbundle the bulk request and push to fiscal-event-post-processor and es-pipeline
         if (!CollectionUtils.isEmpty(fiscalEventRequest.getFiscalEvent())) {
-            RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-            for (FiscalEvent fiscalEvent : fiscalEventRequest.getFiscalEvent()) {
-                ObjectNode fiscalEventRequestNode = JsonNodeFactory.instance.objectNode();
-                fiscalEventRequestNode.putPOJO("requestHeader", requestHeader);
-                fiscalEventRequestNode.putPOJO("fiscalEvent", fiscalEvent);
 
-                //push with request header details
-                producer.push(eventConfiguration.getFiscalPushRequest(), fiscalEventRequestNode);
+            producer.push(eventConfiguration.getFiscalPushRequestTopic(), fiscalEventRequest);
 
-                //push to ES sink
-                producer.push(eventConfiguration.getFiscalEventESSinkTopic(), fiscalEventRequestNode);
-            }
-
-            //push without request header details
             FiscalEventRequestDTO enrichedFiscalEventRequest = enricher.prepareFiscalEventDTOListForPersister(fiscalEventRequest);
             producer.push(eventConfiguration.getFiscalEventPushToPostgresSink(), enrichedFiscalEventRequest);
         }
