@@ -91,6 +91,8 @@ config:
       - work-dir: "reference-adapter/adapter-master-data-service"
         image-name: "adapter-master-data-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "reference-adapter/adapter-master-data-service/src/main/resources/db"
+        image-name: "adapter-master-data-service-db"
   - name: "builds/iFix/reference-adapter/pspcl-ifix-adapter"
     build:
       - work-dir: "reference-adapter/pspcl-ifix-adapter"
