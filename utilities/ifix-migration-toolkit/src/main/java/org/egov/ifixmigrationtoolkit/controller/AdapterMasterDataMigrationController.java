@@ -44,10 +44,10 @@ public class AdapterMasterDataMigrationController {
 
     @RequestMapping(value="/project/v1/_migrate", method = RequestMethod.POST)
     public ResponseEntity<?> migrateProjectToPostgres(@RequestBody @Valid MigrationRequest request) throws JsonProcessingException {
-//        adapterMasterDataMigrationService.migrateProject(request);
-//        Map<String, Object> responseMap = new HashMap<>();
-//        responseMap.put("SUCCESS", "Project data migration job created successfully");
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        adapterMasterDataMigrationService.migrateProject(request);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("SUCCESS", "Project data migration job created successfully");
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
 }
