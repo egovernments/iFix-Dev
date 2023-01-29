@@ -61,7 +61,7 @@ public class AdapterMasterDataMigrationService {
                 expenditureSearchRequest);
         ExpenditureResponse expenditureResponse = objectMapper.convertValue(response, ExpenditureResponse.class);
         expenditureResponse.getExpenditure().forEach(expenditure -> {
-            producer.push("save-department-application",
+            producer.push("save-expenditure-application",
                     ExpenditureRequest.builder().expenditure(expenditure).requestHeader(migrationRequest.getRequestHeader()).build());
         });
     }
