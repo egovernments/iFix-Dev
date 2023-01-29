@@ -21,11 +21,15 @@ config:
       - work-dir: "domain-services/ifix-master-data-service"
         image-name: "ifix-master-data-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/ifix-master-data-service/src/main/resources/db"
+        image-name: "ifix-master-data-service-db"
   - name: "builds/iFix/domain-services/fiscal-event-service"
     build:
       - work-dir: "domain-services/fiscal-event-service"
         image-name: "fiscal-event-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/fiscal-event-service/src/main/resources/db"
+        image-name: "fiscal-event-service-db"
   - name: "builds/iFix/domain-services/fiscal-event-post-processor"
     build:
       - work-dir: "domain-services/fiscal-event-post-processor"
@@ -51,12 +55,12 @@ config:
       - work-dir: "domain-services/ifix-es-pipeline"
         image-name: "ifix-es-pipeline"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/domain-services/ifix-migration-toolkit"
+  - name: "builds/iFix/utilities/ifix-migration-toolkit"
     build:
-      - work-dir: "domain-services/ifix-migration-toolkit"
+      - work-dir: "utilities/ifix-migration-toolkit"
         image-name: "ifix-migration-toolkit"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "domain-services/ifix-migration-toolkit/src/main/resources/db"
+      - work-dir: "utilities/ifix-migration-toolkit/src/main/resources/db"
         image-name: "ifix-migration-toolkit-db"
   - name: "builds/iFix/reference-adapter/ifix-department-entity-service"
     build:
@@ -87,6 +91,8 @@ config:
       - work-dir: "reference-adapter/adapter-master-data-service"
         image-name: "adapter-master-data-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "reference-adapter/adapter-master-data-service/src/main/resources/db"
+        image-name: "adapter-master-data-service-db"
   - name: "builds/iFix/reference-adapter/pspcl-ifix-adapter"
     build:
       - work-dir: "reference-adapter/pspcl-ifix-adapter"
@@ -95,5 +101,5 @@ config:
   - name: "builds/iFix/frontend/digit-ui"
     build:
       - work-dir: frontend/micro-ui/
-        image-name: digit-ui
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
+        image-name: digit-ui

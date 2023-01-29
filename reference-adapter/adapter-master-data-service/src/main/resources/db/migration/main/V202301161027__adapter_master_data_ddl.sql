@@ -1,44 +1,50 @@
 CREATE TABLE department
 (
     id character varying(255)  NOT NULL,
+    tenant_id character varying(255),
     code character varying(255),
+    name character varying(255),
+    is_nodal boolean,
+    parent character varying(255),
+
     created_by character varying(255),
     created_time bigint,
-    is_nodal boolean,
     last_modified_by character varying(255),
     last_modified_time bigint,
-    name character varying(255),
-    parent character varying(255),
-    tenant_id character varying(255),
+
     CONSTRAINT department_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE expenditure
 (
     id character varying(255)  NOT NULL,
+    tenant_id character varying(255),
     code character varying(255),
+    name character varying(255),
+    type character varying(255),
+    department_id character varying(255),
+
     created_by character varying(255),
     created_time bigint,
-    department_id character varying(255),
     last_modified_by character varying(255),
     last_modified_time bigint,
-    name character varying(255),
-    tenant_id character varying(255),
-    type character varying(255),
+
     CONSTRAINT expenditure_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE project
 (
     id character varying(255)  NOT NULL,
+    tenant_id character varying(255),
     code character varying(255),
+    name character varying(255),
+    expenditure_id character varying(255),
+
     created_by character varying(255),
     created_time bigint,
-    expenditure_id character varying(255),
     last_modified_by character varying(255),
     last_modified_time bigint,
-    name character varying(255),
-    tenant_id character varying(255),
+
     CONSTRAINT project_pkey PRIMARY KEY (id)
 );
 
