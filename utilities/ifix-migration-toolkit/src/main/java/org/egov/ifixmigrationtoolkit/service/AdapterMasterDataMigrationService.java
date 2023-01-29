@@ -130,6 +130,8 @@ public class AdapterMasterDataMigrationService {
                     .locationIds(locationRelationshipDTOS)
                     .auditDetails(project.getAuditDetails())
                     .build();
+
+            newProjects.add(newProject);
         }
         return ProjectResponseNew.builder().projectDTO(newProjects).build();
     }
