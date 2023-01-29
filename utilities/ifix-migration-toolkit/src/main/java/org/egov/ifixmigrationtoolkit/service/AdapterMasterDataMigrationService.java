@@ -38,6 +38,7 @@ public class AdapterMasterDataMigrationService {
         DepartmentSearchRequest departmentSearchRequest =
                 DepartmentSearchRequest.builder()
                         .criteria(departmentSearchCriteria)
+                        .requestHeader(migrationRequest.getRequestHeader())
                         .build();
         Object response = serviceRequestRepository.fetchResult(
                  new StringBuilder(adapterMasterDataServiceHost + "adapter-master-data/department/v1/_search"),
