@@ -21,6 +21,8 @@ config:
       - work-dir: "domain-services/ifix-master-data-service"
         image-name: "ifix-master-data-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/ifix-master-data-service/src/main/resources/db"
+        image-name: "ifix-master-data-service-db"
   - name: "builds/iFix/domain-services/fiscal-event-service"
     build:
       - work-dir: "domain-services/fiscal-event-service"
@@ -94,7 +96,7 @@ config:
       - work-dir: "reference-adapter/pspcl-ifix-adapter"
         image-name: "pspcl-ifix-adapter"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/iFix/frontend/micro-ui/digit-ui"
+  - name: "builds/iFix/frontend/digit-ui"
     build:
       - work-dir: frontend/micro-ui/
         image-name: digit-ui

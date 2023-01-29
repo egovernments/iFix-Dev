@@ -1,0 +1,391 @@
+---
+openapi: 3.0.0
+info:
+  title: iFIX-Master-Data
+  description: iFIX-Master-Data
+  version: 2.1.0
+paths:
+  /chartOfAccount/v1/_create:
+    post:
+      tags:
+        - COA
+      summary: Create/Add new COA on iFix for a tenant
+      description: Create/Add new COA on iFix for a tenant
+      requestBody:
+        description: Details for the new COA + RequestHeader (meta data of the API).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/COARequest'
+        required: true
+      responses:
+        "202":
+          description: Request has been accepted for processing
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/COAResponse'
+        "400":
+          description: Failed to process the request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /chartOfAccount/v1/_search:
+    post:
+      tags:
+        - COA
+      summary: Get the list COA.
+      description: |
+        Based on the criteria get the list of COA.
+      requestBody:
+        description: RequestHeader meta data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/COASearchRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/COAResponse'
+        "400":
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ChartOfAccount:
+      required:
+        - groupHead
+        - majorHead
+        - minorHead
+        - objectHead
+        - subHead
+        - subMajorHead
+      type: object
+      properties:
+        id:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique system generated UUID
+          readOnly: true
+        coaCode:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Chart of account concatinated string
+          readOnly: true
+        tenantId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique tenant identifier
+        majorHead:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Capture the major head code
+          nullable: false
+        majorHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the major head code name
+          nullable: false
+        majorHeadType:
+          maxLength: 32
+          minLength: 2
+          type: string
+          description: Capture the major head code type
+          example: Revenue
+        subMajorHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Capture the sub major head code
+        subMajorHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the sub major head code name
+        minorHead:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: Capture the minor head code
+        minorHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the minor head code name
+        subHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Capture the sub head code
+        subHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the sub head code name
+        groupHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Capture the group head code
+        groupHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the group head code name
+        objectHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Capture the object head code
+        objectHeadName:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Capture the object head code name
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        attributes:
+          type: object
+      description: Captures the COA data as map
+    COARequest:
+      required:
+        - coa
+        - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        chartOfAccount:
+          $ref: '#/components/schemas/ChartOfAccount'
+      description: COA request along with request metadata
+    COAResponse:
+      properties:
+        responseHeader:
+          $ref: '#/components/schemas/ResponseHeader'
+        chartOfAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChartOfAccount'
+      description: Contains the ResponseHeader and the enriched COA information
+    COASearchRequest:
+      required:
+        - criteria
+        - requestHeader
+      properties:
+        requestHeader:
+          $ref: '#/components/schemas/RequestHeader'
+        criteria:
+          $ref: '#/components/schemas/COASearchCriteria'
+      description: COA search request along with request metadata. Defoult operator b/w multiple criteria is AND.
+    COASearchCriteria:
+      required:
+        - tenantId
+      type: object
+      properties:
+        tenantId:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: Tenant Id
+        Ids:
+          type: array
+          description: List of COA ids
+          items:
+            maxItems: 50
+            type: string
+        coaCodes:
+          type: array
+          items:
+            maxLength: 64
+            minLength: 1
+            maxItems: 50
+            type: string
+            description: Chart of account concatinated string
+        majorHead:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Search by major head
+        subMajorHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Search by sub major head
+        minorHead:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: Search by minor head
+        subHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Search by sub head
+        groupHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Search by group head
+        objectHead:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Search by object head
+      description: The object contains all the search criteria of the fund
+    ErrorResponse:
+      required:
+        - ResponseHeader
+      type: object
+      properties:
+        ResponseHeader:
+          $ref: '#/components/schemas/ResponseHeader'
+        Errors:
+          minLength: 1
+          type: array
+          description: Error response array to return multiple error for single request
+          items:
+            $ref: '#/components/schemas/Error'
+      description: All APIs will return ErrorRes in case of failure which will carry ResponseHeader as metadata and Error object as actual representation of error.
+    ResponseHeader:
+      type: object
+      properties:
+        ts:
+          type: integer
+          description: response time in epoch
+          format: int64
+        correlationId:
+          maxLength: 256
+          type: string
+          description: unique response message id (UUID) - will usually be the correlation id from the server
+        msgId:
+          maxLength: 256
+          type: string
+          description: message id of the request
+        status:
+          type: string
+          description: status of request processing
+          enum:
+            - SUCCESS
+            - FAILED
+        signature:
+          type: string
+          description: Hash describing the current Request
+        version:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: The version of the API
+          nullable: false
+      description: ResponseHeader should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseHeader should always correspond to the same values in respective request's RequestHeader.
+      readOnly: true
+    Error:
+      required:
+        - code
+        - description
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error Code will be service specific error label/code to identiffy the error. Example for error code would be User.NotFound to indicate User Not Found by User/Authentication service. All services must declare their possible Error Codes with brief description in the error response section of their API path.
+        message:
+          type: string
+          description: Human readable error message
+        description:
+          type: string
+          description: technical description of the error which can help developer to debug the error if error is unexpected.
+      description: Error object will be returned as a part of reponse body in conjunction with ResponseHeader as part of ErrorResponse whenever the request processing status in the ResponseHeader is FAILED. HTTP return in this scenario will usually be HTTP 400.
+    AuditDetails:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          description: UUID (preferred) or userid of the user that created the object
+          readOnly: true
+        lastModifiedBy:
+          type: string
+          description: UUID (preferred) or userid of the user that last modified the object
+          readOnly: true
+        createdTime:
+          type: integer
+          description: epoch of the time object is created
+          format: int64
+          readOnly: true
+        lastModifiedTime:
+          type: integer
+          description: epoch of the time object is last modified
+          format: int64
+          readOnly: true
+      description: Collection of audit related fields used by most models
+      readOnly: true
+    RequestHeader:
+      type: object
+      properties:
+        ts:
+          type: integer
+          description: time in epoch
+          format: int64
+          nullable: false
+        version:
+          maxLength: 64
+          minLength: 2
+          type: string
+          description: The version of the API
+          nullable: false
+        msgId:
+          maxLength: 256
+          type: string
+          description: Unique request message id from the caller
+        userInfo:
+          $ref: '#/components/schemas/UserInfo'
+        correlationId:
+          type: string
+          readOnly: true
+        signature:
+          type: string
+          description: Hash describing the current RequestHeader
+      description: RequestHeader should be used to carry meta information about the requests to the server as described in the fields below. All eGov APIs will use requestHeader as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseHeader in the response body to ensure correlation.
+    UserInfo:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: System Generated User id of the authenticated user.
+        roles:
+          type: array
+          description: List of roles assigned to a user
+          items:
+            type: string
+        tenants:
+          type: array
+          description: List of tenants assigned to a user
+          items:
+            type: string
+        attributes:
+          type: object
+      description: Capture the user information
+      readOnly: true

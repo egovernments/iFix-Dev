@@ -26,12 +26,7 @@ public class MasterDataServiceConfiguration {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
-    @Value("${ifix.master.government.host}")
-    private String ifixMasterGovernmentHost;
+    @Value("${root.level.tenant.id}")
+    private String rootLevelTenantId;
 
-    @Value("${ifix.master.government.context.path}")
-    private String ifixMasterGovernmentContextPath;
-
-    @Value("${ifix.master.government.search.path}")
-    private String ifixMasterGovernmentSearchPath;
 }
