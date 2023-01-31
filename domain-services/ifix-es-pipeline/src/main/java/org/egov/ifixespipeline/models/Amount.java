@@ -1,0 +1,34 @@
+package org.egov.ifixespipeline.models;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.egov.common.contract.AuditDetails;
+
+import java.math.BigDecimal;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Amount {
+    @JsonProperty("id")
+    private String id = null;
+
+    @JsonProperty("amount")
+    private BigDecimal amount = null;
+
+    @JsonProperty("coaId")
+    private String coaId = null;
+
+    @JsonProperty("fromBillingPeriod")
+    private Long fromBillingPeriod = null;
+
+    @JsonProperty("toBillingPeriod")
+    private Long toBillingPeriod = null;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+
+}
+
