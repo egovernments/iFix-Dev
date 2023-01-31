@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 
 public class QueryCriteria {
-    private static String PROJECT_SELECT_ALL = "SELECT * FROM project";
+    private static String PROJECT_SELECT_ALL = "SELECT * FROM project, project_department_entity_relationship" +
+            " where project.id = project_department_entity_relationship.project_id";
     private static String EXPENDITURE_SELECT_ALL = "SELECT * FROM expenditure";
     private static String DEPARTMENT_SELECT_ALL = "SELECT * FROM department";
     private static String PROJECT_DEPARTMENT_ENTITY_SELECT_ALL = "SELECT * FROM project_department_entity_relationship";
