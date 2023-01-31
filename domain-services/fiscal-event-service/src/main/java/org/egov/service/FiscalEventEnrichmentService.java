@@ -71,6 +71,7 @@ public class FiscalEventEnrichmentService {
                 //set the audit details
                 fiscalEvent.setAuditDetails(auditDetails);
                 fiscalEvent.setIngestionTime(ingestionTime);
+                fiscalEvent.setSender(requestHeader.getUserInfo().getUuid());
             }
         }
 
