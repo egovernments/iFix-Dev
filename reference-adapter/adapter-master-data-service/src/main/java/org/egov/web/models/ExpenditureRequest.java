@@ -23,7 +23,7 @@ public class ExpenditureRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("expenditure")
-    private Expenditure expenditure = null;
+    private ExpenditureDTO expenditureDTO = null;
 
 
 }

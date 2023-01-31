@@ -1,42 +1,68 @@
 package org.egov.repository.queryBuilder;
 
-import org.apache.commons.lang3.StringUtils;
+import org.egov.repository.criteriaBuilder.QueryCriteria;
 import org.egov.web.models.ProjectSearchCriteria;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.egov.web.models.persist.Project;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+
+import static org.egov.util.MasterDataConstants.DEPARTMENT_ID;
+import static org.egov.util.MasterDataConstants.ProjectConst.*;
 
 @Component
 public class ProjectQueryBuilder {
 
-    public Query buildQuerySearch(ProjectSearchCriteria projectSearchCriteria) {
-        Criteria criteria = Criteria.where("tenantId").is(projectSearchCriteria.getTenantId());
+    public static final String ID = "project.id";
+    public static final String TENANT_ID = "project.tenant_id";
+    public static final String CODE = "project.code";
+    public static final String NAME = "project.name";
+    public static final String EXPENDITURE_ID = "project.expenditure_id";
+    public static final String DEPARTMENT_ENTITY_ID = "project_department_entity_relationship.department_entity_id";
 
-        if (!StringUtils.isEmpty(projectSearchCriteria.getName())) {
-            criteria.and("name").is(projectSearchCriteria.getName());
-        }
+    /**
+     * @param projectSearchCriteria
+     * @return
+     */
+    public String buildQuerySearch(ProjectSearchCriteria projectSearchCriteria) {
+        QueryCriteria queryCriteria = QueryCriteria.builder(Project.class);
+
+        queryCriteria.and(TENANT_ID).is(projectSearchCriteria.getTenantId());
 
         if (!StringUtils.isEmpty(projectSearchCriteria.getCode())) {
-            criteria.and("code").is(projectSearchCriteria.getCode());
+            queryCriteria.and(CODE).is(projectSearchCriteria.getCode());
         }
 
-        if (!StringUtils.isEmpty(projectSearchCriteria.getLocationId())) {
-            criteria.and("locationIds").in(Collections.singletonList(projectSearchCriteria.getLocationId()));
+        if (!StringUtils.isEmpty(projectSearchCriteria.getName())) {
+            queryCriteria.and(NAME).is(projectSearchCriteria.getName());
         }
 
         if (!StringUtils.isEmpty(projectSearchCriteria.getExpenditureId())) {
-            criteria.and("expenditureId").is(projectSearchCriteria.getExpenditureId());
+            queryCriteria.and(EXPENDITURE_ID).is(projectSearchCriteria.getExpenditureId());
         }
 
-        if (!StringUtils.isEmpty(projectSearchCriteria.getDepartmentEntityId())) {
-            criteria.and("departmentEntityIds").in(Collections.singletonList(projectSearchCriteria.getDepartmentEntityId()));
+        if (projectSearchCriteria.getIds() != null && !projectSearchCriteria.getIds().isEmpty()) {
+            queryCriteria.and(ID).in(projectSearchCriteria.getIds());
         }
 
-        if (projectSearchCriteria.getIds() != null && !projectSearchCriteria.getIds().isEmpty())
-            criteria.and("id").in(projectSearchCriteria.getIds());
+        if(!StringUtils.isEmpty(projectSearchCriteria.getDepartmentEntityId())) {
+            queryCriteria.and(DEPARTMENT_ENTITY_ID).is(projectSearchCriteria.getDepartmentEntityId());
+        }
 
-        return new Query(criteria);
+        return queryCriteria.build();
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public String findById(String id) {
+        if (!StringUtils.isEmpty(id)) {
+            return QueryCriteria.builder(Project.class)
+                    .where(ID).is(id)
+                    .build();
+        }
+        return null;
     }
 }

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains the ResponseHeader and the enriched Project information
+ * Contains the ResponseHeader and the enriched ProjectConst information
  */
-@ApiModel(description = "Contains the ResponseHeader and the enriched Project information")
+@ApiModel(description = "Contains the ResponseHeader and the enriched ProjectConst information")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -28,14 +28,14 @@ public class ProjectResponse {
 
     @JsonProperty("project")
     @Valid
-    private List<Project> project = null;
+    private List<ProjectDTO> projectDTO = null;
 
 
-    public ProjectResponse addProjectItem(Project projectItem) {
-        if (this.project == null) {
-            this.project = new ArrayList<>();
+    public ProjectResponse addProjectItem(ProjectDTO projectDTOItem) {
+        if (this.projectDTO == null) {
+            this.projectDTO = new ArrayList<>();
         }
-        this.project.add(projectItem);
+        this.projectDTO.add(projectDTOItem);
         return this;
     }
 

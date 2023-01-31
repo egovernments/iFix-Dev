@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains the ResponseHeader and the enriched Department information
+ * Contains the ResponseHeader and the enriched DepartmentConst information
  */
-@ApiModel(description = "Contains the ResponseHeader and the enriched Department information")
+@ApiModel(description = "Contains the ResponseHeader and the enriched DepartmentConst information")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -28,10 +28,10 @@ public class DepartmentResponse {
 
     @JsonProperty("department")
     @Valid
-    private List<Department> department = null;
+    private List<DepartmentDTO> department = null;
 
 
-    public DepartmentResponse addDepartmentItem(Department departmentItem) {
+    public DepartmentResponse addDepartmentItem(DepartmentDTO departmentItem) {
         if (this.department == null) {
             this.department = new ArrayList<>();
         }

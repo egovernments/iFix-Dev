@@ -1,36 +1,45 @@
 package org.egov.repository.queryBuilder;
 
-import org.apache.commons.lang3.StringUtils;
-import org.egov.util.MasterDataConstants;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.repository.criteriaBuilder.QueryCriteria;
+import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.ExpenditureSearchCriteria;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.egov.web.models.persist.Department;
+import org.egov.web.models.persist.Expenditure;
 import org.springframework.stereotype.Component;
+
+import static org.egov.util.MasterDataConstants.ExpenditureConst.*;
+
 
 /**
  *
  */
 @Component
+@Slf4j
 public class ExpenditureQueryBuilder {
+
 
     /**
      * @param expenditureSearchCriteria
      * @return
      */
-    public Query buildQuerySearch(ExpenditureSearchCriteria expenditureSearchCriteria) {
-        Criteria criteria = Criteria.where(MasterDataConstants.CRITERIA_TENANT_ID).is(expenditureSearchCriteria.getTenantId());
+    public String buildSearchQuery(ExpenditureSearchCriteria expenditureSearchCriteria) {
+        QueryCriteria queryCriteria = QueryCriteria.builder(Expenditure.class);
 
-        if (!StringUtils.isEmpty(expenditureSearchCriteria.getName())) {
-            criteria.and(MasterDataConstants.CRITERIA_NAME).is(expenditureSearchCriteria.getName());
+        queryCriteria.where(TENANT_ID).is(expenditureSearchCriteria.getTenantId());
+
+        if (!org.springframework.util.StringUtils.isEmpty(expenditureSearchCriteria.getName())) {
+            queryCriteria.and(NAME).is(expenditureSearchCriteria.getName());
         }
 
-        if (!StringUtils.isEmpty(expenditureSearchCriteria.getCode())) {
-            criteria.and(MasterDataConstants.CRITERIA_CODE).is(expenditureSearchCriteria.getCode());
+        if (!org.springframework.util.StringUtils.isEmpty(expenditureSearchCriteria.getCode())) {
+            queryCriteria.and(CODE).is(expenditureSearchCriteria.getCode());
         }
 
-        if (expenditureSearchCriteria.getIds() != null && !expenditureSearchCriteria.getIds().isEmpty())
-            criteria.and(MasterDataConstants.CRITERIA_ID).in(expenditureSearchCriteria.getIds());
+        if (expenditureSearchCriteria.getIds() != null && !expenditureSearchCriteria.getIds().isEmpty()) {
+            queryCriteria.and(ID).in(expenditureSearchCriteria.getIds());
+        }
 
-        return new Query(criteria);
+        return queryCriteria.build();
     }
 }

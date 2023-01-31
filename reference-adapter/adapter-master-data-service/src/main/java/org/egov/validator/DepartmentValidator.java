@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.MasterDataConstants;
-import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentDTO;
 import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.DepartmentSearchRequest;
@@ -68,7 +68,7 @@ public class DepartmentValidator {
     public void validateCreateRequestData(DepartmentRequest departmentRequest) {
         Map<String, String> errorMap = new HashMap<>();
 
-        if (departmentRequest != null && departmentRequest.getDepartment() != null
+        if (departmentRequest != null && departmentRequest.getDepartmentDTO() != null
                 && departmentRequest.getRequestHeader() != null) {
             RequestHeader requestHeader = departmentRequest.getRequestHeader();
 
@@ -76,7 +76,7 @@ public class DepartmentValidator {
                 errorMap.put(MasterDataConstants.USER_INFO, "User information is missing");
             }
 
-            Department department = departmentRequest.getDepartment();
+            DepartmentDTO department = departmentRequest.getDepartmentDTO();
 
             if (StringUtils.isEmpty(department.getTenantId())) {
                 errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is missing in request data");

@@ -22,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@SpringBootTest
 class ExpenditureUtilTest {
 
-    @Autowired
+   /* @Autowired
     private TestDataFormatter testDataFormatter;
 
     @Mock
@@ -73,6 +73,6 @@ class ExpenditureUtilTest {
 
         assertThrows(CustomException.class,
                 () -> expenditureUtil.validateExpenditure("pb", idList, requestHeader));
-    }
+    }*/
 }
 

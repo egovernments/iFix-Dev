@@ -18,7 +18,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Department {
+public class DepartmentDTO {
     @JsonProperty("id")
     private String id = null;
 

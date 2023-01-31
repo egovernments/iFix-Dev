@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.ExpenditureService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.Expenditure;
+import org.egov.web.models.ExpenditureDTO;
 import org.egov.web.models.ExpenditureRequest;
 import org.egov.web.models.ExpenditureResponse;
 import org.egov.web.models.ExpenditureSearchRequest;
@@ -51,7 +51,7 @@ public class ExpenditureApiController {
         ExpenditureRequest expenditureRequest = expenditureService.createV1Expenditure(body);
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
         ExpenditureResponse expenditureResponse = ExpenditureResponse.builder().responseHeader(responseHeader)
-                .expenditure(Collections.singletonList(expenditureRequest.getExpenditure())).build();
+                .expenditureDTO(Collections.singletonList(expenditureRequest.getExpenditureDTO())).build();
         return new ResponseEntity<ExpenditureResponse>(expenditureResponse, HttpStatus.OK);
     }
 
@@ -63,12 +63,12 @@ public class ExpenditureApiController {
     public ResponseEntity<ExpenditureResponse> eatV1SearchPost(@ApiParam(value = "Details for the expenditure search criteria " +
             "RequestHeader (meta data of the API).", required = true) @Valid @RequestBody ExpenditureSearchRequest body) {
 
-        List<Expenditure> expenditureList = expenditureService.findAllByCriteria(body);
+        List<ExpenditureDTO> expenditureDTOList = expenditureService.findAllByCriteria(body);
 
         ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(),
                 true);
 
-        ExpenditureResponse eatResponse = ExpenditureResponse.builder().responseHeader(responseHeader).expenditure(expenditureList).build();
+        ExpenditureResponse eatResponse = ExpenditureResponse.builder().responseHeader(responseHeader).expenditureDTO(expenditureDTOList).build();
 
         return new ResponseEntity<>(eatResponse, HttpStatus.ACCEPTED);
     }

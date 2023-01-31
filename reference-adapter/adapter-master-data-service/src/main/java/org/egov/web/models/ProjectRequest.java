@@ -7,9 +7,9 @@ import org.egov.common.contract.request.RequestHeader;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Project request along with request metadata
+ * ProjectConst request along with request metadata
  */
-@ApiModel(description = "Project request along with request metadata")
+@ApiModel(description = "ProjectConst request along with request metadata")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2021-08-02T16:24:12.742+05:30")
 
@@ -23,7 +23,7 @@ public class ProjectRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("project")
-    private Project project = null;
+    private ProjectDTO projectDTO = null;
 
 
 }
