@@ -1,19 +1,20 @@
 package org.egov.util;
 
-import com.jayway.jsonpath.JsonPath;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestHeader;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.config.FiscalEventConfiguration;
+import org.egov.mdms.model.*;
+import org.egov.mdms.service.MdmsClientService;
 import org.egov.repository.ServiceRequestRepository;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -24,6 +25,13 @@ public class TenantUtil {
 
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
+    @Autowired
+    private MdmsClientService mdmsClientService;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    final private static String TENANT_MODULE_NAME = "tenant";
+    final private static String TENANT_MASTER_NAME = "tenants";
 
     /**
      * @param tenantIds
@@ -31,38 +39,25 @@ public class TenantUtil {
      * @return
      */
     public boolean validateTenant(List<String> tenantIds, RequestHeader requestHeader) {
-        if (tenantIds!= null && !tenantIds.isEmpty() && requestHeader != null) {
+        if (tenantIds != null && !tenantIds.isEmpty() && requestHeader != null) {
 
-            Map<String, Object> tenantValueMap = new HashMap<>();
-            tenantValueMap.put(MasterDataConstants.IDS,tenantIds);
+            MasterDetail masterDetail = MasterDetail.builder().name(TENANT_MASTER_NAME).filter("$.*.code").build();
+            ModuleDetail moduleDetail =
+                    ModuleDetail.builder().moduleName(TENANT_MODULE_NAME).masterDetails(Collections.singletonList(masterDetail)).build();
+            MdmsCriteria mdmsCriteria =
+                    MdmsCriteria.builder().moduleDetails(Collections.singletonList(moduleDetail)).tenantId(fiscalEventConfiguration.getRootLevelTenantId()).build();
+            MdmsCriteriaReq mdmsCriteriaReq =
+                    MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build()).mdmsCriteria(mdmsCriteria).build();
 
-            Map<String, Object> tenantMap = new HashMap<>();
-            tenantMap.put(MasterDataConstants.REQUEST_HEADER, requestHeader);
-            tenantMap.put(MasterDataConstants.CRITERIA, tenantValueMap);
+            MdmsResponse mdmsResponse = mdmsClientService.getMaster(mdmsCriteriaReq);
+            JSONArray tenantCodes = mdmsResponse.getMdmsRes().get(TENANT_MODULE_NAME).get(TENANT_MASTER_NAME);
 
-            Object response = serviceRequestRepository.fetchResult(createSearchTenantUrl(), tenantMap);
+            List<String> validTenantIds = objectMapper.convertValue(tenantCodes, new TypeReference<List<String>>() {
+            });
 
-            try {
-                List list = JsonPath.read(response, MasterDataConstants.TENANT_LIST);
-
-                return (list != null && !list.isEmpty() && (list.size() == tenantIds.size()));
-            } catch (Exception e) {
-                throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse government response for tenantId");
-            }
+            return validTenantIds.containsAll(tenantIds);
         }
         return false;
-    }
-
-
-    /**
-     * @return
-     */
-    private String createSearchTenantUrl() {
-        StringBuilder uriBuilder = new StringBuilder();
-        uriBuilder.append(fiscalEventConfiguration.getIfixMasterGovernmentHost())
-                .append(fiscalEventConfiguration.getIfixMasterGovernmentContextPath())
-                .append(fiscalEventConfiguration.getIfixMasterGovernmentSearchPath());
-        return uriBuilder.toString();
     }
 
 }

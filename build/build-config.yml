@@ -28,6 +28,8 @@ config:
       - work-dir: "domain-services/fiscal-event-service"
         image-name: "fiscal-event-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/fiscal-event-service/src/main/resources/db"
+        image-name: "fiscal-event-service-db"
   - name: "builds/iFix/domain-services/fiscal-event-post-processor"
     build:
       - work-dir: "domain-services/fiscal-event-post-processor"
