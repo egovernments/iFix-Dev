@@ -87,7 +87,8 @@ public class FiscalEventMigrationService {
                     FiscalEventBulkRequest.builder().fiscalEvent(response.getFiscalEvent()).build());
 
             // Send fiscal events to postgres sink
-            producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
+            if(!request.isPostgresToES())
+                producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
             commitMigrationProgress(request.getTenantId(), i, batchSize, totalNumberOfRecordsMigrated);
             i += 1;
             lastPageNumber = i;
