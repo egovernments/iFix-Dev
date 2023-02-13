@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.web.models.Criteria;
+import org.egov.web.models.PlainsearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -138,5 +139,14 @@ public class FiscalEventQueryBuilder {
         preparedStmtList.add(ObjectUtils.isEmpty(searchCriteria.getLimit()) ? configuration.getDefaultLimit() : searchCriteria.getLimit());
     }
 
+    public String buildCountQuery(PlainsearchCriteria criteria, List<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder("SELECT COUNT(id) FROM eg_ifix_fiscal_event as fiscal_event ");
+        if (StringUtils.isNotBlank(criteria.getTenantId())) {
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" fiscal_event.tenantId = ?");
+            preparedStmtList.add(criteria.getTenantId());
+        }
+        return query.toString();
+    }
 
 }

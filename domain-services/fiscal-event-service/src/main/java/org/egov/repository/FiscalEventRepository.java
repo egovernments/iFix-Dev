@@ -9,6 +9,7 @@ import org.egov.repository.rowmapper.FiscalEventRowMapper;
 import org.egov.tracer.model.CustomException;
 import org.egov.web.models.Criteria;
 import org.egov.web.models.FiscalEvent;
+import org.egov.web.models.PlainsearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -55,4 +56,12 @@ public class FiscalEventRepository {
         List<String> fiscalEventIds = jdbcTemplate.query(idQuery, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
         return fiscalEventIds;
     }
+
+    public Long getFiscalEventsCount(PlainsearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String countQuery = eventQueryBuilder.buildCountQuery(criteria, preparedStmtList);
+        Long count = jdbcTemplate.queryForObject(countQuery, preparedStmtList.toArray(), Long.class);
+        return count;
+    }
+
 }
