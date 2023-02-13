@@ -3,9 +3,8 @@ package org.egov.repository.querybuilder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.util.OffsetBasedPageRequest;
 import org.egov.web.models.PlainsearchCriteria;
-import org.springframework.core.annotation.Order;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -46,7 +45,7 @@ public class FiscalEventQueryBuilder {
         Query finalQuery = new Query(criteria).with(Sort.by(Sort.Direction.DESC, "ingestionTime"));
 
         if(!searchCriteria.getIsCountCall()) {
-            Pageable pageableRequest = PageRequest.of(searchCriteria.getOffset(), searchCriteria.getLimit());
+            Pageable pageableRequest = new OffsetBasedPageRequest(searchCriteria.getOffset(), searchCriteria.getLimit());
             return finalQuery.with(pageableRequest);
         }
 
