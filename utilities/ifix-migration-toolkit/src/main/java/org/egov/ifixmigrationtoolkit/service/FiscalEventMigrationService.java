@@ -60,7 +60,7 @@ public class FiscalEventMigrationService {
         int i = resumeFrom;
         while (Boolean.TRUE) {
             log.info("At page: " + i);
-            plainSearchRequest.getCriteria().setOffset(i);
+            plainSearchRequest.getCriteria().setOffset(i * batchSize);
             plainSearchRequest.getCriteria().setLimit(batchSize);
             FiscalEventResponse response = null;
             try {
