@@ -102,4 +102,28 @@ public class FiscalEventService {
          */
         return fiscalEvents;
     }
+
+    public List<FiscalEvent> fiscalEventsV1PlainSearchPost(FiscalEventPlainSearchRequest fiscalEventGetRequest) {
+        PlainsearchCriteria plainsearchCriteria = fiscalEventGetRequest.getCriteria();
+
+        Criteria searchCriteria = Criteria.builder().tenantId(plainsearchCriteria.getTenantId())
+                .limit((long)plainsearchCriteria.getLimit()).offSet((long)plainsearchCriteria.getOffset()).build();
+
+        List<String> fiscalEventUuids = eventRepository.searchFiscalEventUuids(searchCriteria);
+
+        if(CollectionUtils.isEmpty(fiscalEventUuids)){
+            return new ArrayList<>();
+        }
+
+        List<FiscalEvent> fiscalEvents = eventRepository.searchFiscalEvent(Criteria.builder().ids(fiscalEventUuids).build());
+        fiscalEventUtil.deduplicateReceivers(fiscalEvents);
+
+        return fiscalEvents;
+    }
+
+
+    public Long getFiscalEventsCount(FiscalEventPlainSearchRequest body) {
+        return eventRepository.getFiscalEventsCount(body.getCriteria());
+    }
+
 }
