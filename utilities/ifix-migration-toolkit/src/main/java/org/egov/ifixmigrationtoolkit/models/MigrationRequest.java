@@ -18,4 +18,7 @@ public class MigrationRequest {
     @JsonProperty("tenantId")
     private String tenantId = null;
 
+    @JsonProperty("postgresToES")
+    private boolean postgresToES = false;
+
 }

@@ -60,7 +60,7 @@ public class FiscalEventMigrationService {
         int i = resumeFrom;
         while (Boolean.TRUE) {
             log.info("At page: " + i);
-            plainSearchRequest.getCriteria().setOffset(i);
+            plainSearchRequest.getCriteria().setOffset(i * batchSize);
             plainSearchRequest.getCriteria().setLimit(batchSize);
             FiscalEventResponse response = null;
             try {
@@ -87,7 +87,8 @@ public class FiscalEventMigrationService {
                     FiscalEventBulkRequest.builder().fiscalEvent(response.getFiscalEvent()).build());
 
             // Send fiscal events to postgres sink
-            producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
+            if(!request.isPostgresToES())
+                producer.push(postgresSinkPushTopic, prepareFiscalEventDTOListForPersister(response.getFiscalEvent()));
             commitMigrationProgress(request.getTenantId(), i, batchSize, totalNumberOfRecordsMigrated);
             i += 1;
             lastPageNumber = i;
