@@ -1,0 +1,35 @@
+{
+  "id": "9a3df9ce-70f4-4b14-acba-530f2159c8d3",
+  "tenantId": "od.jatni",
+  "billNumber": "1231231231",
+  "billDate": 1678863099000,
+  "netAmount": 20000,
+  "grossAmount": 20000,
+  "headOfAccount": "",
+  "ifmsSanctionNumber": "14256732",
+  "purpose": "Mukta Wage Seeker Tranfer",
+  "beneficiaries": [
+    {
+      "id": "12",
+      "name": "ABC",
+      "accountNumber": "123123123123",
+      "ifscCode": "IFSC000012",
+      "mobileNumber": "9123456789",
+      "address": "Jatni",
+      "accountType": "Savings",
+      "amount": 10000,
+      "purpose": "Mukta Wage Seeker Tranfer"
+    },
+    {
+      "id": "23",
+      "name": "DEF",
+      "accountNumber": "321321321321",
+      "ifscCode": "IFSC000012",
+      "mobileNumber": "9987654321",
+      "address": "Jatni",
+      "accountType": "Savings",
+      "amount": 10000,
+      "purpose": "Mukta Wage Seeker Tranfer"
+    }
+  ]
+}
