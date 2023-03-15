@@ -5,9 +5,9 @@
   "billDate": 1678863099000,
   "netAmount": 20000,
   "grossAmount": 20000,
-  "headOfAccount": "",
+  "headOfAccount": "2217/05/800/3586/41045/908",
   "ifmsSanctionNumber": "14256732",
-  "purpose": "Mukta Wage Seeker Tranfer",
+  "purpose": "Mukta Wage Seeker Transfer",
   "beneficiaries": [
     {
       "id": "12",
@@ -18,7 +18,7 @@
       "address": "Jatni",
       "accountType": "Savings",
       "amount": 10000,
-      "purpose": "Mukta Wage Seeker Tranfer"
+      "purpose": "Mukta Wage Seeker Transfer"
     },
     {
       "id": "23",
@@ -29,7 +29,7 @@
       "address": "Jatni",
       "accountType": "Savings",
       "amount": 10000,
-      "purpose": "Mukta Wage Seeker Tranfer"
+      "purpose": "Mukta Wage Seeker Transfer"
     }
   ]
 }

@@ -32,6 +32,7 @@ public class PaymentStatusService {
                             .sequenceDate(bill.getBillDate())
                             .rbiSequenceNumber(RandomStringUtils.random(10, false, true))
                             .endToEndId(RandomStringUtils.random(10, false, true))
+                            .status("SUCCESS")
                             .build());
         }
 

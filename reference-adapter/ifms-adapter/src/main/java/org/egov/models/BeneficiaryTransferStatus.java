@@ -15,5 +15,6 @@ public class BeneficiaryTransferStatus {
     private String rbiSequenceNumber;
     private Long sequenceDate;
     private String endToEndId;
+    private String status;
 
 }
