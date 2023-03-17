@@ -1,0 +1,42 @@
+{
+  "serviceId": "PI",
+  "params": {
+    "billDetails": [
+      {
+        "billNo": "ABC123",
+        "billDate": "05/09/2022",
+        "billNetAmount": "150",
+        "grossAmount": "150",
+        "hoa": "132217058003586410459082112",
+        "ssuIaId": "1474",
+        "ssuName": "BHUBANESWAR MUNICIPAL CORPORATION",
+        "ifmsSanctionNumber": "",
+        "purpose": "Mukta"
+      }
+    ],
+    "beneficiaryDetails": [
+      {
+        "benefId": "154",
+        "benefName": "Sushant Sahoo",
+        "accountNumber": "12345678",
+        "ifscCode": "SBI0022309",
+        "mobileNumber": "9876654321",
+        "benfAddress": "khurda",
+        "accountType": "Savings",
+        "paymentAmount": "1000",
+        "purpose": "Agriculture Fund"
+      },
+      {
+        "benefId": "154",
+        "benefName": "Sushant Sahoo",
+        "accountNumber": "12345678",
+        "ifscCode": "SBI0022309",
+        "mobileNumber": "9876654321",
+        "benfAddress": "khurda",
+        "accountType": "Savings",
+        "paymentAmount": "1000",
+        "purpose": "Agriculture Fund"
+      }
+    ]
+  }
+}

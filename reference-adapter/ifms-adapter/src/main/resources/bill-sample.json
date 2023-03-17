@@ -1,35 +1,61 @@
 {
-  "id": "9a3df9ce-70f4-4b14-acba-530f2159c8d3",
-  "tenantId": "od.jatni",
-  "billNumber": "1231231231",
-  "billDate": 1678863099000,
-  "netAmount": 20000,
-  "grossAmount": 20000,
-  "headOfAccount": "2217/05/800/3586/41045/908",
-  "ifmsSanctionNumber": "14256732",
-  "purpose": "Mukta Wage Seeker Transfer",
-  "beneficiaries": [
+  "ResponseInfo": {
+    "apiId": "mukta-services",
+    "ver": null,
+    "ts": null,
+    "resMsgId": "uief87324",
+    "msgId": "Create Contract",
+    "status": "successful"
+  },
+  "BillDemands": [
     {
-      "id": "12",
-      "name": "ABC",
-      "accountNumber": "123123123123",
-      "ifscCode": "IFSC000012",
-      "mobileNumber": "9123456789",
-      "address": "Jatni",
-      "accountType": "Savings",
-      "amount": 10000,
-      "purpose": "Mukta Wage Seeker Transfer"
-    },
-    {
-      "id": "23",
-      "name": "DEF",
-      "accountNumber": "321321321321",
-      "ifscCode": "IFSC000012",
-      "mobileNumber": "9987654321",
-      "address": "Jatni",
-      "accountType": "Savings",
-      "amount": 10000,
-      "purpose": "Mukta Wage Seeker Transfer"
+      "id": "fe03d5b5-fa89-45be-9733-8151ef85fcca",
+      "tenantId": "pg.citya",
+      "billNumber": "MR/2022-23/03/16/000560",
+      "billDate": 1679039958910,
+      "netAmount": 1050.0,
+      "grossAmount": 1050.0,
+      "headOfAccount": "6614/58/922/3921/48525/242",
+      "ifmsSanctionNumber": "79059148",
+      "purpose": "Mukta Wage Seeker Transfer",
+      "beneficiaries": [
+        {
+          "id": "aabdcdc8-1349-4686-b53d-b7f0d007a18g",
+          "billNumber": null,
+          "name": "Vishal",
+          "accountNumber": "880182873839",
+          "ifscCode": "SBIN0001237",
+          "mobileNumber": "123456789",
+          "address": null,
+          "accountType": "Saving",
+          "amount": 525.0,
+          "purpose": "Mukta Wage Seeker Transfer",
+          "status": "PENDING",
+          "auditDetails": null
+        },
+        {
+          "id": "aabdcdc8-1349-4686-b53d-b7f0d007a18f",
+          "billNumber": null,
+          "name": "Vishal",
+          "accountNumber": "880182873839",
+          "ifscCode": "SBIN0001237",
+          "mobileNumber": "123456789",
+          "address": null,
+          "accountType": "Saving",
+          "amount": 525.0,
+          "purpose": "Mukta Wage Seeker Transfer",
+          "status": "PENDING",
+          "auditDetails": null
+        }
+      ],
+      "auditDetails": {
+        "createdBy": "11b0e02b-0145-4de2-bc42-c97b96264807",
+        "lastModifiedBy": "11b0e02b-0145-4de2-bc42-c97b96264807",
+        "createdTime": 1679039958910,
+        "lastModifiedTime": 1679039958910
+      }
     }
-  ]
+  ],
+  "Pagination": null,
+  "TotalCount": null
 }

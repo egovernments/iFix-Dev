@@ -26,7 +26,7 @@ public class EgovKeyGenerator {
         return randomBytes;
     }
 
-    public static String genSek() throws NoSuchAlgorithmException {
+    public static String genAES256Key() throws NoSuchAlgorithmException {
         final KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         keyGenerator.init(256);
         // Generate Key

@@ -1,24 +1,36 @@
 {
-  "billNumber": "1231231231",
-  "billDate": 1678863099000,
-  "voucherNumber": "7205674565",
-  "voucherDate": 1678863099000,
-  "beneficiaryTransferStatuses": [
+  "ResponseInfo": {
+    "apiId": "mukta-services",
+    "ver": null,
+    "ts": null,
+    "resMsgId": "uief87324",
+    "msgId": "Create Contract",
+    "status": "successful"
+  },
+  "PaymentStatuses": [
     {
-      "accountNumber": "123123123123",
-      "ifscCode": "IFSC000012",
-      "rbiSequenceNumber": "8193570977",
-      "sequenceDate": 1678863099000,
-      "endToEndId": "7640626064",
-      "status": "SUCCESS"
-    },
-    {
-      "accountNumber": "321321321321",
-      "ifscCode": "IFSC000012",
-      "rbiSequenceNumber": "8710608567",
-      "sequenceDate": 1678863099000,
-      "endToEndId": "8444035538",
-      "status": "SUCCESS"
+      "billNumber": "MR/2022-23/03/16/000560",
+      "billDate": 1679039958910,
+      "voucherNumber": "9892022608",
+      "voucherDate": 1679039958910,
+      "beneficiaryTransferStatuses": [
+        {
+          "accountNumber": "880182873839",
+          "ifscCode": "SBIN0001237",
+          "rbiSequenceNumber": "7611337840",
+          "sequenceDate": 1679039958910,
+          "endToEndId": "6681424918",
+          "status": "SUCCESS"
+        },
+        {
+          "accountNumber": "880182873839",
+          "ifscCode": "SBIN0001237",
+          "rbiSequenceNumber": "1302956559",
+          "sequenceDate": 1679039958910,
+          "endToEndId": "7800970788",
+          "status": "SUCCESS"
+        }
+      ]
     }
   ]
 }

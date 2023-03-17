@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-public class Bill {
+public class BillDemand {
 
     private String id;
     private String tenantId;

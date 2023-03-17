@@ -6,6 +6,13 @@ import java.util.Base64;
 
 public class SymmetricEncryptionService {
 
+    public static String encrypt(final byte[] plainText, final byte[] secret) throws Exception {
+        final SecretKeySpec secretKey = new SecretKeySpec(secret, "AES");
+        final Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        return Base64.getEncoder().encodeToString(cipher.doFinal(plainText));
+    }
+
     public static String decrypt(final String cypherText, final byte[] secret)
             throws Exception {
         final SecretKeySpec secretKey = new SecretKeySpec(secret, "AES");

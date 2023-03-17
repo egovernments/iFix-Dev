@@ -1,0 +1,22 @@
+{
+  "serviceId": "VA",
+  "errorMsg": null,
+  "data": [
+    {
+      "ddoCode": "OLSHUD001",
+      "schemeCode": "13145",
+      "schemeName": "Mukhyamantri Karma Tatpara Abhiyan (MUKTA)",
+      "granteeAgCode": "GOHUDULBMCR0002",
+      "granteeName": "BHUBANESWAR MUNICIPAL CORPORATION",
+      "ssuId": "1474",
+      "ssuOffice": "BHUBANESWAR MUNICIPAL CORPORATION",
+      "allotmentDate": "2023-03-15 15:43:28.0",
+      "allotmentTxnSlNo": "0",
+      "allotmentAmount": "1000",
+      "availableBalance": "99000",
+      "allotmentTxnType": "Initial Allotment",
+      "mstAllotmentDistId": "878",
+      "ssuAllotmentId": "618"
+    }
+  ]
+}

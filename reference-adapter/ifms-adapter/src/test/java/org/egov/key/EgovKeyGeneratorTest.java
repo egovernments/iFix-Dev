@@ -19,7 +19,7 @@ class EgovKeyGeneratorTest {
 
     @Test
     public void testGenSek() throws NoSuchAlgorithmException {
-        String key = EgovKeyGenerator.genSek();
+        String key = EgovKeyGenerator.genAES256Key();
         System.out.println(key);
     }
 
