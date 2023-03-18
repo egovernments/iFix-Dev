@@ -1,41 +1,48 @@
 {
   "serviceId": "PI",
   "params": {
-    "billDetails": [
-      {
-        "billNo": "ABC123",
-        "billDate": "05/09/2022",
-        "billNetAmount": "150",
-        "grossAmount": "150",
-        "hoa": "132217058003586410459082112",
-        "ssuIaId": "1474",
-        "ssuName": "BHUBANESWAR MUNICIPAL CORPORATION",
-        "ifmsSanctionNumber": "",
-        "purpose": "Mukta"
-      }
-    ],
+    "jitBillNo": "MUKTA2399",
+    "jitBillDate": "2023-03-16 16:26:42",
+    "jitBillDdoCode": "OLSHUD001",
+    "granteeAgCode": "GOHUDULBMCR0002",
+    "schemeCode": "13145",
+    "hoa": "132217058003586410459082112",
+    "ssuIaId": "1474",
+    "mstAllotmentDistId": "878",
+    "ssuAllotmentId": "618",
+    "allotmentTxnSlNo": "0",
+    "billGrossAmount": "500",
+    "billNetAmount": "500",
+    "billNumberOfBenf": "2",
+    "purpose": "Mukta",
     "beneficiaryDetails": [
       {
-        "benefId": "154",
-        "benefName": "Sushant Sahoo",
-        "accountNumber": "12345678",
-        "ifscCode": "SBI0022309",
-        "mobileNumber": "9876654321",
+        "benefId": "16032023001",
+        "benefName": "Dev Mallick",
+        "benfAcctNo": "12345678",
+        "benfBankIfscCode": "SBI0022309",
+        "benfMobileNo": "9876654321",
+        "benfEmailId": "",
         "benfAddress": "khurda",
-        "accountType": "Savings",
-        "paymentAmount": "1000",
-        "purpose": "Agriculture Fund"
+        "benfAccountType": "Savings",
+        "benfAmount": "250",
+        "pranNo": " ",
+        "adhaarNumber": "123412562345",
+        "purpose": "Mukta Payment"
       },
       {
-        "benefId": "154",
-        "benefName": "Sushant Sahoo",
-        "accountNumber": "12345678",
-        "ifscCode": "SBI0022309",
-        "mobileNumber": "9876654321",
+        "benefId": "16032023002",
+        "benefName": "Rushang Singh",
+        "benfAcctNo": "12000123",
+        "benfBankIfscCode": "SBI0022309",
+        "benfMobileNo": "9876654320",
+        "benfEmailId": "",
         "benfAddress": "khurda",
-        "accountType": "Savings",
-        "paymentAmount": "1000",
-        "purpose": "Agriculture Fund"
+        "benfAccountType": "Savings",
+        "benfAmount": "250",
+        "pranNo": "1234566",
+        "adhaarNumber": "123412762345",
+        "purpose": "MuktaPayment"
       }
     ]
   }

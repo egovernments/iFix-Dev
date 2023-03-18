@@ -26,7 +26,8 @@ class SymmetricEncryptionServiceTest {
     @Test
     public void testDecrypt() throws Exception {
         String secretKey = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
-        String ciphertext = "Y6XemYcCMUmsx9GI0OCFyizhAuFmSOkbM64R1F+ZyAxsOpqKf5HoxG9Lg+pd8HF98nvBX0nNd5MrJl/uXY5sf+mCd0ZJQyb171FTWW1IBBxJ6YAYcFRpFwtyUVgrdBJdu46WY/9+PljKuhsKS8QhjsIqHJsfcf83VBfFC2kNC0dDG0SUhkHdUMKe2sZoDtp/FoeYFVtzPLnjjnANTRYOKCXJz3Z+dZxYU318q2dHY0devzTRoe48MUm7unaGCBwJW/nIdAZmG4KwbhuvgihEyzmPwflwmiC6k3PmDdKfte7CDOgMctcmcQmw8+Swq2dT/uuFKOV4VN+hNSrpXVUIX63Y54UxV3DIRFbJTbrapbGikQhI/VicllYpoSn7Fbp11wjkqlPGoix8jCGKmLPz4Visj2HSrGjhI/TWMEyoFOwWjFY/jqVwUj0gIr9HK+KR1zJjHAr8y9PQvrSGBibEU2IibapLbuvWH/ghfw/UPwGRcPRDO8EZkQaxACFtCeG+Oi7DzRF7OcDzGbYwD5v+yyK2Vtrn+ez+9EjHoxRjbt3Qs/bn7ERBWF7eyKQh11lHKL1xMf8P9hYEvnqT61OE5lP8JmZtugZvCsr+QYiAwZ+AuW0nXvqol8J/29aTplWJiXQxrSVnNlruHghtr1eyK5Ah9s2+TYBSc/cFzrHHS3k=";
+//        secretKey = "2LIJU1wc0zxuTcoSDlV0WvJJWG08cRhQT6sCwoNyPJI=";
+        String ciphertext = "NKxAhfPi3ZM9yXhckVlgQgifrTLH3NNqkBptDcC53MYRh9nf41IeJ+3NK/2RzjFy";
         byte[] secret = Base64.getDecoder().decode(secretKey);
         String plaintext = SymmetricEncryptionService.decrypt(ciphertext, secret);
         plaintext = new String(Base64.getDecoder().decode(plaintext));
@@ -35,7 +36,7 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testEncrypt() throws Exception {
-        String secretKey = "6WeGtuYkrZslUFzKo8g8JUkMEivFZPtcVUVoppqw3xc=";
+        String secretKey = "cHoShoa21tYpn4i9nt+oq2ERYROQNcqiTzel4AANo/M=";
         byte[] sekBytes = Base64.getDecoder().decode(secretKey);
         final byte[] fileBytes = Files.readAllBytes(Paths.get(baseURL + requestFilePath));
         String requestBody = new String(fileBytes);
@@ -43,10 +44,10 @@ class SymmetricEncryptionServiceTest {
         byte[] plainBytes = requestBody.getBytes();
         String ciphertext = SymmetricEncryptionService.encrypt(plainBytes, sekBytes);
         System.out.println(ciphertext);
-        String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
-        byte[] rekBytes = Base64.getDecoder().decode(rek);
-        String cipherKey = SymmetricEncryptionService.encrypt(rekBytes, sekBytes);
-        System.out.println(cipherKey);
+//        String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
+//        byte[] rekBytes = Base64.getDecoder().decode(rek);
+//        String cipherKey = SymmetricEncryptionService.encrypt(rekBytes, sekBytes);
+//        System.out.println(cipherKey);
     }
 
     @Test
