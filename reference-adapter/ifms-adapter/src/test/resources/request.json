@@ -1,7 +1,7 @@
 {
   "serviceId": "PI",
   "params": {
-    "jitBillNo": "MUKTA2399",
+    "jitBillNo": "MUKTA/2022-23/03/16/000561",
     "jitBillDate": "2023-03-16 16:26:42",
     "jitBillDdoCode": "OLSHUD001",
     "granteeAgCode": "GOHUDULBMCR0002",
@@ -24,10 +24,10 @@
         "benfMobileNo": "9876654321",
         "benfEmailId": "",
         "benfAddress": "khurda",
-        "benfAccountType": "Savings",
+        "benfAccountType": "Saving",
         "benfAmount": "250",
-        "pranNo": " ",
-        "adhaarNumber": "123412562345",
+        "pranNo": "",
+        "adhaarNumber": "",
         "purpose": "Mukta Payment"
       },
       {
@@ -38,7 +38,7 @@
         "benfMobileNo": "9876654320",
         "benfEmailId": "",
         "benfAddress": "khurda",
-        "benfAccountType": "Savings",
+        "benfAccountType": "Saving",
         "benfAmount": "250",
         "pranNo": "1234566",
         "adhaarNumber": "123412762345",
