@@ -26,7 +26,7 @@ class SymmetricEncryptionServiceTest {
     @Test
     public void testDecryptSek() throws Exception {
         String appKey = "jq4ivcRJG26AceMqXax6u9mn54mGdUcR8e00HAV6wmM=";
-        String ciphertext = "bxJP1gJnDanBx8OEUT4Ix/n8r6k4X2WTb5IV2qMly13glZFeVbqmfM+ffaLXUe6D";
+        String ciphertext = "+jKNLNdDtC0DiVY8p8vfhQ9V+kPH5wSRnmNaeDjx7DnglZFeVbqmfM+ffaLXUe6D";
         byte[] secret = Base64.getDecoder().decode(appKey);
         String sek = SymmetricEncryptionService.decrypt(ciphertext, secret);
         System.out.println(sek);
@@ -35,7 +35,7 @@ class SymmetricEncryptionServiceTest {
     @Test
     public void testDecryptResponse() throws Exception {
         String secretKey = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
-        String ciphertext = "D3JF6tvSW7vA91ysLUMO2SzhAuFmSOkbM64R1F+ZyAzliJbAtJnzJrN9dYGxvXZzD0yql7ZDJJTuqSJTnfy30wIpJKO/0KZUoxQFVxPhMSB138dhTfXG9xQLyGdeXV9ooz7+LJLtkWHE6s4KP05xtBiU0lgYnT9MjnPAeBhI5Urgm0Z8/vt4GjV3wI05a1oJEEFgXzrDYhaiMNl+qPuHWUm3n1Tcl6c237v90tTg+9l4LFq8liZmdIWN0+EwZ4rc";
+        String ciphertext = "DIJJS8vuKbC15JdvMv7awq1BJ06RuVrDRfygeMxo9Wnqoyh1wtR8aZx53/D2GKZ7Bp/GyOrtH6E1MMYaKE0Zkw==";
         byte[] secret = Base64.getDecoder().decode(secretKey);
         String plaintext = SymmetricEncryptionService.decrypt(ciphertext, secret);
         plaintext = new String(Base64.getDecoder().decode(plaintext));
@@ -44,7 +44,7 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testEncrypt() throws Exception {
-        String secretKey = "m1Q/JtatnTomnGzjEy00YWFZhGrLCW/BBNPLi7+48a4=";
+        String secretKey = "E1apGkAd4cZIDHCjSoqU7jXwv+KxDy1FGzNeKlxR6GY=";
         byte[] sekBytes = Base64.getDecoder().decode(secretKey);
         final byte[] fileBytes = Files.readAllBytes(Paths.get(baseURL + "request.json"));
         String requestBody = new String(fileBytes);
