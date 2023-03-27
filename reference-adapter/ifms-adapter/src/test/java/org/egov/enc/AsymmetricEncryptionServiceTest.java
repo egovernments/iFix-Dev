@@ -32,7 +32,8 @@ class AsymmetricEncryptionServiceTest {
     }
 
     @Test
-    public void testEncrypt() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public void genAppKey() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException,
+            BadPaddingException, InvalidKeyException {
         String appKey = EgovKeyGenerator.genAES256Key();
         System.out.println(appKey);
         String plaintext = appKey;

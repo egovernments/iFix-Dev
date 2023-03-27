@@ -34,9 +34,9 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testDecryptResponse() throws Exception {
-        String secretKey = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
+        String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
         String ciphertext = "DIJJS8vuKbC15JdvMv7awq1BJ06RuVrDRfygeMxo9Wnqoyh1wtR8aZx53/D2GKZ7Bp/GyOrtH6E1MMYaKE0Zkw==";
-        byte[] secret = Base64.getDecoder().decode(secretKey);
+        byte[] secret = Base64.getDecoder().decode(rek);
         String plaintext = SymmetricEncryptionService.decrypt(ciphertext, secret);
         plaintext = new String(Base64.getDecoder().decode(plaintext));
         System.out.println(plaintext);
