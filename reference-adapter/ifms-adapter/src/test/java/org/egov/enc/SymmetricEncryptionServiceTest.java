@@ -25,8 +25,8 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testDecryptSek() throws Exception {
-        String appKey = "jq4ivcRJG26AceMqXax6u9mn54mGdUcR8e00HAV6wmM=";
-        String ciphertext = "+jKNLNdDtC0DiVY8p8vfhQ9V+kPH5wSRnmNaeDjx7DnglZFeVbqmfM+ffaLXUe6D";
+        String appKey = "ysftrEbv577GMbhflKmstlwExjTHp7jJAf2p5AOSRzA=";
+        String ciphertext = "+FXzHTLAw3/MeeAUtcfRPaLwTJa81DMBzFoVFwH86Si+pYVJh7ZIZy7wmXdPkYTy";
         byte[] secret = Base64.getDecoder().decode(appKey);
         String sek = SymmetricEncryptionService.decrypt(ciphertext, secret);
         System.out.println(sek);
@@ -35,7 +35,7 @@ class SymmetricEncryptionServiceTest {
     @Test
     public void testDecryptResponse() throws Exception {
         String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
-        String ciphertext = "DIJJS8vuKbC15JdvMv7awq1BJ06RuVrDRfygeMxo9Wnqoyh1wtR8aZx53/D2GKZ7Bp/GyOrtH6E1MMYaKE0Zkw==";
+        String ciphertext = "DIJJS8vuKbC15JdvMv7awk2gSDS84f1vin8DTSWUcSxFTHGvvTuGY9BXPwsaKMlf/fjagr6S8JtYwACjIYtFpWlzJZNHJlEYlPIuXagjnUWIPO2rRcNcaaN5go/R6U+TofkKB2XfKh9KPxvTQ1K6xEKMvnZxpOOdDA3bN3LTiOllNwBJ2llqGxI+bOgAdsYUDfNMfSkPXF2kI+1Ck9w4wcwXJNwJgPoXh6D+xT3SCgd5lFd4SxwHPu1kKR7qm179HS8v1utOH0whnpgtv5jpH7e0Wr+8CzTnFDMJQ7loAMJvwau3AdxwpDes0T1R0RHNumhQ/gIixyl54CHhsZMFPgbcjNnS9SMEI6qadq/+wnYTFWtxrgtsqkmRQFC42itr+LoF2tCxzSo2nKAIZeSsLLdomK+setAcIWcg/U0CPcqFwwCgLaoe2PS4HbjJFMyGzBj9J7gX7ED2I8yRQIqDohW6cla5zhdsEOzOc+Ft7nNqy/cKtt7cwch5ufUMy39iSWI82xxryNGBaPEOrfzz2/4QMS0ltiIHV6XchPGd5cxfUA1jvlaDIBEkHWcySkCFWoS/5a+Pfa7+AkXqjcE4FJE+ArCVsNXX7VF+cXaifPQ=";
         byte[] secret = Base64.getDecoder().decode(rek);
         String plaintext = SymmetricEncryptionService.decrypt(ciphertext, secret);
         plaintext = new String(Base64.getDecoder().decode(plaintext));
@@ -44,7 +44,7 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testEncrypt() throws Exception {
-        String secretKey = "E1apGkAd4cZIDHCjSoqU7jXwv+KxDy1FGzNeKlxR6GY=";
+        String secretKey = "yzHVLkkBehjItj4NKl5k9vn8Ab8w5M3LWh5UN9vuo7U=";
         byte[] sekBytes = Base64.getDecoder().decode(secretKey);
         final byte[] fileBytes = Files.readAllBytes(Paths.get(baseURL + "request.json"));
         String requestBody = new String(fileBytes);
