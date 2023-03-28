@@ -11,11 +11,12 @@ import java.util.Base64;
 
 public class AsymmetricEncryptionService {
 
-    public static String encrypt(final byte[] data, final PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public static byte[] encrypt(final byte[] data, final PublicKey publicKey) throws NoSuchPaddingException,
+            NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         final Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         final byte[] cipherText = cipher.doFinal(data);
-        return Base64.getEncoder().encodeToString(cipherText);
+        return cipherText;
     }
 
 }

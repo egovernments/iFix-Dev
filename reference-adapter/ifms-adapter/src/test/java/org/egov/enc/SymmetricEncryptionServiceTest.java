@@ -1,11 +1,13 @@
 package org.egov.enc;
 
 import org.egov.xtra.enc.SymmetricEncryptionService;
-import org.egov.xtra.key.EgovKeyGenerator;
+import org.egov.key.KeyGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -25,43 +27,40 @@ class SymmetricEncryptionServiceTest {
 
     @Test
     public void testDecryptSek() throws Exception {
-        String appKey = "ysftrEbv577GMbhflKmstlwExjTHp7jJAf2p5AOSRzA=";
-        String ciphertext = "+FXzHTLAw3/MeeAUtcfRPaLwTJa81DMBzFoVFwH86Si+pYVJh7ZIZy7wmXdPkYTy";
-        byte[] secret = Base64.getDecoder().decode(appKey);
-        String sek = SymmetricEncryptionService.decrypt(ciphertext, secret);
-        System.out.println(sek);
+        String appKey = "nXIDx/4elkUv44ffXYCYm46B2IKfn+eh/wfAcuMS+m4=";
+        String ciphertext = "Vq0sDLSlhrARucnWYmjvgAInWIhS/8tLX9ksJUQVUanEirZMxRf4kOBN9xCXoFua";
+        SecretKey secretKey = new SecretKeySpec(Base64.getDecoder().decode(appKey), "AES");
+        byte[] sek = SymmetricEncryptionService.decrypt(ciphertext, secretKey);
+        String sekString = Base64.getEncoder().encodeToString(sek);
+        System.out.println(sekString);
     }
 
     @Test
     public void testDecryptResponse() throws Exception {
         String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
-        String ciphertext = "DIJJS8vuKbC15JdvMv7awk2gSDS84f1vin8DTSWUcSxFTHGvvTuGY9BXPwsaKMlf/fjagr6S8JtYwACjIYtFpWlzJZNHJlEYlPIuXagjnUWIPO2rRcNcaaN5go/R6U+TofkKB2XfKh9KPxvTQ1K6xEKMvnZxpOOdDA3bN3LTiOllNwBJ2llqGxI+bOgAdsYUDfNMfSkPXF2kI+1Ck9w4wcwXJNwJgPoXh6D+xT3SCgd5lFd4SxwHPu1kKR7qm179HS8v1utOH0whnpgtv5jpH7e0Wr+8CzTnFDMJQ7loAMJvwau3AdxwpDes0T1R0RHNumhQ/gIixyl54CHhsZMFPgbcjNnS9SMEI6qadq/+wnYTFWtxrgtsqkmRQFC42itr+LoF2tCxzSo2nKAIZeSsLLdomK+setAcIWcg/U0CPcqFwwCgLaoe2PS4HbjJFMyGzBj9J7gX7ED2I8yRQIqDohW6cla5zhdsEOzOc+Ft7nNqy/cKtt7cwch5ufUMy39iSWI82xxryNGBaPEOrfzz2/4QMS0ltiIHV6XchPGd5cxfUA1jvlaDIBEkHWcySkCFWoS/5a+Pfa7+AkXqjcE4FJE+ArCVsNXX7VF+cXaifPQ=";
+        String ciphertext = "0snte1FcOAtC0FmdQwnI2SzhAuFmSOkbM64R1F+ZyAy3BCLqg1szxUnpioa1qgAgnsMJsi/fGTPmLWtdXe2pKwgzbrmCfQvMZ9uhsq642LYVdxPW21D70didroc6v4GHkCwXggBII7vrFRS2ewxt0QH8Wlrk1HG+yrPldhqxop2caI5KUKKcUcREy3i6301r6H+CxRfq0WuZyXJre5ATdGcMmXv9yj2ELOX+v/+mjtoPtZJ3fCu5KeIw8GMLasm9";
         byte[] secret = Base64.getDecoder().decode(rek);
-        String plaintext = SymmetricEncryptionService.decrypt(ciphertext, secret);
-        plaintext = new String(Base64.getDecoder().decode(plaintext));
+        SecretKey secretKey = new SecretKeySpec(secret, "AES");
+        byte[] plainBytes = SymmetricEncryptionService.decrypt(ciphertext, secretKey);
+        String plaintext = new String(plainBytes);
         System.out.println(plaintext);
     }
 
     @Test
     public void testEncrypt() throws Exception {
-        String secretKey = "yzHVLkkBehjItj4NKl5k9vn8Ab8w5M3LWh5UN9vuo7U=";
-        byte[] sekBytes = Base64.getDecoder().decode(secretKey);
+        String sekString = "h7b890EUMIrgv37UU24GQLpLr7emgpjQ2Qx1+3VJPoI=";
+        byte[] sekBytes = Base64.getDecoder().decode(sekString);
+        SecretKey secretKey = new SecretKeySpec(sekBytes, "AES");
         final byte[] fileBytes = Files.readAllBytes(Paths.get(baseURL + "request.json"));
         String requestBody = new String(fileBytes);
         System.out.println(requestBody);
         byte[] plainBytes = requestBody.getBytes();
-        String ciphertext = SymmetricEncryptionService.encrypt(plainBytes, sekBytes);
+        String ciphertext = SymmetricEncryptionService.encrypt(plainBytes, secretKey);
         System.out.println(ciphertext);
         String rek = "e1ro8WIs7BsGYwHtBbTWAWrmR/yzJSCoksOaMmOO0SI=";
         byte[] rekBytes = Base64.getDecoder().decode(rek);
-        String cipherKey = SymmetricEncryptionService.encrypt(rekBytes, sekBytes);
+        String cipherKey = SymmetricEncryptionService.encrypt(rekBytes, secretKey);
         System.out.println(cipherKey);
-    }
-
-    @Test
-    public void testAESKeyGen() throws NoSuchAlgorithmException {
-        String rek = EgovKeyGenerator.genAES256Key();
-        System.out.println(rek);
     }
 
 }
