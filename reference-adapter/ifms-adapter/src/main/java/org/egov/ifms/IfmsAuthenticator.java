@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
 
 @Slf4j
@@ -29,17 +30,19 @@ public class IfmsAuthenticator {
     @Value("${ifms.jit.client.secret}")
     private String clientSecret;
 
-    public void refreshTokens() {
+    public void refreshTokens() throws Exception {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("clientId", clientId);
         httpHeaders.add("clientSecret", clientSecret);
 
+        SecretKey appKey = getNewAppKey();
+
 
     }
 
-    private String getEncryptedAppKey() throws NoSuchAlgorithmException {
-
-        return null;
+    private SecretKey getNewAppKey() throws NoSuchAlgorithmException {
+        SecretKey secretKey = KeyGenerator.genAES256Key();
+        return secretKey;
     }
 
 }
