@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestInstance;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -30,7 +31,8 @@ class AsymmetricEncryptionServiceTest {
     @Test
     public void genAppKey() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException,
             BadPaddingException, InvalidKeyException {
-        String appKey = KeyGenerator.genAES256Key();
+        SecretKey secretKey = KeyGenerator.genAES256Key();
+        String appKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
         System.out.println(appKey);
         String plaintext = appKey;
         byte[] plainBytes = Base64.getDecoder().decode(plaintext);

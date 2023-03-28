@@ -38,7 +38,7 @@ public class IfmsAuthenticator {
     }
 
     private String getEncryptedAppKey() throws NoSuchAlgorithmException {
-        String aesKey = KeyGenerator.genAES256Key();
+
         return null;
     }
 

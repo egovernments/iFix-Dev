@@ -17,12 +17,11 @@ public class KeyGenerator {
         secureRandom = new SecureRandom();
     }
 
-    public static String genAES256Key() throws NoSuchAlgorithmException {
+    public static SecretKey genAES256Key() throws NoSuchAlgorithmException {
         final javax.crypto.KeyGenerator keyGenerator = javax.crypto.KeyGenerator.getInstance("AES");
         keyGenerator.init(256);
         final SecretKey secretKey = keyGenerator.generateKey();
-        final String key = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-        return key;
+        return secretKey;
     }
 
 }
