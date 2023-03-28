@@ -1,6 +1,5 @@
 package org.egov.enc;
 
-import org.egov.xtra.enc.AsymmetricEncryptionService;
 import org.egov.key.KeyGenerator;
 import org.egov.key.PublicKeyLoader;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,4 +1,4 @@
-package org.egov.xtra.enc;
+package org.egov.enc;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

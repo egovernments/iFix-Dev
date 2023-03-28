@@ -1,7 +1,5 @@
 package org.egov.enc;
 
-import org.egov.xtra.enc.SymmetricEncryptionService;
-import org.egov.key.KeyGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,7 +8,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

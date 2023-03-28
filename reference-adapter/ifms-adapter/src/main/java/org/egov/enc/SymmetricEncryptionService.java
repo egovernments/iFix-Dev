@@ -1,4 +1,4 @@
-package org.egov.xtra.enc;
+package org.egov.enc;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
