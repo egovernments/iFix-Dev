@@ -73,9 +73,9 @@ public class FiscalEventEnrichmentService {
                 fiscalEvent.setIngestionTime(ingestionTime);
                 fiscalEvent.setSender(requestHeader.getUserInfo().getUuid());
             }
-        }
 
-        validateAndEnrichCoa(fiscalEventRequest, coaCodes, fiscalEventRequest.getFiscalEvent().get(0).getTenantId());
+            validateAndEnrichCoa(fiscalEventRequest, coaCodes, fiscalEventRequest.getFiscalEvent().get(0).getTenantId());
+        }
 
     }
 

@@ -62,7 +62,7 @@ public class ChartOfAccountService {
 		List<ChartOfAccount> chartOfAccounts = coaRepository.search(searchCriteria);
 
 		if (chartOfAccounts == null || chartOfAccounts.isEmpty())
-			Collections.emptyList();
+			return Collections.emptyList();
 
 		return chartOfAccounts;
 

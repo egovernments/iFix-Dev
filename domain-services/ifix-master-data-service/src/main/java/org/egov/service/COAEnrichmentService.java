@@ -57,7 +57,7 @@ public class COAEnrichmentService {
 
     }
 
-    private COASearchCriteria createCOASearchCriteria(ChartOfAccount chartOfAccount) {
+    protected COASearchCriteria createCOASearchCriteria(ChartOfAccount chartOfAccount) {
         COASearchCriteria searchCriteria = new COASearchCriteria();
         searchCriteria.setTenantId(chartOfAccount.getTenantId());
         List<String> coaCodes = new ArrayList<>();
