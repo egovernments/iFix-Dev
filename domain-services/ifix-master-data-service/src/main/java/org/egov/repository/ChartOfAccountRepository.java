@@ -6,6 +6,7 @@ import java.util.List;
 import org.egov.producer.Producer;
 import org.egov.repository.querybuilder.ChartOfAccountQueryBuilder;
 import org.egov.repository.rowmapper.COARowMapper;
+import org.egov.tracer.model.CustomException;
 import org.egov.web.models.COASearchCriteria;
 import org.egov.web.models.ChartOfAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class ChartOfAccountRepository {
 				return new ArrayList<>();
 		}catch(Exception e) {
 			log.error("Exception while fetching from DB: " + e);
-			return chartOfAccounts;
+			throw new CustomException("IFIX_COA_SEARCH_ERR", "Some error occurred while running search operation.");
 		}
 
 		return chartOfAccounts;
