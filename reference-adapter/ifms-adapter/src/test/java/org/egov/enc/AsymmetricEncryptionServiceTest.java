@@ -24,8 +24,9 @@ class AsymmetricEncryptionServiceTest {
     @BeforeAll
     public void init() throws Exception {
         ClassLoader classLoader = this.getClass().getClassLoader();
-        baseURL = classLoader.getResource("").getFile();
-        publicKey = PublicKeyLoader.getPublicKeyFromByteFile(baseURL + "publicKey");
+//        baseURL = classLoader.getResource("").getFile();
+        String path = "D:/egovernments/ifix-dev-bkp/reference-adapter/ifms-adapter/src/main/resources/";
+        publicKey = PublicKeyLoader.getPublicKeyFromByteFile(path + "publicKey");
     }
 
     @Test

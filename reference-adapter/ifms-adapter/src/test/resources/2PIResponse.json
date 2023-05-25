@@ -1,13 +1,1 @@
-{
-  "serviceId": "PI",
-  "errorMsg": null,
-  "data": [
-    {
-      "jitBillNo": "MUKTA/2022-23/03/16/105",
-      "jitBillDate": "2023-03-16 00:00:00.0",
-      "ssuIaId": "1474",
-      "successCode": "0",
-      "sucessDescrp": "Success"
-    }
-  ]
-}
+{"serviceId":"PI","errorMsg":null,"data":[{"jitBillNo":"MUKTA/2022-23/05/25/105","jitBillDate":"2023-05-25","ssuIaId":"1621","successCode":"0","sucessDescrp":"Jit Bill is received successfully ,Payment Instruction will be generated after Bill is submitted by SSU in JIT-FS"}]}
