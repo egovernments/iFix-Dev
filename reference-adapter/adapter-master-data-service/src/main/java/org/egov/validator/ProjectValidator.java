@@ -5,12 +5,14 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.repository.ProjectRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentUtil;
+import org.egov.util.DtoWrapper;
 import org.egov.util.ExpenditureUtil;
 import org.egov.util.MasterDataConstants;
-import org.egov.web.models.Project;
+import org.egov.web.models.ProjectDTO;
 import org.egov.web.models.ProjectRequest;
 import org.egov.web.models.ProjectSearchCriteria;
 import org.egov.web.models.ProjectSearchRequest;
+import org.egov.web.models.persist.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,9 @@ public class ProjectValidator {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
 
     /**
      * @param projectSearchRequest
@@ -72,7 +77,7 @@ public class ProjectValidator {
             if (!StringUtils.isEmpty(projectSearchCriteria.getDepartmentEntityId())
                     && (projectSearchCriteria.getDepartmentEntityId().length() < 2
                     || projectSearchCriteria.getDepartmentEntityId().length() > 64)) {
-                throw new CustomException(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Department Entity id length is invalid."
+                throw new CustomException(MasterDataConstants.DEPARTMENT_ENTITY_ID, "DepartmentConst Entity id length is invalid."
                         + MasterDataConstants.LENGTH_RANGE_2_64);
             }
 
@@ -92,42 +97,42 @@ public class ProjectValidator {
     public void validateProjectCreateRequest(ProjectRequest projectRequest) {
         Map<String, String> errorMap = new HashMap<>();
 
-        if (projectRequest != null && projectRequest.getProject() != null && projectRequest.getRequestHeader() != null) {
+        if (projectRequest != null && projectRequest.getProjectDTO() != null && projectRequest.getRequestHeader() != null) {
             RequestHeader requestHeader = projectRequest.getRequestHeader();
 
             if (requestHeader.getUserInfo() == null || StringUtils.isEmpty(requestHeader.getUserInfo().getUuid())) {
                 errorMap.put(MasterDataConstants.USER_INFO, "User information is missing");
             }
 
-            Project project = projectRequest.getProject();
+            ProjectDTO projectDTO = projectRequest.getProjectDTO();
 
-            validateTenantId(errorMap, project.getTenantId());
+            validateTenantId(errorMap, projectDTO.getTenantId());
 
-            if (StringUtils.isEmpty(project.getCode())) {
+            if (StringUtils.isEmpty(projectDTO.getCode())) {
                 errorMap.put(MasterDataConstants.PROJECT_CODE, "Project code is missing in request data");
-            } else if (project.getCode().length() < 1 || project.getCode().length() > 64) {
+            } else if (projectDTO.getCode().length() < 1 || projectDTO.getCode().length() > 64) {
                 errorMap.put(MasterDataConstants.PROJECT_CODE, "Project code length is invalid. Length range [1-64]");
             }
 
-            if (StringUtils.isEmpty(project.getName())) {
+            if (StringUtils.isEmpty(projectDTO.getName())) {
                 errorMap.put(MasterDataConstants.PROJECT_NAME, "Project name is missing in request data");
-            } else if (project.getName().length() < 1 || project.getName().length() > 64) {
+            } else if (projectDTO.getName().length() < 1 || projectDTO.getName().length() > 64) {
                 errorMap.put(MasterDataConstants.PROJECT_NAME, "Project name length is invalid. Length range [1-64]");
             }
 
-            if (!StringUtils.isEmpty(project.getExpenditureId())) {
-                if (project.getExpenditureId().length() < 2 || project.getExpenditureId().length() > 64) {
+            if (!StringUtils.isEmpty(projectDTO.getExpenditureId())) {
+                if (projectDTO.getExpenditureId().length() < 2 || projectDTO.getExpenditureId().length() > 64) {
                     errorMap.put(MasterDataConstants.EXPENDITURE_ID, "Expenditure id length is invalid. Length range [2-64]");
                 }
 
-                if (!expenditureUtil.validateExpenditure(project.getTenantId(),
-                        Collections.singletonList(project.getExpenditureId()), requestHeader)) {
-                    errorMap.put(MasterDataConstants.EXPENDITURE_ID, "Expenditure id : " + project.getExpenditureId()
+                if (!expenditureUtil.validateExpenditure(projectDTO.getTenantId(),
+                        Collections.singletonList(projectDTO.getExpenditureId()), requestHeader)) {
+                    errorMap.put(MasterDataConstants.EXPENDITURE_ID, "Expenditure id : " + projectDTO.getExpenditureId()
                             + " doesn't exist in the system");
                 }
             }
 
-            validateDepartmentEntityId(errorMap, requestHeader, project);
+            validateDepartmentEntityId(errorMap, requestHeader, projectDTO);
 
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
@@ -141,27 +146,27 @@ public class ProjectValidator {
     public void validateProjectUpdateRequest(ProjectRequest projectRequest) {
         Map<String, String> errorMap = new HashMap<>();
 
-        if (projectRequest != null && projectRequest.getProject() != null && projectRequest.getRequestHeader() != null) {
+        if (projectRequest != null && projectRequest.getProjectDTO() != null && projectRequest.getRequestHeader() != null) {
             RequestHeader requestHeader = projectRequest.getRequestHeader();
 
             if (requestHeader.getUserInfo() == null || StringUtils.isEmpty(requestHeader.getUserInfo().getUuid())) {
                 errorMap.put(MasterDataConstants.USER_INFO, "User information is missing");
             }
 
-            Project project = projectRequest.getProject();
+            ProjectDTO projectDTO = projectRequest.getProjectDTO();
 
-            validateTenantId(errorMap, project.getTenantId());
+            validateTenantId(errorMap, projectDTO.getTenantId());
 
-            if (StringUtils.isBlank(project.getId())) {
+            if (StringUtils.isBlank(projectDTO.getId())) {
                 errorMap.put(MasterDataConstants.ID, "Project id is missing in request data");
             } else {
-                Optional<Project> optionalProject = projectRepository.findByProjectId(project.getId());
+                Optional<Project> optionalProject = projectRepository.findByProjectId(projectDTO.getId());
                 if (!optionalProject.isPresent()) {
                     errorMap.put(MasterDataConstants.INVALID_ID, "Invalid project id");
                 }
             }
 
-            validateDepartmentEntityId(errorMap, requestHeader, project);
+            validateDepartmentEntityId(errorMap, requestHeader, projectDTO);
 
             if (!errorMap.isEmpty()) {
                 throw new CustomException(errorMap);
@@ -172,22 +177,25 @@ public class ProjectValidator {
         }
     }
 
-    private void validateDepartmentEntityId(Map<String, String> errorMap, RequestHeader requestHeader, Project project) {
-        if (project.getDepartmentEntityIds() != null && !project.getDepartmentEntityIds().isEmpty()) {
-            List<String> departmentEntitytIds = project.getDepartmentEntityIds();
+    private void validateDepartmentEntityId(Map<String, String> errorMap, RequestHeader requestHeader, ProjectDTO projectDTO) {
+        if (projectDTO.getDepartmentEntityIds() != null && !projectDTO.getDepartmentEntityIds().isEmpty()) {
+            List<String> departmentEntitytIds =
+                    dtoWrapper.getIdListFromDepartmentEntityDTO(projectDTO.getDepartmentEntityIds());
+
             for (String departmentEntitytId : departmentEntitytIds) {
                 if (!StringUtils.isEmpty(departmentEntitytId)) {
                     if (departmentEntitytId.length() < 2 || departmentEntitytId.length() > 64) {
-                        errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Department Entity id length is invalid. " +
+                        errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "DepartmentConst Entity id length is invalid. " +
                                 MasterDataConstants.LENGTH_RANGE_2_64);
                     }
                 }
             }
 
-            if (!departmentUtil.validateDepartmentEntityIds(project.getTenantId(),
-                    project.getDepartmentEntityIds(), requestHeader)) {
-                errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Some of the Department Entity ids : "
-                        + project.getDepartmentEntityIds() + " doesn't exist in the system");
+            if (!departmentUtil.validateDepartmentEntityIds(projectDTO.getTenantId(),
+                    dtoWrapper.getIdListFromDepartmentEntityDTO(projectDTO.getDepartmentEntityIds()), requestHeader)) {
+
+                errorMap.put(MasterDataConstants.DEPARTMENT_ENTITY_ID, "Some of the DepartmentConst Entity ids : "
+                        + projectDTO.getDepartmentEntityIds() + " doesn't exist in the system");
             }
         }
     }

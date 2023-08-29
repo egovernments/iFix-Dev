@@ -1,6 +1,9 @@
 package org.egov.util;
 
 public class MasterDataConstants {
+    private MasterDataConstants() {
+    }
+
     public static final String CRITERIA_TENANT_ID = "tenantId";
     public static final String CRITERIA_NAME = "name";
     public static final String CRITERIA_CODE = "code";
@@ -8,10 +11,6 @@ public class MasterDataConstants {
     public static final String LENGTH_RANGE_2_64 = "Length range [2-64]";
     public static final String TENANT_ID_IS_MISSING_IN_REQUEST_DATA = "Tenant id is missing in request data";
     public static final String TENANT_ID_LENGTH_IS_INVALID = "Tenant id length is invalid. ";
-
-    private MasterDataConstants() {
-    }
-
 
     public static final String USER_INFO = "USER_INFO";
     public static final String GOVERNMENT_ID = "GOVERNMENT_ID";
@@ -47,5 +46,50 @@ public class MasterDataConstants {
     public static final String ID = "ID";
     public static final String INVALID_ID = "INVALID_ID";
 
+    public class ProjectConst {
+        public static final String ID = "id";
+        public static final String TENANT_ID = "tenant_id";
+        public static final String CODE = "code";
+        public static final String NAME = "name";
+        public static final String EXPENDITURE_ID = "expenditure_id";
+        public static final String DEPARTMENT_ENTITY_ID = "departmentEntity_id";
+        public static final String LOCATION_ID = "location_id";
+        public static final String CREATED_BY = "created_by";
+        public static final String CREATED_TIME = "created_time";
+        public static final String LAST_MODIFIED_BY = "last_modified_by";
+        public static final String LAST_MODIFIED_TIME = "last_modified_time";
+    }
+
+    public class DepartmentConst {
+        public static final String ID = "id";
+        public static final String TENANT_ID = "tenant_id";
+        public static final String CODE = "code";
+        public static final String NAME = "name";
+        public static final String IS_NODAL = "isNodal";
+        public static final String PARENT = "parent";
+        public static final String CREATED_BY = "created_by";
+        public static final String CREATED_TIME = "created_time";
+        public static final String LAST_MODIFIED_BY = "last_modified_by";
+        public static final String LAST_MODIFIED_TIME = "last_modified_time";
+    }
+
+    public class ExpenditureConst {
+        public static final String ID = "id";
+        public static final String TENANT_ID = "tenant_id";
+        public static final String CODE = "code";
+        public static final String NAME = "name";
+        public static final String TYPE = "type";
+        public static final String DEPARTMENT_ID = "departmentId";
+        public static final String CREATED_BY = "created_by";
+        public static final String CREATED_TIME = "created_time";
+        public static final String LAST_MODIFIED_BY = "last_modified_by";
+        public static final String LAST_MODIFIED_TIME = "last_modified_time";
+    }
+
+    public class ProjectDepartmentEntityRelationshipConst {
+        public static final String PROJECT_ID = "project_id";
+        public static final String PROJECT_DEPARTMENT_ENTITY_ID = "department_entity_id";
+        public static final String STATUS = "status";
+    }
 
 }

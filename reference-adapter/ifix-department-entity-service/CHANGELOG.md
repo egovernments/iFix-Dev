@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2023-01-30
+- Migrated database from MongoDB to PostgreSQL
+
 ## 1.2.0 - 2022-05-04
 - New feature added - update department entity API.
 

@@ -1,5 +1,6 @@
 package org.egov.util;
 
+import org.egov.MasterApplicationMain;
 import org.egov.common.contract.AuditDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = MasterApplicationMain.class)
 class MasterDataServiceUtilTest {
 
 

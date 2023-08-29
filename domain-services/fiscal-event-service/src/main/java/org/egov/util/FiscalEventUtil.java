@@ -10,9 +10,9 @@ import org.egov.web.models.FiscalEvent;
 import org.egov.web.models.FiscalEventRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -69,5 +69,17 @@ public class FiscalEventUtil {
             fiscalEvents.add(newFiscalEvent);
         }
         fiscalEventRequest.setFiscalEvent(fiscalEvents);
+    }
+
+    public void deduplicateReceivers(List<FiscalEvent> fiscalEvents) {
+        if(CollectionUtils.isEmpty(fiscalEvents)){
+            return;
+        }
+
+        fiscalEvents.forEach(fiscalEvent -> {
+            Set<String> uniqueReceivers = new LinkedHashSet<>(fiscalEvent.getReceivers());
+            fiscalEvent.setReceivers(new ArrayList<>());
+            fiscalEvent.getReceivers().addAll(uniqueReceivers);
+        });
     }
 }

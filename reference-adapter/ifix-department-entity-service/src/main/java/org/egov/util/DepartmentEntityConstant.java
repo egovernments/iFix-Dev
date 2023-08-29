@@ -33,4 +33,49 @@ public class DepartmentEntityConstant {
     public static final String DEPARTMENT_JSON_PATH = "$.department.*";
 
     public static final String JSONPATH_ERROR = "JSONPATH_ERROR";
+
+    public static final String WHERE_CLAUSE = " WHERE ";
+    public static final String ORDER_BY_CLAUSE = " ORDER BY ";
+    public static final String EQUAL_TO = " = ";
+    public static final String IN_CLAUSE = " IN ";
+    public static final String GREATER_THAN_AND_EQUAL_TO = " >= ";
+    public static final String GREATER_THAN = " > ";
+    public static final String LESS_THAN_AND_EQUAL_TO = " <= ";
+    public static final String LESS_THAN = " < ";
+    public static final String AND = " AND ";
+    public static final String DESC = " DESC ";
+    public static final String SINGLE_QUOTE = "'";
+
+    public class DepartmentEntityConst {
+        public static final String ID = "id";
+        public static final String CHILDREN = "children";
+        public static final String CODE = "code";
+        public static final String CREATED_BY = "created_by";
+        public static final String CREATED_TIME = "created_time";
+        public static final String DEPARTMENT_ID = "department_id";
+        public static final String HIERARCHY_LEVEL = "hierarchy_level";
+        public static final String LAST_MODIFIED_BY = "last_modified_by";
+        public static final String LAST_MODIFIED_TIME = "last_modified_time";
+        public static final String NAME = "name";
+        public static final String TENANT_ID = "tenant_id";
+    }
+
+    public class DepartmentHierarchyLevelConst {
+        public static final String ID = "id";
+        public static final String CREATED_BY = "created_by";
+        public static final String CREATED_TIME = "created_time";
+        public static final String DEPARTMENT_ID = "department_id";
+        public static final String LABEL = "label";
+        public static final String LAST_MODIFIED_BY = "last_modified_by";
+        public static final String LAST_MODIFIED_TIME = "last_modified_time";
+        public static final String LEVEL = "level";
+        public static final String PARENT = "parent";
+        public static final String TENANT_ID = "tenant_id";
+    }
+
+    public class DepartmentEntityChildrenConst {
+        public static final String PARENT_ID = "parent_id";
+        public static final String CHILD_ID = "child_id";
+        public static final String STATUS = "status";
+    }
 }

@@ -1,11 +1,13 @@
 package org.egov.service;
 
+import org.egov.FiscalApplicationMain;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.config.TestDataFormatter;
 import org.egov.producer.Producer;
 import org.egov.repository.FiscalEventRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.FiscalEventMapperUtil;
+import org.egov.util.FiscalEventUtil;
 import org.egov.validator.FiscalEventValidator;
 import org.egov.web.models.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,13 +20,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = FiscalApplicationMain.class)
 class FiscalEventServiceTest {
     @Mock
     private FiscalEventConfiguration fiscalEventConfiguration;
@@ -43,6 +46,8 @@ class FiscalEventServiceTest {
 
     @Mock
     private FiscalEventValidator fiscalEventValidator;
+    @Mock
+    private FiscalEventUtil fiscalEventUtil;
 
     @Mock
     private Producer producer;
@@ -68,7 +73,7 @@ class FiscalEventServiceTest {
         doNothing().when(this.fiscalEventEnrichmentService).enrichFiscalEventPushPost((FiscalEventRequest) any());
         doNothing().when(this.producer).push((String) any(), (Object) any());
         FiscalEventRequest fiscalEventRequest = new FiscalEventRequest();
-        assertNotSame(fiscalEventRequest, this.fiscalEventService.fiscalEventsV1PushPost(fiscalEventRequest));
+        this.fiscalEventService.fiscalEventsV1PushPost(fiscalEventRequest);
         verify(this.fiscalEventValidator).validateFiscalEventPushPost((FiscalEventRequest) any());
         verify(this.fiscalEventEnrichmentService).enrichFiscalEventPushPost((FiscalEventRequest) any());
     }
@@ -78,9 +83,7 @@ class FiscalEventServiceTest {
         doNothing().when(this.fiscalEventValidator).validateFiscalEventPushPost((FiscalEventRequest) any());
         doNothing().when(this.fiscalEventEnrichmentService).enrichFiscalEventPushPost((FiscalEventRequest) any());
         doNothing().when(this.producer).push((String) any(), (Object) any());
-
-        assertNotSame(fiscalEventRequest, this.fiscalEventService.fiscalEventsV1PushPost(fiscalEventRequest));
-
+        this.fiscalEventService.fiscalEventsV1PushPost(fiscalEventRequest);
         verify(this.fiscalEventValidator).validateFiscalEventPushPost((FiscalEventRequest) any());
         verify(this.fiscalEventEnrichmentService).enrichFiscalEventPushPost((FiscalEventRequest) any());
         verify(this.producer,atLeast(1)).push((String) any(), (Object) any());
@@ -107,24 +110,21 @@ class FiscalEventServiceTest {
     @Test
     void testFiscalEventsV1SearchPostEmptyResult() {
         doNothing().when(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
-        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(new ArrayList<Object>());
+        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(Collections.emptyList());
 
         assertTrue(this.fiscalEventService.fiscalEventsV1SearchPost(fiscalEventGetRequest).isEmpty());
         verify(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
-        verify(this.fiscalEventRepository).searchFiscalEvent((Criteria) any());
+        verify(this.fiscalEventRepository).searchFiscalEventUuids(any());
     }
 
     @Test
     void testFiscalEventsV1SearchPostNonEmptyResult() {
         doNothing().when(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
 
-        ArrayList<Object> objectList = new ArrayList<Object>();
-        objectList.add("42");
-        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(objectList);
+        when(this.fiscalEventRepository.searchFiscalEventUuids(any())).thenReturn(Collections.singletonList(fiscalEventSearchResponse.getFiscalEvent().get(0).getId()));
+        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(fiscalEventSearchResponse.getFiscalEvent());
 
         List<FiscalEvent> fiscalEventList = fiscalEventSearchResponse.getFiscalEvent();
-        when(this.fiscalEventMapperUtil.mapDereferencedFiscalEventToFiscalEvent((List<Object>) any()))
-                .thenReturn(fiscalEventList);
 
         List<FiscalEvent> actualFiscalEventsV1SearchPostResult = this.fiscalEventService
                 .fiscalEventsV1SearchPost(fiscalEventGetRequest);
@@ -133,19 +133,17 @@ class FiscalEventServiceTest {
         assertTrue(actualFiscalEventsV1SearchPostResult.size() > 0);
         verify(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
         verify(this.fiscalEventRepository).searchFiscalEvent((Criteria) any());
-        verify(this.fiscalEventMapperUtil).mapDereferencedFiscalEventToFiscalEvent((List<Object>) any());
     }
 
     @Test
     void testFiscalEventsV1SearchPostNonEmptyResultWithIdSearchCriteria() {
         doNothing().when(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
 
-        ArrayList<Object> objectList = new ArrayList<Object>();
+        ArrayList<String> objectList = new ArrayList<>();
         objectList.add("42");
-        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(objectList);
+        when(this.fiscalEventRepository.searchFiscalEventUuids(any())).thenReturn(objectList);
+        when(this.fiscalEventRepository.searchFiscalEvent((Criteria) any())).thenReturn(fiscalEventSearchResponse.getFiscalEvent());
         List<FiscalEvent> fiscalEventList = fiscalEventSearchResponse.getFiscalEvent();
-        when(this.fiscalEventMapperUtil.mapDereferencedFiscalEventToFiscalEvent((List<Object>) any()))
-                .thenReturn(fiscalEventList);
 
         ArrayList<String> idList = new ArrayList<String>();
         idList.add("ek9d96e8-3b6b-4e36-9503-0f14a01af785");
@@ -158,7 +156,5 @@ class FiscalEventServiceTest {
         assertTrue(actualFiscalEventsV1SearchPostResult.size() > 0);
         verify(this.fiscalEventValidator).validateFiscalEventSearchPost((FiscalEventGetRequest) any());
         verify(this.fiscalEventRepository).searchFiscalEvent((Criteria) any());
-        verify(this.fiscalEventMapperUtil).mapDereferencedFiscalEventToFiscalEvent((List<Object>) any());
     }
 }
-

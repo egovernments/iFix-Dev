@@ -23,7 +23,7 @@ public class DepartmentEntityRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("departmentEntity")
-    private DepartmentEntity departmentEntity = null;
+    private DepartmentEntityDTO departmentEntityDTO = null;
 
 
 }

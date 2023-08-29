@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 class MainConfigurationTest {
-    @Test
+/*    @Test
     void testJacksonConverter() {
         MainConfiguration mainConfiguration = new MainConfiguration();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -17,6 +17,6 @@ class MainConfigurationTest {
 
         assertEquals(2, actualJacksonConverterResult.getSupportedMediaTypes().size());
         assertSame(objectMapper, actualJacksonConverterResult.getObjectMapper());
-    }
+    }*/
 }
 

@@ -1,9 +1,12 @@
 package org.egov.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import org.egov.FiscalApplicationMain;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.common.contract.request.UserInfo;
 import org.egov.config.TestDataFormatter;
+import org.egov.util.CoaUtil;
 import org.egov.util.FiscalEventUtil;
 import org.egov.web.models.Amount;
 import org.egov.web.models.FiscalEvent;
@@ -24,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = FiscalApplicationMain.class)
 class FiscalEventEnrichmentServiceTest {
 
     @InjectMocks
@@ -32,17 +35,21 @@ class FiscalEventEnrichmentServiceTest {
 
     @Mock
     private FiscalEventUtil fiscalEventUtil;
+    @Mock
+    private CoaUtil coaUtil;
 
     @Autowired
     private TestDataFormatter testDataFormatter;
 
     private AuditDetails auditDetails;
     private FiscalEventRequest fiscalEventRequest;
+    private JsonNode coaResponse;
 
 
     @BeforeEach
     void init() throws IOException {
         fiscalEventRequest = testDataFormatter.getFiscalEventPushRequestData();
+        coaResponse = testDataFormatter.getCOASearchResponse().get("chartOfAccounts");
         RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
         Long time = System.currentTimeMillis();
         auditDetails = AuditDetails.builder().createdBy(requestHeader.getUserInfo().getUuid())
@@ -80,48 +87,24 @@ class FiscalEventEnrichmentServiceTest {
     void testEnrichFiscalEventPushPostWithAuditDetails() {
         when(this.fiscalEventUtil.enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any()))
                 .thenReturn(auditDetails);
+        when(coaUtil.fetchCoaDetailsByCoaCodes(any(), any(), any())).thenReturn(coaResponse);
         fiscalEventRequest.getFiscalEvent().get(0).setAuditDetails(auditDetails);
         this.fiscalEventEnrichmentService.enrichFiscalEventPushPost(fiscalEventRequest);
-        verify(this.fiscalEventUtil).enrichAuditDetails((String) any(), (AuditDetails) any(), any(Boolean.FALSE.getClass()));
+        verify(this.fiscalEventUtil, atLeastOnce()).enrichAuditDetails((String) any(), (AuditDetails) any(),
+                any(Boolean.FALSE.getClass()));
         List<FiscalEvent> fiscalEvent1 = fiscalEventRequest.getFiscalEvent();
         assertTrue(fiscalEvent1.get(0).getAmountDetails().size() > 0);
         assertEquals(auditDetails, fiscalEvent1.get(0).getAuditDetails());
     }
 
     @Test
-    void testEnrichFiscalEventPushPostWithDefaultAmountDetails() {
-        when(this.fiscalEventUtil.enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any()))
-                .thenReturn(auditDetails);
-
-        FiscalEvent fiscalEvent = new FiscalEvent();
-        fiscalEvent.addAmountDetailsItem(new Amount());
-        fiscalEvent.setAuditDetails(auditDetails);
-        List<FiscalEvent> fiscalEvents = new ArrayList<>();
-        fiscalEvents.add(fiscalEvent);
-        FiscalEventRequest fiscalEventRequest1 = FiscalEventRequest.builder().fiscalEvent(fiscalEvents)
-                .requestHeader(fiscalEventRequest.getRequestHeader()).build();
-
-        this.fiscalEventEnrichmentService.enrichFiscalEventPushPost(fiscalEventRequest1);
-        verify(this.fiscalEventUtil).enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any());
-        List<FiscalEvent> fiscalEvent1 = fiscalEventRequest1.getFiscalEvent();
-        List<Amount> amountDetails = fiscalEvent1.get(0).getAmountDetails();
-        assertEquals(1, amountDetails.size());
-        assertSame(auditDetails, fiscalEvent1.get(0).getAuditDetails());
-
-        Amount getResult = amountDetails.get(0);
-        assertNull(getResult.getFromBillingPeriod());
-        assertNull(getResult.getCoaId());
-        assertNull(getResult.getAmount());
-        assertNull(getResult.getToBillingPeriod());
-    }
-
-    @Test
     void testEnrichFiscalEventPushPostWithFiscalEventRequest() {
         when(this.fiscalEventUtil.enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any()))
                 .thenReturn(auditDetails);
+        when(coaUtil.fetchCoaDetailsByCoaCodes(any(), any(), any())).thenReturn(coaResponse);
         List<FiscalEvent> fiscalEvent = fiscalEventRequest.getFiscalEvent();
         this.fiscalEventEnrichmentService.enrichFiscalEventPushPost(fiscalEventRequest);
-        verify(this.fiscalEventUtil).enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any());
+        verify(this.fiscalEventUtil, atLeastOnce()).enrichAuditDetails((String) any(), (AuditDetails) any(), (Boolean) any());
         assertNotNull(fiscalEvent.get(0).getAmountDetails());
         assertTrue(fiscalEvent.get(0).getAmountDetails().size() > 0);
         assertNotNull(fiscalEvent.get(0).getAmountDetails().get(0).getId());

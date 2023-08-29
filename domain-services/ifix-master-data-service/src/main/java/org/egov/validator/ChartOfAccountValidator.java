@@ -12,6 +12,7 @@ import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,9 @@ public class ChartOfAccountValidator {
     @Autowired
     private CoaUtil coaUtil;
 
-    @Autowired
-    private ChartOfAccountRepository coaRepository;
+
+	 @Autowired
+     private ChartOfAccountRepository chartOfAccountRepository;
 
     public void validateCreatePost(COARequest coaRequest) {
         log.info("Enter into ChartOfAccountValidator.validateCreatePost()");
@@ -120,11 +122,9 @@ public class ChartOfAccountValidator {
             errorMap.put("OBJECT_HEAD_NAME", "Object head name's length is invalid");
 
 
-        //validate the tenant id is exist in the system or not
+        //validate if tenant id exist in the system or not
         if (StringUtils.isNotBlank(chartOfAccount.getTenantId())) {
-            //call the Tenant Service for search, if doesn't exist add in the error map
-            List<Government> governments = coaUtil.searchTenants(requestHeader, chartOfAccount);
-            if (governments == null || governments.isEmpty()) {
+            if (!coaUtil.validateTenant(chartOfAccount.getTenantId(), requestHeader)) {
                 errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id doesn't exist in the system");
             }
         }
@@ -137,7 +137,8 @@ public class ChartOfAccountValidator {
     }
 
     public void validateCoaCode(COASearchCriteria searchCriteria) {
-        List<ChartOfAccount> chartOfAccounts = coaRepository.search(searchCriteria);
+        List<ChartOfAccount> chartOfAccounts = chartOfAccountRepository.search(searchCriteria);
+        		
         if (!chartOfAccounts.isEmpty())
             throw new CustomException("DUPLICATE_COA_CODE", "This coa code exists in the system");
     }

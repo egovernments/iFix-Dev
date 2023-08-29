@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@PropertySource("classpath:application_test.properties")
+@PropertySource("classpath:application.properties")
 public class TestProperties {
 
     @Value("${test.data.package}")

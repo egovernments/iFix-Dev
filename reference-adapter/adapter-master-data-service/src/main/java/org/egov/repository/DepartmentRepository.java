@@ -3,11 +3,11 @@ package org.egov.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.repository.queryBuilder.DepartmentQueryBuilder;
-import org.egov.web.models.Department;
+import org.egov.repository.rowmapper.DepartmentRowMapper;
 import org.egov.web.models.DepartmentSearchCriteria;
+import org.egov.web.models.persist.Department;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,23 +15,20 @@ import java.util.List;
 @Repository
 @Slf4j
 public class DepartmentRepository {
-
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private DepartmentRowMapper departmentRowMapper;
 
     @Autowired
     private DepartmentQueryBuilder departmentQueryBuilder;
 
     public List<Department> search(DepartmentSearchCriteria searchCriteria) {
-        Query searchQuery = departmentQueryBuilder.buildSearchQuery(searchCriteria);
-        return (mongoTemplate.find(searchQuery, Department.class));
-    }
+        return jdbcTemplate.query(
+                departmentQueryBuilder
+                        .buildSearchQuery(searchCriteria), departmentRowMapper);
 
-    /**
-     * @param department
-     */
-    public void save(Department department) {
-        mongoTemplate.save(department);
+
     }
 }

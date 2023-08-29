@@ -23,7 +23,7 @@ public class DepartmentHierarchyLevelRequest {
     private RequestHeader requestHeader = null;
 
     @JsonProperty("departmentHierarchyLevel")
-    private DepartmentHierarchyLevel departmentHierarchyLevel = null;
+    private DepartmentHierarchyLevelDTO departmentHierarchyLevelDTO = null;
 
 
 }

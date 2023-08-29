@@ -62,7 +62,7 @@ public class DepartmentEntityApiController {
 
         DepartmentEntityResponse departmentEntityResponse = DepartmentEntityResponse.builder()
                 .responseHeader(responseHeader)
-                .departmentEntity(Collections.singletonList(departmentEntityRequest.getDepartmentEntity())).build();
+                .departmentEntity(Collections.singletonList(departmentEntityRequest.getDepartmentEntityDTO())).build();
 
         return new ResponseEntity<DepartmentEntityResponse>(departmentEntityResponse, HttpStatus.OK);
     }
@@ -102,7 +102,7 @@ public class DepartmentEntityApiController {
 
         DepartmentEntityResponse departmentEntityResponse = DepartmentEntityResponse.builder()
                 .responseHeader(responseHeader)
-                .departmentEntity(Collections.singletonList(departmentEntityRequest.getDepartmentEntity())).build();
+                .departmentEntity(Collections.singletonList(departmentEntityRequest.getDepartmentEntityDTO())).build();
 
         return new ResponseEntity<DepartmentEntityResponse>(departmentEntityResponse, HttpStatus.OK);
     }

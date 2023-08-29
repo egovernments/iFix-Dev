@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.AuditDetails;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.util.MasterDataServiceUtil;
-import org.egov.web.models.Expenditure;
+import org.egov.web.models.ExpenditureDTO;
 import org.egov.web.models.ExpenditureRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,17 +20,17 @@ public class ExpenditureEnrichmentService {
     private MasterDataServiceUtil mdsUtil;
 
     public void enrichCreateExpenditure(ExpenditureRequest expenditureRequest) {
-        Expenditure expenditure = expenditureRequest.getExpenditure();
+        ExpenditureDTO expenditureDTO = expenditureRequest.getExpenditureDTO();
         RequestHeader requestHeader = expenditureRequest.getRequestHeader();
 
         AuditDetails auditDetails = null;
-        if (expenditure.getAuditDetails() == null) {
-            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), expenditure.getAuditDetails(), true);
+        if (expenditureDTO.getAuditDetails() == null) {
+            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), expenditureDTO.getAuditDetails(), true);
         } else {
-            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), expenditure.getAuditDetails(), false);
+            auditDetails = mdsUtil.enrichAuditDetails(requestHeader.getUserInfo().getUuid(), expenditureDTO.getAuditDetails(), false);
         }
 
-        expenditure.setAuditDetails(auditDetails);
-        expenditure.setId(UUID.randomUUID().toString());
+        expenditureDTO.setAuditDetails(auditDetails);
+        expenditureDTO.setId(UUID.randomUUID().toString());
     }
 }

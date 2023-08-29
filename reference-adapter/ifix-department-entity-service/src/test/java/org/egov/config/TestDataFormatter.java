@@ -2,8 +2,6 @@ package org.egov.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +76,7 @@ public class TestDataFormatter {
         JsonNode deptEntityNode = rootNode.get("departmentEntity");
 
         return (DepartmentEntityResponse.builder().responseHeader(objectMapper.convertValue(headerNode, ResponseHeader.class))
-                .departmentEntity(Collections.singletonList(objectMapper.convertValue(deptEntityNode.get(0), DepartmentEntity.class)))
+                .departmentEntity(Collections.singletonList(objectMapper.convertValue(deptEntityNode.get(0), DepartmentEntityDTO.class)))
                 .build());
     }
 
@@ -105,7 +103,7 @@ public class TestDataFormatter {
         JsonNode deptEntityNode = rootNode.get("departmentEntity");
 
         return (DepartmentEntityResponse.builder().responseHeader(objectMapper.convertValue(headerNode, ResponseHeader.class))
-                .departmentEntity(Collections.singletonList(objectMapper.convertValue(deptEntityNode.get(0), DepartmentEntity.class)))
+                .departmentEntity(Collections.singletonList(objectMapper.convertValue(deptEntityNode.get(0), DepartmentEntityDTO.class)))
                 .build());
     }
 

@@ -36,13 +36,13 @@ department itself._
              
              1. Find the department entity parent where the new children need to be added. Do search by name and hierarchy level.
               
-              db.departmentEntity.find({"name" : "<current_department_entity's_name>","hierarchyLevel": <Current_department_entity_hierarchy_level>});
+              db.departmentEntityDTO.find({"name" : "<current_department_entity's_name>","hierarchyLevel": <Current_department_entity_hierarchy_level>});
               
               2. Append the department entity id at the end of the current department entity children's list. So first find the length of the current array and then set it as
                  "children.n": "<Resulted_department_entity_id>" (where n is the length of the array.). 
              
              e.g: 
-             db.departmentEntity.update({"_id": "<current_department_entity_id>"},{$set:
+             db.departmentEntityDTO.update({"_id": "<current_department_entity_id>"},{$set:
              {"children.n": "<Resulted_department_entity_id_1>",
              "children.n+1": "<Resulted_department_entity_id_2>"}
              })

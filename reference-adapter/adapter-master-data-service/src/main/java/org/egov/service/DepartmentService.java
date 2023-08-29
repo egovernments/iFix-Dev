@@ -2,12 +2,16 @@ package org.egov.service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.repository.DepartmentRepository;
+import org.egov.util.DtoWrapper;
+import org.egov.util.KafkaProducer;
 import org.egov.validator.DepartmentValidator;
-import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentDTO;
 import org.egov.web.models.DepartmentRequest;
 import org.egov.web.models.DepartmentSearchCriteria;
 import org.egov.web.models.DepartmentSearchRequest;
+import org.egov.web.models.persist.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +31,23 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepo;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private MasterDataServiceConfiguration masterDataServiceConfiguration;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
+
     /**
-     * Search the Department based on search criteria
+     * Search the DepartmentConst based on search criteria
      *
      * @param searchRequest
      * @return
      */
-    public List<Department> departmentV1SearchPost(DepartmentSearchRequest searchRequest) {
+    public List<DepartmentDTO> departmentV1SearchPost(DepartmentSearchRequest searchRequest) {
         validator.validateSearchPost(searchRequest);
-        enricher.enrichSearchPost(searchRequest);
 
         DepartmentSearchCriteria searchCriteria = searchRequest.getCriteria();
         if (searchCriteria.isEmpty())
@@ -46,7 +58,7 @@ public class DepartmentService {
         if (departments == null || departments.isEmpty())
             Collections.emptyList();
 
-        return departments;
+        return dtoWrapper.wrapDepartmentEntityListIntoDTOs(departments);
     }
 
     /**
@@ -56,7 +68,8 @@ public class DepartmentService {
     public DepartmentRequest createDepartment(DepartmentRequest departmentRequest) {
         validator.validateCreateRequestData(departmentRequest);
         enricher.enrichDepartmentData(departmentRequest);
-        departmentRepo.save(departmentRequest.getDepartment());
+
+        kafkaProducer.push(masterDataServiceConfiguration.getPersisterKafkaDepartmentCreateTopic(), departmentRequest);
 
         return departmentRequest;
     }

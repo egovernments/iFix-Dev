@@ -1,10 +1,14 @@
 package org.egov.service;
 
+import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.repository.ExpenditureRepository;
+import org.egov.util.DtoWrapper;
+import org.egov.util.KafkaProducer;
 import org.egov.validator.ExpenditureValidator;
-import org.egov.web.models.Expenditure;
+import org.egov.web.models.ExpenditureDTO;
 import org.egov.web.models.ExpenditureRequest;
 import org.egov.web.models.ExpenditureSearchRequest;
+import org.egov.web.models.persist.Expenditure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +26,32 @@ public class ExpenditureService {
     @Autowired
     private ExpenditureEnrichmentService enricher;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private MasterDataServiceConfiguration masterDataServiceConfiguration;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
+
     /**
      * @param expenditureSearchRequest
      * @return
      */
-    public List<Expenditure> findAllByCriteria(ExpenditureSearchRequest expenditureSearchRequest) {
+    public List<ExpenditureDTO> findAllByCriteria(ExpenditureSearchRequest expenditureSearchRequest) {
         expenditureValidator.validateExpenditureSearchRequest(expenditureSearchRequest);
-        return expenditureRepository.findAllByCriteria(expenditureSearchRequest.getCriteria());
+        List<Expenditure> expenditureList = expenditureRepository.findAllByCriteria(expenditureSearchRequest.getCriteria());
+
+        return dtoWrapper.wrapExpenditureDTOByEntity(expenditureList);
     }
 
     public ExpenditureRequest createV1Expenditure(ExpenditureRequest expenditureRequest) {
         expenditureValidator.validateExpenditureCreateRequest(expenditureRequest);
         enricher.enrichCreateExpenditure(expenditureRequest);
-        expenditureRepository.save(expenditureRequest.getExpenditure());
+
+        kafkaProducer.push(masterDataServiceConfiguration.getPersisterKafkaExpenditureCreateTopic(), expenditureRequest);
+
         return expenditureRequest;
     }
 }

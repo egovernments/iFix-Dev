@@ -30,14 +30,14 @@ public class ExpenditureResponse {
 
     @JsonProperty("expenditure")
     @Valid
-    private List<Expenditure> expenditure = null;
+    private List<ExpenditureDTO> expenditureDTO = null;
 
 
-    public ExpenditureResponse addEatItem(Expenditure expenditureItem) {
-        if (this.expenditure == null) {
-            this.expenditure = new ArrayList<>();
+    public ExpenditureResponse addEatItem(ExpenditureDTO expenditureDTOItem) {
+        if (this.expenditureDTO == null) {
+            this.expenditureDTO = new ArrayList<>();
         }
-        this.expenditure.add(expenditureItem);
+        this.expenditureDTO.add(expenditureDTOItem);
         return this;
     }
 

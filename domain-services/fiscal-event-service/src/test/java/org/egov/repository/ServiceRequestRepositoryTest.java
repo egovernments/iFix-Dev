@@ -1,6 +1,7 @@
 package org.egov.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.egov.FiscalApplicationMain;
 import org.egov.tracer.model.ServiceCallException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = FiscalApplicationMain.class)
 class ServiceRequestRepositoryTest {
 
 
@@ -69,7 +70,7 @@ class ServiceRequestRepositoryTest {
         when(clientHttpRequestFactory.createRequest((java.net.URI) any(), (org.springframework.http.HttpMethod) any()))
                 .thenThrow(new HttpClientErrorException(HttpStatus.CONTINUE));
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-        ServiceRequestRepository serviceRequestRepository = new ServiceRequestRepository(objectMapper,restTemplate);
+        ServiceRequestRepository serviceRequestRepository = new ServiceRequestRepository(objectMapper, restTemplate);
         assertThrows(ServiceCallException.class,
                 () -> (serviceRequestRepository).fetchResult("Uri", "Request"));
         verify(objectMapper).configure((com.fasterxml.jackson.databind.SerializationFeature) any(), anyBoolean());

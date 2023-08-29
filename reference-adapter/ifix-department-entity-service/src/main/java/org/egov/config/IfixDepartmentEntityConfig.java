@@ -50,4 +50,14 @@ public class IfixDepartmentEntityConfig {
     @Value("${maximum.supported.department.hierarchy}")
     private Integer maximumSupportedDepartmentHierarchy;
 
+    @Value("${persister.kafka.department.entity.create.topic}")
+    private String persisterKafkaDepartmentEntityCreateTopic;
+
+    @Value("${persister.kafka.department.entity.update.topic}")
+    private String persisterKafkaDepartmentEntityUpdateTopic;
+
+    @Value("${persister.kafka.department.hierarchy.create.topic}")
+    private String persisterKafkaDepartmentHierarchyCreateTopic;
+
+
 }

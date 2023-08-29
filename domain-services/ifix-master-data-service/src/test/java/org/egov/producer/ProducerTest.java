@@ -3,6 +3,7 @@ package org.egov.producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.TopicPartition;
+import org.egov.MasterApplicationMain;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,7 +15,7 @@ import org.springframework.kafka.support.SendResult;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = MasterApplicationMain.class)
 class ProducerTest {
 
     @Mock
