@@ -46,10 +46,13 @@ public class FiscalDataEnrichmentService {
         DepartmentHierarchyLevelSearchRequest request = DepartmentHierarchyLevelSearchRequest.builder().criteria(criteria).requestHeader(new RequestHeader()).build();
         Object result = serviceRequestRepository.fetchResult(getIfixDepartmentEntityUri(), request);
         DepartmentHierarchyLevelResponse response = objectMapper.convertValue(result, DepartmentHierarchyLevelResponse.class);
+        log.info("Response:"+response);
         HashMap<Integer, String> hierarchyLevelVsLabelMap = new HashMap<>();
         response.getDepartmentHierarchyLevel().forEach(hierarchyObject -> {
-            if(!hierarchyLevelVsLabelMap.containsKey(hierarchyObject.getLevel()))
+            if(!hierarchyLevelVsLabelMap.containsKey(hierarchyObject.getLevel())) {
+                log.info("Level : "  +hierarchyObject.getLevel() +" label:" +hierarchyObject.getLabel());
                 hierarchyLevelVsLabelMap.put(hierarchyObject.getLevel(), hierarchyObject.getLabel().replaceAll(" ", "_"));
+            }
         });
         return hierarchyLevelVsLabelMap;
     }
