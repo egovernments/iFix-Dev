@@ -46,19 +46,15 @@ public class FiscalDataEnrichmentService {
         DepartmentHierarchyLevelSearchRequest request = DepartmentHierarchyLevelSearchRequest.builder().criteria(criteria).requestHeader(new RequestHeader()).build();
         Object result = serviceRequestRepository.fetchResult(getIfixDepartmentEntityUri(), request);
         DepartmentHierarchyLevelResponse response = objectMapper.convertValue(result, DepartmentHierarchyLevelResponse.class);
-        log.info("Response:"+response);
         HashMap<Integer, String> hierarchyLevelVsLabelMap = new HashMap<>();
         response.getDepartmentHierarchyLevel().forEach(hierarchyObject -> {
-            if(!hierarchyLevelVsLabelMap.containsKey(hierarchyObject.getLevel())) {
-                log.info("Level : "  +hierarchyObject.getLevel() +" label:" +hierarchyObject.getLabel());
+            if(!hierarchyLevelVsLabelMap.containsKey(hierarchyObject.getLevel()))
                 hierarchyLevelVsLabelMap.put(hierarchyObject.getLevel(), hierarchyObject.getLabel().replaceAll(" ", "_"));
-            }
         });
         return hierarchyLevelVsLabelMap;
     }
 
     public void enrichFiscalData(FiscalEvent fiscalEvent){
-        log.info("FISCAL EVENT :"+fiscalEvent);
         HashMap<String, Object> attributes = (HashMap<String, Object>) fiscalEvent.getAttributes();
 
         HashMap<String, Object> departmentEntity = new HashMap<>();
@@ -77,16 +73,13 @@ public class FiscalDataEnrichmentService {
             tenantIdVshierarchyLevelVsLabelMap.put(fiscalEvent.getTenantId(),
                     loadDepartmentHierarchyLevel(fiscalEvent.getTenantId()));
         }
-        log.info("ancestryList:" +ancestryList );
-        log.info("tenantIdVshierarchyLevelVsLabelMap:" +tenantIdVshierarchyLevelVsLabelMap);
+
         ancestryList.forEach(ancestry -> {
-            if(ancestry.containsKey("hierarchyLevel") && ancestry.containsKey("code")) {
-               log.info("Code:"+(String) ancestry.get("code"));
+            if(ancestry.containsKey("hierarchyLevel") && ancestry.containsKey("code"))
                 hierarchyMap.put(tenantIdVshierarchyLevelVsLabelMap.get(fiscalEvent.getTenantId()).get(ancestry.get(
-                        "hierarchyLevel")), (String) ancestry.get("code"));
-            }
+                        "hierarchyLevel")), (String)ancestry.get("code"));
         });
-        log.info("hierarchyMap:" +hierarchyMap );
+
         fiscalEvent.setHierarchyMap(hierarchyMap);
 
         log.info(fiscalEvent.toString());
