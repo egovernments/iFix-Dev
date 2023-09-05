@@ -58,6 +58,7 @@ public class FiscalDataEnrichmentService {
     }
 
     public void enrichFiscalData(FiscalEvent fiscalEvent){
+        log.info("FISCAL EVENT :"+fiscalEvent);
         HashMap<String, Object> attributes = (HashMap<String, Object>) fiscalEvent.getAttributes();
 
         HashMap<String, Object> departmentEntity = new HashMap<>();
@@ -76,13 +77,16 @@ public class FiscalDataEnrichmentService {
             tenantIdVshierarchyLevelVsLabelMap.put(fiscalEvent.getTenantId(),
                     loadDepartmentHierarchyLevel(fiscalEvent.getTenantId()));
         }
-
+        log.info("ancestryList:" +ancestryList );
+        log.info("tenantIdVshierarchyLevelVsLabelMap:" +tenantIdVshierarchyLevelVsLabelMap);
         ancestryList.forEach(ancestry -> {
-            if(ancestry.containsKey("hierarchyLevel") && ancestry.containsKey("code"))
+            if(ancestry.containsKey("hierarchyLevel") && ancestry.containsKey("code")) {
+               log.info("Code:"+(String) ancestry.get("code"));
                 hierarchyMap.put(tenantIdVshierarchyLevelVsLabelMap.get(fiscalEvent.getTenantId()).get(ancestry.get(
-                        "hierarchyLevel")), (String)ancestry.get("code"));
+                        "hierarchyLevel")), (String) ancestry.get("code"));
+            }
         });
-
+        log.info("hierarchyMap:" +hierarchyMap );
         fiscalEvent.setHierarchyMap(hierarchyMap);
 
         log.info(fiscalEvent.toString());
