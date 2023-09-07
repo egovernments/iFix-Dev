@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiParam;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.service.FiscalEventService;
 import org.egov.util.ResponseHeaderCreator;
-import org.egov.web.models.FiscalEvent;
-import org.egov.web.models.FiscalEventGetRequest;
-import org.egov.web.models.FiscalEventRequest;
-import org.egov.web.models.FiscalEventResponse;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +58,26 @@ public class FiscalApiController {
                 .fiscalEvent(fiscalEventList).build();
 
         return new ResponseEntity<FiscalEventResponse>(fiscalEventResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<FiscalEventResponse> fiscalEventsV1PlainSearchPost(@Valid @RequestBody FiscalEventPlainSearchRequest body) {
+        List<FiscalEvent> fiscalEventList = fiscalEventService.fiscalEventsV1PlainSearchPost(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        FiscalEventResponse fiscalEventResponse = FiscalEventResponse.builder().responseHeader(responseHeader)
+                .fiscalEvent(fiscalEventList).build();
+
+        return new ResponseEntity<FiscalEventResponse>(fiscalEventResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_count", method = RequestMethod.POST)
+    public ResponseEntity<FiscalEventCountResponse> fiscalEventsV1Count(@Valid @RequestBody FiscalEventPlainSearchRequest body) {
+        Long count = fiscalEventService.getFiscalEventsCount(body);
+        ResponseHeader responseHeader = responseHeaderCreator.createResponseHeaderFromRequestHeader(body.getRequestHeader(), true);
+        FiscalEventCountResponse fiscalEventCountResponse = FiscalEventCountResponse.builder().responseHeader(responseHeader)
+                .count(count).build();
+
+        return new ResponseEntity<FiscalEventCountResponse>(fiscalEventCountResponse, HttpStatus.OK);
     }
 
 }

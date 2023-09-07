@@ -3,12 +3,16 @@ package org.egov.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.config.IfixDepartmentEntityConfig;
 import org.egov.repository.DepartmentHierarchyLevelRepository;
+import org.egov.util.DtoWrapper;
+import org.egov.util.KafkaProducer;
 import org.egov.validator.DepartmentHierarchyLevelValidator;
-import org.egov.web.models.DepartmentHierarchyLevel;
+import org.egov.web.models.DepartmentHierarchyLevelDTO;
 import org.egov.web.models.DepartmentHierarchyLevelRequest;
 import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
 import org.egov.web.models.DepartmentHierarchyLevelSearchRequest;
+import org.egov.web.models.persist.DepartmentHierarchyLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,15 @@ public class DepartmentHierarchyLevelService {
     @Autowired
     private DepartmentHierarchyLevelRepository hierarchyLevelRepository;
 
+    @Autowired
+    private IfixDepartmentEntityConfig ifixDepartmentEntityConfig;
+
+    @Autowired
+    private DtoWrapper dtoWrapper;
+
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
     /**
      * validate the department hierarchy level request , enrich and save the details in
      * db and return the enriched request
@@ -38,7 +51,9 @@ public class DepartmentHierarchyLevelService {
     public DepartmentHierarchyLevelRequest createDepartmentEntityHierarchyLevel(DepartmentHierarchyLevelRequest request) {
         validator.validateHierarchyLevelCreatePost(request);
         enricher.enrichHierarchyLevelCreatePost(request);
-        hierarchyLevelRepository.save(request.getDepartmentHierarchyLevel());
+
+        kafkaProducer.push(ifixDepartmentEntityConfig.getPersisterKafkaDepartmentHierarchyCreateTopic(), request);
+
         return request;
     }
 
@@ -48,7 +63,7 @@ public class DepartmentHierarchyLevelService {
      * @param searchRequest
      * @return
      */
-    public List<DepartmentHierarchyLevel> searchDepartmentEntityHierarchyLevel(DepartmentHierarchyLevelSearchRequest searchRequest) {
+    public List<DepartmentHierarchyLevelDTO> searchDepartmentEntityHierarchyLevel(DepartmentHierarchyLevelSearchRequest searchRequest) {
         validator.validateHierarchyLevelSearchPost(searchRequest);
         DepartmentHierarchyLevelSearchCriteria searchCriteria = searchRequest.getCriteria();
 
@@ -59,11 +74,11 @@ public class DepartmentHierarchyLevelService {
             return Collections.emptyList();
         }
 
-        List<DepartmentHierarchyLevel> departmentHierarchyLevels = hierarchyLevelRepository.searchDeptHierarchyLevel(searchCriteria);
+        List<DepartmentHierarchyLevel> departmentHierarchyLevelList = hierarchyLevelRepository.findByParamExistence(searchCriteria);
 
-        if (departmentHierarchyLevels == null || departmentHierarchyLevels.isEmpty())
+        if (departmentHierarchyLevelList == null || departmentHierarchyLevelList.isEmpty())
             return Collections.emptyList();
 
-        return departmentHierarchyLevels;
+        return dtoWrapper.wrapDepartmentHierarchyLevelIntoDTO(departmentHierarchyLevelList);
     }
 }

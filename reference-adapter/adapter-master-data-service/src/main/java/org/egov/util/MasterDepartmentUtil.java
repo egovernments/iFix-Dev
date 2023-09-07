@@ -10,7 +10,7 @@ import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.MasterDataServiceConfiguration;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
-import org.egov.web.models.Department;
+import org.egov.web.models.DepartmentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class MasterDepartmentUtil {
      * @param requestHeader
      * @return
      */
-    public List<Department> fetchDepartment(List<String> departmentIds, String tenantId, RequestHeader requestHeader) {
+    public List<DepartmentDTO> fetchDepartment(List<String> departmentIds, String tenantId, RequestHeader requestHeader) {
         if ((departmentIds != null && !departmentIds.isEmpty()) && StringUtils.isNotBlank(tenantId) && requestHeader != null) {
             Map<String, Object> departmentValueMap = new HashMap<>();
             departmentValueMap.put(MasterDataConstants.IDS, departmentIds);
@@ -50,9 +50,9 @@ public class MasterDepartmentUtil {
 
             Object response = searchRequestRepository.fetchResult(createSearchDepartmentUrl(), departmentMap);
             try {
-                List<Department> departmentList = JsonPath.read(response, MasterDataConstants.DEPARTMENT_JSON_PATH);
+                List<DepartmentDTO> departmentList = JsonPath.read(response, MasterDataConstants.DEPARTMENT_JSON_PATH);
 
-                return objectMapper.convertValue(departmentList, new TypeReference<List<Department>>() {
+                return objectMapper.convertValue(departmentList, new TypeReference<List<DepartmentDTO>>() {
                 });
             } catch (Exception e) {
                 throw new CustomException(MasterDataConstants.JSONPATH_ERROR, "Failed to parse expenditure response");

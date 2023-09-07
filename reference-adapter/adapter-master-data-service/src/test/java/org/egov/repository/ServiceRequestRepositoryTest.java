@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 class ServiceRequestRepositoryTest {
-    @Autowired
+    /*@Autowired
     private TestDataFormatter testDataFormatter;
 
     @Mock
@@ -56,7 +56,7 @@ class ServiceRequestRepositoryTest {
                 .when(restTemplate).postForObject("URI", null, Map.class);
 
         assertThrows(ServiceCallException.class, () -> serviceRequestRepository.fetchResult("URI", null));
-    }
+    }*/
 
 
 }

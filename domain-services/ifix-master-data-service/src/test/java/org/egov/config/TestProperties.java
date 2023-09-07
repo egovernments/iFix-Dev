@@ -7,26 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@PropertySource("classpath:application_test.properties")
+@PropertySource("classpath:application.properties")
 public class TestProperties {
 
     @Value("${test.data.package}")
     private String testDataPackage;
-
-    @Value("${gov.create.request.data}")
-    private String govCreateRequestData;
-
-    @Value("${gov.create.response.data}")
-    private String govCreateResponseData;
-
-    @Value("${gov.search.request.data}")
-    private String govSearchRequestData;
-
-    @Value("${gov.search.response.data}")
-    private String govSearchResponseData;
-
-    @Value("${gov.create.request.data.headless}")
-    private String govCreateRequestDataHeadless;
 
     @Value("${coa.create.request.data}")
     private String coaCreateRequestData;
@@ -42,4 +27,8 @@ public class TestProperties {
 
     @Value("${coa.create.request.data.headless}")
     private String coaCreateRequestDataHeadless;
+
+    @Value("${gov.search.response.data}")
+    public String govSearchResponseData;
+
 }

@@ -108,16 +108,6 @@ public class TestDataFormatter {
         return validGovernmentResponse;
     }
 
-    public JsonNode getEmptyGovernmentSearchResponse() throws IOException {
-        ObjectNode invalidGovernmentResponse =
-                (ObjectNode) new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()));
-
-        ArrayNode emptyArray = new ObjectMapper().createArrayNode();
-        invalidGovernmentResponse.set("government", emptyArray);
-
-        return invalidGovernmentResponse;
-    }
-
     public JsonNode getCOASearchResponse() throws IOException {
         JsonNode coaSearchResponse =
                 new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getCoaSearchResponseData()));

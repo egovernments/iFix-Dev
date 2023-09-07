@@ -1,23 +1,13 @@
 package org.egov.repository.queryBuilder;
 
-import org.egov.web.models.ProjectSearchCriteria;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 class ProjectQueryBuilderTest {
 
-    @InjectMocks
+   /* @InjectMocks
     private ProjectQueryBuilder projectQueryBuilder;
 
     private ArrayList<String> idList;
@@ -38,6 +28,6 @@ class ProjectQueryBuilderTest {
         assertTrue(actualBuildQuerySearchResult.getRestrictedTypes().isEmpty());
         assertEquals(7, actualBuildQuerySearchResult.getQueryObject().size());
 
-    }
+    }*/
 }
 

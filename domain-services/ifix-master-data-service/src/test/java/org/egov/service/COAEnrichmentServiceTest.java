@@ -1,5 +1,6 @@
 package org.egov.service;
 
+import org.egov.MasterApplicationMain;
 import org.egov.common.contract.AuditDetails;
 import org.egov.config.TestDataFormatter;
 import org.egov.tracer.model.CustomException;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest()
+@SpringBootTest(classes = MasterApplicationMain.class)
 class COAEnrichmentServiceTest {
     @Autowired
     private TestDataFormatter testDataFormatter;
@@ -35,17 +36,13 @@ class COAEnrichmentServiceTest {
     private MasterDataServiceUtil masterDataServiceUtil;
 
     private COARequest coaRequest;
-    private COASearchRequest coaSearchRequest;
     private COAResponse coaResponse;
-    private COARequest headlessCoaRequest;
     private COAResponse coaCreateResponse;
     private AuditDetails auditDetails;
 
     @BeforeAll
     public void init() throws IOException {
         coaRequest = testDataFormatter.getCoaRequestData();
-        headlessCoaRequest = testDataFormatter.getHeadlessCoaRequestData();
-        coaSearchRequest = testDataFormatter.getCoaSearchRequestData();
 
         coaCreateResponse = testDataFormatter.getCoaCreateResponseData();
         coaResponse = testDataFormatter.getCoaSearchResponseData();
@@ -99,9 +96,8 @@ class COAEnrichmentServiceTest {
     @Test
     void testEnrichSearchPost() {
         COASearchRequest coaSearchRequest = new COASearchRequest();
-        this.cOAEnrichmentService.enrichSearchPost(coaSearchRequest);
+        this.cOAEnrichmentService.createCOASearchCriteria(coaRequest.getChartOfAccount());
         assertNull(coaSearchRequest.getCriteria());
         assertNull(coaSearchRequest.getRequestHeader());
     }
 }
-

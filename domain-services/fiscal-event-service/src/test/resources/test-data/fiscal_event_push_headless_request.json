@@ -1,52 +1,52 @@
 {
   "fiscalEvent": [
-  {
-    "tenantId": "pb",
-    "eventType": "RECEIPT",
-    "eventTime": 1628177497000,
-    "referenceId": "013e9c56-8207-4dac-9f4d-f1e20bd824e7",
-    "receivers": [
-      "string"
-    ],
-    "amountDetails": [
-      {
-        "amount": 221,
-        "coaCode": "0215-01-102-00-00-01",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      },
-      {
-        "amount": 331,
-        "coaCode": "8247-12-373-56-78-90",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      },
-      {
-        "amount": 441,
-        "coaCode": "0216-01-102-00-00-01",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      },
-      {
-        "amount":551,
-        "coaCode": "8246-12-373-56-78-90",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      },
-      {
-        "amount": 661,
-        "coaCode": "0210-01-102-00-00-01",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      },
-      {
-        "amount": 771,
-        "coaCode": "8346-12-373-56-78-90",
-        "fromBillingPeriod": 1622907239000,
-        "toBillingPeriod": 1628177643000
-      }
-    ],
-    "attributes": {}
-  }
+    {
+      "tenantId": "pb",
+      "eventType": "RECEIPT",
+      "eventTime": 1628177497000,
+      "referenceId": "013e9c56-8207-4dac-9f4d-f1e20bd824e7",
+      "receivers": [
+        "string"
+      ],
+      "amountDetails": [
+        {
+          "amount": 221,
+          "coaCode": "0215-01-102-00-00-01",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        },
+        {
+          "amount": 331,
+          "coaCode": "8247-12-373-56-78-90",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        },
+        {
+          "amount": 441,
+          "coaCode": "0216-01-102-00-00-01",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        },
+        {
+          "amount": 551,
+          "coaCode": "8246-12-373-56-78-90",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        },
+        {
+          "amount": 661,
+          "coaCode": "0210-01-102-00-00-01",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        },
+        {
+          "amount": 771,
+          "coaCode": "8346-12-373-56-78-90",
+          "fromBillingPeriod": 1622907239000,
+          "toBillingPeriod": 1628177643000
+        }
+      ],
+      "attributes": {}
+    }
   ]
 }

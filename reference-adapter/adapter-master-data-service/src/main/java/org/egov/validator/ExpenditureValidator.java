@@ -56,7 +56,7 @@ public class ExpenditureValidator {
 
     public void validateExpenditureCreateRequest(ExpenditureRequest expenditureRequest) {
         RequestHeader requestHeader = expenditureRequest.getRequestHeader();
-        Expenditure expenditure = expenditureRequest.getExpenditure();
+        ExpenditureDTO expenditureDTO = expenditureRequest.getExpenditureDTO();
         Map<String, String> errorMap = new HashMap<>();
 
         //Header validation
@@ -67,49 +67,52 @@ public class ExpenditureValidator {
             errorMap.put(MasterDataConstants.USER_INFO, "User info is missing");
         }
 
-        if (expenditure == null) {
+        if (expenditureDTO == null) {
             throw new CustomException(MasterDataConstants.REQUEST_PAYLOAD_MISSING, "Expenditure request is invalid");
         }
 
         //Tenant id
-        if (StringUtils.isBlank(expenditure.getTenantId())) {
+        if (StringUtils.isBlank(expenditureDTO.getTenantId())) {
             errorMap.put(MasterDataConstants.TENANT_ID, "Tenant id is mandatory");
         }
-        if (StringUtils.isNotBlank(expenditure.getTenantId())
-                && (expenditure.getTenantId().length() < 2 || expenditure.getTenantId().length() > 64)) {
+        if (StringUtils.isNotBlank(expenditureDTO.getTenantId())
+                && (expenditureDTO.getTenantId().length() < 2 || expenditureDTO.getTenantId().length() > 64)) {
             throw new CustomException(MasterDataConstants.TENANT_ID, "Tenant id length is invalid. " +
                     MasterDataConstants.LENGTH_RANGE_2_64);
         }
 
         //code
-        if (StringUtils.isBlank(expenditure.getCode())) {
+        if (StringUtils.isBlank(expenditureDTO.getCode())) {
             errorMap.put(MasterDataConstants.EXPENDITURE_CODE, "Expenditure code is missing in request data");
         }
-        if (StringUtils.isNotBlank(expenditure.getCode())
-                && (expenditure.getCode().length() < 2 || expenditure.getCode().length() > 64)) {
+        if (StringUtils.isNotBlank(expenditureDTO.getCode())
+                && (expenditureDTO.getCode().length() < 2 || expenditureDTO.getCode().length() > 64)) {
             errorMap.put(MasterDataConstants.EXPENDITURE_CODE, "Expenditure code length is invalid. " +
                     MasterDataConstants.LENGTH_RANGE_2_64);
         }
 
         //name
-        if (StringUtils.isBlank(expenditure.getName())) {
+        if (StringUtils.isBlank(expenditureDTO.getName())) {
             errorMap.put(MasterDataConstants.EXPENDITURE_NAME, "Expenditure name is missing in request data");
         }
-        if (StringUtils.isNotBlank(expenditure.getName())
-                && (expenditure.getName().length() < 2 || expenditure.getName().length() > 256)) {
+        if (StringUtils.isNotBlank(expenditureDTO.getName())
+                && (expenditureDTO.getName().length() < 2 || expenditureDTO.getName().length() > 256)) {
             errorMap.put(MasterDataConstants.EXPENDITURE_NAME, "Expenditure name length is invalid. " +
                     "Length range [2-256]");
         }
 
         //type
-        if (expenditure.getType() == null) {
+        if (expenditureDTO.getType() == null) {
             errorMap.put(MasterDataConstants.EXPENDITURE_TYPE, "Expenditure type is missing in request data");
         }
         //department id
-        if (StringUtils.isNotBlank(expenditure.getDepartmentId()) && StringUtils.isNotBlank(expenditure.getTenantId())) {
-            List<Department> departments = masterDepartmentUtil.fetchDepartment(Collections.singletonList(expenditure.getDepartmentId()), expenditure.getTenantId(), requestHeader);
+        if (StringUtils.isNotBlank(expenditureDTO.getDepartmentId()) && StringUtils.isNotBlank(expenditureDTO.getTenantId())) {
+            List<DepartmentDTO> departments = masterDepartmentUtil.fetchDepartment(
+                    Collections.singletonList(expenditureDTO.getDepartmentId()), expenditureDTO.getTenantId(),
+                    requestHeader);
+
             if (departments == null || departments.isEmpty()) {
-                errorMap.put(MasterDataConstants.DEPARTMENT_ID, "Department id doesn't exist in the system");
+                errorMap.put(MasterDataConstants.DEPARTMENT_ID, "DepartmentConst id doesn't exist in the system");
             }
         }
 

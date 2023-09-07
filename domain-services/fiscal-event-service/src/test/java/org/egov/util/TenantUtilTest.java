@@ -5,9 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import org.egov.FiscalApplicationMain;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.config.FiscalEventConfiguration;
 import org.egov.config.TestDataFormatter;
+import org.egov.mdms.model.MdmsResponse;
+import org.egov.mdms.service.MdmsClientService;
 import org.egov.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.web.models.FiscalEventRequest;
@@ -16,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -28,14 +33,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = FiscalApplicationMain.class)
 @Slf4j
 class TenantUtilTest {
 
     @Autowired
     private TestDataFormatter testDataFormatter;
 
-    @Autowired
+    @Spy
     private ObjectMapper objectMapper;
 
     @InjectMocks
@@ -45,16 +50,22 @@ class TenantUtilTest {
     private FiscalEventConfiguration fiscalEventConfiguration;
     @Mock
     private ServiceRequestRepository serviceRequestRepository;
+    @Mock
+    private MdmsClientService mdmsClientService;
 
     private FiscalEventRequest fiscalEventRequest;
     private JsonNode validGovernmentSearchResult;
-    private JsonNode emptyGovernmentSearchResult;
 
     @BeforeAll
     public void init() throws IOException {
         fiscalEventRequest = testDataFormatter.getFiscalEventPushRequestData();
         validGovernmentSearchResult = testDataFormatter.getValidGovernmentSearchResponse();
-        emptyGovernmentSearchResult = testDataFormatter.getEmptyGovernmentSearchResponse();
+    }
+
+    @Test
+    void testNullTenant() {
+        RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
+        assertFalse(tenantUtil.validateTenant(null, requestHeader));
     }
 
     @Test
@@ -64,63 +75,10 @@ class TenantUtilTest {
     }
 
     @Test
-    void testValidateTenantWithResultFromServiceReqRepo() {
-        when(this.serviceRequestRepository.fetchResult((String) any(), (Object) any())).thenReturn("Fetch Result");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentSearchPath())
-                .thenReturn("Ifix Master Government Search Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentContextPath())
-                .thenReturn("Ifix Master Government Context Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentHost()).thenReturn("localhost");
-
-        ArrayList<String> stringList = new ArrayList<String>();
-        stringList.add("pb");
-        RequestHeader requestHeader = new RequestHeader();
-        assertThrows(CustomException.class, () -> this.tenantUtil.validateTenant(stringList, requestHeader));
-        verify(this.serviceRequestRepository).fetchResult((String) any(), (Object) any());
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentContextPath();
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentHost();
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentSearchPath();
-    }
-
-    @Test
-    void testValidateTenantWithNullResultFromServiceReqRepo() {
-        when(this.serviceRequestRepository.fetchResult((String) any(), (Object) any())).thenReturn(null);
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentSearchPath())
-                .thenReturn("Ifix Master Government Search Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentContextPath())
-                .thenReturn("Ifix Master Government Context Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentHost()).thenReturn("localhost");
-
-        ArrayList<String> stringList = new ArrayList<String>();
-        stringList.add("pb");
-        RequestHeader requestHeader = new RequestHeader();
-        assertThrows(CustomException.class, () -> this.tenantUtil.validateTenant(stringList, requestHeader));
-        verify(this.serviceRequestRepository).fetchResult((String) any(), (Object) any());
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentContextPath();
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentHost();
-        verify(this.fiscalEventConfiguration).getIfixMasterGovernmentSearchPath();
-    }
-
-    @Test
-    void testValidateTenantWithNullHeader() {
-        when(this.serviceRequestRepository.fetchResult((String) any(), (Object) any())).thenReturn("Fetch Result");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentSearchPath())
-                .thenReturn("Ifix Master Government Search Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentContextPath())
-                .thenReturn("Ifix Master Government Context Path");
-        when(this.fiscalEventConfiguration.getIfixMasterGovernmentHost()).thenReturn("localhost");
-
-        ArrayList<String> stringList = new ArrayList<String>();
-        stringList.add("foo");
-        assertFalse(this.tenantUtil.validateTenant(stringList, null));
-    }
-
-    @Test
     void testValidTenant() {
         RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-        Map<String, Object> map = objectMapper.convertValue(validGovernmentSearchResult, new TypeReference<Map<String, Object>>() {
-        });
-        doReturn(map).when(serviceRequestRepository).fetchResult(any(), any());
+        MdmsResponse mdmsResponse = objectMapper.convertValue(validGovernmentSearchResult, MdmsResponse.class);
+        doReturn(mdmsResponse).when(mdmsClientService).getMaster(any());
         List<String> tenantIds = new ArrayList<>();
         tenantIds.add("pb");
         assertTrue(tenantUtil.validateTenant(tenantIds, requestHeader));
@@ -129,19 +87,11 @@ class TenantUtilTest {
     @Test
     void testInvalidTenant() {
         RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-        Map<String, Object> map = objectMapper.convertValue(emptyGovernmentSearchResult, new TypeReference<Map<String, Object>>() {
-        });
-        doReturn(map).when(serviceRequestRepository).fetchResult(any(), any());
+        MdmsResponse mdmsResponse = objectMapper.convertValue(validGovernmentSearchResult, MdmsResponse.class);
+        doReturn(mdmsResponse).when(mdmsClientService).getMaster(any());
         List<String> tenantIds = new ArrayList<>();
-        tenantIds.add("pb");
+        tenantIds.add("ab");
         assertFalse(tenantUtil.validateTenant(tenantIds, requestHeader));
-    }
-
-    @Test
-    void testNullTenant() {
-        RequestHeader requestHeader = fiscalEventRequest.getRequestHeader();
-        doReturn(null).when(serviceRequestRepository).fetchResult((String) any(), (RequestHeader) any());
-        assertFalse(tenantUtil.validateTenant(null, requestHeader));
     }
 
 }

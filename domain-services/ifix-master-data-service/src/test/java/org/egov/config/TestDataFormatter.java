@@ -1,5 +1,6 @@
 package org.egov.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.egov.web.models.*;
@@ -31,67 +32,6 @@ public class TestDataFormatter {
             return new File(classLoader.getResource(fileName).getFile());
         }
     }
-
-
-    /**
-     * @return
-     */
-    public GovernmentRequest getGovernmentRequestData() throws IOException {
-        GovernmentRequest governmentRequest = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovCreateRequestData()),
-                        GovernmentRequest.class);
-
-        return governmentRequest;
-    }
-
-    /**
-     * @return
-     * @throws IOException
-     */
-    public GovernmentRequest getHeadlessGovernmentRequestData() throws IOException {
-        GovernmentRequest governmentRequest = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovCreateRequestDataHeadless()),
-                        GovernmentRequest.class);
-
-        return governmentRequest;
-    }
-
-    /**
-     * @return
-     * @throws IOException
-     */
-    public GovernmentResponse getGovernmentCreateResponseData() throws IOException {
-        GovernmentResponse governmentResponse = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovCreateResponseData()),
-                        GovernmentResponse.class);
-
-        return governmentResponse;
-    }
-
-    /**
-     * @return
-     * @throws IOException
-     */
-    public GovernmentSearchRequest getGovernmentSearchRequestData() throws IOException {
-        GovernmentSearchRequest governmentSearchRequest = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovSearchRequestData()),
-                        GovernmentSearchRequest.class);
-
-        return governmentSearchRequest;
-    }
-
-    /**
-     * @return
-     * @throws IOException
-     */
-    public GovernmentResponse getGovernmentSearchResponseData() throws IOException {
-        GovernmentResponse governmentResponse = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()),
-                        GovernmentResponse.class);
-
-        return governmentResponse;
-    }
-
 
     public COARequest getCoaRequestData() throws IOException {
         COARequest coaRequest = new ObjectMapper()
@@ -149,17 +89,10 @@ public class TestDataFormatter {
         return coaResponse;
     }
 
-    /**
-     * @return
-     * @throws IOException
-     */
-    public Object getGovernmentSearchResponseDataAsObject() throws IOException {
-        Object governmentResponse = new ObjectMapper()
-                .readValue(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()),
-                        Object.class);
-
-        return governmentResponse;
+    public JsonNode getValidGovernmentSearchResponse() throws IOException {
+        JsonNode validGovernmentResponse =
+                new ObjectMapper().readTree(getFileFromClassLoaderResource(testProperties.getGovSearchResponseData()));
+        return validGovernmentResponse;
     }
-
 
 }

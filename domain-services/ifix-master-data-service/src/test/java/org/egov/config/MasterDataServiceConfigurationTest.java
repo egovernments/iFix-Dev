@@ -8,14 +8,10 @@ class MasterDataServiceConfigurationTest {
     @Test
     void testInitialize() {
         MasterDataServiceConfiguration masterDataServiceConfiguration = new MasterDataServiceConfiguration("UTC",
-                "localhost", "Ifix Master Government Context Path", "Ifix Master Government Search Path");
+                "pb");
         masterDataServiceConfiguration.initialize();
         assertEquals("UTC", masterDataServiceConfiguration.getTimeZone());
-        assertEquals("Ifix Master Government Search Path",
-                masterDataServiceConfiguration.getIfixMasterGovernmentSearchPath());
-        assertEquals("localhost", masterDataServiceConfiguration.getIfixMasterGovernmentHost());
-        assertEquals("Ifix Master Government Context Path",
-                masterDataServiceConfiguration.getIfixMasterGovernmentContextPath());
+        assertEquals("pb", masterDataServiceConfiguration.getRootLevelTenantId());
     }
 
     @Test

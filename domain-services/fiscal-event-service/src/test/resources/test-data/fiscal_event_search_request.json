@@ -11,7 +11,9 @@
     "tenantId": "pb",
     "fromEventTime": 1622876350000,
     "toEventTime": 1633417150000,
-    "eventType":"DEMAND",
-    "referenceId":["WS/400/2021-22/0434"]
+    "eventType": "DEMAND",
+    "referenceId": [
+      "WS/400/2021-22/0434"
+    ]
   }
 }

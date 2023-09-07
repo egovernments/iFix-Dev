@@ -2,6 +2,7 @@ package org.egov.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.egov.MasterApplicationMain;
 import org.egov.config.TestDataFormatter;
 import org.egov.tracer.model.ServiceCallException;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = MasterApplicationMain.class)
 class ServiceRequestRepositoryTest {
     @Autowired
     private TestDataFormatter testDataFormatter;

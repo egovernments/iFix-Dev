@@ -1,6 +1,7 @@
 package org.egov.web.controllers;
 
 import com.google.gson.Gson;
+import org.egov.MasterApplicationMain;
 import org.egov.common.contract.response.ResponseHeader;
 import org.egov.config.TestDataFormatter;
 import org.egov.service.ChartOfAccountService;
@@ -14,7 +15,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,10 +32,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * API tests for ChartOfAccountApiController
  */
-@AutoConfigureDataMongo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@WebMvcTest(ChartOfAccountApiController.class)
+@SpringBootTest(classes = MasterApplicationMain.class)
 @ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
 public class ChartOfAccountApiControllerTest {
 
     @Autowired

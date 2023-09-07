@@ -1,5 +1,6 @@
 package org.egov.util;
 
+import org.egov.MasterApplicationMain;
 import org.egov.common.contract.request.RequestHeader;
 import org.egov.common.contract.response.ResponseHeader;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@SpringBootTest(classes = MasterApplicationMain.class)
 class ResponseHeaderCreatorTest {
 
     @InjectMocks

@@ -7,10 +7,11 @@ import org.egov.repository.DepartmentHierarchyLevelRepository;
 import org.egov.tracer.model.CustomException;
 import org.egov.util.DepartmentEntityConstant;
 import org.egov.util.DepartmentUtil;
-import org.egov.web.models.DepartmentHierarchyLevel;
+import org.egov.web.models.DepartmentHierarchyLevelDTO;
 import org.egov.web.models.DepartmentHierarchyLevelRequest;
 import org.egov.web.models.DepartmentHierarchyLevelSearchCriteria;
 import org.egov.web.models.DepartmentHierarchyLevelSearchRequest;
+import org.egov.web.models.persist.DepartmentHierarchyLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,10 @@ public class DepartmentHierarchyLevelValidator {
     private DepartmentUtil departmentUtil;
 
     @Autowired
-    private DepartmentHierarchyLevelRepository levelRepository;
+    private DepartmentHierarchyLevelRepository hierarchyLevelRepository;
 
     public void validateHierarchyLevelCreatePost(DepartmentHierarchyLevelRequest request) {
-        DepartmentHierarchyLevel departmentHierarchyLevel = request.getDepartmentHierarchyLevel();
+        DepartmentHierarchyLevelDTO departmentHierarchyLevelDTO = request.getDepartmentHierarchyLevelDTO();
         RequestHeader requestHeader = request.getRequestHeader();
         Map<String, String> errorMap = new HashMap<>();
 
@@ -41,38 +42,38 @@ public class DepartmentHierarchyLevelValidator {
             errorMap.put(DepartmentEntityConstant.USER_INFO, "User info is missing");
         }
 
-        if (departmentHierarchyLevel == null) {
+        if (departmentHierarchyLevelDTO == null) {
             throw new CustomException(DepartmentEntityConstant.INVALID_REQUEST, "Department hierarchy request is invalid");
         }
 
-        if (StringUtils.isBlank(departmentHierarchyLevel.getTenantId())) {
+        if (StringUtils.isBlank(departmentHierarchyLevelDTO.getTenantId())) {
             errorMap.put(DepartmentEntityConstant.TENANT_ID, "Tenant id is missing");
         }
-        if (StringUtils.isBlank(departmentHierarchyLevel.getDepartmentId())) {
+        if (StringUtils.isBlank(departmentHierarchyLevelDTO.getDepartmentId())) {
             errorMap.put(DepartmentEntityConstant.DEPARTMENT_ID, "Department id is missing");
         }
-        if (StringUtils.isBlank(departmentHierarchyLevel.getLabel())) {
+        if (StringUtils.isBlank(departmentHierarchyLevelDTO.getLabel())) {
             errorMap.put(DepartmentEntityConstant.DEPARTMENT_LABEL, "Department label is missing");
         }
 
-        if (StringUtils.isNotBlank(departmentHierarchyLevel.getDepartmentId()) && StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())) {
-            List<String> departments = departmentUtil.getDepartmentFromDepartmentService(departmentHierarchyLevel.getTenantId(),
-                    departmentHierarchyLevel.getDepartmentId(), requestHeader);
+        if (StringUtils.isNotBlank(departmentHierarchyLevelDTO.getDepartmentId()) && StringUtils.isNotBlank(departmentHierarchyLevelDTO.getTenantId())) {
+            List<String> departments = departmentUtil.getDepartmentFromDepartmentService(departmentHierarchyLevelDTO.getTenantId(),
+                    departmentHierarchyLevelDTO.getDepartmentId(), requestHeader);
             if (departments.isEmpty())
-                errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevel.getDepartmentId()
+                errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevelDTO.getDepartmentId()
                         + " doesn't exist in the system");
         }
 
-        if(StringUtils.isNotBlank(departmentHierarchyLevel.getTenantId())
-                && StringUtils.isNotBlank(departmentHierarchyLevel.getDepartmentId())
-                && StringUtils.isBlank(departmentHierarchyLevel.getParent())) {
+        if(StringUtils.isNotBlank(departmentHierarchyLevelDTO.getTenantId())
+                && StringUtils.isNotBlank(departmentHierarchyLevelDTO.getDepartmentId())
+                && StringUtils.isNotBlank(departmentHierarchyLevelDTO.getParent())) {
 
-            List<DepartmentHierarchyLevel> dbDepartmentHierarchyLevels = levelRepository.searchParentDeptHierarchyLevel(
-                    departmentHierarchyLevel.getDepartmentId()
-                    , departmentHierarchyLevel.getTenantId()
-                    , departmentHierarchyLevel.getParent());
-            if (dbDepartmentHierarchyLevels != null && !dbDepartmentHierarchyLevels.isEmpty()) {
-                errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevel.getDepartmentId()
+            List<DepartmentHierarchyLevel> dbDepartmentHierarchyLevelDTOS = hierarchyLevelRepository
+                    .findByDepartmentIdAndTenantIdAndParent(departmentHierarchyLevelDTO.getDepartmentId()
+                            , departmentHierarchyLevelDTO.getTenantId(), departmentHierarchyLevelDTO.getParent());
+
+            if (dbDepartmentHierarchyLevelDTOS != null && !dbDepartmentHierarchyLevelDTOS.isEmpty()) {
+                errorMap.put(DepartmentEntityConstant.INVALID_DEPARTMENT_ID, "Department id : " + departmentHierarchyLevelDTO.getDepartmentId()
                         + " is not valid for given parent");
 
             }

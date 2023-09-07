@@ -1,10 +1,12 @@
 package org.egov.repository;
 
 import org.egov.repository.queryBuilder.ExpenditureQueryBuilder;
-import org.egov.web.models.Expenditure;
+import org.egov.repository.rowmapper.ExpenditureRowMapper;
+import org.egov.web.models.ExpenditureDTO;
 import org.egov.web.models.ExpenditureSearchCriteria;
+import org.egov.web.models.persist.Expenditure;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,20 +15,21 @@ import java.util.List;
 public class ExpenditureRepository {
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    ExpenditureQueryBuilder expenditureQueryBuilder;
+    private ExpenditureQueryBuilder expenditureQueryBuilder;
+
+    @Autowired
+    private ExpenditureRowMapper expenditureRowMapper;
 
     /**
      * @param expenditureSearchCriteria
      * @return
      */
     public List<Expenditure> findAllByCriteria(ExpenditureSearchCriteria expenditureSearchCriteria) {
-        return mongoTemplate.find(expenditureQueryBuilder.buildQuerySearch(expenditureSearchCriteria), Expenditure.class);
-    }
-
-    public void save(Expenditure expenditure) {
-        mongoTemplate.save(expenditure);
+        return jdbcTemplate.query(
+                expenditureQueryBuilder
+                        .buildSearchQuery(expenditureSearchCriteria), expenditureRowMapper);
     }
 }

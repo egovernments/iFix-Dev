@@ -8,7 +8,7 @@ public class MasterDataConstants {
     public static final String TO_EVENT_TIME = "TO_EVENT_TIME";
     public static final String FROM_EVENT_TIME = "FROM_EVENT_TIME";
     public static final String PARENT_EVENT_ID = "LINKED_EVENT_ID";
-    public static final String FISCAL_EVENT_VERSION = "2.1.0";
+    public static final String FISCAL_EVENT_VERSION = "2.2.0";
 
     private MasterDataConstants() {
     }
