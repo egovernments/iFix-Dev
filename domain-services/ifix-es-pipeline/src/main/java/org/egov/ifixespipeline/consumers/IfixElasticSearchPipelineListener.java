@@ -67,8 +67,6 @@ public class IfixElasticSearchPipelineListener {
             FiscalEventBulkRequest fiscalEventBulkRequest = objectMapper.convertValue(record, FiscalEventBulkRequest.class);
 
             for(FiscalEvent fiscalEvent : fiscalEventBulkRequest.getFiscalEvent()) {
-                log.info("Fiscal Event request got "+fiscalEvent);
-                log.info("tenant id:"+fiscalEvent.getTenantId());
                 // Enrich hierarchy map according to the tenantid encountered by this pipeline to avoid redundant network calls
                 if(!tenantIdVsExpenditureTypeVsUuidsMap.containsKey(fiscalEvent.getTenantId()))
                     tenantIdVsExpenditureTypeVsUuidsMap.put(fiscalEvent.getTenantId(),
@@ -77,7 +75,7 @@ public class IfixElasticSearchPipelineListener {
                 fiscalDataEnrichmentService.enrichFiscalData(fiscalEvent);
                 fiscalDataEnrichmentService.enrichComputedFields(fiscalEvent,
                         tenantIdVsExpenditureTypeVsUuidsMap.get(fiscalEvent.getTenantId()));
-                log.info("Fiscal evennt before sending to index:"+fiscalEvent);
+
                 producer.push(indexFiscalEventsTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
             }
         }catch(Exception e) {
@@ -95,30 +93,23 @@ public class IfixElasticSearchPipelineListener {
         expenditureTypeVsUuidsMap.put("Others", new HashSet<>());
         expenditureTypeVsUuidsMap.put(electricityCoaHeadName, new HashSet<>());
         expenditureTypeVsUuidsMap.put(operationsCoaHeadName, new HashSet<>());
-        log.info("expenditureTypeVsUuidsMap:" +expenditureTypeVsUuidsMap);
-
+        expenditureTypeVsUuidsMap.put(salaryCoaHeadName, new HashSet<>());
         response.getChartOfAccounts().forEach(chartOfAccount -> {
 
-            log.info("COA ID: "+chartOfAccount.getId()+" COA CODE:"+chartOfAccount.getCoaCode());
-            if(expenditureTypeVsUuidsMap.containsKey(electricityCoaHeadName)) {
-                log.info("Inside electricity Coa head");
+            if(chartOfAccount.getObjectHeadName().equals(electricityCoaHeadName)) {
                 expenditureTypeVsUuidsMap.get(electricityCoaHeadName).add(chartOfAccount.getId());
             }
-            else if(expenditureTypeVsUuidsMap.containsKey(operationsCoaHeadName)) {
-                log.info("Inside Operation Coa head");
+            else if(chartOfAccount.getObjectHeadName().equals(operationsCoaHeadName)) {
                 expenditureTypeVsUuidsMap.get(operationsCoaHeadName).add(chartOfAccount.getId());
             }
-            else if(expenditureTypeVsUuidsMap.containsKey(salaryCoaHeadName)) {
-                log.info("Inside salary Coa head");
+            else if(chartOfAccount.getObjectHeadName().equals(salaryCoaHeadName)) {
                 expenditureTypeVsUuidsMap.get(salaryCoaHeadName).add(chartOfAccount.getId());
             }
             else {
-                log.info("Inside Other Coa head");
                 expenditureTypeVsUuidsMap.get("Others").add(chartOfAccount.getId());
             }
 
         });
-        log.info("expenditureTypeVsUuidsMap:" +expenditureTypeVsUuidsMap);
         return expenditureTypeVsUuidsMap;
     }
 
