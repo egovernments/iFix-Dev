@@ -78,6 +78,7 @@ public class IfixElasticSearchPipelineListener {
                 fiscalDataEnrichmentService.enrichComputedFields(fiscalEvent,
                         tenantIdVsExpenditureTypeVsUuidsMap.get(fiscalEvent.getTenantId()));
 
+                log.info("Before Pushing to indexer:" + fiscalEvent.toString());
                 producer.push(indexFiscalEventsTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
             }
         }catch(Exception e) {
