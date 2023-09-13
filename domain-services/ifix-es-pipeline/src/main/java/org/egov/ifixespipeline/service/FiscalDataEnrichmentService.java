@@ -152,7 +152,6 @@ public class FiscalDataEnrichmentService {
             }
             computedFieldsMap.put("electricityExpenseNetAmount", electricityBillAmount);
         }
-        log.info("Computed fields:"+computedFieldsMap);
         fiscalEvent.setComputedFields(computedFieldsMap);
     }
 }

@@ -68,17 +68,13 @@ public class IfixElasticSearchPipelineListener {
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             FiscalEventBulkRequest fiscalEventBulkRequest = objectMapper.convertValue(record, FiscalEventBulkRequest.class);
-            log.info("coaMap:" +coaMap);
             for(FiscalEvent fiscalEvent : fiscalEventBulkRequest.getFiscalEvent()) {
                 // Enrich hierarchy map according to the tenantid encountered by this pipeline to avoid redundant network calls
                 if(!tenantIdVsExpenditureTypeVsUuidsMap.containsKey(fiscalEvent.getTenantId()))
                     tenantIdVsExpenditureTypeVsUuidsMap.put(fiscalEvent.getTenantId(), coaMap);
-                log.info("tenantIdVsExpenditureTypeVsUuidsMap:"+tenantIdVsExpenditureTypeVsUuidsMap);
                 fiscalDataEnrichmentService.enrichFiscalData(fiscalEvent);
                 fiscalDataEnrichmentService.enrichComputedFields(fiscalEvent,
                         tenantIdVsExpenditureTypeVsUuidsMap.get(fiscalEvent.getTenantId()));
-
-                log.info("Before Pushing to indexer:" + fiscalEvent.toString());
                 producer.push(indexFiscalEventsTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
             }
         }catch(Exception e) {
@@ -96,21 +92,17 @@ public class IfixElasticSearchPipelineListener {
         expenditureTypeVsUuidsMap.put("Others", new HashSet<>());
         expenditureTypeVsUuidsMap.put(electricityCoaHeadName, new HashSet<>());
         expenditureTypeVsUuidsMap.put(operationsCoaHeadName, new HashSet<>());
-        expenditureTypeVsUuidsMap.put(salaryCoaHeadName, new HashSet<>());
+
         response.getChartOfAccounts().forEach(chartOfAccount -> {
 
-            if(chartOfAccount.getObjectHeadName().equals(electricityCoaHeadName)) {
+            if(expenditureTypeVsUuidsMap.containsKey(electricityCoaHeadName))
                 expenditureTypeVsUuidsMap.get(electricityCoaHeadName).add(chartOfAccount.getId());
-            }
-            else if(chartOfAccount.getObjectHeadName().equals(operationsCoaHeadName)) {
+            else if(expenditureTypeVsUuidsMap.containsKey(operationsCoaHeadName))
                 expenditureTypeVsUuidsMap.get(operationsCoaHeadName).add(chartOfAccount.getId());
-            }
-            else if(chartOfAccount.getObjectHeadName().equals(salaryCoaHeadName)) {
+            else if(expenditureTypeVsUuidsMap.containsKey(salaryCoaHeadName))
                 expenditureTypeVsUuidsMap.get(salaryCoaHeadName).add(chartOfAccount.getId());
-            }
-            else {
+            else
                 expenditureTypeVsUuidsMap.get("Others").add(chartOfAccount.getId());
-            }
 
         });
         return expenditureTypeVsUuidsMap;
