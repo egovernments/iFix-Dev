@@ -53,6 +53,9 @@ public class IfixElasticSearchPipelineListener {
     @Value("${coa.salary.head.name}")
     private String salaryCoaHeadName;
 
+    @Value("#{${coa.map}}")
+    Map<String, HashSet<String>> coaMap;
+
     private Map<String, Map<String, HashSet<String>>> tenantIdVsExpenditureTypeVsUuidsMap = new HashMap<>();
 
     /**
@@ -65,17 +68,13 @@ public class IfixElasticSearchPipelineListener {
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             FiscalEventBulkRequest fiscalEventBulkRequest = objectMapper.convertValue(record, FiscalEventBulkRequest.class);
-
             for(FiscalEvent fiscalEvent : fiscalEventBulkRequest.getFiscalEvent()) {
                 // Enrich hierarchy map according to the tenantid encountered by this pipeline to avoid redundant network calls
                 if(!tenantIdVsExpenditureTypeVsUuidsMap.containsKey(fiscalEvent.getTenantId()))
-                    tenantIdVsExpenditureTypeVsUuidsMap.put(fiscalEvent.getTenantId(),
-                            loadExpenditureTypeVsUuidMap(fiscalEvent.getTenantId()));
-
+                    tenantIdVsExpenditureTypeVsUuidsMap.put(fiscalEvent.getTenantId(), coaMap);
                 fiscalDataEnrichmentService.enrichFiscalData(fiscalEvent);
                 fiscalDataEnrichmentService.enrichComputedFields(fiscalEvent,
                         tenantIdVsExpenditureTypeVsUuidsMap.get(fiscalEvent.getTenantId()));
-
                 producer.push(indexFiscalEventsTopic, FiscalEventRequest.builder().fiscalEvent(fiscalEvent).build());
             }
         }catch(Exception e) {

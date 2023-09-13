@@ -1,6 +1,6 @@
-* @sathishp-eGov @rushang7-eGov @GhanshyamRawat-eGov
-core/ @sathishp-eGov @GhanshyamRawat-eGov	@rushang7-eGov
-reference-adapter/ @sathishp-eGov @GhanshyamRawat-eGov @rushang7-eGov
-domain-services/ @sathishp-eGov @GhanshyamRawat-eGov @rushang7-eGov
-utilities/ @sathishp-eGov @rushang7-eGov
+* @sathishp-eGov @pradeepkumarcm-egov @GhanshyamRawat-eGov
+core/ @sathishp-eGov @GhanshyamRawat-eGov	@pradeepkumarcm-egov
+reference-adapter/ @sathishp-eGov @GhanshyamRawat-eGov @pradeepkumarcm-egov
+domain-services/ @sathishp-eGov @GhanshyamRawat-eGov @pradeepkumarcm-egov
+utilities/ @sathishp-eGov @pradeepkumarcm-egov
 frontend/micro-ui/ @jagankumar-egov
