@@ -117,9 +117,12 @@ public class FiscalDataEnrichmentService {
         BigDecimal operationsHeadAmount = new BigDecimal(0);
         BigDecimal salaryHeadAmount = new BigDecimal(0);
         BigDecimal otherHeadAmount = new BigDecimal(0);
-
+        log.info("expenditureTypeVsUuidsMap in enrichComputedFields:"+expenditureTypeVsUuidsMap);
         for(int i = 0; i < fiscalEvent.getAmountDetails().size(); i++) {
             Amount amount = fiscalEvent.getAmountDetails().get(i);
+            log.info("Amount Details:"+amount);
+            log.info("Amount Coa:"+amount.getCoaId());
+            log.info("Amount :"+amount.getAmount());
             if(expenditureTypeVsUuidsMap.get(electricityCoaHeadName).contains(amount.getCoaId()))
                 electricityHeadAmount = electricityHeadAmount.add(amount.getAmount());
             else if(expenditureTypeVsUuidsMap.get(operationsCoaHeadName).contains(amount.getCoaId()))
@@ -151,6 +154,9 @@ public class FiscalDataEnrichmentService {
                     electricityBillAmount = electricityBillAmount.add(amount.getAmount());
             }
             computedFieldsMap.put("electricityExpenseNetAmount", electricityBillAmount);
+        }
+        if(!computedFieldsMap.isEmpty()) {
+            log.info("computedFieldsMap:" +computedFieldsMap);
         }
 
         fiscalEvent.setComputedFields(computedFieldsMap);
