@@ -1,0 +1,27 @@
+package org.digit.exchange.model;
+
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class JsonMessage {
+
+    @JsonProperty("signature")
+    private String signature;
+    @JsonProperty("header")
+    @NotNull
+    private RequestHeader header;
+    @NotNull
+    @JsonProperty("message")
+    private JsonNode jsonNode;
+
+
+
+}
