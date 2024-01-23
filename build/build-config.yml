@@ -45,6 +45,8 @@ config:
       - work-dir: "domain-services/program-service"
         image-name: "program-service"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/program-service/src/main/resources/db"
+        image-name: "program-service-db"
   - name: "builds/iFix/core/ifix-zuul"
     build:
       - work-dir: "core/ifix-zuul"
