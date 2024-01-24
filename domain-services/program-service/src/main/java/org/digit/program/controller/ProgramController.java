@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/program/v1")
+@RequestMapping("/v1")
 public class ProgramController {
 
     private final ProgramService programService;

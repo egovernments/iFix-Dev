@@ -2,9 +2,9 @@ package org.digit.program.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.constants.SortOrder;
 import org.digit.program.models.*;
 import org.digit.program.repository.ProgramRepository;
+import org.digit.program.utils.CommonUtil;
 import org.digit.program.utils.DispatcherUtil;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,13 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final EnrichmentService enrichmentService;
     private final DispatcherUtil dispatcherUtil;
+    private final CommonUtil commonUtil;
 
-    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil) {
+    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, CommonUtil commonUtil) {
         this.programRepository = programRepository;
         this.enrichmentService = enrichmentService;
         this.dispatcherUtil = dispatcherUtil;
+        this.commonUtil = commonUtil;
     }
 
     public RequestJsonMessage createProgram(RequestJsonMessage requestJsonMessage) {
@@ -30,6 +32,7 @@ public class ProgramService {
         enrichmentService.enrichProgramForCreate(program);
         programRepository.save(program);
         dispatcherUtil.sendOnProgram(requestJsonMessage, program);
+        requestJsonMessage.setMessage(program.toJsonNode(program));
         return requestJsonMessage;
 
     }
@@ -40,20 +43,14 @@ public class ProgramService {
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.save(program);
         dispatcherUtil.sendOnProgram(requestJsonMessage, program);
+        requestJsonMessage.setMessage(program.toJsonNode(program));
         return requestJsonMessage;
     }
 
     public List<ExchangeCode> searchProgram(ProgramSearch programSearch) {
         log.info("searchProgram");
         List<ExchangeCode> programs;
-        Sort.Direction direction = Sort.Direction.DESC;
-        if (programSearch.getPagination().getSortOrder() != null &&
-                programSearch.getPagination().getSortOrder().equals(SortOrder.ASC)) {
-            direction = Sort.Direction.ASC;
-        }
-        Sort sort = null;
-        if (programSearch.getPagination() != null && programSearch.getPagination().getSortBy() != null)
-            sort = Sort.by(new Sort.Order(direction, programSearch.getPagination().getSortBy()));
+        Sort sort = commonUtil.getPagination(programSearch.getPagination());
         programs = programRepository.findByCriteria(programSearch.getIds(), programSearch.getName(), programSearch.getParentId(),
                 programSearch.getProgramCode(), programSearch.getLocationCode(), sort);
         return programs;

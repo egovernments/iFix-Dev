@@ -78,4 +78,12 @@ public class Program extends ExchangeCode {
         this.setClientHostUrl(program.getClientHostUrl());
         this.setAuditDetails(program.getAuditDetails());
     }
+
+    public JsonNode toJsonNode (Program program) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        JsonNode jsonNode;
+        jsonNode = mapper.valueToTree(program);
+        return jsonNode;
+    }
 }

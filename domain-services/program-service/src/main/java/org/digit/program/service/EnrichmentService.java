@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.Status;
 import org.digit.program.models.Program;
+import org.digit.program.models.Sanction;
 import org.digit.program.utils.IdGenUtil;
 import org.egov.common.contract.models.AuditDetails;
 import org.egov.common.contract.request.RequestInfo;
@@ -42,4 +43,11 @@ public class EnrichmentService {
         return program;
     }
 
+    public Sanction enrichSanctionCreate(Sanction sanction) {
+        log.info("Enrich sanction create");
+        sanction.setId(UUID.randomUUID().toString());
+        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+        sanction.setAuditDetails(auditDetails);
+        return sanction;
+    }
 }
