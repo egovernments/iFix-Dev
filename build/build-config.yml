@@ -35,6 +35,11 @@ config:
       - work-dir: "domain-services/fiscal-event-post-processor"
         image-name: "fiscal-event-post-processor"
         dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/domain-services/digit-exchange"
+    build:
+      - work-dir: "domain-services/digit-exchange"
+        image-name: "digit-exchange"
+        dockerfile: "build/maven/Dockerfile"
   - name: "builds/iFix/core/ifix-zuul"
     build:
       - work-dir: "core/ifix-zuul"
