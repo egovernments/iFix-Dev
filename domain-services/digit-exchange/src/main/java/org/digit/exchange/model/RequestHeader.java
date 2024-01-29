@@ -1,11 +1,11 @@
 package org.digit.exchange.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.digit.exchange.constants.Action;
 import org.digit.exchange.constants.MessageType;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 
