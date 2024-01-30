@@ -14,7 +14,6 @@ import org.egov.common.contract.models.AuditDetails;
 
 @Getter
 @Setter
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +30,9 @@ public class Program extends ExchangeCode {
 
     @JsonProperty("parent_id")
     private String parentId;
+
+    @JsonProperty("description")
+    private String description;
 
     @JsonProperty("start_date")
     private long startDate;
@@ -73,9 +75,18 @@ public class Program extends ExchangeCode {
         this.setProgramCode(program.getProgramCode());
         this.setName(program.getName());
         this.setParentId(program.getParentId());
+        this.setDescription(program.getDescription());
         this.setStartDate(program.getStartDate());
         this.setEndDate(program.getEndDate());
         this.setClientHostUrl(program.getClientHostUrl());
         this.setAuditDetails(program.getAuditDetails());
+    }
+
+    public JsonNode toJsonNode(Program program) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        JsonNode jsonNode;
+        jsonNode = mapper.valueToTree(program);
+        return jsonNode;
     }
 }

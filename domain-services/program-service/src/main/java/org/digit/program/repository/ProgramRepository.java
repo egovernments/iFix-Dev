@@ -1,32 +1,59 @@
 package org.digit.program.repository;
 
-import org.digit.program.constants.SortOrder;
-import org.digit.program.models.ExchangeCode;
 import org.digit.program.models.Program;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
+import org.digit.program.models.ProgramSearch;
+import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
+import org.digit.program.repository.querybuilder.ProgramQueryBuilder;
+import org.digit.program.repository.rowmapper.ProgramRowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface ProgramRepository extends ExchangeCodeRepository {
-//    List<ExchangeCode> findAllByIdIn(List<String> ids);
-//    List<ExchangeCode> findByParentId(String parentId);
-//    List<ExchangeCode> findByName(String name);
-//    List<ExchangeCode> findByProgramCode(String programCode);
-//    List<ExchangeCode> findByLocationCode(String locationCode);
+public class ProgramRepository {
 
-    @Query("SELECT ec FROM ExchangeCode ec " +
-            "WHERE (:ids is null or ec.id in :ids) " +
-            "AND (:parentId is null or ec.parentId = :parentId) " +
-            "AND (:name is null or ec.name = :name) " +
-            "AND (:programCode is null or ec.programCode = :programCode) " +
-            "AND (:locationCode is null or ec.locationCode = :locationCode)")
-    List<ExchangeCode> findByCriteria(List<String> ids, String name, String parentId, String programCode, String locationCode, Sort sort);
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-//    Iterable<Program> findByType(String name);
-//    Iterable<ExchangeCode> findByParentId(@Param("parentId") String parentId);
+    @Autowired
+    private ProgramRowMapper programRowMapper;
+
+    @Autowired
+    private ProgramQueryBuilder programQueryBuilder;
+
+    @Autowired
+    private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
+
+    @Transactional
+    public void saveProgram(Program program) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeInsertQuery(program, preparedStmtList);
+        jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
+
+        preparedStmtList = new ArrayList<>();
+        String programInsertQuery = programQueryBuilder.buildProgramInsertQuery(program, preparedStmtList);
+        jdbcTemplate.update(programInsertQuery, preparedStmtList.toArray());
+    }
+
+    @Transactional
+    public void updateProgram(Program program) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeUpdateQuery(program, preparedStmtList);
+        jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
+
+        preparedStmtList = new ArrayList<>();
+        String programUpdateQuery = programQueryBuilder.buildProgramUpdateQuery(program, preparedStmtList);
+        jdbcTemplate.update(programUpdateQuery, preparedStmtList.toArray());
+    }
+
+    public List<Program> searchProgram(ProgramSearch programSearch) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String programSearchQuery = programQueryBuilder.buildProgramSearchQuery(programSearch, preparedStmtList);
+        return jdbcTemplate.query(programSearchQuery, preparedStmtList.toArray(), programRowMapper);
+    }
 
 }

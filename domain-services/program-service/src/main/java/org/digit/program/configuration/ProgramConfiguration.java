@@ -32,4 +32,6 @@ public class ProgramConfiguration {
 
     private String domain;
 
+    private Double searchlimit;
+
 }

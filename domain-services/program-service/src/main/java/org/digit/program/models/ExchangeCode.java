@@ -2,7 +2,7 @@ package org.digit.program.models;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -13,14 +13,11 @@ import static org.digit.program.constants.Error.INVALID_ID;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Table(name="exchange_code")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Builder(builderClassName = "ExchangeCodeBuilder")
 public class ExchangeCode {
 
 
     @JsonProperty("id")
-    @Id
     @NotBlank(message = INVALID_ID)
     private String id;
 

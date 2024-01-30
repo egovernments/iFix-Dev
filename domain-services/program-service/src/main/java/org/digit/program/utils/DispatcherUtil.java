@@ -32,10 +32,10 @@ public class DispatcherUtil {
         requestMessage.getHeader().setReceiverId(senderId);
     }
 
-    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage, Boolean isCreate){
+    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage, Program program, Boolean isCreate){
         RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
-                .message(requestJsonMessage.getMessage().toString()).build();
+                .message(program.toString()).build();
         requestMessage.getHeader().setMessageType(MessageType.PROGRAM);
         requestMessage.getHeader().setAction(isCreate ? Action.CREATE : Action.UPDATE);
         StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/program");

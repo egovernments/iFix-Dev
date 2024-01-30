@@ -2,6 +2,7 @@ package org.digit.program.models;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,6 +10,7 @@ import org.digit.program.constants.SortOrder;
 
 @Getter
 @Setter
+@Builder
 public class Pagination {
 
     @JsonProperty("limit")
