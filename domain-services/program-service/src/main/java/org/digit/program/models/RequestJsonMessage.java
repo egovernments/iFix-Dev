@@ -2,21 +2,18 @@ package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
-@Embeddable
 @Getter
 @Setter
 @Slf4j
 public class RequestJsonMessage {
 
-    @Id
     private String id;
     @JsonProperty("signature")
     private String signature;

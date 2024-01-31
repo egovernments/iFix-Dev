@@ -1,8 +1,7 @@
 package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +22,6 @@ public class RequestMessage {
 
     @JsonProperty("header")
     @NotNull
-    @Transient
     private RequestHeader header;
 
     @NotNull

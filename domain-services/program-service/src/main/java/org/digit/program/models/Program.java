@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
 import lombok.*;
 import org.egov.common.contract.models.AuditDetails;
 
@@ -44,7 +42,6 @@ public class Program extends ExchangeCode {
     private String clientHostUrl;
 
     @JsonProperty("audit_details")
-    @Embedded
     private AuditDetails auditDetails;
 
     public Program(JsonNode jsonNode) {
