@@ -35,20 +35,20 @@ public class ProgramController {
         }
     }
 
-    @PostMapping(value = "/program/_search")
-    public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody ProgramSearchRequest programSearchRequest) {
+    @PostMapping(value = "/program/_update")
+    public ResponseEntity<RequestJsonMessage> updateProgram(@RequestBody RequestJsonMessage requestJsonMessage) {
         try {
-            return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
+            return ResponseEntity.ok(programService.updateProgram(requestJsonMessage));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @PostMapping(value = "/program/_update")
-    public ResponseEntity<RequestJsonMessage> updateProgram(@RequestBody RequestJsonMessage requestJsonMessage) {
+    @PostMapping(value = "/program/_search")
+    public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody ProgramSearchRequest programSearchRequest) {
         try {
-            return ResponseEntity.ok(programService.updateProgram(requestJsonMessage));
+            return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();

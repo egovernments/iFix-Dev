@@ -14,13 +14,13 @@ import org.digit.program.constants.SortOrder;
 public class Pagination {
 
     @JsonProperty("limit")
-    private double limit;
+    private Integer limit;
 
     @JsonProperty("offset")
-    private double offset;
+    private Integer offset;
 
     @JsonProperty("total_count")
-    private double totalCount;
+    private Integer totalCount;
 
     @JsonProperty("sort_by")
     private String sortBy;

@@ -5,16 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "configuration")
 @Configuration
 public class ProgramConfiguration {
 
@@ -28,10 +26,21 @@ public class ProgramConfiguration {
         return new RestTemplate();
     }
 
-    private Map<String, String> idgen;
+    @Value("${egov.idgen.host}")
+    private String idGenHost;
 
+    @Value("${egov.idgen.path}")
+    private String idGenPath;
+
+    @Value("${egov.idgen.idname}")
+    private String idName;
+
+    @Value("${program.domain}")
     private String domain;
 
-    private Double searchlimit;
+    @Value("${search.max.limit}")
+    private Integer searchMaxLimit;
 
+    @Value("${search.default.limit}")
+    private Integer searchDefaultLimit;
 }

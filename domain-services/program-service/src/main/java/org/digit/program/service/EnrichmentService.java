@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static org.digit.program.constants.ProgramConstants.ID_NAME;
-
 @Service
 @Slf4j
 public class EnrichmentService {
@@ -30,7 +28,7 @@ public class EnrichmentService {
     public void enrichProgramForCreate(RequestHeader header, Program program) {
         log.info("Enrich Program for Create");
         if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdgen().get(ID_NAME), "", 1).get(0));
+            program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdName(), "", 1).get(0));
         else
             program.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).createdBy("a").lastModifiedBy("b").build();
@@ -50,8 +48,13 @@ public class EnrichmentService {
         if (programSearch.getPagination() == null)
             programSearch.setPagination(Pagination.builder().build());
 
-        if (programSearch.getPagination().getLimit() == 0.0) {
-            programSearch.getPagination().setLimit(configs.getSearchlimit());
+        if (programSearch.getPagination().getLimit() == null) {
+            programSearch.getPagination().setLimit(configs.getSearchDefaultLimit());
+        } else if (programSearch.getPagination().getLimit() > configs.getSearchMaxLimit()) {
+            programSearch.getPagination().setLimit(configs.getSearchMaxLimit());
+        }
+        if (programSearch.getPagination().getOffset() == null) {
+            programSearch.getPagination().setOffset(0);
         }
         if (StringUtils.isEmpty(programSearch.getPagination().getSortBy())) {
             programSearch.getPagination().setSortBy("last_modified_time");
