@@ -32,7 +32,7 @@ public class ProgramService {
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForCreate(requestJsonMessage.getHeader(), program);
         programRepository.saveProgram(program);
-        if (requestJsonMessage.getHeader().getReceiverId().equalsIgnoreCase(configs.getDomain()))
+        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
             dispatcherUtil.sendOnProgram(requestJsonMessage, program);
         else
             dispatcherUtil.forwardMessage(requestJsonMessage, program, true);
@@ -46,7 +46,7 @@ public class ProgramService {
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.updateProgram(program);
-        if (requestJsonMessage.getHeader().getReceiverId().equalsIgnoreCase(configs.getDomain()))
+        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
             dispatcherUtil.sendOnProgram(requestJsonMessage, program);
         else
             dispatcherUtil.forwardMessage(requestJsonMessage, program, false);
@@ -65,7 +65,8 @@ public class ProgramService {
     public RequestJsonMessage onProgram(RequestJsonMessage requestJsonMessage) {
         log.info("onProgram");
         Program program = new Program(requestJsonMessage.getMessage());
-//        programRepository.save(program);
+        enrichmentService.enrichProgramForUpdate(program);
+        programRepository.updateProgram(program);
         return requestJsonMessage;
     }
 }

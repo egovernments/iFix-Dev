@@ -41,7 +41,6 @@ public class DispatcherUtil {
         StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/program");
         restRepo.fetchResult(url, requestMessage);
         return requestJsonMessage;
-
     }
 
 }

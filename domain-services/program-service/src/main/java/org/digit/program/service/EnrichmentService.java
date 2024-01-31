@@ -31,7 +31,7 @@ public class EnrichmentService {
 
     public void enrichProgramForCreate(RequestHeader header, Program program) {
         log.info("Enrich Program for Create");
-        if (header.getReceiverId().equalsIgnoreCase(configs.getDomain()))
+        if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdgen().get(ID_NAME), "", 1).get(0));
         else
             program.setId(UUID.randomUUID().toString());
