@@ -31,6 +31,7 @@ public class ExchangeConsumer {
         try {
             requestMessageWrapper = objectMapper.readValue(receivedObject, RequestMessageWrapper.class);
         } catch (JsonProcessingException e) {
+            log.error("Exception while converting message to RequestMessageWrapper", e);
             throw new RuntimeException(e);
         }
         log.info("Successfully converted message to RequestMessageWrapper");

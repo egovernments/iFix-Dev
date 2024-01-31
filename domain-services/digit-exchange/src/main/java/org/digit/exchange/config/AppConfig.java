@@ -6,26 +6,24 @@ import lombok.*;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TimeZone;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @Getter
 @Setter
 @Import({TracerConfiguration.class})
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
-@Data
+@Configuration
 public class AppConfig {
 
 
@@ -36,6 +34,18 @@ public class AppConfig {
     public void initialize() {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
+
+    @PostConstruct
+    public void init() {
+        // Parse the JSON string and convert it to a Map during initialization
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            receiverEndpoints = objectMapper.readValue(receiverEndpointsStr, new TypeReference<Map<String, String>>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -54,17 +64,20 @@ public class AppConfig {
         return new RestTemplate();
     }
 
+    @Value("${app.name}")
     private String name;
-
+    @Value("${app.domain}")
     private String domain;
 
-    private String host;
-
-    private String path;
-
-    private Map<String, String> routes;
-
+    @Value("${app.exchangeTopic}")
     private String exchangeTopic;
 
+    @Value("${app.errorTopic}")
     private String errorTopic;
+
+    @Value("${app.receiver.endpoints}")
+    private String receiverEndpointsStr;
+
+    private Map<String, String> receiverEndpoints;
+
 }

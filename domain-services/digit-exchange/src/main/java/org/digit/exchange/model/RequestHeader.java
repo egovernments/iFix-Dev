@@ -3,10 +3,9 @@ package org.digit.exchange.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.digit.exchange.constants.Action;
-import org.digit.exchange.constants.MessageType;
+import org.digit.exchange.constants.ExchangeType;
 
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
 
 
 @Getter
@@ -20,17 +19,17 @@ public class RequestHeader {
     private String messageId;
     @JsonProperty("message_ts")
     @NotNull
-    private ZonedDateTime messageTs;
+    private String messageTs;
     @JsonProperty("message_type")
     @NotNull
-    private MessageType messageType;
+    private ExchangeType messageType;
     @JsonProperty("action")
     @NotNull
     private Action action;
     @JsonProperty("sender_id")
     @NotNull
     private String senderId;
-    @JsonProperty("senderUri")
+    @JsonProperty("sender_uri")
     private String senderUri;
     @NotNull
     @JsonProperty("receiver_id")
