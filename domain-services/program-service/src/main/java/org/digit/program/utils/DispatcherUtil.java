@@ -21,7 +21,7 @@ public class DispatcherUtil {
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
                 .message(requestJsonMessage.getMessage().toString()).build();
         updateUri(requestMessage);
-        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/on-program");
+        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId().split("@")[1]).append("exchange/v1/on-program");
         restRepo.fetchResult(url, requestMessage);
     }
 
@@ -37,7 +37,7 @@ public class DispatcherUtil {
                 .message(requestJsonMessage.getMessage().toString()).build();
         requestMessage.getHeader().setMessageType(MessageType.PROGRAM);
         requestMessage.getHeader().setAction(isCreate ? Action.CREATE : Action.UPDATE);
-        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/program");
+        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId().split("@")[1]).append("exchange/v1/program");
         restRepo.fetchResult(url, requestMessage);
         return requestJsonMessage;
     }

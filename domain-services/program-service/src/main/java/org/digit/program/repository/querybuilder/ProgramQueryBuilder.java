@@ -1,8 +1,6 @@
 package org.digit.program.repository.querybuilder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.models.Pagination;
 import org.digit.program.models.Program;
 import org.digit.program.models.ProgramSearch;
 import org.springframework.stereotype.Component;
@@ -13,12 +11,12 @@ import java.util.List;
 @Component
 public class ProgramQueryBuilder {
     public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
-            "( id, location_code, program_code, name, parent_id, description, client_host_url, status, " +
+            "( id, location_code, program_code, name, parent_id, description, client_host_url, status, status_message, " +
             "start_date, end_date, created_by, last_modified_by, created_time, last_modified_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
-            "SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, " +
+            "SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
             " end_date = ?, last_modified_by = ?, last_modified_time = ? " +
             "WHERE id = ?";
 
@@ -95,9 +93,10 @@ public class ProgramQueryBuilder {
             preparedStmtList.add(programSearch.getParentId());
         }
 
-        programSearchQuery.append(" ORDER BY ? LIMIT ? OFFSET ? ");
+        programSearchQuery.append(" ORDER BY ? ");
         preparedStmtList.add(programSearch.getPagination().getSortBy());
         programSearchQuery.append(programSearch.getPagination().getSortOrder().toString());
+        programSearchQuery.append(" LIMIT ? OFFSET ? ");
         preparedStmtList.add(programSearch.getPagination().getLimit());
         preparedStmtList.add(programSearch.getPagination().getOffset());
 

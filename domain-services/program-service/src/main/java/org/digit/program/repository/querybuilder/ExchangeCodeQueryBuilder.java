@@ -1,9 +1,11 @@
 package org.digit.program.repository.querybuilder;
 
 import org.digit.program.models.Program;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ExchangeCodeQueryBuilder {
 
     public static final String EXCHANGE_CODE_INSERT_QUERY = "" +
@@ -34,7 +36,6 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getCreatedTime());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
-        preparedStmtList.add(program.getId());
         return EXCHANGE_CODE_INSERT_QUERY;
     }
 

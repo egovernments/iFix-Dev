@@ -11,8 +11,6 @@ import org.egov.common.contract.models.AuditDetails;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import static org.digit.program.constants.ProgramConstants.ID_NAME;
@@ -52,11 +50,8 @@ public class EnrichmentService {
         if (programSearch.getPagination() == null)
             programSearch.setPagination(Pagination.builder().build());
 
-        if (programSearch.getPagination().getLimit() == Double.NaN) {
+        if (programSearch.getPagination().getLimit() == 0.0) {
             programSearch.getPagination().setLimit(configs.getSearchlimit());
-        }
-        if (programSearch.getPagination().getOffset() == Double.NaN) {
-            programSearch.getPagination().setOffset(0);
         }
         if (StringUtils.isEmpty(programSearch.getPagination().getSortBy())) {
             programSearch.getPagination().setSortBy("last_modified_time");

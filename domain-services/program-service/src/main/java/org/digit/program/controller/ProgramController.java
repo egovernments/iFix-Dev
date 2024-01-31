@@ -3,10 +3,7 @@ package org.digit.program.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.models.ExchangeCode;
-import org.digit.program.models.Program;
-import org.digit.program.models.ProgramSearch;
-import org.digit.program.models.RequestJsonMessage;
+import org.digit.program.models.*;
 import org.digit.program.service.ProgramService;
 import org.digit.program.utils.DispatcherUtil;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +20,9 @@ import java.util.List;
 public class ProgramController {
 
     private final ProgramService programService;
-    private final ProgramConfiguration configs;
-    private final DispatcherUtil dispatcherUtil;
 
-    public ProgramController(ProgramService programService, ProgramConfiguration configs, DispatcherUtil dispatcherUtil) {
+    public ProgramController(ProgramService programService) {
         this.programService = programService;
-        this.configs = configs;
-        this.dispatcherUtil = dispatcherUtil;
     }
 
     @PostMapping(value = "/program/_create")
@@ -43,9 +36,9 @@ public class ProgramController {
     }
 
     @PostMapping(value = "/program/_search")
-    public ResponseEntity<List<Program>> searchProgram(@RequestBody ProgramSearch programSearch) {
+    public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody ProgramSearchRequest programSearchRequest) {
         try {
-            return ResponseEntity.ok(programService.searchProgram(programSearch));
+            return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().build();

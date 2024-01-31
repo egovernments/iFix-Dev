@@ -1,6 +1,7 @@
 package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,10 @@ public class ProgramSearch {
     @JsonProperty("ids")
     private List<String> ids;
 
+    @NotNull
+    @JsonProperty("location_code")
+    private String locationCode;
+
     @JsonProperty("parent_id")
     private String parentId;
 
@@ -21,9 +26,6 @@ public class ProgramSearch {
 
     @JsonProperty("program_code")
     private String programCode;
-
-    @JsonProperty("location_code")
-    private String locationCode;
 
     @JsonProperty("pagination")
     private Pagination pagination;

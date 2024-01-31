@@ -1,8 +1,6 @@
 package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
-@Embeddable
 @Getter
 @Setter
 @Slf4j
@@ -19,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RequestMessage {
 
-    @Id
+    @JsonProperty("id")
     private String id;
     @JsonProperty("signature")
     private String signature;

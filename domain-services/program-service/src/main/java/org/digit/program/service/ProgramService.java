@@ -3,9 +3,7 @@ package org.digit.program.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.models.Program;
-import org.digit.program.models.ProgramSearch;
-import org.digit.program.models.RequestJsonMessage;
+import org.digit.program.models.*;
 import org.digit.program.repository.ProgramRepository;
 import org.digit.program.utils.DispatcherUtil;
 import org.springframework.stereotype.Service;
@@ -54,12 +52,12 @@ public class ProgramService {
         return requestJsonMessage;
     }
 
-    public List<Program> searchProgram(ProgramSearch programSearch) {
+    public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
         log.info("searchProgram");
         List<Program> programs = null;
-        enrichmentService.enrichProgramForSearch(programSearch);
-        programs = programRepository.searchProgram(programSearch);
-        return programs;
+        enrichmentService.enrichProgramForSearch(programSearchRequest.getProgramSearch());
+        programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
+        return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
     public RequestJsonMessage onProgram(RequestJsonMessage requestJsonMessage) {

@@ -7,7 +7,7 @@ CREATE TABLE eg_program (
   description                   character varying(256),
   client_host_url               character varying(128),
   status                        character varying(64),
-  status_message                character varying(256)
+  status_message                character varying(256),
   start_date                    bigint,
   end_date                      bigint,
   created_by                    character varying(256),
