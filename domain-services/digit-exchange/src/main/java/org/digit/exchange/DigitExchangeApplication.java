@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 @Import({TracerConfiguration.class})
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
-@ComponentScan(basePackages = { "org.digit.exchange", "org.digit.exchange.controllers", "org.digit.exchange.config" })
+@ComponentScan(basePackages = { "org.digit.exchange", "org.digit.exchange.controller", "org.digit.exchange.config" })
 public class DigitExchangeApplication {
 
 	public static void main(String[] args) {
