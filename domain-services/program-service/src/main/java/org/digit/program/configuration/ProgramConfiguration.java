@@ -54,6 +54,15 @@ public class ProgramConfiguration {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
+    @Value("${program.domain}")
+    private String domain;
+
+    @Value("${exchange.host}")
+    private String exchangeHost;
+
+    @Value("${exchange.path}")
+    private String exchangePath;
+
     @Value("${egov.idgen.host}")
     private String idGenHost;
 
@@ -62,9 +71,6 @@ public class ProgramConfiguration {
 
     @Value("${egov.idgen.idname}")
     private String idName;
-
-    @Value("${program.domain}")
-    private String domain;
 
     @Value("${search.max.limit}")
     private Integer searchMaxLimit;

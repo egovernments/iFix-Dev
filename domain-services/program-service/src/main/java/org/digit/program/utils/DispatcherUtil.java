@@ -1,5 +1,6 @@
 package org.digit.program.utils;
 
+import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.Action;
 import org.digit.program.constants.MessageType;
 import org.digit.program.models.RequestJsonMessage;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Component;
 public class DispatcherUtil {
 
     private final ServiceRequestRepository restRepo;
+    private final ProgramConfiguration configs;
 
-    public DispatcherUtil(ServiceRequestRepository restRepo) {
+    public DispatcherUtil(ServiceRequestRepository restRepo, ProgramConfiguration configs) {
         this.restRepo = restRepo;
+        this.configs = configs;
     }
 
     public void sendOnProgram(RequestJsonMessage requestJsonMessage){
@@ -21,7 +24,7 @@ public class DispatcherUtil {
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
                 .message(requestJsonMessage.getMessage().toString()).build();
         updateUri(requestMessage);
-        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId().split("@")[1]).append("exchange/v1/on-program");
+        StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath());
         restRepo.fetchResult(url, requestMessage);
     }
 
@@ -37,7 +40,7 @@ public class DispatcherUtil {
                 .message(requestJsonMessage.getMessage().toString()).build();
         requestMessage.getHeader().setMessageType(MessageType.PROGRAM);
         requestMessage.getHeader().setAction(isCreate ? Action.CREATE : Action.UPDATE);
-        StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId().split("@")[1]).append("exchange/v1/program");
+        StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath());
         restRepo.fetchResult(url, requestMessage);
         return requestJsonMessage;
     }
