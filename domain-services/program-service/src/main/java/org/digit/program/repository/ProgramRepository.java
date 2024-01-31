@@ -1,5 +1,6 @@
 package org.digit.program.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.Program;
 import org.digit.program.models.ProgramSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class ProgramRepository {
 
     @Autowired
@@ -37,6 +39,7 @@ public class ProgramRepository {
         preparedStmtList = new ArrayList<>();
         String programInsertQuery = programQueryBuilder.buildProgramInsertQuery(program, preparedStmtList);
         jdbcTemplate.update(programInsertQuery, preparedStmtList.toArray());
+        log.info("create Program persisted");
     }
 
     @Transactional
@@ -48,6 +51,7 @@ public class ProgramRepository {
         preparedStmtList = new ArrayList<>();
         String programUpdateQuery = programQueryBuilder.buildProgramUpdateQuery(program, preparedStmtList);
         jdbcTemplate.update(programUpdateQuery, preparedStmtList.toArray());
+        log.info("update Program persisted");
     }
 
     public List<Program> searchProgram(ProgramSearch programSearch) {

@@ -35,16 +35,18 @@ public class EnrichmentService {
         program.setAuditDetails(auditDetails);
         org.digit.program.models.Status status = org.digit.program.models.Status.builder().statusCode(Status.RECEIVED).build();
         program.setStatus(status);
+        log.info("Enrichment for create completed");
     }
 
-    public Program enrichProgramForUpdate(Program program) {
+    public void enrichProgramForUpdate(Program program) {
         log.info("Enrich Program for Update");
         AuditDetails auditDetails = AuditDetails.builder().lastModifiedTime(System.currentTimeMillis()).lastModifiedBy("b").build();
         program.setAuditDetails(auditDetails);
-        return program;
+        log.info("Enrichment for update completed");
     }
 
     public void enrichProgramForSearch(ProgramSearch programSearch) {
+        log.info("Enrich Program for Search");
         if (programSearch.getPagination() == null)
             programSearch.setPagination(Pagination.builder().build());
 
@@ -62,8 +64,7 @@ public class EnrichmentService {
         if (programSearch.getPagination().getSortOrder() == null) {
             programSearch.getPagination().setSortOrder(SortOrder.DESC);
         }
-
-
+        log.info("Enrichment for search completed");
     }
 
 }

@@ -26,7 +26,7 @@ public class ProgramService {
     }
 
     public RequestJsonMessage createProgram(RequestJsonMessage requestJsonMessage) {
-        log.info("createProgram");
+        log.info("create Program");
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForCreate(requestJsonMessage.getHeader(), program);
         programRepository.saveProgram(program);
@@ -40,7 +40,7 @@ public class ProgramService {
     }
 
     public RequestJsonMessage updateProgram(RequestJsonMessage requestJsonMessage) {
-        log.info("updateProgram");
+        log.info("update Program");
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.updateProgram(program);
@@ -53,15 +53,16 @@ public class ProgramService {
     }
 
     public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
-        log.info("searchProgram");
+        log.info("search Program");
         List<Program> programs = null;
         enrichmentService.enrichProgramForSearch(programSearchRequest.getProgramSearch());
         programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
+        log.info("Found {} programs", programs.size());
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
     public RequestJsonMessage onProgram(RequestJsonMessage requestJsonMessage) {
-        log.info("onProgram");
+        log.info("on Program");
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.updateProgram(program);
