@@ -69,10 +69,10 @@ public class AppConfig {
     @Value("${app.domain}")
     private String domain;
 
-    @Value("${app.exchangeTopic}")
+    @Value("${app.exchange.topic.name}")
     private String exchangeTopic;
 
-    @Value("${app.errorTopic}")
+    @Value("${app.error.topic.name}")
     private String errorTopic;
 
     @Value("${app.receiver.endpoints}")
