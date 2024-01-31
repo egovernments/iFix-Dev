@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.exchange.config.AppConfig;
+import org.digit.exchange.constants.ExchangeType;
 import org.digit.exchange.kafka.ExchangeProducer;
 import org.digit.exchange.model.JsonMessage;
 import org.digit.exchange.model.RequestMessage;
@@ -27,7 +28,7 @@ public class ExchangeService {
         this.restRepo = restRepo;
     }
 
-    public RequestMessage processMessage(String type, RequestMessage messageRequest) {
+    public RequestMessage processMessage(ExchangeType type, RequestMessage messageRequest) {
         RequestMessageWrapper requestMessageWrapper = new RequestMessageWrapper(type, messageRequest);
         producer.push( config.getExchangeTopic(), requestMessageWrapper);
         log.info("Pushed message to kafka topic");
@@ -36,12 +37,13 @@ public class ExchangeService {
 
     public void send(RequestMessageWrapper requestMessageWrapper) {
         RequestMessage requestMessage = requestMessageWrapper.getRequestMessage();
-        Boolean isReply = requestMessageWrapper.getType().contains("on-") ;
+        Boolean isReply = requestMessageWrapper.getType().toString().contains("on-") ;
         String url = getReceiverEndPoint(requestMessage, isReply);
         if(url==null)
             return;
         log.info("Receiver url mapped: {}", url);
-        if (requestMessage.getHeader().getReceiverId().equalsIgnoreCase(config.getDomain())){
+        String receiverDomain = requestMessage.getHeader().getReceiverId().contains("@") ? requestMessage.getHeader().getReceiverId().split("@")[1] : requestMessage.getHeader().getReceiverId();
+        if( receiverDomain.equalsIgnoreCase(config.getDomain())){
             log.info("Converting message to Json Node");
             JsonNode node;
             try {
@@ -76,7 +78,7 @@ public class ExchangeService {
             String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
             requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
             requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
-            requestMessageWrapper.setType("on-" + requestMessageWrapper.getType());
+            requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
             String newUrl = getReceiverEndPoint(requestMessageWrapper.getRequestMessage(), true);
             try {
                 restRepo.fetchResult(newUrl, requestMessageWrapper.getRequestMessage());
@@ -97,7 +99,7 @@ public class ExchangeService {
             String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
             requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
             requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
-            requestMessageWrapper.setType("on-" + requestMessageWrapper.getType());
+            requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
             String newUrl = getReceiverEndPoint(requestMessageWrapper.getRequestMessage(), true);
             JsonNode newNode;
             log.info("Converting message to Json Node");
@@ -120,13 +122,15 @@ public class ExchangeService {
     String getReceiverEndPoint(RequestMessage message, Boolean isReply){
         String receiverDomain = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[1] : message.getHeader().getReceiverId();
         if( receiverDomain.equalsIgnoreCase(config.getDomain())){
+            // Get the reciver Service name and get the host from config
+            String receiverService = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[0] : "program";
+            if (!config.getReceiverEndpoints().containsKey(receiverService))
+                return null;
+            String baseUrl = config.getReceiverEndpoints().get(receiverService);
             //Retrieve url from config
-            if (Boolean.TRUE.equals(isReply))
-                return config.getDomain() + config.getPath() + config.getRoutes().get("ON-" + message.getHeader().getMessageType().toString()) + "/_" + message.getHeader().getAction();
-            else
-                return config.getDomain() + config.getPath() + config.getRoutes().get(message.getHeader().getMessageType().toString()) + "/_" + message.getHeader().getAction();
-        }else{
-            return receiverDomain + "/exchange/v1/" + message.getHeader().getMessageType().toString().toLowerCase();
+            return baseUrl + "/" + message.getHeader().getMessageType().toString() + "/_" + message.getHeader().getAction();
+        } else {
+            return receiverDomain + "/exchange/v1/" + message.getHeader().getMessageType().toString();
         }
     }
 }

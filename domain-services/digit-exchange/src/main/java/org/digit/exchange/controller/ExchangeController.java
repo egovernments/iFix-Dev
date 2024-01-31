@@ -1,6 +1,7 @@
 package org.digit.exchange.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.digit.exchange.constants.ExchangeType;
 import org.digit.exchange.exception.ResourceNotFoundException;
 import org.digit.exchange.model.RequestMessage;
 import org.digit.exchange.service.ExchangeService;
@@ -26,7 +27,7 @@ public class ExchangeController {
     public ResponseEntity<RequestMessage> program(@RequestBody RequestMessage messageRequest, @PathVariable("subpath1") String type) {
     log.info("Received message from: {} to {}", messageRequest.getHeader().getSenderId(), messageRequest.getHeader().getReceiverId());
         try {
-            RequestMessage response = exchangeService.processMessage(type, messageRequest);
+            RequestMessage response = exchangeService.processMessage(ExchangeType.fromValue(type), messageRequest);
             return ResponseEntity.ok(response);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
