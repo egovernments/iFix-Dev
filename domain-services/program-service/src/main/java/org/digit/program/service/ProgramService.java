@@ -32,11 +32,11 @@ public class ProgramService {
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForCreate(requestJsonMessage.getHeader(), program);
         programRepository.saveProgram(program);
-        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(requestJsonMessage, program);
-        else
-            dispatcherUtil.forwardMessage(requestJsonMessage, program, true);
         requestJsonMessage.setMessage(program.toJsonNode(program));
+        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.sendOnProgram(requestJsonMessage);
+        else
+            dispatcherUtil.forwardMessage(requestJsonMessage, true);
         return requestJsonMessage;
 
     }
@@ -46,11 +46,11 @@ public class ProgramService {
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.updateProgram(program);
-        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(requestJsonMessage, program);
-        else
-            dispatcherUtil.forwardMessage(requestJsonMessage, program, false);
         requestJsonMessage.setMessage(program.toJsonNode(program));
+        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.sendOnProgram(requestJsonMessage);
+        else
+            dispatcherUtil.forwardMessage(requestJsonMessage, false);
         return requestJsonMessage;
     }
 

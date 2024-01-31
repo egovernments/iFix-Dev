@@ -2,7 +2,6 @@ package org.digit.program.utils;
 
 import org.digit.program.constants.Action;
 import org.digit.program.constants.MessageType;
-import org.digit.program.models.Program;
 import org.digit.program.models.RequestJsonMessage;
 import org.digit.program.models.RequestMessage;
 import org.digit.program.repository.ServiceRequestRepository;
@@ -17,10 +16,10 @@ public class DispatcherUtil {
         this.restRepo = restRepo;
     }
 
-    public void sendOnProgram(RequestJsonMessage requestJsonMessage, Program program){
+    public void sendOnProgram(RequestJsonMessage requestJsonMessage){
         RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
-                .message(program.toString()).build();
+                .message(requestJsonMessage.getMessage().toString()).build();
         updateUri(requestMessage);
         StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/on-program");
         restRepo.fetchResult(url, requestMessage);
@@ -32,10 +31,10 @@ public class DispatcherUtil {
         requestMessage.getHeader().setReceiverId(senderId);
     }
 
-    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage, Program program, Boolean isCreate){
+    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage, Boolean isCreate){
         RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
-                .message(program.toString()).build();
+                .message(requestJsonMessage.getMessage().toString()).build();
         requestMessage.getHeader().setMessageType(MessageType.PROGRAM);
         requestMessage.getHeader().setAction(isCreate ? Action.CREATE : Action.UPDATE);
         StringBuilder url = new StringBuilder(requestMessage.getHeader().getReceiverId()).append("exchange/v1/program");
