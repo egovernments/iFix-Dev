@@ -12,6 +12,8 @@ import org.digit.exchange.model.RequestMessage;
 import org.digit.exchange.model.RequestMessageWrapper;
 import org.digit.exchange.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Service;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Service
 @Slf4j
@@ -43,7 +45,7 @@ public class ExchangeService {
             return;
         log.info("Receiver url mapped: {}", url);
         String receiverDomain = requestMessage.getHeader().getReceiverId().contains("@") ? requestMessage.getHeader().getReceiverId().split("@")[1] : requestMessage.getHeader().getReceiverId();
-        if( receiverDomain.equalsIgnoreCase(config.getDomain())){
+        if(matchDomains(receiverDomain, config.getDomain())){
             log.info("Converting message to Json Node");
             JsonNode node;
             try {
@@ -125,7 +127,7 @@ public class ExchangeService {
 
     String getReceiverEndPoint(RequestMessage message, Boolean isReply){
         String receiverDomain = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[1] : message.getHeader().getReceiverId();
-        if( receiverDomain.equalsIgnoreCase(config.getDomain())){
+        if(matchDomains(receiverDomain, config.getDomain())){
             // Get the reciver Service name and get the host from config
             String receiverService = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[0] : "program";
             if (!config.getReceiverEndpoints().containsKey(receiverService))
@@ -136,5 +138,27 @@ public class ExchangeService {
         } else {
             return receiverDomain + "/digit-exchange/v1/" + message.getHeader().getMessageType().toString();
         }
+    }
+
+    public static boolean matchDomains(String domain1, String domain2) {
+        try {
+            URI uri1 = new URI(normalizeUrl(domain1));
+            URI uri2 = new URI(normalizeUrl(domain2));
+
+            // Check if the normalized domains are equal
+            return uri1.getHost().equalsIgnoreCase(uri2.getHost());
+        } catch (URISyntaxException e) {
+            // Handle URI syntax exception if needed
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static String normalizeUrl(String url) {
+        // Add a default scheme (e.g., "http://") if not present
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+        return url;
     }
 }
