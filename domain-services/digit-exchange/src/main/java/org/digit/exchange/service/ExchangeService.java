@@ -55,15 +55,19 @@ public class ExchangeService {
             JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature()).header(requestMessage.getHeader()).jsonNode(node).build();
             try {
                 restRepo.fetchResult(url, jsonMessage);
+                log.info("Posted request to : {}", url);
             } catch (Exception e) {
+                log.error("Exception while calling the API : {}", e.getMessage());
                 handleErrorForSameDomain(requestMessageWrapper, isReply);
             }
         } else {
             try {
                 restRepo.fetchResult(url, requestMessage);
+                log.info("Posted request to : {}", url);
             } catch (Exception e) {
+                log.error("Exception while calling the API : {}", e.getMessage());
                 handleErrorForDifferentDomain(requestMessageWrapper, isReply);
-        }
+            }
         }
 
     }
@@ -130,7 +134,7 @@ public class ExchangeService {
             //Retrieve url from config
             return baseUrl + "/" + message.getHeader().getMessageType().toString() + "/_" + message.getHeader().getAction();
         } else {
-            return receiverDomain + "/exchange/v1/" + message.getHeader().getMessageType().toString();
+            return receiverDomain + "/digit-exchange/v1/" + message.getHeader().getMessageType().toString();
         }
     }
 }

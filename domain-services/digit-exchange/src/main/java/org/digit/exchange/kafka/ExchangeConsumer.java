@@ -27,6 +27,7 @@ public class ExchangeConsumer {
     @KafkaListener(topics = {"${app.exchange.topic.name}"})
     public void listen(final String receivedObject,  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.info("Consumed message from topic: {}", topic);
+        log.info("Received message: {}", receivedObject);
         RequestMessageWrapper requestMessageWrapper = null;
         try {
             requestMessageWrapper = objectMapper.readValue(receivedObject, RequestMessageWrapper.class);
