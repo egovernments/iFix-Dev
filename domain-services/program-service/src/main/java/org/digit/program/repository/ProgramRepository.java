@@ -6,7 +6,6 @@ import org.digit.program.models.ProgramSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.ProgramQueryBuilder;
 import org.digit.program.repository.rowmapper.ProgramRowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,17 +17,17 @@ import java.util.List;
 @Slf4j
 public class ProgramRepository {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
     private ProgramRowMapper programRowMapper;
-
-    @Autowired
     private ProgramQueryBuilder programQueryBuilder;
-
-    @Autowired
     private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
+
+    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.programRowMapper = programRowMapper;
+        this.programQueryBuilder = programQueryBuilder;
+        this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
+    }
 
     @Transactional
     public void saveProgram(Program program) {
