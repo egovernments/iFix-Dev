@@ -1,6 +1,7 @@
 package org.digit.program.repository.querybuilder;
 
 import org.digit.program.models.Program;
+import org.digit.program.models.Sanction;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -50,6 +51,38 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());
+        return EXCHANGE_CODE_UPDATE_QUERY;
+    }
+
+    public String buildExchangeCodeSanctionInsertQuery (Sanction sanction, List<Object> preparedStmtList) {
+        preparedStmtList.add(sanction.getId());
+        preparedStmtList.add(sanction.getLocationCode());
+        preparedStmtList.add(sanction.getId());
+        preparedStmtList.add(sanction.getFunctionCode());
+        preparedStmtList.add(sanction.getAdministrationCode());
+        preparedStmtList.add(sanction.getProgramCode());
+        preparedStmtList.add(sanction.getRecipientSegmentCode());
+        preparedStmtList.add(sanction.getEconomicSegmentCode());
+        preparedStmtList.add(sanction.getSourceOfFundCode());
+        preparedStmtList.add(sanction.getTargetSegmentCode());
+        preparedStmtList.add(sanction.getAuditDetails().getCreatedBy());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(sanction.getAuditDetails().getCreatedTime());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
+        return EXCHANGE_CODE_INSERT_QUERY;
+    }
+
+    public String buildExchangeCodeSanctionUpdateQuery (Sanction sanction, List<Object> preparedStmtList) {
+        preparedStmtList.add(sanction.getFunctionCode());
+        preparedStmtList.add(sanction.getAdministrationCode());
+        preparedStmtList.add(sanction.getProgramCode());
+        preparedStmtList.add(sanction.getRecipientSegmentCode());
+        preparedStmtList.add(sanction.getEconomicSegmentCode());
+        preparedStmtList.add(sanction.getSourceOfFundCode());
+        preparedStmtList.add(sanction.getTargetSegmentCode());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
+        preparedStmtList.add(sanction.getId());
         return EXCHANGE_CODE_UPDATE_QUERY;
     }
 

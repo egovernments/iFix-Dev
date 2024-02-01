@@ -100,7 +100,6 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(programSearch.getPagination().getLimit());
         preparedStmtList.add(programSearch.getPagination().getOffset());
 
-
         return programSearchQuery.toString();
     }
 
