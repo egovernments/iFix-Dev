@@ -68,9 +68,10 @@ public class EnrichmentService {
         return pagination;
     }
 
-    public Sanction enrichSanctionCreate(Sanction sanction) {
+    public Sanction enrichSanctionCreate(Sanction sanction, RequestJsonMessage requestJsonMessage) {
         log.info("Enrich sanction create");
-        sanction.setId(UUID.randomUUID().toString());
+        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            sanction.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         sanction.setAuditDetails(auditDetails);
         return sanction;

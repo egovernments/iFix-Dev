@@ -34,7 +34,7 @@ public class ProgramService {
         if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
             dispatcherUtil.sendOnProgram(requestJsonMessage);
         else
-            dispatcherUtil.forwardMessage(requestJsonMessage, true);
+            dispatcherUtil.forwardMessage(requestJsonMessage);
         return requestJsonMessage;
 
     }
@@ -48,7 +48,7 @@ public class ProgramService {
         if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
             dispatcherUtil.sendOnProgram(requestJsonMessage);
         else
-            dispatcherUtil.forwardMessage(requestJsonMessage, false);
+            dispatcherUtil.forwardMessage(requestJsonMessage);
         return requestJsonMessage;
     }
 

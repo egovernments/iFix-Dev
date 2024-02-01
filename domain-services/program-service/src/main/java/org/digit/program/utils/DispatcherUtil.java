@@ -33,7 +33,7 @@ public class DispatcherUtil {
         requestMessage.getHeader().setReceiverId(senderId);
     }
 
-    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage, Boolean isCreate){
+    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage){
         RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
                 .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
                 .message(requestJsonMessage.getMessage().toString()).build();

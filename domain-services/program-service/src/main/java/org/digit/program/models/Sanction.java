@@ -75,5 +75,13 @@ public class Sanction extends ExchangeCode {
         this.setAuditDetails(sanction.getAuditDetails());
     }
 
+    public JsonNode toJsonNode(Sanction sanction) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        JsonNode jsonNode;
+        jsonNode = mapper.valueToTree(sanction);
+        return jsonNode;
+    }
+
 
 }
