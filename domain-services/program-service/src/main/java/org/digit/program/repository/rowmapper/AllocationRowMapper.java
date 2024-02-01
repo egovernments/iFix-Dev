@@ -33,7 +33,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             String programCode = rs.getString("program_code");
             String sanctionId = rs.getString("sanction_id");
             Double amount = rs.getDouble("amount");
-            AllocationType allocationType = AllocationType.valueOf(rs.getString("allocation_type"));
+            AllocationType allocationType = AllocationType.valueOf(rs.getString("type"));
             String status = rs.getString("status");
             String statusMessage = rs.getString("status_message");
             String createdBy = rs.getString("created_by");

@@ -51,6 +51,8 @@ public class AllocationService {
 
     public AllocationResponse searchAllocation (AllocationSearchRequest allocationSearchRequest) {
         log.info("Search Allocation");
+        allocationSearchRequest.getAllocationSearch().setPagination(enrichmentService.enrichSearch(allocationSearchRequest
+                .getAllocationSearch().getPagination()));
         List<Allocation> allocations = allocationRepository.searchAllocation(allocationSearchRequest.getAllocationSearch());
         AllocationResponse allocationResponse = AllocationResponse.builder().header(allocationSearchRequest.getHeader())
                 .allocations(allocations).build();

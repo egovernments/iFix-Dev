@@ -31,7 +31,8 @@ public class AllocationController {
         return ResponseEntity.ok(allocationService.updateAllocation(requestJsonMessage));
     }
 
-    public ResponseEntity<AllocationResponse> searchAllocation(AllocationSearchRequest allocationSearchRequest) {
+    @PostMapping(value = "/allocation/_search")
+    public ResponseEntity<AllocationResponse> searchAllocation(@RequestBody AllocationSearchRequest allocationSearchRequest) {
         return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest));
 
     }
