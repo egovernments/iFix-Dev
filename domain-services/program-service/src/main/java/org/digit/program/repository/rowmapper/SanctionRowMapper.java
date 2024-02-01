@@ -2,7 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.Program;
+import org.digit.program.models.Sanction;
 import org.digit.program.models.Status;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;
@@ -11,33 +11,32 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Slf4j
-public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
+public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
+
 
     private ObjectMapper mapper;
 
-    public ProgramRowMapper(ObjectMapper mapper) {
+    public SanctionRowMapper(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
-    @Override
-    public List<Program> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        List<Program> programs = new ArrayList<>();
-        while (rs.next()) {
 
-            Program program = new Program();
+    @Override
+    public List<Sanction> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        List<Sanction> sanctions = new ArrayList<>();
+        while (rs.next()) {
+            Sanction sanction = new Sanction();
             String id = rs.getString("id");
             String locationCode = rs.getString("location_code");
             String programCode = rs.getString("program_code");
-            String name = rs.getString("name");
-            String parentId = rs.getString("parent_id");
-            String description = rs.getString("description");
-            Long startDate = rs.getLong("start_date");
-            Long endDate = rs.getLong("end_date");
-            String clientHostUrl = rs.getString("client_host_url");
+            Double sanctionAmount = rs.getDouble("sanctioned_amount");
+            Double allocatedAmount = rs.getDouble("allocated_amount");
+            Double availableAmount = rs.getDouble("available_amount");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -55,28 +54,25 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
 
             AuditDetails auditDetails = AuditDetails.builder().createdTime(createdTime).lastModifiedTime(lastModifiedTime).createdBy(createdBy).lastModifiedBy(lastModifiedBy).build();
-            program.setId(id);
-            program.setLocationCode(locationCode);
-            program.setProgramCode(programCode);
-            program.setName(name);
-            program.setParentId(parentId);
-            program.setDescription(description);
-            program.setStartDate(startDate);
-            program.setEndDate(endDate);
-            program.setClientHostUrl(clientHostUrl);
-            program.setAuditDetails(auditDetails);
 
-            program.setFunctionCode(functionCode);
-            program.setAdministrationCode(administrationCode);
-            program.setRecipientSegmentCode(recipientSegmentCode);
-            program.setEconomicSegmentCode(economicSegmentCode);
-            program.setSourceOfFundCode(sourceOfFundCode);
-            program.setTargetSegmentCode(targetSegmentCode);
-            program.setStatus(status1);
+            sanction.setId(id);
+            sanction.setLocationCode(locationCode);
+            sanction.setProgramCode(programCode);
+            sanction.setSanctionedAmount(sanctionAmount);
+            sanction.setAllocatedAmount(allocatedAmount);
+            sanction.setAvailableAmount(availableAmount);
+            sanction.setAuditDetails(auditDetails);
 
-            programs.add(program);
+            sanction.setFunctionCode(functionCode);
+            sanction.setAdministrationCode(administrationCode);
+            sanction.setRecipientSegmentCode(recipientSegmentCode);
+            sanction.setEconomicSegmentCode(economicSegmentCode);
+            sanction.setSourceOfFundCode(sourceOfFundCode);
+            sanction.setTargetSegmentCode(targetSegmentCode);
+            sanction.setStatus(status1);
 
+            sanctions.add(sanction);
         }
-        return programs;
+        return sanctions;
     }
 }

@@ -55,7 +55,7 @@ public class ProgramService {
     public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
         log.info("search Program");
         List<Program> programs = null;
-        enrichmentService.enrichProgramForSearch(programSearchRequest.getProgramSearch());
+        programSearchRequest.getProgramSearch().setPagination(enrichmentService.enrichSearch(programSearchRequest.getProgramSearch().getPagination()));
         programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
         log.info("Found {} programs", programs.size());
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();

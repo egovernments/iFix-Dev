@@ -45,26 +45,35 @@ public class EnrichmentService {
         log.info("Enrichment for update completed");
     }
 
-    public void enrichProgramForSearch(ProgramSearch programSearch) {
+    public Pagination enrichSearch(Pagination pagination) {
         log.info("Enrich Program for Search");
-        if (programSearch.getPagination() == null)
-            programSearch.setPagination(Pagination.builder().build());
+        if (pagination == null)
+            pagination = Pagination.builder().build();
 
-        if (programSearch.getPagination().getLimit() == null) {
-            programSearch.getPagination().setLimit(configs.getSearchDefaultLimit());
-        } else if (programSearch.getPagination().getLimit() > configs.getSearchMaxLimit()) {
-            programSearch.getPagination().setLimit(configs.getSearchMaxLimit());
+        if (pagination.getLimit() == null) {
+            pagination.setLimit(configs.getSearchDefaultLimit());
+        } else if (pagination.getLimit() > configs.getSearchMaxLimit()) {
+            pagination.setLimit(configs.getSearchMaxLimit());
         }
-        if (programSearch.getPagination().getOffset() == null) {
-            programSearch.getPagination().setOffset(0);
+        if (pagination.getOffset() == null) {
+            pagination.setOffset(0);
         }
-        if (StringUtils.isEmpty(programSearch.getPagination().getSortBy())) {
-            programSearch.getPagination().setSortBy("last_modified_time");
+        if (StringUtils.isEmpty(pagination.getSortBy())) {
+            pagination.setSortBy("last_modified_time");
         }
-        if (programSearch.getPagination().getSortOrder() == null) {
-            programSearch.getPagination().setSortOrder(SortOrder.DESC);
+        if (pagination.getSortOrder() == null) {
+            pagination.setSortOrder(SortOrder.DESC);
         }
         log.info("Enrichment for search completed");
+        return pagination;
+    }
+
+    public Sanction enrichSanctionCreate(Sanction sanction) {
+        log.info("Enrich sanction create");
+        sanction.setId(UUID.randomUUID().toString());
+        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+        sanction.setAuditDetails(auditDetails);
+        return sanction;
     }
 
 }
