@@ -1,5 +1,6 @@
 package org.digit.program.repository.querybuilder;
 
+import org.digit.program.models.Allocation;
 import org.digit.program.models.Program;
 import org.digit.program.models.Sanction;
 import org.springframework.stereotype.Component;
@@ -86,4 +87,35 @@ public class ExchangeCodeQueryBuilder {
         return EXCHANGE_CODE_UPDATE_QUERY;
     }
 
+    public String buildExchangeCodeAllocationInsertQuery (Allocation allocation, List<Object> preparedStmtList) {
+        preparedStmtList.add(allocation.getId());
+        preparedStmtList.add(allocation.getLocationCode());
+        preparedStmtList.add(allocation.getId());
+        preparedStmtList.add(allocation.getFunctionCode());
+        preparedStmtList.add(allocation.getAdministrationCode());
+        preparedStmtList.add(allocation.getProgramCode());
+        preparedStmtList.add(allocation.getRecipientSegmentCode());
+        preparedStmtList.add(allocation.getEconomicSegmentCode());
+        preparedStmtList.add(allocation.getSourceOfFundCode());
+        preparedStmtList.add(allocation.getTargetSegmentCode());
+        preparedStmtList.add(allocation.getAuditDetails().getCreatedBy());
+        preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(allocation.getAuditDetails().getCreatedTime());
+        preparedStmtList.add(allocation.getAuditDetails().getLastModifiedTime());
+        return EXCHANGE_CODE_INSERT_QUERY;
+    }
+
+    public String buildExchangeCodeAllocationUpdateQuery (Allocation allocation, List<Object> preparedStmtList) {
+        preparedStmtList.add(allocation.getFunctionCode());
+        preparedStmtList.add(allocation.getAdministrationCode());
+        preparedStmtList.add(allocation.getProgramCode());
+        preparedStmtList.add(allocation.getRecipientSegmentCode());
+        preparedStmtList.add(allocation.getEconomicSegmentCode());
+        preparedStmtList.add(allocation.getSourceOfFundCode());
+        preparedStmtList.add(allocation.getTargetSegmentCode());
+        preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(allocation.getAuditDetails().getLastModifiedTime());
+        preparedStmtList.add(allocation.getId());
+        return EXCHANGE_CODE_UPDATE_QUERY;
+    }
 }

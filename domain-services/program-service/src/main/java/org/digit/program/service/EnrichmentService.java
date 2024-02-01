@@ -77,4 +77,13 @@ public class EnrichmentService {
         return sanction;
     }
 
+    public Allocation enrichAllocationCreate(Allocation allocation, RequestJsonMessage requestJsonMessage) {
+        log.info("Enrich allocation create");
+        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            allocation.setId(UUID.randomUUID().toString());
+        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+        allocation.setAuditDetails(auditDetails);
+        return allocation;
+    }
+
 }

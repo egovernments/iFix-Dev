@@ -19,6 +19,10 @@ public class SanctionQueryBuilder {
             "SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +
             "WHERE id = ?";
 
+    public static final String SANCTION_UPDATE_ON_ALLOCATION_QUERY = "UPDATE eg_program_sanction " +
+            "SET allocated_amount = ?, available_amount = ?, last_modified_by = ?, last_modified_time = ? " +
+            "WHERE id = ?";
+
     public static final String SANCTION_SEARCH_QUERY = "SELECT * FROM eg_program_sanction JOIN eg_program_message_codes " +
             "ON eg_program_sanction.id = eg_program_message_codes.id ";
 
@@ -46,6 +50,15 @@ public class SanctionQueryBuilder {
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(sanction.getId());
         return SANCTION_UPDATE_QUERY;
+    }
+
+    public String buildSanctionUpdateOnAllocationQuery(Sanction sanction, List<Object> preparedStmtList) {
+        preparedStmtList.add(sanction.getAllocatedAmount());
+        preparedStmtList.add(sanction.getAvailableAmount());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
+        preparedStmtList.add(sanction.getId());
+        return SANCTION_UPDATE_ON_ALLOCATION_QUERY;
     }
 
     public String buildSanctionSearchQuery(SanctionSearch sanctionSearch, List<Object> preparedStmtList) {

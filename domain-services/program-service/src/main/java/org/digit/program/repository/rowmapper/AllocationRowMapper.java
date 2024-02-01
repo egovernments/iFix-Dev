@@ -1,8 +1,8 @@
 package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.Sanction;
+import org.digit.program.constants.AllocationType;
+import org.digit.program.models.Allocation;
 import org.digit.program.models.Status;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;
@@ -15,28 +15,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Slf4j
-public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
-
+public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>> {
 
     private ObjectMapper mapper;
 
-    public SanctionRowMapper(ObjectMapper mapper) {
+    public AllocationRowMapper(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
-
     @Override
-    public List<Sanction> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        List<Sanction> sanctions = new ArrayList<>();
+    public List<Allocation> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        List<Allocation> allocations = new ArrayList<>();
         while (rs.next()) {
-            Sanction sanction = new Sanction();
+            Allocation allocation = new Allocation();
             String id = rs.getString("id");
             String locationCode = rs.getString("location_code");
             String programCode = rs.getString("program_code");
-            Double sanctionAmount = rs.getDouble("sanctioned_amount");
-            Double allocatedAmount = rs.getDouble("allocated_amount");
-            Double availableAmount = rs.getDouble("available_amount");
+            String sanctionId = rs.getString("sanction_id");
+            Double amount = rs.getDouble("amount");
+            AllocationType allocationType = AllocationType.valueOf(rs.getString("allocation_type"));
             String status = rs.getString("status");
             String statusMessage = rs.getString("status_message");
             String createdBy = rs.getString("created_by");
@@ -52,27 +49,27 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             String targetSegmentCode = rs.getString("target_segment_code");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
-
             AuditDetails auditDetails = AuditDetails.builder().createdTime(createdTime).lastModifiedTime(lastModifiedTime).createdBy(createdBy).lastModifiedBy(lastModifiedBy).build();
 
-            sanction.setId(id);
-            sanction.setLocationCode(locationCode);
-            sanction.setProgramCode(programCode);
-            sanction.setSanctionedAmount(sanctionAmount);
-            sanction.setAllocatedAmount(allocatedAmount);
-            sanction.setAvailableAmount(availableAmount);
-            sanction.setStatus(status1);
-            sanction.setAuditDetails(auditDetails);
+            allocation.setId(id);
+            allocation.setLocationCode(locationCode);
+            allocation.setProgramCode(programCode);
+            allocation.setSanctionId(sanctionId);
+            allocation.setAmount(amount);
+            allocation.setType(allocationType);
+            allocation.setStatus(status1);
+            allocation.setAuditDetails(auditDetails);
 
-            sanction.setFunctionCode(functionCode);
-            sanction.setAdministrationCode(administrationCode);
-            sanction.setRecipientSegmentCode(recipientSegmentCode);
-            sanction.setEconomicSegmentCode(economicSegmentCode);
-            sanction.setSourceOfFundCode(sourceOfFundCode);
-            sanction.setTargetSegmentCode(targetSegmentCode);
+            allocation.setFunctionCode(functionCode);
+            allocation.setAdministrationCode(administrationCode);
+            allocation.setRecipientSegmentCode(recipientSegmentCode);
+            allocation.setEconomicSegmentCode(economicSegmentCode);
+            allocation.setSourceOfFundCode(sourceOfFundCode);
+            allocation.setTargetSegmentCode(targetSegmentCode);
 
-            sanctions.add(sanction);
+            allocations.add(allocation);
+
         }
-        return sanctions;
+        return allocations;
     }
 }
