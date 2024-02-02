@@ -24,7 +24,7 @@ public class DispatcherUtil {
                 .message(requestJsonMessage.getMessage().toString()).build();
         updateUri(requestMessage);
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
-                .append("on-").append(requestJsonMessage.getHeader().getMessageType());
+                .append(requestJsonMessage.getHeader().getMessageType());
         restRepo.fetchResult(url, requestMessage);
     }
 
