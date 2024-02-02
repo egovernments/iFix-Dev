@@ -27,7 +27,8 @@ public class SanctionService {
 
     public RequestJsonMessage createSanction(RequestJsonMessage requestJsonMessage) {
         log.info("createSanction");
-        Sanction sanction = enrichmentService.enrichSanctionCreate(new Sanction(requestJsonMessage.getMessage()), requestJsonMessage);
+        Sanction sanction = enrichmentService.enrichSanctionCreate(new Sanction(requestJsonMessage.getMessage()), requestJsonMessage.getHeader().getReceiverId());
+        sanctionValidator.validateCreateSanction(sanction);
         sanctionRepository.saveSanction(sanction);
         requestJsonMessage.setMessage(sanction.toJsonNode(sanction));
         dispatcherUtil.forwardMessage(requestJsonMessage);
