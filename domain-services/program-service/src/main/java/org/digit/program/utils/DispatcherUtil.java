@@ -1,6 +1,7 @@
 package org.digit.program.utils;
 
 import org.digit.program.configuration.ProgramConfiguration;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.RequestJsonMessage;
 import org.digit.program.models.RequestMessage;
 import org.digit.program.repository.ServiceRequestRepository;
@@ -31,6 +32,7 @@ public class DispatcherUtil {
         String senderId = requestMessage.getHeader().getSenderId();
         requestMessage.getHeader().setSenderId(requestMessage.getHeader().getReceiverId());
         requestMessage.getHeader().setReceiverId(senderId);
+        requestMessage.getHeader().setMessageType(MessageType.fromValue("on-" + requestMessage.getHeader().getMessageType().toString()));
     }
 
     public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage){
