@@ -66,6 +66,8 @@ public class ProgramService {
         Program program = new Program(requestJsonMessage.getMessage());
         enrichmentService.enrichProgramForUpdate(program);
         programRepository.updateProgram(program);
+        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.forwardMessage(requestJsonMessage);
         return requestJsonMessage;
     }
 }
