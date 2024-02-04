@@ -1,6 +1,7 @@
 package org.digit.program.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.AllocationType;
 import org.digit.program.models.*;
 import org.digit.program.repository.AllocationRepository;
 import org.digit.program.repository.SanctionRepository;
@@ -30,8 +31,10 @@ public class AllocationService {
 
     public RequestJsonMessage createAllocation(RequestJsonMessage requestJsonMessage) {
         log.info("Create Allocation");
-        Allocation allocation = enrichmentService.enrichAllocationCreate(new Allocation(requestJsonMessage.getMessage()), requestJsonMessage);
-        Sanction sanction = calculationUtil.calculateSanctionAmount(allocation);
+        Allocation allocation = enrichmentService.enrichAllocationCreate(new Allocation(requestJsonMessage.getMessage()),
+                requestJsonMessage.getHeader().getReceiverId());
+        Sanction sanction = calculationUtil.calculateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
+                allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
         sanctionRepository.updateSanctionOnAllocation(sanction);
         allocationRepository.saveAllocation(allocation);
         requestJsonMessage.setMessage(allocation.toJsonNode(allocation));

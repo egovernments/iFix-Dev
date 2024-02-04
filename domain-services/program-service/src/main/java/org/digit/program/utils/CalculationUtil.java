@@ -21,19 +21,19 @@ public class CalculationUtil {
         this.sanctionRepository = sanctionRepository;
     }
 
-    public Sanction calculateSanctionAmount(Allocation allocation) {
+    public Sanction calculateSanctionAmount(String sanctionId, Double amount, Boolean isAddition) {
         log.info("calculateSanctionAmount");
-        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(allocation.getSanctionId()))
+        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(sanctionId))
                 .pagination(Pagination.builder().sortBy("last_modified_time").sortOrder(SortOrder.DESC).limit(1).offset(0).build()).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
         Double allocatedAmount;
         Double availableAmount;
-        if (allocation.getType().equals(AllocationType.ALLOCATION)) {
-            allocatedAmount = sanction.getAllocatedAmount() + allocation.getAmount();
-            availableAmount = sanction.getAvailableAmount() + allocation.getAmount();
+        if (isAddition) {
+            allocatedAmount = sanction.getAllocatedAmount() + amount;
+            availableAmount = sanction.getAvailableAmount() + amount;
         } else {
-            allocatedAmount = sanction.getAllocatedAmount() - allocation.getAmount();
-            availableAmount = sanction.getAvailableAmount() - allocation.getAmount();
+            allocatedAmount = sanction.getAllocatedAmount() - amount;
+            availableAmount = sanction.getAvailableAmount() - amount;
         }
         sanction.setAllocatedAmount(allocatedAmount);
         sanction.setAvailableAmount(availableAmount);

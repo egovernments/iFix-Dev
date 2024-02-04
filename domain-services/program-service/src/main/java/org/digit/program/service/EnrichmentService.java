@@ -68,22 +68,31 @@ public class EnrichmentService {
         return pagination;
     }
 
-    public Sanction enrichSanctionCreate(Sanction sanction, RequestJsonMessage requestJsonMessage) {
+    public Sanction enrichSanctionCreate(Sanction sanction, String receiverId) {
         log.info("Enrich sanction create");
-        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
             sanction.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         sanction.setAuditDetails(auditDetails);
         return sanction;
     }
 
-    public Allocation enrichAllocationCreate(Allocation allocation, RequestJsonMessage requestJsonMessage) {
+    public Allocation enrichAllocationCreate(Allocation allocation, String receiverId) {
         log.info("Enrich allocation create");
-        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
             allocation.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         allocation.setAuditDetails(auditDetails);
         return allocation;
+    }
+
+    public Disbursement enrichDisburseCreate(Disbursement disbursement, String receiverId) {
+        log.info("Enrich disburse create");
+        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            disbursement.setId(UUID.randomUUID().toString());
+        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+        disbursement.setAuditDetails(auditDetails);
+        return disbursement;
     }
 
 }
