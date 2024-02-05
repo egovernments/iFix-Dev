@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Getter
@@ -24,5 +25,5 @@ public class RequestMessage {
     private RequestHeader header;
     @NotNull
     @JsonProperty("message")
-    private String message;
+    private List<String> message;
 }

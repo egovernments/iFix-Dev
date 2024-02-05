@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class JsonMessage {
     private RequestHeader header;
     @NotNull
     @JsonProperty("message")
-    private JsonNode jsonNode;
+    private List<JsonNode> jsonNode;
 
 
 
