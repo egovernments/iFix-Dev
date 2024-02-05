@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -24,7 +25,7 @@ public class RequestJsonMessage {
 
     @JsonProperty("message")
     @NotNull
-    private JsonNode message;
+    private List<JsonNode> message;
 
     public RequestJsonMessage(){
         UUID uuid = UUID.randomUUID();

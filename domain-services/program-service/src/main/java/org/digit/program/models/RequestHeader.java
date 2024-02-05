@@ -36,6 +36,7 @@ public class RequestHeader{
     @NotNull
     private String senderId;
     @JsonProperty("senderUri")
+    @NotNull
     private String senderUri;
     @NotNull
     @JsonProperty("receiver_id")

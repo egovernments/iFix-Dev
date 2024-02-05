@@ -1,5 +1,6 @@
 package org.digit.program.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.AllocationType;
 import org.digit.program.models.*;
@@ -9,6 +10,7 @@ import org.digit.program.utils.CalculationUtil;
 import org.digit.program.utils.DispatcherUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,23 +33,33 @@ public class AllocationService {
 
     public RequestJsonMessage createAllocation(RequestJsonMessage requestJsonMessage) {
         log.info("Create Allocation");
-        Allocation allocation = enrichmentService.enrichAllocationCreate(new Allocation(requestJsonMessage.getMessage()),
-                requestJsonMessage.getHeader().getReceiverId());
-        Sanction sanction = calculationUtil.calculateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
-                allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
-        sanctionRepository.updateSanctionOnAllocation(sanction);
-        allocationRepository.saveAllocation(allocation);
-        requestJsonMessage.setMessage(allocation.toJsonNode(allocation));
+        List<JsonNode> messages = new ArrayList<>();
+        Allocation allocation;
+        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
+            allocation = enrichmentService.enrichAllocationCreate(new Allocation(requestJsonMessage.getMessage().get(i)),
+                    requestJsonMessage.getHeader().getReceiverId());
+            Sanction sanction = calculationUtil.calculateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
+                    allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
+            sanctionRepository.updateSanctionOnAllocation(sanction);
+            allocationRepository.saveAllocation(allocation);
+            messages.add(allocation.toJsonNode(allocation));
+        }
+        requestJsonMessage.setMessage(messages);
         dispatcherUtil.forwardMessage(requestJsonMessage);
         return requestJsonMessage;
     }
 
     public RequestJsonMessage updateAllocation (RequestJsonMessage requestJsonMessage) {
         log.info("Update Allocation");
-        Allocation allocation = new Allocation(requestJsonMessage.getMessage());
+        List<JsonNode> messages = new ArrayList<>();
+        Allocation allocation;
+        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
+            allocation = new Allocation(requestJsonMessage.getMessage().get(i));
 //        allocationValidator.validateUpdateAllocation(allocation);
-        allocationRepository.updateAllocation(allocation);
-        requestJsonMessage.setMessage(allocation.toJsonNode(allocation));
+            allocationRepository.updateAllocation(allocation);
+            messages.add(allocation.toJsonNode(allocation));
+        }
+        requestJsonMessage.setMessage(messages);
         dispatcherUtil.forwardMessage(requestJsonMessage);
         return requestJsonMessage;
     }

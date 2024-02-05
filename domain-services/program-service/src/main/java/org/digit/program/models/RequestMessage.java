@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -26,7 +27,7 @@ public class RequestMessage {
 
     @NotNull
     @JsonProperty("message")
-    private String message;
+    private List<String> message;
 
 //    public RequestMessage(){
 //        UUID uuid = UUID.randomUUID();
