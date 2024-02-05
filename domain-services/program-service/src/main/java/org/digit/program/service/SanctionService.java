@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.*;
 import org.digit.program.repository.SanctionRepository;
 import org.digit.program.utils.DispatcherUtil;
+import org.digit.program.validator.CommonValidator;
 import org.digit.program.validator.SanctionValidator;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,19 @@ public class SanctionService {
     private final EnrichmentService enrichmentService;
     private final SanctionValidator sanctionValidator;
     private final DispatcherUtil dispatcherUtil;
+    private final CommonValidator commonValidator;
 
-    public SanctionService(SanctionRepository sanctionRepository, EnrichmentService enrichmentService, SanctionValidator sanctionValidator, DispatcherUtil dispatcherUtil) {
+    public SanctionService(SanctionRepository sanctionRepository, EnrichmentService enrichmentService, SanctionValidator sanctionValidator, DispatcherUtil dispatcherUtil, CommonValidator commonValidator) {
         this.sanctionRepository = sanctionRepository;
         this.enrichmentService = enrichmentService;
         this.sanctionValidator = sanctionValidator;
         this.dispatcherUtil = dispatcherUtil;
+        this.commonValidator = commonValidator;
     }
 
     public RequestJsonMessage createSanction(RequestJsonMessage requestJsonMessage) {
         log.info("createSanction");
+        commonValidator.validateRequest(requestJsonMessage);
         List<JsonNode> messages = new ArrayList<>();
         Sanction sanction;
         for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
@@ -45,6 +49,7 @@ public class SanctionService {
 
     public RequestJsonMessage updateSanction(RequestJsonMessage requestJsonMessage) {
         log.info("updateSanction");
+        commonValidator.validateRequest(requestJsonMessage);
         List<JsonNode> messages = new ArrayList<>();
         Sanction sanction;
         for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {

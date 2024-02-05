@@ -15,7 +15,7 @@ import java.util.Collections;
 @Component
 @Slf4j
 public class CalculationUtil {
-    private SanctionRepository sanctionRepository;
+    private final SanctionRepository sanctionRepository;
 
     public CalculationUtil(SanctionRepository sanctionRepository) {
         this.sanctionRepository = sanctionRepository;

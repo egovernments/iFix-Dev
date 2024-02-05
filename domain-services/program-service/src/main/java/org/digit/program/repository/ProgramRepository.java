@@ -18,11 +18,11 @@ import java.util.List;
 @Slf4j
 public class ProgramRepository {
 
-    private JdbcTemplate jdbcTemplate;
-    private ProgramRowMapper programRowMapper;
-    private ProgramQueryBuilder programQueryBuilder;
-    private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
-    private EnrichmentService enrichmentService;
+    private final JdbcTemplate jdbcTemplate;
+    private final ProgramRowMapper programRowMapper;
+    private final ProgramQueryBuilder programQueryBuilder;
+    private final ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
+    private final EnrichmentService enrichmentService;
 
     public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, EnrichmentService enrichmentService) {
         this.jdbcTemplate = jdbcTemplate;

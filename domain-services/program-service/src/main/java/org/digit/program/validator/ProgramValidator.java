@@ -15,7 +15,7 @@ import java.util.*;
 @Component
 @Slf4j
 public class ProgramValidator {
-    private ProgramRepository programRepository;
+    private final ProgramRepository programRepository;
 
     public ProgramValidator(ProgramRepository programRepository) {
         this.programRepository = programRepository;

@@ -17,10 +17,10 @@ import java.util.List;
 @Slf4j
 public class DisburseService {
 
-    private DispatcherUtil dispatcherUtil;
-    private EnrichmentService enrichmentService;
-    private CalculationUtil calculationUtil;
-    private SanctionRepository sanctionRepository;
+    private final DispatcherUtil dispatcherUtil;
+    private final EnrichmentService enrichmentService;
+    private final CalculationUtil calculationUtil;
+    private final SanctionRepository sanctionRepository;
 
     public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, SanctionRepository sanctionRepository) {
         this.dispatcherUtil = dispatcherUtil;

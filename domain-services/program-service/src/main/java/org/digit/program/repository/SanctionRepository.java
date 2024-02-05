@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public class SanctionRepository {
 
-    private JdbcTemplate jdbcTemplate;
-    private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
-    private SanctionQueryBuilder sanctionQueryBuilder;
-    private SanctionRowMapper sanctionRowMapper;
-    private EnrichmentService enrichmentService;
+    private final JdbcTemplate jdbcTemplate;
+    private final ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
+    private final SanctionQueryBuilder sanctionQueryBuilder;
+    private final SanctionRowMapper sanctionRowMapper;
+    private final EnrichmentService enrichmentService;
 
     public SanctionRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, SanctionQueryBuilder sanctionQueryBuilder, SanctionRowMapper sanctionRowMapper, EnrichmentService enrichmentService) {
         this.jdbcTemplate = jdbcTemplate;

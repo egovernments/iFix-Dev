@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/v1")
 public class DisburseController {
 
-    private DisburseService disburseService;
+    private final DisburseService disburseService;
 
     public DisburseController(DisburseService disburseService) {
         this.disburseService = disburseService;
