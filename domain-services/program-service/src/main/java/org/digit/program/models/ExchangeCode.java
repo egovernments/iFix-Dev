@@ -4,10 +4,8 @@ package org.digit.program.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import static org.digit.program.constants.Error.INVALID_ID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +16,6 @@ public class ExchangeCode {
 
 
     @JsonProperty("id")
-    @NotBlank(message = INVALID_ID)
     private String id;
 
     @JsonProperty("function_code")
