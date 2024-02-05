@@ -27,10 +27,13 @@ public class EnrichmentService {
 
     public void enrichProgramForCreate(RequestHeader header, Program program) {
         log.info("Enrich Program for Create");
-        if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdName(), "", 1).get(0));
-        else
+        }
+        else {
             program.setId(UUID.randomUUID().toString());
+            program.setClientHostUrl(configs.getDomain());
+        }
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).createdBy("a").lastModifiedBy("b").build();
         program.setAuditDetails(auditDetails);
         org.digit.program.models.Status status = org.digit.program.models.Status.builder().statusCode(Status.RECEIVED).build();
