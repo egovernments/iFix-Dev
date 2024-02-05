@@ -27,8 +27,9 @@ public class SanctionService {
 
     public RequestJsonMessage createSanction(RequestJsonMessage requestJsonMessage) {
         log.info("createSanction");
-        Sanction sanction = enrichmentService.enrichSanctionCreate(new Sanction(requestJsonMessage.getMessage()), requestJsonMessage.getHeader().getReceiverId());
-        sanctionValidator.validateCreateSanction(sanction);
+        Sanction sanction = (new Sanction(requestJsonMessage.getMessage()));
+        sanctionValidator.validateSanction(sanction, true);
+        enrichmentService.enrichSanctionCreate(sanction, requestJsonMessage.getHeader().getReceiverId());
         sanctionRepository.saveSanction(sanction);
         requestJsonMessage.setMessage(sanction.toJsonNode(sanction));
         dispatcherUtil.forwardMessage(requestJsonMessage);
@@ -38,7 +39,8 @@ public class SanctionService {
     public RequestJsonMessage updateSanction(RequestJsonMessage requestJsonMessage) {
         log.info("updateSanction");
         Sanction sanction = new Sanction(requestJsonMessage.getMessage());
-        sanctionValidator.validateUpdateSanction(sanction);
+        sanctionValidator.validateSanction(sanction, false);
+        enrichmentService.enrichSanctionUpdate(sanction);
         sanctionRepository.updateSanction(sanction);
         requestJsonMessage.setMessage(sanction.toJsonNode(sanction));
         dispatcherUtil.forwardMessage(requestJsonMessage);
@@ -48,7 +50,6 @@ public class SanctionService {
     public SanctionSearchResponse searchSanction(SanctionSearchRequest sanctionSearchRequest) {
         log.info("searchSanction");
         List<Sanction> sanctions;
-        sanctionSearchRequest.getSanctionSearch().setPagination(enrichmentService.enrichSearch(sanctionSearchRequest.getSanctionSearch().getPagination()));
         sanctions = sanctionRepository.searchSanction(sanctionSearchRequest.getSanctionSearch());
         return SanctionSearchResponse.builder().header(sanctionSearchRequest.getHeader()).sanctions(sanctions).build();
     }

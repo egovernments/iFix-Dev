@@ -22,29 +22,35 @@ public class ExchangeCode {
     private String id;
 
     @JsonProperty("function_code")
-    @Size(min = 2, max = 128)
+    @Size(min = 2, max = 64)
     private String functionCode;
 
     @JsonProperty("administration_code")
-    @Size(min = 2, max = 128)
+    @Size(min = 2, max = 64)
     private String administrationCode;
 
     @JsonProperty("recipient_segment_code")
+    @Size(min = 2, max = 64)
     private String recipientSegmentCode;
 
     @JsonProperty("economic_segment_code")
+    @Size(min = 2, max = 64)
     private String economicSegmentCode;
 
     @JsonProperty("source_of_fund_code")
+    @Size(min = 2, max = 64)
     private String sourceOfFundCode;
 
     @JsonProperty("target_segment_code")
+    @Size(min = 2, max = 64)
     private String targetSegmentCode;
 
     @JsonProperty("currency_code")
+    @Size(min = 2, max = 64)
     private String currencyCode;
 
     @JsonProperty("locale_code")
+    @Size(min = 2, max = 64)
     private String localeCode;
 
     @JsonProperty("status")

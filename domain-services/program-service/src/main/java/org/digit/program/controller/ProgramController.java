@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -26,43 +27,23 @@ public class ProgramController {
     }
 
     @PostMapping(value = "/program/_create")
-    public ResponseEntity<RequestJsonMessage> createProgram(@RequestBody RequestJsonMessage requestJsonMessage) {
-        try {
-            return ResponseEntity.ok(programService.createProgram(requestJsonMessage));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<RequestJsonMessage> createProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
+        return ResponseEntity.ok(programService.createProgram(requestJsonMessage));
     }
 
     @PostMapping(value = "/program/_update")
-    public ResponseEntity<RequestJsonMessage> updateProgram(@RequestBody RequestJsonMessage requestJsonMessage) {
-        try {
-            return ResponseEntity.ok(programService.updateProgram(requestJsonMessage));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<RequestJsonMessage> updateProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
+        return ResponseEntity.ok(programService.updateProgram(requestJsonMessage));
     }
 
     @PostMapping(value = "/program/_search")
-    public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody ProgramSearchRequest programSearchRequest) {
-        try {
-            return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody @Valid ProgramSearchRequest programSearchRequest) {
+        return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
     }
 
     @PostMapping(value ={ "/on-program/_create", "/on-program/_update"})
-    public ResponseEntity<RequestJsonMessage> onProgram(@RequestBody RequestJsonMessage requestJsonMessage) {
-        try {
+    public ResponseEntity<RequestJsonMessage> onProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
             return ResponseEntity.ok(programService.onProgram(requestJsonMessage));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
     }
 
 }

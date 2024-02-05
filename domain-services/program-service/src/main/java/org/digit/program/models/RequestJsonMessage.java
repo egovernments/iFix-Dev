@@ -22,8 +22,8 @@ public class RequestJsonMessage {
     @NotNull
     private RequestHeader header;
 
-    @NotNull
     @JsonProperty("message")
+    @NotNull
     private JsonNode message;
 
     public RequestJsonMessage(){

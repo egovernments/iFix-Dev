@@ -68,13 +68,18 @@ public class EnrichmentService {
         return pagination;
     }
 
-    public Sanction enrichSanctionCreate(Sanction sanction, String receiverId) {
+    public void enrichSanctionCreate(Sanction sanction, String receiverId) {
         log.info("Enrich sanction create");
         if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
             sanction.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         sanction.setAuditDetails(auditDetails);
-        return sanction;
+    }
+
+    public void enrichSanctionUpdate(Sanction sanction) {
+        log.info("Enrich sanction update");
+        AuditDetails auditDetails = AuditDetails.builder().lastModifiedTime(System.currentTimeMillis()).lastModifiedBy("b").build();
+        sanction.setAuditDetails(auditDetails);
     }
 
     public Allocation enrichAllocationCreate(Allocation allocation, String receiverId) {

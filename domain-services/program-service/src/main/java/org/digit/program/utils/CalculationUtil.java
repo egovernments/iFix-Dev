@@ -23,8 +23,7 @@ public class CalculationUtil {
 
     public Sanction calculateSanctionAmount(String sanctionId, Double amount, Boolean isAddition) {
         log.info("calculateSanctionAmount");
-        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(sanctionId))
-                .pagination(Pagination.builder().sortBy("last_modified_time").sortOrder(SortOrder.DESC).limit(1).offset(0).build()).build();
+        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(sanctionId)).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
         Double allocatedAmount;
         Double availableAmount;

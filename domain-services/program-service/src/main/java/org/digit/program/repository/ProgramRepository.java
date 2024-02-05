@@ -6,6 +6,7 @@ import org.digit.program.models.ProgramSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.ProgramQueryBuilder;
 import org.digit.program.repository.rowmapper.ProgramRowMapper;
+import org.digit.program.service.EnrichmentService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +22,14 @@ public class ProgramRepository {
     private ProgramRowMapper programRowMapper;
     private ProgramQueryBuilder programQueryBuilder;
     private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
+    private EnrichmentService enrichmentService;
 
-    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder) {
+    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, EnrichmentService enrichmentService) {
         this.jdbcTemplate = jdbcTemplate;
         this.programRowMapper = programRowMapper;
         this.programQueryBuilder = programQueryBuilder;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
+        this.enrichmentService = enrichmentService;
     }
 
     @Transactional
@@ -55,6 +58,7 @@ public class ProgramRepository {
 
     public List<Program> searchProgram(ProgramSearch programSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
+        programSearch.setPagination(enrichmentService.enrichSearch(programSearch.getPagination()));
         String programSearchQuery = programQueryBuilder.buildProgramSearchQuery(programSearch, preparedStmtList);
         return jdbcTemplate.query(programSearchQuery, preparedStmtList.toArray(), programRowMapper);
     }

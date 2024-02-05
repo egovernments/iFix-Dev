@@ -5,6 +5,7 @@ import org.digit.program.models.SanctionSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.SanctionQueryBuilder;
 import org.digit.program.repository.rowmapper.SanctionRowMapper;
+import org.digit.program.service.EnrichmentService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +20,14 @@ public class SanctionRepository {
     private ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
     private SanctionQueryBuilder sanctionQueryBuilder;
     private SanctionRowMapper sanctionRowMapper;
+    private EnrichmentService enrichmentService;
 
-    public SanctionRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, SanctionQueryBuilder sanctionQueryBuilder, SanctionRowMapper sanctionRowMapper) {
+    public SanctionRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, SanctionQueryBuilder sanctionQueryBuilder, SanctionRowMapper sanctionRowMapper, EnrichmentService enrichmentService) {
         this.jdbcTemplate = jdbcTemplate;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
         this.sanctionQueryBuilder = sanctionQueryBuilder;
         this.sanctionRowMapper = sanctionRowMapper;
+        this.enrichmentService = enrichmentService;
     }
 
     @Transactional
@@ -62,6 +65,7 @@ public class SanctionRepository {
 
     public List<Sanction> searchSanction(SanctionSearch sanctionSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
+        sanctionSearch.setPagination(enrichmentService.enrichSearch(sanctionSearch.getPagination()));
         String sanctionSearchQuery = sanctionQueryBuilder.buildSanctionSearchQuery(sanctionSearch, preparedStmtList);
         return jdbcTemplate.query(sanctionSearchQuery, preparedStmtList.toArray(), sanctionRowMapper);
     }
