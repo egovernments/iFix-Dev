@@ -39,12 +39,14 @@ public class ProgramValidator {
         if (program.getEndDate() != 0 && program.getStartDate() > program.getEndDate())
             throw new CustomException("DATES_ERROR", "startDate should be less than endDate");
 
-        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getParentId())).build());
-        if (programs.size() == 0)
-            throw new CustomException("PROGRAM_PARENT_ID_NOT_FOUND", "Program not found for ParentId: " + program.getParentId());
+        if (program.getParentId() != null) {
+            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getParentId())).build());
+            if (programs.size() == 0)
+                throw new CustomException("PROGRAM_PARENT_ID_NOT_FOUND", "Program not found for ParentId: " + program.getParentId());
+        }
 
         if (!isCreate) {
-            programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getId())).build());
+            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getId())).build());
             if (programs.size() == 0) {
                 throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for id: " + program.getId());
             }
