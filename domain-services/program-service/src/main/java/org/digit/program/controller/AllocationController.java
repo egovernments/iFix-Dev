@@ -1,8 +1,8 @@
 package org.digit.program.controller;
 
-import org.digit.program.models.AllocationRequest;
-import org.digit.program.models.AllocationResponse;
-import org.digit.program.models.AllocationSearchRequest;
+import org.digit.program.models.allocation.AllocationRequest;
+import org.digit.program.models.allocation.AllocationResponse;
+import org.digit.program.models.allocation.AllocationSearchRequest;
 import org.digit.program.service.AllocationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

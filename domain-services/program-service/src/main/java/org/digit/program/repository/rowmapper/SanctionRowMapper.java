@@ -2,7 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.Sanction;
+import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.Status;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;

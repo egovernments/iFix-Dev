@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.program;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,8 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DisbursementRequest {
-
+public class ProgramRequest {
 
     private String id;
     @JsonProperty("signature")
@@ -25,6 +25,6 @@ public class DisbursementRequest {
     @JsonProperty("message")
     @NotNull
     @Valid
-    private Disbursement disbursement;
+    private Program program;
 
 }

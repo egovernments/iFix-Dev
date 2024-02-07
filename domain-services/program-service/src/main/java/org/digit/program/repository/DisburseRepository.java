@@ -1,7 +1,7 @@
 package org.digit.program.repository;
 
-import org.digit.program.models.DisburseSearch;
-import org.digit.program.models.Disbursement;
+import org.digit.program.models.disburse.DisburseSearch;
+import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.repository.querybuilder.DisburseQueryBuilder;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.rowmapper.DisburseRowMapper;

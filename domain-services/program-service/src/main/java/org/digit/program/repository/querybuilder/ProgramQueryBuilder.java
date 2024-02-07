@@ -1,8 +1,8 @@
 package org.digit.program.repository.querybuilder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.digit.program.models.Program;
-import org.digit.program.models.ProgramSearch;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.program.ProgramSearch;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

@@ -1,15 +1,12 @@
 package org.digit.program.validator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.Program;
-import org.digit.program.models.ProgramSearch;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.ProgramRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.*;
 
 @Component

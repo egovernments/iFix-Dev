@@ -1,12 +1,8 @@
 package org.digit.program.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.constants.AllocationType;
-import org.digit.program.constants.SortOrder;
-import org.digit.program.models.Allocation;
-import org.digit.program.models.Pagination;
-import org.digit.program.models.Sanction;
-import org.digit.program.models.SanctionSearch;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.SanctionRepository;
 import org.springframework.stereotype.Component;
 

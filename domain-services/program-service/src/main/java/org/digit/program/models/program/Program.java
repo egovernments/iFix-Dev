@@ -1,8 +1,9 @@
-package org.digit.program.models;
+package org.digit.program.models.program;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

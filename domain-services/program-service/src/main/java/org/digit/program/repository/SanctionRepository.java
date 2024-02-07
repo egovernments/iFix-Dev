@@ -1,7 +1,7 @@
 package org.digit.program.repository;
 
-import org.digit.program.models.Sanction;
-import org.digit.program.models.SanctionSearch;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.SanctionQueryBuilder;
 import org.digit.program.repository.rowmapper.SanctionRowMapper;

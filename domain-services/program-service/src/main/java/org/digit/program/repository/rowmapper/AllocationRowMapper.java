@@ -2,7 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.constants.AllocationType;
-import org.digit.program.models.Allocation;
+import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.Status;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;

@@ -2,8 +2,8 @@ package org.digit.program.repository.querybuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.digit.program.models.DisburseSearch;
-import org.digit.program.models.Disbursement;
+import org.digit.program.models.disburse.DisburseSearch;
+import org.digit.program.models.disburse.Disbursement;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,20 +11,18 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProgramRequest {
+public class SanctionSearchRequest {
 
-    private String id;
     @JsonProperty("signature")
     private String signature;
 
-    @JsonProperty("header")
     @NotNull
+    @JsonProperty("header")
     @Valid
     private RequestHeader header;
 
-    @JsonProperty("message")
     @NotNull
+    @JsonProperty("message")
     @Valid
-    private Program program;
-
+    private SanctionSearch sanctionSearch;
 }

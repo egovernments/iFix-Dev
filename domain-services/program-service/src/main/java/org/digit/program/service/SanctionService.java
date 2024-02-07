@@ -1,15 +1,16 @@
 package org.digit.program.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.*;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionRequest;
+import org.digit.program.models.sanction.SanctionSearchRequest;
+import org.digit.program.models.sanction.SanctionSearchResponse;
 import org.digit.program.repository.SanctionRepository;
 import org.digit.program.utils.DispatcherUtil;
 import org.digit.program.validator.CommonValidator;
 import org.digit.program.validator.SanctionValidator;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,9 +34,9 @@ public class SanctionService {
     public SanctionRequest createSanction(SanctionRequest sanctionRequest) {
         log.info("createSanction");
         commonValidator.validateRequest(sanctionRequest.getHeader());
-            sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
-            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getReceiverId());
-            sanctionRepository.saveSanction(sanctionRequest.getSanctions());
+        sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
+        enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getReceiverId());
+        sanctionRepository.saveSanction(sanctionRequest.getSanctions());
         dispatcherUtil.forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
                 sanctionRequest.getHeader(), sanctionRequest.getSanctions().toString());
         return sanctionRequest;

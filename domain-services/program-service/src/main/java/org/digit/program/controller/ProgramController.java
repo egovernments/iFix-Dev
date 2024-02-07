@@ -2,10 +2,10 @@ package org.digit.program.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.models.*;
+import org.digit.program.models.program.ProgramRequest;
+import org.digit.program.models.program.ProgramSearchRequest;
+import org.digit.program.models.program.ProgramSearchResponse;
 import org.digit.program.service.ProgramService;
-import org.digit.program.utils.DispatcherUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("v1")

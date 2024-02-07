@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.allocation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

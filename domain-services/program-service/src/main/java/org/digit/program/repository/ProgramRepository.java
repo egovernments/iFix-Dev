@@ -1,8 +1,8 @@
 package org.digit.program.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.models.Program;
-import org.digit.program.models.ProgramSearch;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.ProgramQueryBuilder;
 import org.digit.program.repository.rowmapper.ProgramRowMapper;

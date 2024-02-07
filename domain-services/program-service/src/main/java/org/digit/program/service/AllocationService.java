@@ -1,9 +1,12 @@
 package org.digit.program.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.AllocationType;
-import org.digit.program.models.*;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.allocation.AllocationRequest;
+import org.digit.program.models.allocation.AllocationResponse;
+import org.digit.program.models.allocation.AllocationSearchRequest;
+import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.AllocationRepository;
 import org.digit.program.repository.SanctionRepository;
 import org.digit.program.utils.CalculationUtil;
@@ -12,7 +15,6 @@ import org.digit.program.validator.AllocationValidator;
 import org.digit.program.validator.CommonValidator;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

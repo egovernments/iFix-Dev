@@ -1,9 +1,10 @@
-package org.digit.program.models;
+package org.digit.program.models.disburse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
 import javax.validation.Valid;

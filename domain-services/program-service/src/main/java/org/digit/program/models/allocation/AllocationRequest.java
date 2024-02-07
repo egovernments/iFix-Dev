@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.allocation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SanctionRequest {
+public class AllocationRequest {
 
 
     private String id;
@@ -26,5 +27,6 @@ public class SanctionRequest {
     @JsonProperty("message")
     @NotNull
     @Valid
-    private List<Sanction> sanctions;
+    private List<Allocation> allocations;
+
 }

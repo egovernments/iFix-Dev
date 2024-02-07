@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.disburse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,19 +11,19 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProgramSearchRequest {
+public class DisburseSearchRequest {
 
     @JsonProperty("signature")
     private String signature;
 
-    @NotNull
     @JsonProperty("header")
+    @NotNull
     @Valid
     private RequestHeader header;
 
     @JsonProperty("message")
     @NotNull
     @Valid
-    private ProgramSearch programSearch;
+    private DisburseSearch disburseSearch;
 
 }

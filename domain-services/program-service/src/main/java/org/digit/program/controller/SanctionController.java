@@ -1,6 +1,8 @@
 package org.digit.program.controller;
 
-import org.digit.program.models.*;
+import org.digit.program.models.sanction.SanctionRequest;
+import org.digit.program.models.sanction.SanctionSearchRequest;
+import org.digit.program.models.sanction.SanctionSearchResponse;
 import org.digit.program.service.SanctionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/v1")

@@ -1,7 +1,7 @@
 package org.digit.program.repository.querybuilder;
 
-import org.digit.program.models.Allocation;
-import org.digit.program.models.AllocationSearch;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.allocation.AllocationSearch;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

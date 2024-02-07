@@ -2,7 +2,12 @@ package org.digit.program.validator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.AllocationType;
-import org.digit.program.models.*;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.allocation.AllocationSearch;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.program.ProgramSearch;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.AllocationRepository;
 import org.digit.program.repository.ProgramRepository;
 import org.digit.program.repository.SanctionRepository;

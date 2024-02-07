@@ -1,4 +1,4 @@
-package org.digit.program.models;
+package org.digit.program.models.disburse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

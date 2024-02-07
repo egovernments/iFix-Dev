@@ -1,9 +1,9 @@
 package org.digit.program.repository.querybuilder;
 
-import org.digit.program.models.Allocation;
-import org.digit.program.models.Disbursement;
-import org.digit.program.models.Program;
-import org.digit.program.models.Sanction;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.disburse.Disbursement;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.sanction.Sanction;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

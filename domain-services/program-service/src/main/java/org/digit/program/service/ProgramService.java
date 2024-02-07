@@ -1,17 +1,18 @@
 package org.digit.program.service;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.models.*;
+import org.digit.program.models.program.Program;
+import org.digit.program.models.program.ProgramRequest;
+import org.digit.program.models.program.ProgramSearchRequest;
+import org.digit.program.models.program.ProgramSearchResponse;
 import org.digit.program.repository.ProgramRepository;
 import org.digit.program.utils.DispatcherUtil;
 import org.digit.program.validator.CommonValidator;
 import org.digit.program.validator.ProgramValidator;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

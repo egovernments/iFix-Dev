@@ -2,7 +2,7 @@ package org.digit.program.utils;
 
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.MessageType;
-import org.digit.program.models.ProgramRequest;
+import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.RequestHeader;
 import org.digit.program.models.RequestMessage;
 import org.digit.program.repository.ServiceRequestRepository;

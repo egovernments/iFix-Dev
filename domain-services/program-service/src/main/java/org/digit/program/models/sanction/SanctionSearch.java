@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.Pagination;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -10,8 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DisburseSearch {
-
+public class SanctionSearch {
 
     @JsonProperty("ids")
     private List<String> ids;
@@ -22,9 +22,6 @@ public class DisburseSearch {
 
     @JsonProperty("program_code")
     private String programCode;
-
-    @JsonProperty("target_id")
-    private String targetId;
 
     @JsonProperty("pagination")
     private Pagination pagination;

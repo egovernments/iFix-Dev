@@ -1,7 +1,8 @@
-package org.digit.program.models;
+package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import java.util.List;
 
@@ -9,12 +10,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AllocationResponse {
+public class SanctionSearchResponse {
 
     @JsonProperty("header")
     RequestHeader header;
 
-    @JsonProperty("allocations")
-    List<Allocation> allocations;
+    @JsonProperty("sanctions")
+    List<Sanction> sanctions;
 
 }

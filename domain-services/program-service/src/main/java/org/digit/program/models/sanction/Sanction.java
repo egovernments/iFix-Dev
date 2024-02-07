@@ -1,11 +1,10 @@
-package org.digit.program.models;
+package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.digit.program.constants.AllocationType;
+import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Allocation extends ExchangeCode {
+public class Sanction extends ExchangeCode {
 
     @JsonProperty("location_code")
     @NotNull
@@ -26,22 +25,18 @@ public class Allocation extends ExchangeCode {
     @Size(min = 2, max = 64)
     private String programCode;
 
-    @JsonProperty("sanction_id")
+    @JsonProperty("sanctioned_amount")
     @NotNull
-    @Size(min = 2, max = 64)
-    private String sanctionId;
+    private Double sanctionedAmount;
 
-    @JsonProperty("amount")
-    @NotNull
-    private Double amount;
+    @JsonProperty("allocated_amount")
+    private Double allocatedAmount;
 
-    @JsonProperty("type")
-    @NotNull
-    private AllocationType type;
+    @JsonProperty("available_amount")
+    private Double availableAmount;
 
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;
-
 
 
 }

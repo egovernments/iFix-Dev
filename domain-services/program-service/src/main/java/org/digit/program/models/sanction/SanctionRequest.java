@@ -1,17 +1,21 @@
-package org.digit.program.models;
+package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DisburseSearchRequest {
+public class SanctionRequest {
 
+
+    private String id;
     @JsonProperty("signature")
     private String signature;
 
@@ -23,6 +27,5 @@ public class DisburseSearchRequest {
     @JsonProperty("message")
     @NotNull
     @Valid
-    private DisburseSearch disburseSearch;
-
+    private List<Sanction> sanctions;
 }

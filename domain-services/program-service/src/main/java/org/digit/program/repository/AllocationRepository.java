@@ -1,7 +1,7 @@
 package org.digit.program.repository;
 
-import org.digit.program.models.Allocation;
-import org.digit.program.models.AllocationSearch;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.allocation.AllocationSearch;
 import org.digit.program.repository.querybuilder.AllocationQueryBuilder;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.rowmapper.AllocationRowMapper;

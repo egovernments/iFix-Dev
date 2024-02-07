@@ -1,8 +1,8 @@
 package org.digit.program.controller;
 
-import org.digit.program.models.DisburseSearchRequest;
-import org.digit.program.models.DisburseSearchResponse;
-import org.digit.program.models.DisbursementRequest;
+import org.digit.program.models.disburse.DisburseSearchRequest;
+import org.digit.program.models.disburse.DisburseSearchResponse;
+import org.digit.program.models.disburse.DisbursementRequest;
 import org.digit.program.service.DisburseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
