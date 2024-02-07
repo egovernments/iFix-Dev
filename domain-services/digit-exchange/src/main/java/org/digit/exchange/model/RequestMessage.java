@@ -25,5 +25,5 @@ public class RequestMessage {
     private RequestHeader header;
     @NotNull
     @JsonProperty("message")
-    private List<String> message;
+    private String message;
 }

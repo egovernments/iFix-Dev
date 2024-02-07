@@ -14,7 +14,6 @@ import org.digit.exchange.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -48,17 +47,15 @@ public class ExchangeService {
         String receiverDomain = requestMessage.getHeader().getReceiverId().contains("@") ? requestMessage.getHeader().getReceiverId().split("@")[1] : requestMessage.getHeader().getReceiverId();
         if(matchDomains(receiverDomain, config.getDomain())){
             log.info("Converting message to Json Node");
-            List<JsonNode> nodes = null;
-            for (int i = 0; i < requestMessage.getMessage().size(); i++) {
-                try {
-                    JsonNode node = mapper.readTree(requestMessage.getMessage().get(i));
-                    nodes.add(node);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+            JsonNode jsonNode;
+            try {
+                jsonNode = mapper.readTree(requestMessage.getMessage());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
+
             log.info("Converted message to Json Node");
-            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature()).header(requestMessage.getHeader()).jsonNode(nodes).build();
+            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature()).header(requestMessage.getHeader()).jsonNode(jsonNode).build();
             try {
                 restRepo.fetchResult(url, jsonMessage);
                 log.info("Posted request to : {}", url);
@@ -111,18 +108,15 @@ public class ExchangeService {
             requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
             requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
             String newUrl = getReceiverEndPoint(requestMessageWrapper.getRequestMessage(), true);
-            List<JsonNode> jsonNodes = null;
             log.info("Converting message to Json Node");
-            for (int i = 0; i < requestMessageWrapper.getRequestMessage().getMessage().size(); i++) {
-                try {
-                    JsonNode newNode = mapper.readTree(requestMessageWrapper.getRequestMessage().getMessage().get(i));
-                    jsonNodes.add(newNode);
-                } catch (JsonProcessingException ex) {
-                    throw new RuntimeException(ex);
-                }
+            JsonNode newNode;
+            try {
+                newNode = mapper.readTree(requestMessageWrapper.getRequestMessage().getMessage());
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
             }
 
-            JsonMessage newJsonMessage = JsonMessage.builder().signature(requestMessageWrapper.getRequestMessage().getSignature()).header(requestMessageWrapper.getRequestMessage().getHeader()).jsonNode(jsonNodes).build();
+            JsonMessage newJsonMessage = JsonMessage.builder().signature(requestMessageWrapper.getRequestMessage().getSignature()).header(requestMessageWrapper.getRequestMessage().getHeader()).jsonNode(newNode).build();
             try {
                 restRepo.fetchResult(newUrl, newJsonMessage);
             } catch (Exception ex) {
