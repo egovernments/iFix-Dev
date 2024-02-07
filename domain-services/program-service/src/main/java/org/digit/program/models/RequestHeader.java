@@ -14,10 +14,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestHeader{
-    private String id;
-    @NotNull
-    @JsonProperty("version")
-    private String version;
     @NotNull
     @JsonProperty("message_id")
     @NotNull
@@ -29,6 +25,7 @@ public class RequestHeader{
     @NotNull
     private MessageType messageType;
     @JsonProperty("action")
+    @NotNull
     private Action action;
     @JsonProperty("sender_id")
     @NotNull
@@ -39,8 +36,6 @@ public class RequestHeader{
     @NotNull
     @JsonProperty("receiver_id")
     private String receiverId;
-    @JsonProperty("total_count")
-    private int totalCount;
     @JsonProperty("is_msg_encrypted")
     private boolean isMsgEncrypted;
 //     // @OneToOne(cascade = CascadeType.ALL)
