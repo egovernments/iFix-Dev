@@ -1,6 +1,7 @@
 package org.digit.program.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.models.program.Program;
@@ -24,14 +25,16 @@ public class ProgramService {
     private final ProgramConfiguration configs;
     private final ProgramValidator programValidator;
     private final CommonValidator commonValidator;
+    private final ObjectMapper mapper;
 
-    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, ProgramConfiguration configs, ProgramValidator programValidator, CommonValidator commonValidator) {
+    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, ProgramConfiguration configs, ProgramValidator programValidator, CommonValidator commonValidator, ObjectMapper mapper) {
         this.programRepository = programRepository;
         this.enrichmentService = enrichmentService;
         this.dispatcherUtil = dispatcherUtil;
         this.configs = configs;
         this.programValidator = programValidator;
         this.commonValidator = commonValidator;
+        this.mapper = mapper;
     }
 
     public ProgramRequest createProgram(ProgramRequest programRequest) {
@@ -40,11 +43,7 @@ public class ProgramService {
         programValidator.validateProgram(programRequest.getProgram(), true);
         enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
         programRepository.saveProgram(programRequest.getProgram());
-        if (programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(programRequest);
-        else
-            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
-                    programRequest.getHeader(), programRequest.getProgram().toString());
+        dispatcherUtil.dispatchProgram(programRequest);
         return programRequest;
 
     }
@@ -55,11 +54,7 @@ public class ProgramService {
         enrichmentService.enrichProgramForUpdate(programRequest.getProgram());
         programValidator.validateProgram(programRequest.getProgram(), false);
         programRepository.updateProgram(programRequest.getProgram());
-        if (programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(programRequest);
-        else
-            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
-                    programRequest.getHeader(), programRequest.getProgram().toString());
+        dispatcherUtil.dispatchProgram(programRequest);
         return programRequest;
     }
 
@@ -77,9 +72,7 @@ public class ProgramService {
         programValidator.validateProgram(programRequest.getProgram(), false);
         enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
         programRepository.updateProgram(programRequest.getProgram());
-        if (!programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
-                    programRequest.getHeader(), programRequest.getProgram().toString());
+        dispatcherUtil.dispatchOnProgram(programRequest);
         return programRequest;
     }
 }
