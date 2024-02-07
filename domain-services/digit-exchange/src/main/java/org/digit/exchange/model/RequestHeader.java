@@ -34,5 +34,7 @@ public class RequestHeader {
     @NotNull
     @JsonProperty("receiver_id")
     private String receiverId;
+    @JsonProperty("is_msg_encrypted")
+    private boolean isMsgEncrypted;
 
 }
