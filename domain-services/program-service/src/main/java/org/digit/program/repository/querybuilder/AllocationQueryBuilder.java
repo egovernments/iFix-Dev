@@ -20,7 +20,7 @@ public class AllocationQueryBuilder {
             "WHERE id = ?";
 
     public static final String ALLOCATION_SEARCH_QUERY = "SELECT * FROM eg_program_allocation JOIN eg_program_message_codes " +
-            "ON eg_program_allocation.id = eg_program_message_codes.id ";
+            "ON eg_program_allocation.id = eg_program_message_codes.reference_id ";
 
     public String buildAllocationInsertQuery(Allocation allocation, List<Object> preparedStmtList) {
         preparedStmtList.add(allocation.getId());

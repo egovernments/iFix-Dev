@@ -27,13 +27,13 @@ public class ProgramController {
     }
 
     @PostMapping(value = "/program/_create")
-    public ResponseEntity<RequestJsonMessage> createProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(programService.createProgram(requestJsonMessage));
+    public ResponseEntity<ProgramRequest> createProgram(@RequestBody @Valid ProgramRequest programRequest) {
+        return ResponseEntity.ok(programService.createProgram(programRequest));
     }
 
     @PostMapping(value = "/program/_update")
-    public ResponseEntity<RequestJsonMessage> updateProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(programService.updateProgram(requestJsonMessage));
+    public ResponseEntity<ProgramRequest> updateProgram(@RequestBody @Valid ProgramRequest programRequest) {
+        return ResponseEntity.ok(programService.updateProgram(programRequest));
     }
 
     @PostMapping(value = "/program/_search")
@@ -42,8 +42,8 @@ public class ProgramController {
     }
 
     @PostMapping(value ={ "/on-program/_create", "/on-program/_update"})
-    public ResponseEntity<RequestJsonMessage> onProgram(@RequestBody @Valid RequestJsonMessage requestJsonMessage) {
-            return ResponseEntity.ok(programService.onProgram(requestJsonMessage));
+    public ResponseEntity<ProgramRequest> onProgram(@RequestBody @Valid ProgramRequest programRequest) {
+            return ResponseEntity.ok(programService.onProgram(programRequest));
     }
 
 }

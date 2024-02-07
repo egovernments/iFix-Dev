@@ -10,19 +10,20 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProgramSearchRequest {
+public class ProgramRequest {
 
+    private String id;
     @JsonProperty("signature")
     private String signature;
 
-    @NotNull
     @JsonProperty("header")
+    @NotNull
     @Valid
     private RequestHeader header;
 
     @JsonProperty("message")
     @NotNull
     @Valid
-    private ProgramSearch programSearch;
+    private Program program;
 
 }

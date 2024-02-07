@@ -10,7 +10,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SanctionSearch {
+public class DisburseSearch {
+
 
     @JsonProperty("ids")
     private List<String> ids;
@@ -21,6 +22,9 @@ public class SanctionSearch {
 
     @JsonProperty("program_code")
     private String programCode;
+
+    @JsonProperty("target_id")
+    private String targetId;
 
     @JsonProperty("pagination")
     private Pagination pagination;

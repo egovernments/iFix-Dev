@@ -24,7 +24,7 @@ public class SanctionQueryBuilder {
             "WHERE id = ?";
 
     public static final String SANCTION_SEARCH_QUERY = "SELECT * FROM eg_program_sanction JOIN eg_program_message_codes " +
-            "ON eg_program_sanction.id = eg_program_message_codes.id ";
+            "ON eg_program_sanction.id = eg_program_message_codes.reference_id ";
 
     public String buildSanctionInsertQuery(Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getId());

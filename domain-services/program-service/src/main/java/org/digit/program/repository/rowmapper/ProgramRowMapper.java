@@ -38,6 +38,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             Long startDate = rs.getLong("start_date");
             Long endDate = rs.getLong("end_date");
             String clientHostUrl = rs.getString("client_host_url");
+            Boolean isActive = rs.getBoolean("is_active");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -64,6 +65,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setStartDate(startDate);
             program.setEndDate(endDate);
             program.setClientHostUrl(clientHostUrl);
+            program.setActive(isActive);
             program.setAuditDetails(auditDetails);
 
             program.setFunctionCode(functionCode);

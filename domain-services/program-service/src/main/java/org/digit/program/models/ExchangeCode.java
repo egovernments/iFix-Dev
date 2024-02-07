@@ -7,11 +7,9 @@ import lombok.*;
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder(builderClassName = "ExchangeCodeBuilder")
 public class ExchangeCode {
 
 

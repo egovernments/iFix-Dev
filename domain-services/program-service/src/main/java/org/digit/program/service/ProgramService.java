@@ -33,46 +33,33 @@ public class ProgramService {
         this.commonValidator = commonValidator;
     }
 
-    //TODO make all messages persistance trasanctional
-    public RequestJsonMessage createProgram(RequestJsonMessage requestJsonMessage) {
+    public ProgramRequest createProgram(ProgramRequest programRequest) {
         log.info("create Program");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
-        Program program;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            program = new Program(requestJsonMessage.getMessage().get(i));
-            programValidator.validateProgram(program, true);
-            enrichmentService.enrichProgramForCreate(requestJsonMessage.getHeader(), program);
-            programRepository.saveProgram(program);
-            messages.add(program.toJsonNode(program));
-        }
-        requestJsonMessage.setMessage(messages);
-        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(requestJsonMessage);
+        commonValidator.validateRequest(programRequest.getHeader());
+        programValidator.validateProgram(programRequest.getProgram(), true);
+        enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
+        programRepository.saveProgram(programRequest.getProgram());
+        if (programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.sendOnProgram(programRequest);
         else
-            dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
+                    programRequest.getHeader(), programRequest.getProgram().toString());
+        return programRequest;
 
     }
 
-    public RequestJsonMessage updateProgram(RequestJsonMessage requestJsonMessage) {
+    public ProgramRequest updateProgram(ProgramRequest programRequest) {
         log.info("update Program");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
-        Program program;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            program = new Program(requestJsonMessage.getMessage().get(i));
-            enrichmentService.enrichProgramForUpdate(program);
-            programValidator.validateProgram(program, false);
-            programRepository.updateProgram(program);
-            messages.add(program.toJsonNode(program));
-        }
-        requestJsonMessage.setMessage(messages);
-        if (requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.sendOnProgram(requestJsonMessage);
+        commonValidator.validateRequest(programRequest.getHeader());
+        enrichmentService.enrichProgramForUpdate(programRequest.getProgram());
+        programValidator.validateProgram(programRequest.getProgram(), false);
+        programRepository.updateProgram(programRequest.getProgram());
+        if (programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.sendOnProgram(programRequest);
         else
-            dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
+                    programRequest.getHeader(), programRequest.getProgram().toString());
+        return programRequest;
     }
 
     public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
@@ -83,21 +70,15 @@ public class ProgramService {
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
-    public RequestJsonMessage onProgram(RequestJsonMessage requestJsonMessage) {
+    public ProgramRequest onProgram(ProgramRequest programRequest) {
         log.info("on Program");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
-        Program program;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            program = new Program(requestJsonMessage.getMessage().get(i));
-            programValidator.validateProgram(program, false);
-            enrichmentService.enrichProgramForUpdate(program);
-            programRepository.updateProgram(program);
-            messages.add(program.toJsonNode(program));
-        }
-        requestJsonMessage.setMessage(messages);
-        if (!requestJsonMessage.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+        commonValidator.validateRequest(programRequest.getHeader());
+        programValidator.validateProgram(programRequest.getProgram(), false);
+        enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
+        programRepository.updateProgram(programRequest.getProgram());
+        if (!programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            dispatcherUtil.forwardMessage(programRequest.getId(), programRequest.getSignature(),
+                    programRequest.getHeader(), programRequest.getProgram().toString());
+        return programRequest;
     }
 }

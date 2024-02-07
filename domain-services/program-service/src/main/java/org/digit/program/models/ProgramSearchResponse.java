@@ -1,15 +1,14 @@
 package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProgramSearchResponse {
 
     @JsonProperty("header")

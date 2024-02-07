@@ -11,6 +11,7 @@ import org.egov.common.contract.models.AuditDetails;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,9 +44,17 @@ public class EnrichmentService {
 
     public void enrichProgramForUpdate(Program program) {
         log.info("Enrich Program for Update");
-        AuditDetails auditDetails = AuditDetails.builder().lastModifiedTime(System.currentTimeMillis()).lastModifiedBy("b").build();
-        program.setAuditDetails(auditDetails);
+        program.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+        program.getAuditDetails().setLastModifiedBy("b");
         log.info("Enrichment for update completed");
+    }
+
+    public void enrichProgramForOnProgram(Program program) {
+        log.info("Enrich Program for OnProgram");
+        program.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+        program.getAuditDetails().setLastModifiedBy("b");
+        program.setActive(true);
+
     }
 
     public Pagination enrichSearch(Pagination pagination) {
@@ -71,36 +80,45 @@ public class EnrichmentService {
         return pagination;
     }
 
-    public void enrichSanctionCreate(Sanction sanction, String receiverId) {
+    public void enrichSanctionCreate(List<Sanction> sanctions, String receiverId) {
         log.info("Enrich sanction create");
-        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            sanction.setId(UUID.randomUUID().toString());
-        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
-        sanction.setAuditDetails(auditDetails);
+        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+            for (Sanction sanction : sanctions) {
+                sanction.setId(UUID.randomUUID().toString());
+                AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+                sanction.setAuditDetails(auditDetails);
+            }
+        }
     }
 
-    public void enrichSanctionUpdate(Sanction sanction) {
+    public void enrichSanctionUpdate(List<Sanction> sanctions) {
         log.info("Enrich sanction update");
-        AuditDetails auditDetails = AuditDetails.builder().lastModifiedTime(System.currentTimeMillis()).lastModifiedBy("b").build();
-        sanction.setAuditDetails(auditDetails);
+        for (Sanction sanction : sanctions) {
+            AuditDetails auditDetails = AuditDetails.builder().lastModifiedTime(System.currentTimeMillis()).lastModifiedBy("b").build();
+            sanction.setAuditDetails(auditDetails);
+        }
     }
 
-    public Allocation enrichAllocationCreate(Allocation allocation, String receiverId) {
+    public void enrichAllocationCreate(Allocation allocation, String receiverId) {
         log.info("Enrich allocation create");
         if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
             allocation.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         allocation.setAuditDetails(auditDetails);
-        return allocation;
     }
 
-    public Disbursement enrichDisburseCreate(Disbursement disbursement, String receiverId) {
+    public void enrichDisburseCreate(Disbursement disbursement, String receiverId) {
         log.info("Enrich disburse create");
-        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
             disbursement.setId(UUID.randomUUID().toString());
+            for (Disbursement childDisbursement : disbursement.getDisbursements()) {
+                childDisbursement.setId(UUID.randomUUID().toString());
+                AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+                childDisbursement.setAuditDetails(auditDetails);
+            }
+        }
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         disbursement.setAuditDetails(auditDetails);
-        return disbursement;
     }
 
 }

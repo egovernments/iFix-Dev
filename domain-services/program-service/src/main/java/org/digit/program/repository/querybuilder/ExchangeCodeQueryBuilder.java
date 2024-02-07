@@ -1,6 +1,7 @@
 package org.digit.program.repository.querybuilder;
 
 import org.digit.program.models.Allocation;
+import org.digit.program.models.Disbursement;
 import org.digit.program.models.Program;
 import org.digit.program.models.Sanction;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public class ExchangeCodeQueryBuilder {
 
     public static final String EXCHANGE_CODE_INSERT_QUERY = "" +
             "INSERT INTO eg_program_message_codes " +
-            "(id, location_code, parent_id, function_code, administration_code, program_code, " +
+            "(id, location_code, reference_id, function_code, administration_code, program_code, " +
             "recipient_segment_code, economic_segment_code, source_of_fund_code, target_segment_code, " +
             " created_by, last_modified_by, created_time, last_modified_time) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -26,7 +27,7 @@ public class ExchangeCodeQueryBuilder {
     public String buildExchangeCodeInsertQuery(Program program, List<Object> preparedStmtList) {
         preparedStmtList.add(program.getId());
         preparedStmtList.add(program.getLocationCode());
-        preparedStmtList.add(program.getParentId());
+        preparedStmtList.add(program.getId());
         preparedStmtList.add(program.getFunctionCode());
         preparedStmtList.add(program.getAdministrationCode());
         preparedStmtList.add(program.getProgramCode());
@@ -117,5 +118,24 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(allocation.getId());
         return EXCHANGE_CODE_UPDATE_QUERY;
+    }
+
+    public String buildExchangeCodeDisburseInsertQuery (Disbursement disbursement, List<Object> preparedStmtList) {
+        preparedStmtList.add(disbursement.getId());
+        preparedStmtList.add(disbursement.getLocationCode());
+        preparedStmtList.add(disbursement.getId());
+        preparedStmtList.add(disbursement.getFunctionCode());
+        preparedStmtList.add(disbursement.getAdministrationCode());
+        preparedStmtList.add(disbursement.getProgramCode());
+        preparedStmtList.add(disbursement.getRecipientSegmentCode());
+        preparedStmtList.add(disbursement.getEconomicSegmentCode());
+        preparedStmtList.add(disbursement.getSourceOfFundCode());
+        preparedStmtList.add(disbursement.getTargetSegmentCode());
+        preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
+        preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
+        preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
+        return EXCHANGE_CODE_INSERT_QUERY;
+
     }
 }

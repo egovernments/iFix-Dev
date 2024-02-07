@@ -3,8 +3,7 @@ package org.digit.program.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

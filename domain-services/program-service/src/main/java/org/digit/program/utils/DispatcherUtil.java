@@ -1,15 +1,12 @@
 package org.digit.program.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.MessageType;
-import org.digit.program.models.RequestJsonMessage;
+import org.digit.program.models.ProgramRequest;
+import org.digit.program.models.RequestHeader;
 import org.digit.program.models.RequestMessage;
 import org.digit.program.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class DispatcherUtil {
@@ -22,17 +19,13 @@ public class DispatcherUtil {
         this.configs = configs;
     }
 
-    public void sendOnProgram(RequestJsonMessage requestJsonMessage){
-        List<String> messages = new ArrayList<>();
-        for (JsonNode message : requestJsonMessage.getMessage()) {
-            messages.add(message.toString());
-        }
-        RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
-                .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
-                .message(messages).build();
+    public void sendOnProgram(ProgramRequest programRequest){
+        RequestMessage requestMessage = RequestMessage.builder().id(programRequest.getId())
+                .header(programRequest.getHeader()).signature(programRequest.getSignature())
+                .message(programRequest.getProgram().toString()).build();
         updateUri(requestMessage);
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
-                .append(requestJsonMessage.getHeader().getMessageType());
+                .append(programRequest.getHeader().getMessageType());
         restRepo.fetchResult(url, requestMessage);
     }
 
@@ -43,18 +36,14 @@ public class DispatcherUtil {
         requestMessage.getHeader().setMessageType(MessageType.fromValue("on-" + requestMessage.getHeader().getMessageType().toString()));
     }
 
-    public RequestJsonMessage forwardMessage(RequestJsonMessage requestJsonMessage){
-        List<String> messages = new ArrayList<>();
-        for (JsonNode message : requestJsonMessage.getMessage()) {
-            messages.add(message.toString());
-        }
-        RequestMessage requestMessage = RequestMessage.builder().id(requestJsonMessage.getId())
-                .header(requestJsonMessage.getHeader()).signature(requestJsonMessage.getSignature())
-                .message(messages).build();
+    public Object forwardMessage(String id, String signature, RequestHeader requestHeader, String message){
+        RequestMessage requestMessage = RequestMessage.builder().id(id)
+                .header(requestHeader).signature(signature)
+                .message(message).build();
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
                 .append(requestMessage.getHeader().getMessageType().toString());
-        restRepo.fetchResult(url, requestMessage);
-        return requestJsonMessage;
+        Object response = restRepo.fetchResult(url, requestMessage);
+        return response;
     }
 
 }

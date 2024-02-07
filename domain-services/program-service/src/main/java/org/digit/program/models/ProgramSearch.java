@@ -6,8 +6,7 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +15,8 @@ public class ProgramSearch {
     @JsonProperty("ids")
     private List<String> ids;
 
-    @NotNull
     @JsonProperty("location_code")
+    @NotNull
     private String locationCode;
 
     @JsonProperty("parent_id")

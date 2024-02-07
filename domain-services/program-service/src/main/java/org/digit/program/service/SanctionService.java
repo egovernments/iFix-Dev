@@ -30,38 +30,26 @@ public class SanctionService {
         this.commonValidator = commonValidator;
     }
 
-    public RequestJsonMessage createSanction(RequestJsonMessage requestJsonMessage) {
+    public SanctionRequest createSanction(SanctionRequest sanctionRequest) {
         log.info("createSanction");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
-        Sanction sanction;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            sanction = (new Sanction(requestJsonMessage.getMessage().get(i)));
-            sanctionValidator.validateSanction(sanction, true);
-            enrichmentService.enrichSanctionCreate(sanction, requestJsonMessage.getHeader().getReceiverId());
-            sanctionRepository.saveSanction(sanction);
-            messages.add(sanction.toJsonNode(sanction));
-        }
-        requestJsonMessage.setMessage(messages);
-        dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+        commonValidator.validateRequest(sanctionRequest.getHeader());
+            sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
+            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getReceiverId());
+            sanctionRepository.saveSanction(sanctionRequest.getSanctions());
+        dispatcherUtil.forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
+                sanctionRequest.getHeader(), sanctionRequest.getSanctions().toString());
+        return sanctionRequest;
     }
 
-    public RequestJsonMessage updateSanction(RequestJsonMessage requestJsonMessage) {
+    public SanctionRequest updateSanction(SanctionRequest sanctionRequest) {
         log.info("updateSanction");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
-        Sanction sanction;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            sanction = new Sanction(requestJsonMessage.getMessage().get(i));
-            sanctionValidator.validateSanction(sanction, false);
-            enrichmentService.enrichSanctionUpdate(sanction);
-            sanctionRepository.updateSanction(sanction);
-            messages.add(sanction.toJsonNode(sanction));
-        }
-        requestJsonMessage.setMessage(messages);
-        dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+        commonValidator.validateRequest(sanctionRequest.getHeader());
+        sanctionValidator.validateSanction(sanctionRequest.getSanctions(), false);
+        enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanctions());
+        sanctionRepository.updateSanction(sanctionRequest.getSanctions());
+        dispatcherUtil.forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
+                sanctionRequest.getHeader(), sanctionRequest.getSanctions().toString());
+        return sanctionRequest;
     }
 
     public SanctionSearchResponse searchSanction(SanctionSearchRequest sanctionSearchRequest) {

@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -25,30 +26,21 @@ public class SanctionValidator {
         this.programRepository = programRepository;
     }
 
-    public void validateSanction(Sanction sanction, Boolean isCreate) {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<Sanction>> violations = validator.validate(sanction);
-        Map<String, String> errorMap = new HashMap<>();
-        if (!violations.isEmpty()) {
-            // Handle validation errors
-            for (ConstraintViolation<Sanction> violation : violations) {
-                log.error("Validation error: " + violation.getPropertyPath() + " " + violation.getMessage());
-                errorMap.put(violation.getMessageTemplate(), violation.getPropertyPath() + " " + violation.getMessage());
-            }
-            throw new CustomException(errorMap);
-        }
+    public void validateSanction(List<Sanction> sanctions, Boolean isCreate) {
         log.info("validating Sanction");
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
-                .programCode(sanction.getProgramCode()).build());
+                .programCode(sanctions.get(0).getProgramCode()).build());
         if (CollectionUtils.isEmpty(programs)) {
-            throw new IllegalArgumentException("No Programs exists for program code: " + sanction.getProgramCode());
+            throw new IllegalArgumentException("No Programs exists for program code: " + sanctions.get(0).getProgramCode());
         }
 
         if (!isCreate) {
+            Set<String> sanctionIds = sanctions.stream().map(Sanction::getId).collect(Collectors.toSet());
             List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
-                    .ids(Collections.singletonList(sanction.getId())).build());
-            if (CollectionUtils.isEmpty(sanctionFromSearch)) {
-                throw new IllegalArgumentException("No sanction found for id: " + sanction.getId());
+                    .ids(new ArrayList<>(sanctionIds)).build());
+            if (sanctionFromSearch.size() != sanctionIds.size()) {
+                sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
+                throw new IllegalArgumentException("No sanction found for id(s): " + sanctionIds);
             }
         }
     }

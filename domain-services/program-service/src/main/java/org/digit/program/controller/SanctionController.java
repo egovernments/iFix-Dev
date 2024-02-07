@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,17 +21,17 @@ public class SanctionController {
     }
 
     @PostMapping(value = "/on-sanction/_create")
-    public ResponseEntity<RequestJsonMessage> onSanctionCreate(@RequestBody RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(sanctionService.createSanction(requestJsonMessage));
+    public ResponseEntity<SanctionRequest> onSanctionCreate(@RequestBody @Valid SanctionRequest sanctionRequest) {
+        return ResponseEntity.ok(sanctionService.createSanction(sanctionRequest));
     }
 
     @PostMapping(value = "/on-sanction/_update")
-    public ResponseEntity<RequestJsonMessage> onSanctionUpdate(@RequestBody RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(sanctionService.updateSanction(requestJsonMessage));
+    public ResponseEntity<SanctionRequest> onSanctionUpdate(@RequestBody @Valid SanctionRequest sanctionRequest) {
+        return ResponseEntity.ok(sanctionService.updateSanction(sanctionRequest));
     }
 
     @PostMapping(value = "/sanction/_search")
-    public ResponseEntity<SanctionSearchResponse> sanctionSearch(@RequestBody SanctionSearchRequest sanctionSearchRequest) {
+    public ResponseEntity<SanctionSearchResponse> sanctionSearch(@RequestBody @Valid SanctionSearchRequest sanctionSearchRequest) {
         return ResponseEntity.ok(sanctionService.searchSanction(sanctionSearchRequest));
     }
 

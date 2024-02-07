@@ -1,15 +1,15 @@
 package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SanctionSearchRequest {
 
     @JsonProperty("signature")
@@ -17,9 +17,11 @@ public class SanctionSearchRequest {
 
     @NotNull
     @JsonProperty("header")
+    @Valid
     private RequestHeader header;
 
     @NotNull
     @JsonProperty("message")
+    @Valid
     private SanctionSearch sanctionSearch;
 }

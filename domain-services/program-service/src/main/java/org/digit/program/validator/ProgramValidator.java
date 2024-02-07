@@ -22,17 +22,6 @@ public class ProgramValidator {
     }
 
     public void validateProgram(Program program, Boolean isCreate) {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<Program>> violations = validator.validate(program);
-        Map<String, String> errorMap = new HashMap<>();
-        if (!violations.isEmpty()) {
-            // Handle validation errors
-            for (ConstraintViolation<Program> violation : violations) {
-                log.error("Validation error: " + violation.getPropertyPath() + " " + violation.getMessage());
-                errorMap.put(violation.getMessageTemplate() + "." + violation.getPropertyPath().toString(), violation.getPropertyPath() + " " + violation.getMessage());
-            }
-            throw new CustomException(errorMap);
-        }
         if (program.getStartDate() == 0)
             throw new CustomException("START_DATE_ERROR", "startDate should not be empty");
 

@@ -3,26 +3,20 @@ package org.digit.program.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProgramSearchRequest {
+public class DisburseSearchResponse {
 
-    @JsonProperty("signature")
-    private String signature;
-
-    @NotNull
     @JsonProperty("header")
-    @Valid
+    @NotNull
     private RequestHeader header;
 
-    @JsonProperty("message")
-    @NotNull
-    @Valid
-    private ProgramSearch programSearch;
+    @JsonProperty("disbursements")
+    private List<Disbursement> disbursements;
 
 }

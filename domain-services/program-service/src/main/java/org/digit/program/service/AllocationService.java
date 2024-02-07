@@ -37,48 +37,43 @@ public class AllocationService {
         this.allocationValidator = allocationValidator;
     }
 
-    public RequestJsonMessage createAllocation(RequestJsonMessage requestJsonMessage) {
+    public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
+        commonValidator.validateRequest(allocationRequest.getHeader());
         Allocation allocation;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            allocation = enrichmentService.enrichAllocationCreate(new Allocation(requestJsonMessage.getMessage().get(i)),
-                    requestJsonMessage.getHeader().getReceiverId());
+        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
+            allocation = allocationRequest.getAllocations().get(i);
+            enrichmentService.enrichAllocationCreate(allocation,
+                    allocationRequest.getHeader().getReceiverId());
             allocationValidator.validateAllocation(allocation, true);
             Sanction sanction = calculationUtil.calculateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
                     allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
             sanctionRepository.updateSanctionOnAllocation(sanction);
             allocationRepository.saveAllocation(allocation);
-            messages.add(allocation.toJsonNode(allocation));
         }
-        requestJsonMessage.setMessage(messages);
-        dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+        dispatcherUtil.forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(), allocationRequest.getHeader(), allocationRequest.getAllocations().toString());
+        return allocationRequest;
     }
 
-    public RequestJsonMessage updateAllocation (RequestJsonMessage requestJsonMessage) {
+    public AllocationRequest updateAllocation (AllocationRequest allocationRequest) {
         log.info("Update Allocation");
-        commonValidator.validateRequest(requestJsonMessage);
-        List<JsonNode> messages = new ArrayList<>();
+        commonValidator.validateRequest(allocationRequest.getHeader());
         Allocation allocation;
-        for (int i = 0; i < requestJsonMessage.getMessage().size(); i++) {
-            allocation = new Allocation(requestJsonMessage.getMessage().get(i));
+        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
+            allocation = allocationRequest.getAllocations().get(i);
             allocationValidator.validateAllocation(allocation, false);
             allocationRepository.updateAllocation(allocation);
-            messages.add(allocation.toJsonNode(allocation));
         }
-        requestJsonMessage.setMessage(messages);
-        dispatcherUtil.forwardMessage(requestJsonMessage);
-        return requestJsonMessage;
+        dispatcherUtil.forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(),
+                allocationRequest.getHeader(), allocationRequest.getAllocations().toString());
+        return allocationRequest;
     }
 
     public AllocationResponse searchAllocation (AllocationSearchRequest allocationSearchRequest) {
         log.info("Search Allocation");
         List<Allocation> allocations = allocationRepository.searchAllocation(allocationSearchRequest.getAllocationSearch());
-        AllocationResponse allocationResponse = AllocationResponse.builder().header(allocationSearchRequest.getHeader())
+        return AllocationResponse.builder().header(allocationSearchRequest.getHeader())
                 .allocations(allocations).build();
-        return allocationResponse;
     }
 
 }

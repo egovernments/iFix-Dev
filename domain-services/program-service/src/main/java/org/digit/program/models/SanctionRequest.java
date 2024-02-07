@@ -5,24 +5,26 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProgramSearchRequest {
+public class SanctionRequest {
 
+
+    private String id;
     @JsonProperty("signature")
     private String signature;
 
-    @NotNull
     @JsonProperty("header")
+    @NotNull
     @Valid
     private RequestHeader header;
 
     @JsonProperty("message")
     @NotNull
     @Valid
-    private ProgramSearch programSearch;
-
+    private List<Sanction> sanctions;
 }

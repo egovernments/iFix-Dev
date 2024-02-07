@@ -2,17 +2,15 @@ package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 import org.digit.program.constants.Action;
 import org.digit.program.constants.MessageType;
 
 import java.time.ZonedDateTime;
 
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestHeader{
@@ -35,7 +33,7 @@ public class RequestHeader{
     @JsonProperty("sender_id")
     @NotNull
     private String senderId;
-    @JsonProperty("senderUri")
+    @JsonProperty("sender_uri")
     @NotNull
     private String senderUri;
     @NotNull

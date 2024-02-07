@@ -31,25 +31,29 @@ public class SanctionRepository {
     }
 
     @Transactional
-    public void saveSanction(Sanction sanction) {
-        List<Object> preparedStmtList = new ArrayList<>();
-        String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionInsertQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
+    public void saveSanction(List<Sanction> sanctions) {
+        for (Sanction sanction : sanctions) {
+            List<Object> preparedStmtList = new ArrayList<>();
+            String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionInsertQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
 
-        preparedStmtList = new ArrayList<>();
-        String sanctionInsertQuery = sanctionQueryBuilder.buildSanctionInsertQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(sanctionInsertQuery, preparedStmtList.toArray());
+            preparedStmtList = new ArrayList<>();
+            String sanctionInsertQuery = sanctionQueryBuilder.buildSanctionInsertQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(sanctionInsertQuery, preparedStmtList.toArray());
+        }
     }
 
     @Transactional
-    public void updateSanction(Sanction sanction) {
-        List<Object> preparedStmtList = new ArrayList<>();
-        String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
+    public void updateSanction(List<Sanction> sanctions) {
+        for (Sanction sanction : sanctions) {
+            List<Object> preparedStmtList = new ArrayList<>();
+            String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
 
-        preparedStmtList = new ArrayList<>();
-        String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
+            preparedStmtList = new ArrayList<>();
+            String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
+        }
     }
 
     @Transactional

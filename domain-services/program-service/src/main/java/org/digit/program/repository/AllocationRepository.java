@@ -8,6 +8,7 @@ import org.digit.program.repository.rowmapper.AllocationRowMapper;
 import org.digit.program.service.EnrichmentService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class AllocationRepository {
         this.enrichmentService = enrichmentService;
     }
 
+    @Transactional
     public void saveAllocation(Allocation allocation) {
         List<Object> preparedStmtList = new ArrayList<>();
         String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeAllocationInsertQuery(allocation, preparedStmtList);
@@ -40,6 +42,7 @@ public class AllocationRepository {
         jdbcTemplate.update(allocationInsertQuery, preparedStmtList.toArray());
     }
 
+    @Transactional
     public void updateAllocation(Allocation allocation) {
         List<Object> preparedStmtList = new ArrayList<>();
         String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeAllocationUpdateQuery(allocation, preparedStmtList);

@@ -1,8 +1,8 @@
 package org.digit.program.controller;
 
+import org.digit.program.models.AllocationRequest;
 import org.digit.program.models.AllocationResponse;
 import org.digit.program.models.AllocationSearchRequest;
-import org.digit.program.models.RequestJsonMessage;
 import org.digit.program.service.AllocationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,13 +22,13 @@ public class AllocationController {
     }
 
     @PostMapping(value = "/on-allocation/_create")
-    public ResponseEntity<RequestJsonMessage> onAllocationCreate(@RequestBody RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(allocationService.createAllocation(requestJsonMessage));
+    public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody AllocationRequest allocationRequest) {
+        return ResponseEntity.ok(allocationService.createAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/on-allocation/_update")
-    public ResponseEntity<RequestJsonMessage> onAllocationUpdate(@RequestBody RequestJsonMessage requestJsonMessage) {
-        return ResponseEntity.ok(allocationService.updateAllocation(requestJsonMessage));
+    public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody AllocationRequest allocationRequest) {
+        return ResponseEntity.ok(allocationService.updateAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/allocation/_search")
