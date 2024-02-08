@@ -14,28 +14,34 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestHeader{
-    @NotNull
     @JsonProperty("message_id")
     @NotNull
     private String messageId;
+
     @JsonProperty("message_ts")
     @NotNull
     private ZonedDateTime messageTs;
+
     @JsonProperty("message_type")
     @NotNull
     private MessageType messageType;
+
     @JsonProperty("action")
     @NotNull
     private Action action;
+
     @JsonProperty("sender_id")
     @NotNull
     private String senderId;
+
     @JsonProperty("sender_uri")
     @NotNull
     private String senderUri;
+
     @NotNull
     @JsonProperty("receiver_id")
     private String receiverId;
+
     @JsonProperty("is_msg_encrypted")
     private boolean isMsgEncrypted;
 //     // @OneToOne(cascade = CascadeType.ALL)

@@ -11,9 +11,9 @@ import java.util.List;
 public class AllocationQueryBuilder {
 
     public static final String ALLOCATION_INSERT_QUERY = "INSERT INTO eg_program_allocation " +
-            "(id, location_code, program_code, sanction_id, amount, status, status_message, type, " +
+            " (id, location_code, program_code, sanction_id, amount, status, status_message, type, " +
             " created_by, last_modified_by, created_time, last_modified_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String ALLOCATION_UPDATE_QUERY = "UPDATE eg_program_allocation " +
             "SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +

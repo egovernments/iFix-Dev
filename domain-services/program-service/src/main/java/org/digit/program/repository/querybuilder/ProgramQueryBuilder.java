@@ -12,16 +12,16 @@ import java.util.List;
 public class ProgramQueryBuilder {
     public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
             "( id, location_code, program_code, name, parent_id, description, client_host_url, status, status_message, " +
-            "start_date, end_date, is_active, created_by, last_modified_by, created_time, last_modified_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " start_date, end_date, is_active, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
-            "SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
-            " end_date = ?, is_active = ? last_modified_by = ?, last_modified_time = ? " +
-            "WHERE id = ?";
+            " SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
+            " end_date = ?, is_active = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
 
     public static final String PROGRAM_SEARCH_QUERY = "SELECT * FROM eg_program JOIN eg_program_message_codes " +
-            "ON eg_program.id = eg_program_message_codes.reference_id ";
+            " ON eg_program.id = eg_program_message_codes.reference_id ";
 
 
     public String buildProgramInsertQuery(Program program, List<Object> preparedStmtList) {

@@ -53,7 +53,7 @@ public class AllocationService {
             sanctionRepository.updateSanctionOnAllocation(sanction);
             allocationRepository.saveAllocation(allocation);
         }
-        dispatcherUtil.forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(), allocationRequest.getHeader(), allocationRequest.getAllocations().toString());
+        dispatcherUtil.dispatchOnAllocation(allocationRequest);
         return allocationRequest;
     }
 
@@ -66,8 +66,7 @@ public class AllocationService {
             allocationValidator.validateAllocation(allocation, false);
             allocationRepository.updateAllocation(allocation);
         }
-        dispatcherUtil.forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(),
-                allocationRequest.getHeader(), allocationRequest.getAllocations().toString());
+        dispatcherUtil.dispatchOnAllocation(allocationRequest);
         return allocationRequest;
     }
 

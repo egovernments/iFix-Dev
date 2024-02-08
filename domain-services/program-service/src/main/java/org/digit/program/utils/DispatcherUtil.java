@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.MessageType;
+import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.RequestHeader;
 import org.digit.program.models.RequestMessage;
+import org.digit.program.models.sanction.SanctionRequest;
 import org.digit.program.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +59,30 @@ public class DispatcherUtil {
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
                 .append(programRequest.getHeader().getMessageType());
         restRepo.fetchResult(url, requestMessage);
+    }
+
+    public void dispatchOnSanction (SanctionRequest sanctionRequest) {
+        String message;
+        try {
+            message = mapper.writeValueAsString(sanctionRequest.getSanctions());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if (!sanctionRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
+                    sanctionRequest.getHeader(), message);
+    }
+
+    public void dispatchOnAllocation (AllocationRequest allocationRequest) {
+        String message;
+        try {
+            message = mapper.writeValueAsString(allocationRequest.getAllocations());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if (!allocationRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+            forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(),
+                    allocationRequest.getHeader(), message);
     }
 
     private void updateUri(RequestMessage requestMessage){
