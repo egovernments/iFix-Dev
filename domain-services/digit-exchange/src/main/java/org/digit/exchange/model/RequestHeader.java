@@ -6,7 +6,6 @@ import org.digit.exchange.constants.Action;
 import org.digit.exchange.constants.ExchangeType;
 
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
 
 
 @Getter
@@ -20,7 +19,7 @@ public class RequestHeader {
 
     @JsonProperty("message_ts")
     @NotNull
-    private ZonedDateTime messageTs;
+    private long messageTs;
 
     @JsonProperty("message_type")
     @NotNull
