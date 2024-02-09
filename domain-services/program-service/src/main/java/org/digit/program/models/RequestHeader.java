@@ -7,7 +7,6 @@ import lombok.*;
 import org.digit.program.constants.Action;
 import org.digit.program.constants.MessageType;
 
-import java.time.ZonedDateTime;
 
 @Data
 @Builder
@@ -20,7 +19,7 @@ public class RequestHeader{
 
     @JsonProperty("message_ts")
     @NotNull
-    private ZonedDateTime messageTs;
+    private long messageTs;
 
     @JsonProperty("message_type")
     @NotNull
