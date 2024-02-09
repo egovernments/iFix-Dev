@@ -33,7 +33,7 @@ public class DisburseRepository {
     }
 
     @Transactional
-    public void saveDisburse(Disbursement disbursement, String parentId) {
+    public void saveDisburse(Disbursement disbursement, String parentId, Boolean isRoot) {
         List<Object> preparedStmtList = new ArrayList<>();
         String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeDisburseInsertQuery(disbursement, preparedStmtList);
         jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
@@ -42,9 +42,27 @@ public class DisburseRepository {
         String disburseInsertQuery = disburseQueryBuilder.buildDisburseInsertQuery(disbursement, preparedStmtList, parentId);
         jdbcTemplate.update(disburseInsertQuery, preparedStmtList.toArray());
 
+        if (isRoot) {
+            preparedStmtList = new ArrayList<>();
+            String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList);
+            jdbcTemplate.update(transactionInsertQuery, preparedStmtList.toArray());
+        }
         if (disbursement.getDisbursements() != null) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
-                saveDisburse(childDisbursement, disbursement.getId());
+                saveDisburse(childDisbursement, disbursement.getId(), false);
+            }
+        }
+    }
+
+    @Transactional
+    public void updateDisburse(Disbursement disbursement) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String disburseUpdateQuery = disburseQueryBuilder.buildDisburseUpdateQuery(disbursement, preparedStmtList);
+        jdbcTemplate.update(disburseUpdateQuery, preparedStmtList.toArray());
+
+        if (disbursement.getDisbursements() != null) {
+            for (Disbursement childDisbursement : disbursement.getDisbursements()) {
+                updateDisburse(childDisbursement);
             }
         }
     }
@@ -60,8 +78,13 @@ public class DisburseRepository {
         if (disbursements.isEmpty()) {
             return disbursements;
         }
+        return setChildDisbursements(disbursements);
+
+    }
+
+    private List<Disbursement> setChildDisbursements(List<Disbursement> disbursements) {
         List<String> parentIds = disbursements.stream().map(Disbursement::getId).collect(Collectors.toList());
-        preparedStmtList = new ArrayList<>();
+        List<Object> preparedStmtList = new ArrayList<>();
         String disburseChildSearchQuery = disburseQueryBuilder.buildDisburseSearchQuery(new DisburseSearch(),
                 preparedStmtList, parentIds, false);
         List<Disbursement> childDisbursements = jdbcTemplate.query(disburseChildSearchQuery, preparedStmtList.toArray(),
@@ -75,7 +98,6 @@ public class DisburseRepository {
         }
         return disbursements;
     }
-
 
 
 

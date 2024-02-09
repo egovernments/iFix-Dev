@@ -136,6 +136,5 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
         return EXCHANGE_CODE_INSERT_QUERY;
-
     }
 }

@@ -28,10 +28,6 @@ public class Individual {
     @Size(min = 2)
     private String phone;
 
-    @JsonProperty("gender")
-    @Size(min = 2)
-    private Gender gender;
-
     @JsonProperty("pin")
     private String pin;
 

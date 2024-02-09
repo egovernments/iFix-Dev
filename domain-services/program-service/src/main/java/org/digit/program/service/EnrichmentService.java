@@ -34,10 +34,13 @@ public class EnrichmentService {
         log.info("Enrich Program for Create");
         if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdName(), "", 1).get(0));
-        }
-        else {
+            program.setActive(true);
+            program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.APPROVED).build());
+        } else {
             program.setId(UUID.randomUUID().toString());
             program.setClientHostUrl(configs.getDomain());
+            program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
+            program.setActive(false);
         }
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).createdBy("a").lastModifiedBy("b").build();
         program.setAuditDetails(auditDetails);
@@ -58,7 +61,6 @@ public class EnrichmentService {
         program.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
         program.getAuditDetails().setLastModifiedBy("b");
         program.setActive(true);
-
     }
 
     public Pagination enrichSearch(Pagination pagination) {
@@ -103,12 +105,18 @@ public class EnrichmentService {
         }
     }
 
-    public void enrichAllocationCreate(Allocation allocation, String receiverId) {
+    public void enrichAllocationCreate(List<Allocation> allocations, String receiverId) {
         log.info("Enrich allocation create");
-        if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain()))
-            allocation.setId(UUID.randomUUID().toString());
-        AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
-        allocation.setAuditDetails(auditDetails);
+        for (Allocation allocation : allocations) {
+            if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+                allocation.setId(UUID.randomUUID().toString());
+                AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
+                allocation.setAuditDetails(auditDetails);
+            } else {
+                allocation.getAuditDetails().setLastModifiedBy("b");
+                allocation.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+            }
+        }
     }
 
     public void enrichDisburseCreate(Disbursement disbursement, String receiverId) {
@@ -123,6 +131,12 @@ public class EnrichmentService {
         }
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
         disbursement.setAuditDetails(auditDetails);
+    }
+
+    public void enrichDisburseUpdate(Disbursement disbursement) {
+        log.info("Enrich disburse update");
+        disbursement.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+        disbursement.getAuditDetails().setLastModifiedBy("b");
     }
 
 }

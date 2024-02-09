@@ -25,7 +25,6 @@ public class AllocationService {
     private final EnrichmentService enrichmentService;
     private final DispatcherUtil dispatcherUtil;
     private final CalculationUtil calculationUtil;
-    private final SanctionRepository sanctionRepository;
     private final CommonValidator commonValidator;
     private final AllocationValidator allocationValidator;
 
@@ -34,7 +33,6 @@ public class AllocationService {
         this.enrichmentService = enrichmentService;
         this.dispatcherUtil = dispatcherUtil;
         this.calculationUtil = calculationUtil;
-        this.sanctionRepository = sanctionRepository;
         this.commonValidator = commonValidator;
         this.allocationValidator = allocationValidator;
     }
@@ -42,15 +40,13 @@ public class AllocationService {
     public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
         commonValidator.validateRequest(allocationRequest.getHeader());
-        Allocation allocation;
-        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
-            allocation = allocationRequest.getAllocations().get(i);
-            enrichmentService.enrichAllocationCreate(allocation,
+        Allocation allocation = null;
+            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocations(),
                     allocationRequest.getHeader().getReceiverId());
+        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
             allocationValidator.validateAllocation(allocation, true);
-            Sanction sanction = calculationUtil.calculateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
+            calculationUtil.calculateAndUpdateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
                     allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
-            sanctionRepository.updateSanctionOnAllocation(sanction);
             allocationRepository.saveAllocation(allocation);
         }
         dispatcherUtil.dispatchOnAllocation(allocationRequest);

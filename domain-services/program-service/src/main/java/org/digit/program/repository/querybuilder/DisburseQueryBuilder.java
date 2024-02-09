@@ -2,6 +2,7 @@ package org.digit.program.repository.querybuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
 import org.egov.tracer.model.CustomException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class DisburseQueryBuilder {
@@ -23,8 +25,16 @@ public class DisburseQueryBuilder {
             "gross_amount, status, status_message, created_by, last_modified_by, created_time, last_modified_time) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    public static final String DISBURSE_UPDATE_QUERY = "UPDATE eg_program_disburse " +
+            " SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ?";
+
     public static final String DISBURSE_SEARCH_QUERY = "SELECT * FROM eg_program_disburse JOIN eg_program_message_codes " +
             "ON eg_program_disburse.id = eg_program_message_codes.reference_id ";
+
+    public static final String TRANSACTION_LOGS_INSERT_QUERY = "INSERT INTO eg_program_transaction_logs " +
+            "(id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public DisburseQueryBuilder(ObjectMapper mapper) {
         this.mapper = mapper;
@@ -48,6 +58,28 @@ public class DisburseQueryBuilder {
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
         return DISBURSE_INSERT_QUERY;
+    }
+
+    public String buildDisburseUpdateQuery(Disbursement disbursement, List<Object> preparedStmtList) {
+        preparedStmtList.add(disbursement.getStatus().getStatusCode().toString());
+        preparedStmtList.add(disbursement.getStatus().getStatusMessage());
+        preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
+        preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
+        preparedStmtList.add(disbursement.getId());
+        return DISBURSE_UPDATE_QUERY;
+    }
+
+    public String buildTransactionInsertQuery (Disbursement disbursement, List<Object> preparedStmtList) {
+        preparedStmtList.add(UUID.randomUUID().toString());
+        preparedStmtList.add(disbursement.getLocationCode());
+        preparedStmtList.add(disbursement.getProgramCode());
+        preparedStmtList.add(disbursement.getSanctionId());
+        preparedStmtList.add(disbursement.getId());
+        preparedStmtList.add(MessageType.DISBURSE);
+        preparedStmtList.add(disbursement.getNetAmount());
+        preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
+        preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
+        return TRANSACTION_LOGS_INSERT_QUERY;
     }
 
     public String buildDisburseSearchQuery(DisburseSearch disburseSearch, List<Object> preparedStmtList,

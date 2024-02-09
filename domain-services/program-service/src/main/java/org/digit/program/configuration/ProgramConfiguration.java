@@ -63,6 +63,18 @@ public class ProgramConfiguration {
     @Value("${exchange.path}")
     private String exchangePath;
 
+    @Value("${ifms.adapter.host}")
+    private String ifmsHost;
+
+    @Value("${ifms.adapter.path}")
+    private String ifmsPath;
+
+    @Value("${mukta.adapter.host}")
+    private String muktaHost;
+
+    @Value("${mukta.adapter.path}")
+    private String muktaPath;
+
     @Value("${egov.idgen.host}")
     private String idGenHost;
 

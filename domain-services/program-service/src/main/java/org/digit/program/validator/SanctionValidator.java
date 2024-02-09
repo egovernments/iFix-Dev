@@ -30,7 +30,7 @@ public class SanctionValidator {
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
                 .programCode(sanctions.get(0).getProgramCode()).build());
         if (CollectionUtils.isEmpty(programs)) {
-            throw new IllegalArgumentException("No Programs exists for program code: " + sanctions.get(0).getProgramCode());
+            throw new IllegalArgumentException("No active programs exists for program code: " + sanctions.get(0).getProgramCode());
         }
 
         if (!isCreate) {

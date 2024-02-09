@@ -1,18 +1,17 @@
 package org.digit.program.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.Status;
 import org.digit.program.models.disburse.DisburseSearchRequest;
 import org.digit.program.models.disburse.DisburseSearchResponse;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.disburse.DisbursementRequest;
-import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.DisburseRepository;
 import org.digit.program.repository.SanctionRepository;
 import org.digit.program.utils.CalculationUtil;
 import org.digit.program.utils.DispatcherUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,25 +21,31 @@ public class DisburseService {
     private final DispatcherUtil dispatcherUtil;
     private final EnrichmentService enrichmentService;
     private final CalculationUtil calculationUtil;
-    private final SanctionRepository sanctionRepository;
     private final DisburseRepository disburseRepository;
 
     public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, SanctionRepository sanctionRepository, DisburseRepository disburseRepository) {
         this.dispatcherUtil = dispatcherUtil;
         this.enrichmentService = enrichmentService;
         this.calculationUtil = calculationUtil;
-        this.sanctionRepository = sanctionRepository;
         this.disburseRepository = disburseRepository;
     }
 
     public DisbursementRequest createDisburse(DisbursementRequest disbursementRequest) {
         log.info("Create Disburse");
-        enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader().getReceiverId());
-        Sanction sanction = calculationUtil.calculateSanctionAmount(disbursementRequest.getDisbursement().getSanctionId(), disbursementRequest.getDisbursement().getNetAmount(), false);
-        sanctionRepository.updateSanction(Collections.singletonList(sanction));
-        disburseRepository.saveDisburse(disbursementRequest.getDisbursement(), null);
-        dispatcherUtil.forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
-                disbursementRequest.getHeader(), disbursementRequest.getDisbursement().toString());
+        enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(),
+                disbursementRequest.getHeader().getReceiverId());
+        calculationUtil.calculateAndUpdateSanctionAmount(disbursementRequest.getDisbursement().getSanctionId(),
+                disbursementRequest.getDisbursement().getNetAmount(), false);
+        disburseRepository.saveDisburse(disbursementRequest.getDisbursement(), null, true);
+        dispatcherUtil.dispatchDisburse(disbursementRequest);
+        return disbursementRequest;
+    }
+
+    public DisbursementRequest updateDisburse(DisbursementRequest disbursementRequest) {
+        log.info("Update Disburse");
+        enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement());
+        disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+        dispatcherUtil.dispatchDisburse(disbursementRequest);
         return disbursementRequest;
     }
 
@@ -50,6 +55,17 @@ public class DisburseService {
         return DisburseSearchResponse.builder().header(disburseSearchRequest.getHeader())
                 .disbursements(disbursements).build();
 
+    }
+
+    public DisbursementRequest onDisburse (DisbursementRequest disbursementRequest) {
+        log.info("On Disburse");
+        enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement());
+        if (disbursementRequest.getDisbursement().getStatus().equals(Status.FAILED))
+            calculationUtil.calculateAndUpdateSanctionAmount(disbursementRequest.getDisbursement().getSanctionId(),
+                    disbursementRequest.getDisbursement().getNetAmount(), true);
+        disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+        dispatcherUtil.dispatchDisburse(disbursementRequest);
+        return disbursementRequest;
     }
 
 }

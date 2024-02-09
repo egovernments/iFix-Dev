@@ -29,6 +29,9 @@ public class ProgramSearch {
     @JsonProperty("program_code")
     private String programCode;
 
+    @JsonProperty("is_active")
+    private String isActive;
+
     @JsonProperty("pagination")
     private Pagination pagination;
 

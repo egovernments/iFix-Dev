@@ -17,7 +17,7 @@ public class CalculationUtil {
         this.sanctionRepository = sanctionRepository;
     }
 
-    public Sanction calculateSanctionAmount(String sanctionId, Double amount, Boolean isAddition) {
+    public void calculateAndUpdateSanctionAmount(String sanctionId, Double amount, Boolean isAddition) {
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(sanctionId)).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
@@ -32,8 +32,9 @@ public class CalculationUtil {
         }
         sanction.setAllocatedAmount(allocatedAmount);
         sanction.setAvailableAmount(availableAmount);
+        sanction.getAuditDetails().setLastModifiedBy("c");
         sanction.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
-        return sanction;
+        sanctionRepository.updateSanctionOnAllocation(sanction);
     }
 
 }

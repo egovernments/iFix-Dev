@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.MessageType;
 import org.digit.program.models.allocation.AllocationRequest;
+import org.digit.program.models.disburse.DisbursementRequest;
 import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.RequestHeader;
 import org.digit.program.models.RequestMessage;
@@ -85,6 +86,30 @@ public class DispatcherUtil {
                     allocationRequest.getHeader(), message);
     }
 
+    public void dispatchDisburse (DisbursementRequest disbursementRequest) {
+        if (!disbursementRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+            String message;
+            try {
+                message = mapper.writeValueAsString(disbursementRequest.getDisbursement());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
+                    disbursementRequest.getHeader(), message);
+        } else {
+            String host;
+            String path;
+            if (disbursementRequest.getHeader().getMessageType().equals(MessageType.DISBURSE)) {
+                host = configs.getIfmsHost();
+                path = configs.getIfmsPath();
+            } else {
+                host = configs.getMuktaHost();
+                path = configs.getMuktaPath();
+            }
+            forwardToAdapter(disbursementRequest, host, path);
+        }
+    }
+
     private void updateUri(RequestMessage requestMessage){
         String senderId = requestMessage.getHeader().getSenderId();
         requestMessage.getHeader().setSenderId(requestMessage.getHeader().getReceiverId());
@@ -99,6 +124,14 @@ public class DispatcherUtil {
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
                 .append(requestMessage.getHeader().getMessageType().toString());
         Object response = restRepo.fetchResult(url, requestMessage);
+        return response;
+    }
+
+    public Object forwardToAdapter(DisbursementRequest disbursementRequest, String host, String path){
+        StringBuilder url = new StringBuilder(host).append(path)
+                .append(disbursementRequest.getHeader().getMessageType().toString()).append("/_")
+                .append(disbursementRequest.getHeader().getAction().toString());
+        Object response = restRepo.fetchResult(url, disbursementRequest);
         return response;
     }
 

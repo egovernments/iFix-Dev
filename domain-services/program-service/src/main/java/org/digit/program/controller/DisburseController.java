@@ -27,10 +27,20 @@ public class DisburseController {
         return ResponseEntity.ok(disburseService.createDisburse(disbursementRequest));
     }
 
+    @PostMapping(value = "/disburse/_update")
+    public ResponseEntity<DisbursementRequest> updateDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
+        return ResponseEntity.ok(disburseService.updateDisburse(disbursementRequest));
+    }
+
     @PostMapping(value = "/disburse/_search")
     public ResponseEntity<DisburseSearchResponse> searchDisburse(@RequestBody @Valid DisburseSearchRequest disburseSearchRequest) {
         return ResponseEntity.ok(disburseService.searchDisburse(disburseSearchRequest));
 
+    }
+
+    @PostMapping(value = {"/on-disburse/_create", "/on-disburse/_update"})
+    public ResponseEntity<DisbursementRequest> onDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
+        return ResponseEntity.ok(disburseService.onDisburse(disbursementRequest));
     }
 
 

@@ -94,6 +94,13 @@ public class ProgramQueryBuilder {
             programSearchQuery.append(" eg_program.parent_id = ? ");
             preparedStmtList.add(programSearch.getParentId());
         }
+        addClauseIfRequired(programSearchQuery, preparedStmtList);
+        programSearchQuery.append(" eg_program.is_active = ? ");
+        if (StringUtils.isNotBlank(programSearch.getIsActive())) {
+            preparedStmtList.add(programSearch.getIsActive());
+        } else {
+            preparedStmtList.add(true);
+        }
 
         programSearchQuery.append(" ORDER BY ? ");
         preparedStmtList.add(programSearch.getPagination().getSortBy());

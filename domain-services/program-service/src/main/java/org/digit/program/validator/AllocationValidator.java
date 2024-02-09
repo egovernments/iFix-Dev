@@ -52,7 +52,6 @@ public class AllocationValidator {
             if (allocations.size() == 0)
                 throw new CustomException("ALLOCATION_NOT_FOUND", "Allocation not found for id: " + allocation.getId());
         }
-
     }
 
 
