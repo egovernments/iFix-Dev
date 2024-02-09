@@ -61,7 +61,7 @@ public class ExchangeService {
                 log.info("Posted request to : {}", url);
             } catch (Exception e) {
                 log.error("Exception while calling the API : {}", e.getMessage());
-                handleErrorForSameDomain(requestMessageWrapper, isReply);
+//                handleErrorForSameDomain(requestMessageWrapper, isReply);
             }
         } else {
             try {
@@ -69,7 +69,7 @@ public class ExchangeService {
                 log.info("Posted request to : {}", url);
             } catch (Exception e) {
                 log.error("Exception while calling the API : {}", e.getMessage());
-                handleErrorForDifferentDomain(requestMessageWrapper, isReply);
+//                handleErrorForDifferentDomain(requestMessageWrapper, isReply);
             }
         }
 
