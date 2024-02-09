@@ -30,7 +30,7 @@ public class ProgramSearch {
     private String programCode;
 
     @JsonProperty("is_active")
-    private String isActive;
+    private Boolean isActive;
 
     @JsonProperty("pagination")
     private Pagination pagination;

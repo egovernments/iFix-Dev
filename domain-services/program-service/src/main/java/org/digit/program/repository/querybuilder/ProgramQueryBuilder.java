@@ -96,7 +96,7 @@ public class ProgramQueryBuilder {
         }
         addClauseIfRequired(programSearchQuery, preparedStmtList);
         programSearchQuery.append(" eg_program.is_active = ? ");
-        if (StringUtils.isNotBlank(programSearch.getIsActive())) {
+        if (programSearch.getIsActive() != null) {
             preparedStmtList.add(programSearch.getIsActive());
         } else {
             preparedStmtList.add(true);

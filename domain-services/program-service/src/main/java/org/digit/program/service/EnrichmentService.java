@@ -34,18 +34,15 @@ public class EnrichmentService {
         log.info("Enrich Program for Create");
         if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdName(), "", 1).get(0));
-            program.setActive(true);
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.APPROVED).build());
         } else {
             program.setId(UUID.randomUUID().toString());
             program.setClientHostUrl(configs.getDomain());
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
-            program.setActive(false);
         }
+        program.setActive(true);
         AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).createdBy("a").lastModifiedBy("b").build();
         program.setAuditDetails(auditDetails);
-        org.digit.program.models.Status status = org.digit.program.models.Status.builder().statusCode(Status.RECEIVED).build();
-        program.setStatus(status);
         log.info("Enrichment for create completed");
     }
 
