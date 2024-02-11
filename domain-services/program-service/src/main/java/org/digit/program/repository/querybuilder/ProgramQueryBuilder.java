@@ -16,6 +16,11 @@ public class ProgramQueryBuilder {
             " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
+            " SET name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
+            " end_date = ?, is_active = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
+
+    public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
             " SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
             " end_date = ?, is_active = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
@@ -46,8 +51,10 @@ public class ProgramQueryBuilder {
 
 
 
-    public String buildProgramUpdateQuery(Program program, List<Object> preparedStmtList) {
-        preparedStmtList.add(program.getProgramCode());
+    public String buildProgramUpdateQuery(Program program, List<Object> preparedStmtList, Boolean isOnProgramCreate) {
+        if (isOnProgramCreate) {
+            preparedStmtList.add(program.getProgramCode());
+        }
         preparedStmtList.add(program.getName());
         preparedStmtList.add(program.getDescription());
         preparedStmtList.add(program.getClientHostUrl());
@@ -58,7 +65,7 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());
-        return PROGRAM_UPDATE_QUERY;
+        return isOnProgramCreate ? ON_PROGRAM_UPDATE_QUERY : PROGRAM_UPDATE_QUERY;
     }
 
     public String buildProgramSearchQuery(ProgramSearch programSearch, List<Object> preparedStmtList) {

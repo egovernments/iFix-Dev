@@ -1,7 +1,6 @@
 package org.digit.program.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.constants.AllocationType;
 import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.allocation.AllocationResponse;
@@ -27,6 +26,7 @@ public class AllocationService {
     private final CalculationUtil calculationUtil;
     private final CommonValidator commonValidator;
     private final AllocationValidator allocationValidator;
+    private final SanctionRepository sanctionRepository;
 
     public AllocationService(AllocationRepository allocationRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, CalculationUtil calculationUtil, SanctionRepository sanctionRepository, CommonValidator commonValidator, AllocationValidator allocationValidator) {
         this.allocationRepository = allocationRepository;
@@ -35,20 +35,17 @@ public class AllocationService {
         this.calculationUtil = calculationUtil;
         this.commonValidator = commonValidator;
         this.allocationValidator = allocationValidator;
+        this.sanctionRepository = sanctionRepository;
     }
 
     public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
         commonValidator.validateRequest(allocationRequest.getHeader());
-        Allocation allocation = null;
-            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocations(),
-                    allocationRequest.getHeader().getReceiverId());
-        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
-            allocationValidator.validateAllocation(allocation, true);
-            calculationUtil.calculateAndUpdateSanctionAmount(allocation.getSanctionId(), allocation.getAmount(),
-                    allocation.getType().equals(AllocationType.ALLOCATION) ? true : false);
-            allocationRepository.saveAllocation(allocation);
-        }
+        enrichmentService.enrichAllocationCreate(allocationRequest.getAllocations(),
+                allocationRequest.getHeader().getReceiverId());
+        allocationValidator.validateAllocation(allocationRequest.getAllocations(), true);
+        List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocations());
+        allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocations(), sanctions);
         dispatcherUtil.dispatchOnAllocation(allocationRequest);
         return allocationRequest;
     }
@@ -56,12 +53,9 @@ public class AllocationService {
     public AllocationRequest updateAllocation (AllocationRequest allocationRequest) {
         log.info("Update Allocation");
         commonValidator.validateRequest(allocationRequest.getHeader());
-        Allocation allocation;
-        for (int i = 0; i < allocationRequest.getAllocations().size(); i++) {
-            allocation = allocationRequest.getAllocations().get(i);
-            allocationValidator.validateAllocation(allocation, false);
-            allocationRepository.updateAllocation(allocation);
-        }
+        allocationValidator.validateAllocation(allocationRequest.getAllocations(), false);
+        enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocations());
+        allocationRepository.updateAllocation(allocationRequest.getAllocations());
         dispatcherUtil.dispatchOnAllocation(allocationRequest);
         return allocationRequest;
     }

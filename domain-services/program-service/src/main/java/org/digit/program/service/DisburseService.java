@@ -6,6 +6,7 @@ import org.digit.program.models.disburse.DisburseSearchRequest;
 import org.digit.program.models.disburse.DisburseSearchResponse;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.disburse.DisbursementRequest;
+import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.DisburseRepository;
 import org.digit.program.repository.SanctionRepository;
 import org.digit.program.utils.CalculationUtil;
@@ -34,9 +35,12 @@ public class DisburseService {
         log.info("Create Disburse");
         enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getReceiverId());
-        calculationUtil.calculateAndUpdateSanctionAmount(disbursementRequest.getDisbursement().getSanctionId(),
+        Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement().getSanctionId(),
                 disbursementRequest.getDisbursement().getNetAmount(), false);
-        disburseRepository.saveDisburse(disbursementRequest.getDisbursement(), null, true);
+        if (sanction != null)
+            disburseRepository.createDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
+        else
+            disburseRepository.saveDisburse(disbursementRequest.getDisbursement(), null, true);
         dispatcherUtil.dispatchDisburse(disbursementRequest);
         return disbursementRequest;
     }
@@ -60,10 +64,13 @@ public class DisburseService {
     public DisbursementRequest onDisburse (DisbursementRequest disbursementRequest) {
         log.info("On Disburse");
         enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement());
-        if (disbursementRequest.getDisbursement().getStatus().equals(Status.FAILED))
-            calculationUtil.calculateAndUpdateSanctionAmount(disbursementRequest.getDisbursement().getSanctionId(),
+        if (disbursementRequest.getDisbursement().getStatus().equals(Status.FAILED)) {
+            Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement().getSanctionId(),
                     disbursementRequest.getDisbursement().getNetAmount(), true);
-        disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+            disburseRepository.updateDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
+        } else {
+            disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+        }
         dispatcherUtil.dispatchDisburse(disbursementRequest);
         return disbursementRequest;
     }

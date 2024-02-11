@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/v1")
 public class AllocationController {
@@ -22,17 +24,17 @@ public class AllocationController {
     }
 
     @PostMapping(value = "/on-allocation/_create")
-    public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody AllocationRequest allocationRequest) {
+    public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody @Valid AllocationRequest allocationRequest) {
         return ResponseEntity.ok(allocationService.createAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/on-allocation/_update")
-    public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody AllocationRequest allocationRequest) {
+    public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody @Valid AllocationRequest allocationRequest) {
         return ResponseEntity.ok(allocationService.updateAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/allocation/_search")
-    public ResponseEntity<AllocationResponse> searchAllocation(@RequestBody AllocationSearchRequest allocationSearchRequest) {
+    public ResponseEntity<AllocationResponse> searchAllocation(@RequestBody @Valid AllocationSearchRequest allocationSearchRequest) {
         return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest));
 
     }

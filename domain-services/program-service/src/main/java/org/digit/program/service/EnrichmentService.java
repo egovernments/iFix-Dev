@@ -116,6 +116,14 @@ public class EnrichmentService {
         }
     }
 
+    public void enrichAllocationUpdate(List<Allocation> allocations) {
+        log.info("Enrich allocation update");
+        for (Allocation allocation : allocations) {
+            allocation.getAuditDetails().setLastModifiedBy("b");
+            allocation.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+        }
+    }
+
     public void enrichDisburseCreate(Disbursement disbursement, String receiverId) {
         log.info("Enrich disburse create");
         if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {

@@ -57,14 +57,17 @@ public class SanctionRepository {
     }
 
     @Transactional
-    public void updateSanctionOnAllocation(Sanction sanction) {
-        List<Object> preparedStmtList = new ArrayList<>();
-        String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
+    public void updateSanctionOnAllocationOrDisburse(List<Sanction> sanctions) {
+        for (Sanction sanction : sanctions) {
+            List<Object> preparedStmtList = new ArrayList<>();
+            String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
 
-        preparedStmtList = new ArrayList<>();
-        String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateOnAllocationQuery(sanction, preparedStmtList);
-        jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
+            preparedStmtList = new ArrayList<>();
+            String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateOnAllocationOrDisburseQuery(sanction, preparedStmtList);
+            jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
+        }
+
     }
 
     public List<Sanction> searchSanction(SanctionSearch sanctionSearch) {

@@ -40,9 +40,13 @@ public class ProgramController {
         return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
     }
 
-    @PostMapping(value ={ "/on-program/_create", "/on-program/_update"})
-    public ResponseEntity<ProgramRequest> onProgram(@RequestBody @Valid ProgramRequest programRequest) {
-            return ResponseEntity.ok(programService.onProgram(programRequest));
+    @PostMapping(value = "/on-program/_create")
+    public ResponseEntity<ProgramRequest> onProgramCreate(@RequestBody @Valid ProgramRequest programRequest) {
+        return ResponseEntity.ok(programService.onProgramCreate(programRequest));
     }
 
+    @PostMapping(value = "/on-program/_update")
+    public ResponseEntity<ProgramRequest> onProgram(@RequestBody @Valid ProgramRequest programRequest) {
+            return ResponseEntity.ok(programService.onProgramUpdate(programRequest));
+    }
 }

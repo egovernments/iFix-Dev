@@ -52,7 +52,7 @@ public class SanctionQueryBuilder {
         return SANCTION_UPDATE_QUERY;
     }
 
-    public String buildSanctionUpdateOnAllocationQuery(Sanction sanction, List<Object> preparedStmtList) {
+    public String buildSanctionUpdateOnAllocationOrDisburseQuery(Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getAllocatedAmount());
         preparedStmtList.add(sanction.getAvailableAmount());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());

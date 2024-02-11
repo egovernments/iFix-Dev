@@ -7,6 +7,7 @@ import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.ProgramRepository;
 import org.digit.program.repository.SanctionRepository;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -34,7 +35,14 @@ public class SanctionValidator {
         }
 
         if (!isCreate) {
-            Set<String> sanctionIds = sanctions.stream().map(Sanction::getId).collect(Collectors.toSet());
+            Set<String> sanctionIds = new HashSet<>();
+            for (Sanction sanction : sanctions) {
+                if (sanction.getId() == null || sanction.getId().isEmpty()) {
+                    throw new CustomException("SANCTION_ID_NULL", "Sanction id cannot be null or empty");
+                } else {
+                    sanctionIds.add(sanction.getId());
+                }
+            }
             List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
                     .ids(new ArrayList<>(sanctionIds)).build());
             if (sanctionFromSearch.size() != sanctionIds.size()) {

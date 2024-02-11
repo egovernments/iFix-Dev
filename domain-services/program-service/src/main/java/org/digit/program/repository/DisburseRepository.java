@@ -2,6 +2,7 @@ package org.digit.program.repository;
 
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
+import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.querybuilder.DisburseQueryBuilder;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.rowmapper.DisburseRowMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,13 +25,15 @@ public class DisburseRepository {
     private final DisburseQueryBuilder disburseQueryBuilder;
     private final DisburseRowMapper disburseRowMapper;
     private final EnrichmentService enrichmentService;
+    private final SanctionRepository sanctionRepository;
 
-    public DisburseRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, DisburseQueryBuilder disburseQueryBuilder, DisburseRowMapper disburseRowMapper, EnrichmentService enrichmentService) {
+    public DisburseRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, DisburseQueryBuilder disburseQueryBuilder, DisburseRowMapper disburseRowMapper, EnrichmentService enrichmentService, SanctionRepository sanctionRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
         this.disburseQueryBuilder = disburseQueryBuilder;
         this.disburseRowMapper = disburseRowMapper;
         this.enrichmentService = enrichmentService;
+        this.sanctionRepository = sanctionRepository;
     }
 
     @Transactional
@@ -65,6 +69,18 @@ public class DisburseRepository {
                 updateDisburse(childDisbursement);
             }
         }
+    }
+
+    @Transactional
+    public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+        updateDisburse(disbursement);
+        sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
+    }
+
+    @Transactional
+    public void createDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+        saveDisburse(disbursement, null, true);
+        sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
     }
 
     public List<Disbursement> searchDisbursements(DisburseSearch disburseSearch) {

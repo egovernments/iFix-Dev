@@ -2,7 +2,6 @@ package org.digit.program.models.allocation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.digit.program.constants.AllocationType;

@@ -53,7 +53,7 @@ public class ProgramService {
         commonValidator.validateRequest(programRequest.getHeader());
         enrichmentService.enrichProgramForUpdate(programRequest.getProgram());
         programValidator.validateProgram(programRequest.getProgram(), false);
-        programRepository.updateProgram(programRequest.getProgram());
+        programRepository.updateProgram(programRequest.getProgram(), false);
         dispatcherUtil.dispatchProgram(programRequest);
         return programRequest;
     }
@@ -66,12 +66,22 @@ public class ProgramService {
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
-    public ProgramRequest onProgram(ProgramRequest programRequest) {
-        log.info("on Program");
+    public ProgramRequest onProgramCreate(ProgramRequest programRequest) {
+        log.info("on Program Create");
+        commonValidator.validateRequest(programRequest.getHeader());
+        programValidator.validateProgram(programRequest.getProgram(), true);
+        enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
+        programRepository.updateProgram(programRequest.getProgram(), true);
+        dispatcherUtil.dispatchOnProgram(programRequest);
+        return programRequest;
+    }
+
+    public ProgramRequest onProgramUpdate(ProgramRequest programRequest) {
+        log.info("on Program Update");
         commonValidator.validateRequest(programRequest.getHeader());
         programValidator.validateProgram(programRequest.getProgram(), false);
         enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
-        programRepository.updateProgram(programRequest.getProgram());
+        programRepository.updateProgram(programRequest.getProgram(), false);
         dispatcherUtil.dispatchOnProgram(programRequest);
         return programRequest;
     }

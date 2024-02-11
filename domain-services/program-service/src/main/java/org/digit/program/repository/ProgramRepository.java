@@ -35,7 +35,7 @@ public class ProgramRepository {
     @Transactional
     public void saveProgram(Program program) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeInsertQuery(program, preparedStmtList);
+        String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeProgramInsertQuery(program, preparedStmtList);
         jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
 
         preparedStmtList = new ArrayList<>();
@@ -45,13 +45,13 @@ public class ProgramRepository {
     }
 
     @Transactional
-    public void updateProgram(Program program) {
+    public void updateProgram(Program program, Boolean isOnProgramCreate) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeUpdateQuery(program, preparedStmtList);
+        String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeProgramUpdateQuery(program, preparedStmtList, isOnProgramCreate);
         jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
 
         preparedStmtList = new ArrayList<>();
-        String programUpdateQuery = programQueryBuilder.buildProgramUpdateQuery(program, preparedStmtList);
+        String programUpdateQuery = programQueryBuilder.buildProgramUpdateQuery(program, preparedStmtList, isOnProgramCreate);
         jdbcTemplate.update(programUpdateQuery, preparedStmtList.toArray());
         log.info("update Program persisted");
     }
