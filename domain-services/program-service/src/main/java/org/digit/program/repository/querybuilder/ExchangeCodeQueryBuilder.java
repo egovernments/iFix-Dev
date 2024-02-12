@@ -25,7 +25,7 @@ public class ExchangeCodeQueryBuilder {
             "WHERE id = ?";
 
     public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program_message_codes " +
-            "SET function_code = ?, administration_code = ?, program_code = ?, recipient_segment_code = ?, " +
+            "SET program_code = ?, function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
             "economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
             "last_modified_by = ?, last_modified_time = ? " +
             "WHERE id = ?";
