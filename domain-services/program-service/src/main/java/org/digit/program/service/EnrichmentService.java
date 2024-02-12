@@ -36,7 +36,8 @@ public class EnrichmentService {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(), configs.getIdName(), "", 1).get(0));
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.APPROVED).build());
         } else {
-            program.setId(UUID.randomUUID().toString());
+            if (program.getId() == null || StringUtils.isEmpty(program.getId()))
+                program.setId(UUID.randomUUID().toString());
             program.setClientHostUrl(configs.getDomain());
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
@@ -57,7 +58,6 @@ public class EnrichmentService {
         log.info("Enrich Program for OnProgram");
         program.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
         program.getAuditDetails().setLastModifiedBy("b");
-        program.setActive(true);
     }
 
     public Pagination enrichSearch(Pagination pagination) {
@@ -87,7 +87,8 @@ public class EnrichmentService {
         log.info("Enrich sanction create");
         if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
             for (Sanction sanction : sanctions) {
-                sanction.setId(UUID.randomUUID().toString());
+                if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
+                    sanction.setId(UUID.randomUUID().toString());
                 AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
                 sanction.setAuditDetails(auditDetails);
             }
@@ -106,7 +107,8 @@ public class EnrichmentService {
         log.info("Enrich allocation create");
         for (Allocation allocation : allocations) {
             if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
-                allocation.setId(UUID.randomUUID().toString());
+                if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
+                    allocation.setId(UUID.randomUUID().toString());
                 AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
                 allocation.setAuditDetails(auditDetails);
             } else {
@@ -127,9 +129,11 @@ public class EnrichmentService {
     public void enrichDisburseCreate(Disbursement disbursement, String receiverId) {
         log.info("Enrich disburse create");
         if (!receiverId.split("@")[1].equalsIgnoreCase(configs.getDomain())) {
-            disbursement.setId(UUID.randomUUID().toString());
+            if (disbursement.getId() == null || StringUtils.isEmpty(disbursement.getId()))
+                disbursement.setId(UUID.randomUUID().toString());
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
-                childDisbursement.setId(UUID.randomUUID().toString());
+                if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
+                    childDisbursement.setId(UUID.randomUUID().toString());
                 AuditDetails auditDetails = AuditDetails.builder().createdTime(System.currentTimeMillis()).lastModifiedTime(System.currentTimeMillis()).build();
                 childDisbursement.setAuditDetails(auditDetails);
             }
