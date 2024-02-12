@@ -85,7 +85,6 @@ public class ExchangeCodeQueryBuilder {
     public String buildExchangeCodeSanctionUpdateQuery (Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getFunctionCode());
         preparedStmtList.add(sanction.getAdministrationCode());
-        preparedStmtList.add(sanction.getProgramCode());
         preparedStmtList.add(sanction.getRecipientSegmentCode());
         preparedStmtList.add(sanction.getEconomicSegmentCode());
         preparedStmtList.add(sanction.getSourceOfFundCode());
@@ -117,7 +116,6 @@ public class ExchangeCodeQueryBuilder {
     public String buildExchangeCodeAllocationUpdateQuery (Allocation allocation, List<Object> preparedStmtList) {
         preparedStmtList.add(allocation.getFunctionCode());
         preparedStmtList.add(allocation.getAdministrationCode());
-        preparedStmtList.add(allocation.getProgramCode());
         preparedStmtList.add(allocation.getRecipientSegmentCode());
         preparedStmtList.add(allocation.getEconomicSegmentCode());
         preparedStmtList.add(allocation.getSourceOfFundCode());
