@@ -34,12 +34,15 @@ public class MigrationService {
     private final ProgramConfiguration programConfiguration;
     private final ObjectMapper objectMapper;
     private final ServiceRequestRepository serviceRequestRepository;
+
     @Autowired
-    public MigrationService(ProgramConfiguration programConfiguration, ObjectMapper objectMapper, ServiceRequestRepository serviceRequestRepository) {
+    public MigrationService(ProgramConfiguration programConfiguration, ObjectMapper objectMapper,
+            ServiceRequestRepository serviceRequestRepository) {
         this.programConfiguration = programConfiguration;
         this.objectMapper = objectMapper;
         this.serviceRequestRepository = serviceRequestRepository;
     }
+
     public void createProgram() {
         log.info("Started Creating Program For Each Tenant");
         JsonNode response = getTenantIds();
@@ -57,10 +60,12 @@ public class MigrationService {
                 .isMsgEncrypted(false)
                 .build();
         StringBuilder programCreateUrl = new StringBuilder();
-        programCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceCreatePath());
-        ProgramRequest stateLevelProgram = createStateLevelProgram(stateLevelTenantId, signature, requestHeader,programCreateUrl);
+        programCreateUrl.append(programConfiguration.getProgramServiceHost())
+                .append(programConfiguration.getProgramServiceCreatePath());
+        ProgramRequest stateLevelProgram = createStateLevelProgram(stateLevelTenantId, signature, requestHeader,
+                programCreateUrl);
         Program program = new Program();
-        for(String tenantId: tenantIds) {
+        for (String tenantId : tenantIds) {
             program.setName("Mukta");
             program.setLocationCode(tenantId);
             program.setParentId(stateLevelProgram.getProgram().getId());
@@ -71,11 +76,12 @@ public class MigrationService {
                     .program(program)
                     .build();
             Object programResponse = serviceRequestRepository.fetchResult(programCreateUrl, programRequest);
-            log.info("Program Created Successfully: "+ programResponse);
+            log.info("Program Created Successfully: " + programResponse);
         }
     }
 
-    private ProgramRequest createStateLevelProgram(String stateLevelTenantId, String signature, RequestHeader requestHeader, StringBuilder programCreateUrl) {
+    private ProgramRequest createStateLevelProgram(String stateLevelTenantId, String signature,
+            RequestHeader requestHeader, StringBuilder programCreateUrl) {
         log.info("Creating State Level Program");
         Program program = new Program();
         program.setName("Mukta");
@@ -87,7 +93,7 @@ public class MigrationService {
                 .program(program)
                 .build();
         Object programResponse = serviceRequestRepository.fetchResult(programCreateUrl, programRequest);
-        log.info("State Level Program Created Successfully: "+ programResponse);
+        log.info("State Level Program Created Successfully: " + programResponse);
         return objectMapper.convertValue(programResponse, ProgramRequest.class);
     }
 
@@ -97,12 +103,13 @@ public class MigrationService {
         try {
             File tenantIdsFile = new File(programConfiguration.getTenantIdFilePath());
             response = objectMapper.readTree(tenantIdsFile);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("Exception occurred while fetching tenantIds from file: ", e);
-            throw  new CustomException("TENANT_IDS_FILE_NOT_FOUND", "TenantIds file not found");
+            throw new CustomException("TENANT_IDS_FILE_NOT_FOUND", "TenantIds file not found");
         }
         return response;
     }
+
     private List<String> getChildTenantIds(JsonNode response) {
         List<String> tenantIds = new ArrayList<>();
         log.info("Filtering and extracting codes from the response data.");
@@ -111,11 +118,11 @@ public class MigrationService {
         JsonNode stateLevelTenantId = response.path("tenantId");
         for (JsonNode tenant : tenantsArray) {
             String code = tenant.path("code").asText();
-            if(!code.equals(stateLevelTenantId.asText())) {
+            if (!code.equals(stateLevelTenantId.asText())) {
                 tenantIds.add(code);
             }
         }
-        log.info("TenantIds Fetched Successfully: "+ tenantIds);
+        log.info("TenantIds Fetched Successfully: " + tenantIds);
         return tenantIds;
     }
 
@@ -123,29 +130,30 @@ public class MigrationService {
         log.info("Started Creating Sanction Allocation For Each Tenant");
         JsonNode response = getTenantIds();
         List<String> tenantIds = getChildTenantIds(response);
-        for(String tenantId: tenantIds){
+        for (String tenantId : tenantIds) {
             callOnSanctionAllocation(tenantId, requestInfo);
         }
     }
 
     private void callOnSanctionAllocation(String tenantId, RequestInfo requestInfo) {
-        log.info("Creating Sanction Allocation For Tenant: "+ tenantId);
+        log.info("Creating Sanction Allocation For Tenant: " + tenantId);
         FundsSearchRequest fundsSearchRequest = FundsSearchRequest.builder()
                 .requestInfo(requestInfo)
                 .searchCriteria(SanctionDetailsSearchCriteria.builder().tenantId(tenantId).build())
                 .build();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(programConfiguration.getIfmsServiceHost()).append(programConfiguration.getIfmsServiceFundsSearchPath());
+        stringBuilder.append(programConfiguration.getIfmsServiceHost())
+                .append(programConfiguration.getIfmsServiceFundsSearchPath());
         Object response = serviceRequestRepository.fetchResult(stringBuilder, fundsSearchRequest);
         FundsSearchResponse fundsSearchResponse = objectMapper.convertValue(response, FundsSearchResponse.class);
-        callOnSanctionAllocationForFunds(fundsSearchResponse,tenantId);
+        callOnSanctionAllocationForFunds(fundsSearchResponse, tenantId);
     }
 
     private void callOnSanctionAllocationForFunds(FundsSearchResponse fundsSearchResponse, String tenantId) {
-        log.info("Calling On Sanction Allocation For Tenant: "+ tenantId);
+        log.info("Calling On Sanction Allocation For Tenant: " + tenantId);
         List<SanctionDetail> sanctionDetails = fundsSearchResponse.getFunds();
-        if(sanctionDetails.isEmpty()) {
-            log.info("No Sanction Details Found For Tenant: "+ tenantId);
+        if (sanctionDetails.isEmpty()) {
+            log.info("No Sanction Details Found For Tenant: " + tenantId);
             return;
         }
         List<Sanction> sanctionList = new ArrayList<>();
@@ -153,7 +161,7 @@ public class MigrationService {
         String sanctionId = UUID.randomUUID().toString();
         Double totalSanctionedAmount = 0.0;
         Double totalAvailableAmount = 0.0;
-        for(SanctionDetail sanctionDetail: sanctionDetails) {
+        for (SanctionDetail sanctionDetail : sanctionDetails) {
             Sanction sanction = new Sanction();
             sanction.setId(sanctionDetail.getId());
             sanction.setLocationCode(sanctionDetail.getTenantId());
@@ -165,7 +173,7 @@ public class MigrationService {
             sanctionList.add(sanction);
             totalSanctionedAmount += sanctionDetail.getSanctionedAmount().doubleValue();
             totalAvailableAmount += sanctionDetail.getFundsSummary().getAvailableAmount().doubleValue();
-            for(Allotment allotment: sanctionDetail.getAllotmentDetails()) {
+            for (Allotment allotment : sanctionDetail.getAllotmentDetails()) {
                 Allocation allocation = new Allocation();
                 allocation.setId(allotment.getId());
                 allocation.setSanctionId(allotment.getSanctionId());
@@ -175,9 +183,9 @@ public class MigrationService {
                 allocation.setAuditDetails(allotment.getAuditDetails());
                 allocation.setProgramCode(sanctionDetail.getProgramCode());
                 allocation.setStatus(Status.builder().statusCode(org.digit.program.constants.Status.INITIATED).build());
-                if(allotment.getAllotmentTxnType().equals("Allotment withdrawal")){
+                if (allotment.getAllotmentTxnType().equals("Allotment withdrawal")) {
                     allocation.setAllocationType(AllocationType.DEDUCTION);
-                }else{
+                } else {
                     allocation.setAllocationType(AllocationType.ALLOCATION);
                 }
                 allocationList.add(allocation);
@@ -211,10 +219,11 @@ public class MigrationService {
                 .build();
 
         StringBuilder sanctionCreateUrl = new StringBuilder();
-        sanctionCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceOnSanctionEndpoint());
+        sanctionCreateUrl.append(programConfiguration.getProgramServiceHost())
+                .append(programConfiguration.getProgramServiceOnSanctionEndpoint());
         Object sanctionResponse = serviceRequestRepository.fetchResult(sanctionCreateUrl, sanctionRequest);
-        log.info("Sanction Created Successfully: "+ sanctionResponse);
-        if(sanctionResponse != null) {
+        log.info("Sanction Created Successfully: " + sanctionResponse);
+        if (sanctionResponse != null) {
             Allocation allocation = new Allocation();
             allocation.setChildren(allocationList);
             allocation.setNetAmount(totalSanctionedAmount);
@@ -226,14 +235,15 @@ public class MigrationService {
             allocation.setSanctionId(sanctionId);
             allocation.setProgramCode(sanctionList.get(0).getProgramCode());
             StringBuilder allocationCreateUrl = new StringBuilder();
-            allocationCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceOnAllocationEndpoint());
+            allocationCreateUrl.append(programConfiguration.getProgramServiceHost())
+                    .append(programConfiguration.getProgramServiceOnAllocationEndpoint());
             AllocationRequest allocationRequest = AllocationRequest.builder()
                     .signature(signature)
                     .header(requestHeader)
                     .allocation(allocation)
                     .build();
             Object allocationResponse = serviceRequestRepository.fetchResult(allocationCreateUrl, allocationRequest);
-            log.info("Allocation Created Successfully: "+ allocationResponse);
+            log.info("Allocation Created Successfully: " + allocationResponse);
         }
     }
 }

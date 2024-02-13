@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-
 @RestController
 @RequestMapping("/migration/v1")
 public class MigrationController {
     private final MigrationService migrationService;
+
     @Autowired
     public MigrationController(MigrationService migrationService) {
         this.migrationService = migrationService;
