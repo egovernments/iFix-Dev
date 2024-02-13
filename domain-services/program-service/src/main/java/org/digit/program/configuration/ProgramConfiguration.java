@@ -17,23 +17,22 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-
 @Getter
 @Setter
 @Configuration
-@Import({TracerConfiguration.class})
+@Import({ TracerConfiguration.class })
 public class ProgramConfiguration {
 
     @Bean
     public ObjectMapper objectMapper() {
-        return new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).registerModule(new JavaTimeModule());
+        return new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .registerModule(new JavaTimeModule());
     }
 
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-
 
     @Bean
     @Autowired
@@ -114,4 +113,12 @@ public class ProgramConfiguration {
     @Value("${encryption.vector}")
     private String encryptionVector;
 
+    @Value("${egov.tenant.id.file.path}")
+    private String tenantIdFilePath;
+
+    // Program Configuration For Migration
+    @Value("${egov.program.service.host}")
+    private String programServiceHost;
+    @Value("${egov.program.service.create.path}")
+    private String programServiceCreatePath;
 }
