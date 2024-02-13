@@ -1,9 +1,7 @@
 package org.digit.program.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.program.ProgramSearchRequest;
@@ -22,19 +20,15 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final EnrichmentService enrichmentService;
     private final DispatcherUtil dispatcherUtil;
-    private final ProgramConfiguration configs;
     private final ProgramValidator programValidator;
     private final CommonValidator commonValidator;
-    private final ObjectMapper mapper;
 
-    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, ProgramConfiguration configs, ProgramValidator programValidator, CommonValidator commonValidator, ObjectMapper mapper) {
+    public ProgramService(ProgramRepository programRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, ProgramValidator programValidator, CommonValidator commonValidator) {
         this.programRepository = programRepository;
         this.enrichmentService = enrichmentService;
         this.dispatcherUtil = dispatcherUtil;
-        this.configs = configs;
         this.programValidator = programValidator;
         this.commonValidator = commonValidator;
-        this.mapper = mapper;
     }
 
     public ProgramRequest createProgram(ProgramRequest programRequest) {
@@ -51,8 +45,9 @@ public class ProgramService {
     public ProgramRequest updateProgram(ProgramRequest programRequest) {
         log.info("update Program");
         commonValidator.validateRequest(programRequest.getHeader());
-        enrichmentService.enrichProgramForUpdate(programRequest.getProgram());
         programValidator.validateProgram(programRequest.getProgram(), false);
+        enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
+                programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), false);
         dispatcherUtil.dispatchProgram(programRequest);
         return programRequest;
@@ -60,7 +55,7 @@ public class ProgramService {
 
     public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
         log.info("search Program");
-        List<Program> programs = null;
+        List<Program> programs;
         programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
         log.info("Found {} programs", programs.size());
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
@@ -69,8 +64,9 @@ public class ProgramService {
     public ProgramRequest onProgramCreate(ProgramRequest programRequest) {
         log.info("on Program Create");
         commonValidator.validateRequest(programRequest.getHeader());
-        programValidator.validateProgram(programRequest.getProgram(), true);
-        enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
+        programValidator.validateProgram(programRequest.getProgram(), false);
+        enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
+                programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), true);
         dispatcherUtil.dispatchOnProgram(programRequest);
         return programRequest;
@@ -80,7 +76,8 @@ public class ProgramService {
         log.info("on Program Update");
         commonValidator.validateRequest(programRequest.getHeader());
         programValidator.validateProgram(programRequest.getProgram(), false);
-        enrichmentService.enrichProgramForOnProgram(programRequest.getProgram());
+        enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
+                programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), false);
         dispatcherUtil.dispatchOnProgram(programRequest);
         return programRequest;

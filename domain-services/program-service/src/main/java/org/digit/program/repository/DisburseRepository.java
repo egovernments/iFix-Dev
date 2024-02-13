@@ -6,7 +6,7 @@ import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.querybuilder.DisburseQueryBuilder;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.rowmapper.DisburseRowMapper;
-import org.digit.program.service.EnrichmentService;
+import org.digit.program.utils.PaginationUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +24,18 @@ public class DisburseRepository {
     private final ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
     private final DisburseQueryBuilder disburseQueryBuilder;
     private final DisburseRowMapper disburseRowMapper;
-    private final EnrichmentService enrichmentService;
     private final SanctionRepository sanctionRepository;
+    private final PaginationUtil paginationUtil;
 
-    public DisburseRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, DisburseQueryBuilder disburseQueryBuilder, DisburseRowMapper disburseRowMapper, EnrichmentService enrichmentService, SanctionRepository sanctionRepository) {
+    public DisburseRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder,
+                              DisburseQueryBuilder disburseQueryBuilder, DisburseRowMapper disburseRowMapper,
+                              SanctionRepository sanctionRepository, PaginationUtil paginationUtil) {
         this.jdbcTemplate = jdbcTemplate;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
         this.disburseQueryBuilder = disburseQueryBuilder;
         this.disburseRowMapper = disburseRowMapper;
-        this.enrichmentService = enrichmentService;
         this.sanctionRepository = sanctionRepository;
+        this.paginationUtil = paginationUtil;
     }
 
     @Transactional
@@ -79,19 +81,20 @@ public class DisburseRepository {
 
     @Transactional
     public void createDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+        if (sanction != null)
+            sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         saveDisburse(disbursement, null, true);
-        sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
     }
 
     public List<Disbursement> searchDisbursements(DisburseSearch disburseSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         List<Disbursement> disbursements;
-        disburseSearch.setPagination(enrichmentService.enrichSearch(disburseSearch.getPagination()));
+        disburseSearch.setPagination(paginationUtil.enrichSearch(disburseSearch.getPagination()));
         String disburseSearchQuery = disburseQueryBuilder.buildDisburseSearchQuery(disburseSearch, preparedStmtList,
                 null, true);
         disbursements = jdbcTemplate.query(disburseSearchQuery, preparedStmtList.toArray(), disburseRowMapper);
 
-        if (disbursements.isEmpty()) {
+        if (disbursements == null || disbursements.isEmpty()) {
             return disbursements;
         }
         return setChildDisbursements(disbursements);
@@ -106,7 +109,8 @@ public class DisburseRepository {
         List<Disbursement> childDisbursements = jdbcTemplate.query(disburseChildSearchQuery, preparedStmtList.toArray(),
                 disburseRowMapper);
 
-        Map<String, List<Disbursement>> disbursementsMap = childDisbursements.stream().collect(Collectors.groupingBy(Disbursement::getParentId));
+        Map<String, List<Disbursement>> disbursementsMap = childDisbursements.stream()
+                .collect(Collectors.groupingBy(Disbursement::getParentId));
 
         for (Disbursement disbursement : disbursements) {
             if (disbursementsMap.containsKey(disbursement.getId()))
@@ -114,7 +118,4 @@ public class DisburseRepository {
         }
         return disbursements;
     }
-
-
-
 }

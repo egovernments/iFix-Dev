@@ -12,6 +12,10 @@ public class CommonValidator {
     public void validateRequest(RequestHeader requestHeader) {
         if (requestHeader.getReceiverId().equals(requestHeader.getSenderId()))
             throw new CustomException("RECEIVER_ID_ERROR", "ReceiverId should not be same as SenderId");
+        if (!requestHeader.getReceiverId().contains("@"))
+            throw new CustomException("RECEIVER_ID_ERROR", "ReceiverId is wrong");
+        if (!requestHeader.getSenderId().contains("@"))
+            throw new CustomException("SENDER_ID_ERROR", "SenderId is wrong");
     }
 
 }

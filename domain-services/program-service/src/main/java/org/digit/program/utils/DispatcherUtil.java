@@ -97,16 +97,7 @@ public class DispatcherUtil {
             forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
         } else {
-            String host;
-            String path;
-            if (disbursementRequest.getHeader().getMessageType().equals(MessageType.DISBURSE)) {
-                host = configs.getIfmsHost();
-                path = configs.getIfmsPath();
-            } else {
-                host = configs.getMuktaHost();
-                path = configs.getMuktaPath();
-            }
-            forwardToAdapter(disbursementRequest, host, path);
+            forwardToAdapter(disbursementRequest);
         }
     }
 
@@ -127,8 +118,8 @@ public class DispatcherUtil {
         return response;
     }
 
-    public Object forwardToAdapter(DisbursementRequest disbursementRequest, String host, String path){
-        StringBuilder url = new StringBuilder(host).append(path)
+    public Object forwardToAdapter(DisbursementRequest disbursementRequest){
+        StringBuilder url = new StringBuilder(configs.getAdapterHost()).append(configs.getAdapterPath())
                 .append(disbursementRequest.getHeader().getMessageType().toString()).append("/_")
                 .append(disbursementRequest.getHeader().getAction().toString());
         Object response = restRepo.fetchResult(url, disbursementRequest);

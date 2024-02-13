@@ -27,13 +27,13 @@ public class ProgramValidator {
 
         if (program.getParentId() != null) {
             List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getParentId())).build());
-            if (programs.size() == 0)
+            if (programs.isEmpty())
                 throw new CustomException("PROGRAM_PARENT_ID_NOT_FOUND", "Program not found for ParentId: " + program.getParentId());
         }
 
-        if (!isCreate) {
+        if (Boolean.FALSE.equals(isCreate)) {
             List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getId())).build());
-            if (programs.size() == 0) {
+            if (programs.isEmpty()) {
                 throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for id: " + program.getId());
             }
             if (program.getProgramCode() == null || program.getProgramCode().isEmpty()) {

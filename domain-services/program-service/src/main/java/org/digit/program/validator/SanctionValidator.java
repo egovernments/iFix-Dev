@@ -34,7 +34,7 @@ public class SanctionValidator {
             throw new IllegalArgumentException("No active programs exists for program code: " + sanctions.get(0).getProgramCode());
         }
 
-        if (!isCreate) {
+        if (Boolean.FALSE.equals(isCreate)) {
             Set<String> sanctionIds = new HashSet<>();
             for (Sanction sanction : sanctions) {
                 if (sanction.getId() == null || sanction.getId().isEmpty()) {

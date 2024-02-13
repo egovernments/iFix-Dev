@@ -2,11 +2,15 @@ package org.digit.program.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.AllocationType;
+import org.digit.program.constants.Status;
 import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.disburse.DisburseSearch;
+import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.DisburseRepository;
 import org.digit.program.repository.SanctionRepository;
+import org.digit.program.service.EnrichmentService;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,30 +21,46 @@ import java.util.stream.Collectors;
 public class CalculationUtil {
     private final SanctionRepository sanctionRepository;
     private final DisburseRepository disburseRepository;
+    private final EnrichmentService enrichmentService;
 
-    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository) {
+    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository, EnrichmentService enrichmentService) {
         this.sanctionRepository = sanctionRepository;
         this.disburseRepository = disburseRepository;
+        this.enrichmentService = enrichmentService;
     }
 
-    public Sanction calculateAndReturnSanctionForDisburse(String sanctionId, Double amount, Boolean isAddition) {
+    public Sanction calculateAndReturnSanctionForOnDisburseFailure(Disbursement disbursement) {
         log.info("calculateSanctionAmount");
-        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(sanctionId)).build();
+        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
         Double allocatedAmount;
         Double availableAmount;
-        if (isAddition) {
-            allocatedAmount = sanction.getAllocatedAmount() + amount;
-            availableAmount = sanction.getAvailableAmount() + amount;
-        } else {
-            allocatedAmount = sanction.getAllocatedAmount() - amount;
-            availableAmount = sanction.getAvailableAmount() - amount;
-        }
+        allocatedAmount = sanction.getAllocatedAmount() + disbursement.getNetAmount();
+        availableAmount = sanction.getAvailableAmount() + disbursement.getNetAmount();
         sanction.setAllocatedAmount(allocatedAmount);
         sanction.setAvailableAmount(availableAmount);
         sanction.getAuditDetails().setLastModifiedBy("c");
         sanction.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
         return sanction;
+    }
+
+    public Sanction calculateAndReturnSanctionForDisburse(Disbursement disbursement, String senderId) {
+        //Search disburse and return null if targetId is already present in db
+        List<Disbursement> disbursements = disburseRepository.searchDisbursements(DisburseSearch.builder()
+                .targetId(disbursement.getTargetId()).build());
+        if (!disbursements.isEmpty() && disbursements.get(0).getStatus().getStatusCode().equals(Status.PARTIAL)) {
+            return null;
+        }
+        log.info("calculateSanctionAmount");
+        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
+        Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
+        Double allocatedAmount = sanction.getAllocatedAmount() - disbursement.getNetAmount();
+        Double availableAmount = sanction.getAvailableAmount() - disbursement.getNetAmount();
+        sanction.setAllocatedAmount(allocatedAmount);
+        sanction.setAvailableAmount(availableAmount);
+        sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));
+        return sanction;
+
     }
 
     public List<Sanction> calculateAndReturnSanction(List<Allocation> allocations) {

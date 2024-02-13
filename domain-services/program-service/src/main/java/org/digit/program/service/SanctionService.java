@@ -35,7 +35,8 @@ public class SanctionService {
         log.info("createSanction");
         commonValidator.validateRequest(sanctionRequest.getHeader());
         sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
-        enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getReceiverId());
+        enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(),
+                sanctionRequest.getHeader());
         sanctionRepository.saveSanction(sanctionRequest.getSanctions());
         dispatcherUtil.dispatchOnSanction(sanctionRequest);
         return sanctionRequest;
@@ -45,7 +46,7 @@ public class SanctionService {
         log.info("updateSanction");
         commonValidator.validateRequest(sanctionRequest.getHeader());
         sanctionValidator.validateSanction(sanctionRequest.getSanctions(), false);
-        enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanctions());
+        enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getSenderId());
         sanctionRepository.updateSanction(sanctionRequest.getSanctions());
         dispatcherUtil.dispatchOnSanction(sanctionRequest);
         return sanctionRequest;

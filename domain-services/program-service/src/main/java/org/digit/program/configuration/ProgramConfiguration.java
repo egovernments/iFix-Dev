@@ -1,6 +1,5 @@
 package org.digit.program.configuration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,8 +15,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.Map;
 import java.util.TimeZone;
 
 
@@ -63,17 +60,11 @@ public class ProgramConfiguration {
     @Value("${exchange.path}")
     private String exchangePath;
 
-    @Value("${ifms.adapter.host}")
-    private String ifmsHost;
+    @Value("${adapter.host}")
+    private String adapterHost;
 
-    @Value("${ifms.adapter.path}")
-    private String ifmsPath;
-
-    @Value("${mukta.adapter.host}")
-    private String muktaHost;
-
-    @Value("${mukta.adapter.path}")
-    private String muktaPath;
+    @Value("${adapter.path}")
+    private String adapterPath;
 
     @Value("${egov.idgen.host}")
     private String idGenHost;

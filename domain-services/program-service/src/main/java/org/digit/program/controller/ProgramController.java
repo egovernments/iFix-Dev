@@ -1,7 +1,5 @@
 package org.digit.program.controller;
 
-
-import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.program.ProgramSearchRequest;
 import org.digit.program.models.program.ProgramSearchResponse;
@@ -15,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("v1")
-@Slf4j
+@RequestMapping("/v1")
 public class ProgramController {
 
     private final ProgramService programService;

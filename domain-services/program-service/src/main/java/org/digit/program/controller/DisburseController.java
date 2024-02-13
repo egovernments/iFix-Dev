@@ -38,9 +38,14 @@ public class DisburseController {
 
     }
 
-    @PostMapping(value = {"/on-disburse/_create", "/on-disburse/_update"})
-    public ResponseEntity<DisbursementRequest> onDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        return ResponseEntity.ok(disburseService.onDisburse(disbursementRequest));
+    @PostMapping(value = "/on-disburse/_create")
+    public ResponseEntity<DisbursementRequest> onDisburseCreate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
+        return ResponseEntity.ok(disburseService.onDisburseCreate(disbursementRequest));
+    }
+
+    @PostMapping(value = "/on-disburse/_update")
+    public ResponseEntity<DisbursementRequest> onDisburseUpdate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
+        return ResponseEntity.ok(disburseService.updateDisburse(disbursementRequest));
     }
 
 

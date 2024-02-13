@@ -34,7 +34,7 @@ public class AllocationValidator {
     public void validateAllocation(List<Allocation> allocations, boolean isCreate) {
 
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(allocations.get(0).getProgramCode()).build());
-        if (programs.size() == 0)
+        if (programs.isEmpty())
             throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for ProgramCode: " + allocations.get(0).getProgramCode());
 
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
@@ -71,7 +71,8 @@ public class AllocationValidator {
                     allocationIds.add(allocation.getId());
                 }
             }
-            List<Allocation> allocationsFromSearch = allocationRepository.searchAllocation(AllocationSearch.builder().ids(new ArrayList<>(allocationIds)).build());
+            List<Allocation> allocationsFromSearch = allocationRepository.searchAllocation(AllocationSearch.builder()
+                    .ids(new ArrayList<>(allocationIds)).build());
             if (allocationsFromSearch.size() != allocationIds.size()) {
                 allocationIds.removeAll(allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toSet()));
                 throw new IllegalArgumentException("No allocation found for id(s): " + allocationIds);
