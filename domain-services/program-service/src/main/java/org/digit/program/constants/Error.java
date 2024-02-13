@@ -12,7 +12,7 @@ public class Error {
     public static final String SANCTIONS_NOT_FOUND_MSG = "No sanction found for id(s): ";
 
     public static final String PROGRAM_CODE_ERROR_SANCTION = "PROGRAM_CODE_ERROR_SANCTION";
-    public static  final String PROGRAM_CODE_ERROR_SANCTION_MSG = "Program code should be same as sanction program code";
+    public static final String PROGRAM_CODE_ERROR_SANCTION_MSG = "Program code should be same as sanction program code";
 
     public static final String SANCTIONED_AMOUNT_ERROR_ALLOCATION = "SANCTIONED_AMOUNT_ERROR_ALLOCATION";
     public static final String SANCTIONED_AMOUNT_ERROR_ALLOCATION_MSG = "Sanctioned amount should be greater than allocated amount";
@@ -24,7 +24,7 @@ public class Error {
     public static final String INVALID_ALLOCATION_ID_MSG = "Allocation id cannot be empty";
 
     public static final String ALLOCATIONS_NOT_FOUND = "ALLOCATIONS_NOT_FOUND";
-    public static final String ALLOCATIONS_NOT_FOUND_MSG =  "No allocation found for id(s): ";
+    public static final String ALLOCATIONS_NOT_FOUND_MSG = "No allocation found for id(s): ";
 
     public static final String DUPLICATE_ALLOCATION_ID = "DUPLICATE_ALLOCATION_ID";
     public static final String DUPLICATE_ALLOCATION_ID_MSG = "Duplicate allocation id(s): ";
@@ -145,4 +145,6 @@ public class Error {
 
     public static final String PARSING_ERROR = "PARSING_ERROR";
     public static final String PARSING_ERROR_MSG = "Error while parsing ";
+    public static final String INVALID_ID = "Id is mandatory";
+    public static final String ERROR_WHILE_FETCHING_FROM_MDMS = "Error while fetching from MDMS";
 }
