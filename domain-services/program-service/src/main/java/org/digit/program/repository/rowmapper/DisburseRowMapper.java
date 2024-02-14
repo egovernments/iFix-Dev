@@ -6,14 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.disburse.Individual;
 import org.digit.program.models.Status;
+import org.digit.program.utils.CommonUtil;
 import org.egov.common.contract.models.AuditDetails;
-import org.egov.tracer.model.CustomException;
-import org.postgresql.util.PGobject;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,9 +21,11 @@ import java.util.List;
 public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>> {
 
     private final ObjectMapper objectMapper;
+    private final CommonUtil commonUtil;
 
-    public DisburseRowMapper(ObjectMapper objectMapper) {
+    public DisburseRowMapper(ObjectMapper objectMapper, CommonUtil commonUtil) {
         this.objectMapper = objectMapper;
+        this.commonUtil = commonUtil;
     }
 
 
@@ -38,14 +38,15 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             String locationCode = rs.getString("location_code");
             String programCode = rs.getString("program_code");
             String targetId = rs.getString("target_id");
-            String parentId = rs.getString("disburse_parent_id");
+            String parentId = rs.getString("parent_id");
             String sanctionId = rs.getString("sanction_id");
             String accountCode = rs.getString("account_code");
-            JsonNode individual = getJsonNode(rs, "individual");
+            JsonNode individual = commonUtil.getJsonNode(rs, "individual");
             Double netAmount = rs.getDouble("net_amount");
             Double grossAmount = rs.getDouble("gross_amount");
             String status = rs.getString("status");
             String statusMessage = rs.getString("status_message");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -78,7 +79,9 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             disbursement.setNetAmount(netAmount);
             disbursement.setGrossAmount(grossAmount);
             disbursement.setStatus(status1);
+            disbursement.setAdditionalDetails(additionalDetails);
             disbursement.setAuditDetails(auditDetails);
+
             disbursement.setFunctionCode(functionCode);
             disbursement.setAdministrationCode(administrationCode);
             disbursement.setRecipientSegmentCode(recipientSegmentCode);
@@ -89,25 +92,5 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             disbursements.add(disbursement);
         }
         return disbursements;
-    }
-
-    private JsonNode getJsonNode(ResultSet rs, String key) throws SQLException {
-        JsonNode individual = null;
-
-        try {
-
-            PGobject obj = (PGobject) rs.getObject(key);
-            if (obj != null) {
-                individual = objectMapper.readTree(obj.getValue());
-            }
-
-        } catch (IOException e) {
-            throw new CustomException("PARSING_ERROR", "Error while parsing");
-        }
-
-        if(individual.isEmpty())
-            individual = null;
-
-        return individual;
     }
 }

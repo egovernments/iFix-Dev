@@ -6,7 +6,7 @@ import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.querybuilder.ProgramQueryBuilder;
 import org.digit.program.repository.rowmapper.ProgramRowMapper;
-import org.digit.program.service.EnrichmentService;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +22,14 @@ public class ProgramRepository {
     private final ProgramRowMapper programRowMapper;
     private final ProgramQueryBuilder programQueryBuilder;
     private final ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
-    private final EnrichmentService enrichmentService;
+    private final CommonUtil commonUtil;
 
-    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, EnrichmentService enrichmentService) {
+    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, CommonUtil commonUtil) {
         this.jdbcTemplate = jdbcTemplate;
         this.programRowMapper = programRowMapper;
         this.programQueryBuilder = programQueryBuilder;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
-        this.enrichmentService = enrichmentService;
+        this.commonUtil = commonUtil;
     }
 
     @Transactional
@@ -58,7 +58,7 @@ public class ProgramRepository {
 
     public List<Program> searchProgram(ProgramSearch programSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
-        programSearch.setPagination(enrichmentService.enrichSearch(programSearch.getPagination()));
+        programSearch.setPagination(commonUtil.enrichSearch(programSearch.getPagination()));
         String programSearchQuery = programQueryBuilder.buildProgramSearchQuery(programSearch, preparedStmtList);
         return jdbcTemplate.query(programSearchQuery, preparedStmtList.toArray(), programRowMapper);
     }

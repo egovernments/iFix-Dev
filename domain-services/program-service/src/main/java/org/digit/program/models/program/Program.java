@@ -2,6 +2,7 @@ package org.digit.program.models.program;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
@@ -48,6 +49,9 @@ public class Program extends ExchangeCode {
 
     @JsonProperty("is_active")
     private boolean isActive;
+
+    @JsonProperty("additional_details")
+    private JsonNode additionalDetails;
 
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;

@@ -6,7 +6,7 @@ import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.querybuilder.DisburseQueryBuilder;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
 import org.digit.program.repository.rowmapper.DisburseRowMapper;
-import org.digit.program.utils.PaginationUtil;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +25,17 @@ public class DisburseRepository {
     private final DisburseQueryBuilder disburseQueryBuilder;
     private final DisburseRowMapper disburseRowMapper;
     private final SanctionRepository sanctionRepository;
-    private final PaginationUtil paginationUtil;
+    private final CommonUtil commonUtil;
 
     public DisburseRepository(JdbcTemplate jdbcTemplate, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder,
                               DisburseQueryBuilder disburseQueryBuilder, DisburseRowMapper disburseRowMapper,
-                              SanctionRepository sanctionRepository, PaginationUtil paginationUtil) {
+                              SanctionRepository sanctionRepository, CommonUtil commonUtil) {
         this.jdbcTemplate = jdbcTemplate;
         this.exchangeCodeQueryBuilder = exchangeCodeQueryBuilder;
         this.disburseQueryBuilder = disburseQueryBuilder;
         this.disburseRowMapper = disburseRowMapper;
         this.sanctionRepository = sanctionRepository;
-        this.paginationUtil = paginationUtil;
+        this.commonUtil = commonUtil;
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class DisburseRepository {
         String disburseInsertQuery = disburseQueryBuilder.buildDisburseInsertQuery(disbursement, preparedStmtList, parentId);
         jdbcTemplate.update(disburseInsertQuery, preparedStmtList.toArray());
 
-        if (isRoot) {
+        if (Boolean.TRUE.equals(isRoot)) {
             preparedStmtList = new ArrayList<>();
             String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList);
             jdbcTemplate.update(transactionInsertQuery, preparedStmtList.toArray());
@@ -89,7 +89,7 @@ public class DisburseRepository {
     public List<Disbursement> searchDisbursements(DisburseSearch disburseSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         List<Disbursement> disbursements;
-        disburseSearch.setPagination(paginationUtil.enrichSearch(disburseSearch.getPagination()));
+        disburseSearch.setPagination(commonUtil.enrichSearch(disburseSearch.getPagination()));
         String disburseSearchQuery = disburseQueryBuilder.buildDisburseSearchQuery(disburseSearch, preparedStmtList,
                 null, true);
         disbursements = jdbcTemplate.query(disburseSearchQuery, preparedStmtList.toArray(), disburseRowMapper);

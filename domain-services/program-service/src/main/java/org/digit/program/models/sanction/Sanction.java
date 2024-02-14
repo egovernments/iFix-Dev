@@ -1,6 +1,7 @@
 package org.digit.program.models.sanction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,9 @@ public class Sanction extends ExchangeCode {
 
     @JsonProperty("available_amount")
     private Double availableAmount;
+
+    @JsonProperty("additional_details")
+    private JsonNode additionalDetails;
 
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;

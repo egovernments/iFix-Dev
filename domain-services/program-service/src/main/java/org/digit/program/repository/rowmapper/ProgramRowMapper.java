@@ -1,9 +1,10 @@
 package org.digit.program.repository.rowmapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.Status;
+import org.digit.program.utils.CommonUtil;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -17,10 +18,10 @@ import java.util.*;
 @Slf4j
 public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
 
-    private ObjectMapper mapper;
+    private CommonUtil commonUtil;
 
-    public ProgramRowMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public ProgramRowMapper(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
     }
 
     @Override
@@ -39,6 +40,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             Long endDate = rs.getLong("end_date");
             String clientHostUrl = rs.getString("client_host_url");
             Boolean isActive = rs.getBoolean("is_active");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -66,6 +68,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setEndDate(endDate);
             program.setClientHostUrl(clientHostUrl);
             program.setActive(isActive);
+            program.setAdditionalDetails(additionalDetails);
             program.setAuditDetails(auditDetails);
 
             program.setFunctionCode(functionCode);

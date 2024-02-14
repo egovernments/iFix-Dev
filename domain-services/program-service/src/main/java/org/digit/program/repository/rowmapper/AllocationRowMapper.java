@@ -1,9 +1,10 @@
 package org.digit.program.repository.rowmapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.digit.program.constants.AllocationType;
 import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.Status;
+import org.digit.program.utils.CommonUtil;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -17,10 +18,10 @@ import java.util.List;
 @Component
 public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>> {
 
-    private ObjectMapper mapper;
+    private final CommonUtil commonUtil;
 
-    public AllocationRowMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public AllocationRowMapper(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
     }
 
     @Override
@@ -36,6 +37,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             AllocationType allocationType = AllocationType.valueOf(rs.getString("type"));
             String status = rs.getString("status");
             String statusMessage = rs.getString("status_message");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -58,6 +60,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             allocation.setAmount(amount);
             allocation.setType(allocationType);
             allocation.setStatus(status1);
+            allocation.setAdditionalDetails(additionalDetails);
             allocation.setAuditDetails(auditDetails);
 
             allocation.setFunctionCode(functionCode);

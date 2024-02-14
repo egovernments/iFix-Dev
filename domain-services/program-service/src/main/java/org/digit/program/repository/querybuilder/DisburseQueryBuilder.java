@@ -1,15 +1,11 @@
 package org.digit.program.repository.querybuilder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.constants.MessageType;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
-import org.egov.tracer.model.CustomException;
-import org.postgresql.util.PGobject;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -17,16 +13,17 @@ import java.util.UUID;
 @Component
 public class DisburseQueryBuilder {
 
-    private final ObjectMapper mapper;
+    private final CommonUtil commonUtil;
 
 
     public static final String DISBURSE_INSERT_QUERY = "INSERT INTO eg_program_disburse " +
-            "(id, location_code, program_code, disburse_parent_id, target_id, sanction_id, account_code, individual, net_amount, " +
-            "gross_amount, status, status_message, created_by, last_modified_by, created_time, last_modified_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "( id, location_code, program_code, parent_id, target_id, sanction_id, account_code, individual, net_amount, " +
+            " gross_amount, status, status_message, additional_details, created_by, last_modified_by, created_time, " +
+            " last_modified_time) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String DISBURSE_UPDATE_QUERY = "UPDATE eg_program_disburse " +
-            " SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +
+            " SET status = ?, status_message = ?, additional_detail = ? last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ?";
 
     public static final String DISBURSE_SEARCH_QUERY = "SELECT * FROM eg_program_disburse JOIN eg_program_message_codes " +
@@ -36,8 +33,8 @@ public class DisburseQueryBuilder {
             "(id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    public DisburseQueryBuilder(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public DisburseQueryBuilder(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
     }
 
     public String buildDisburseInsertQuery(Disbursement disbursement, List<Object> preparedStmtList, String parentId) {
@@ -48,11 +45,12 @@ public class DisburseQueryBuilder {
         preparedStmtList.add(disbursement.getTargetId());
         preparedStmtList.add(disbursement.getSanctionId());
         preparedStmtList.add(disbursement.getAccountCode());
-        preparedStmtList.add(getPGObject(disbursement.getIndividual()));
+        preparedStmtList.add(commonUtil.getPGObject(disbursement.getIndividual()));
         preparedStmtList.add(disbursement.getNetAmount());
         preparedStmtList.add(disbursement.getGrossAmount());
         preparedStmtList.add(disbursement.getStatus().getStatusCode().toString());
         preparedStmtList.add(disbursement.getStatus().getStatusMessage());
+        preparedStmtList.add(commonUtil.getPGObject(disbursement.getAdditionalDetails()));
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
@@ -63,6 +61,7 @@ public class DisburseQueryBuilder {
     public String buildDisburseUpdateQuery(Disbursement disbursement, List<Object> preparedStmtList) {
         preparedStmtList.add(disbursement.getStatus().getStatusCode().toString());
         preparedStmtList.add(disbursement.getStatus().getStatusMessage());
+        preparedStmtList.add(commonUtil.getPGObject(disbursement.getAdditionalDetails()));
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(disbursement.getId());
@@ -109,10 +108,10 @@ public class DisburseQueryBuilder {
         }
         if (parentIds == null || parentIds.isEmpty()) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.disburse_parent_id IS NULL ");
+            disburseSearchQuery.append(" eg_program_disburse.parent_id IS NULL ");
         } else {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.disburse_parent_id IN (").append(createQuery(parentIds)).append(")");
+            disburseSearchQuery.append(" eg_program_disburse.parent_id IN (").append(createQuery(parentIds)).append(")");
             addToPreparedStatement(preparedStmtList, parentIds);
         }
 
@@ -149,25 +148,5 @@ public class DisburseQueryBuilder {
         } else {
             query.append(" AND ");
         }
-    }
-
-
-    public PGobject getPGObject(Object individual) {
-
-        String value = null;
-        try {
-            value = mapper.writeValueAsString(individual);
-        } catch (JsonProcessingException e) {
-            throw new CustomException();
-        }
-
-        PGobject json = new PGobject();
-        json.setType("jsonb");
-        try {
-            json.setValue(value);
-        } catch (SQLException e) {
-            throw new CustomException("", "");
-        }
-        return json;
     }
 }

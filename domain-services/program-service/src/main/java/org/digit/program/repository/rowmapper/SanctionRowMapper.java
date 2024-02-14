@@ -1,9 +1,10 @@
 package org.digit.program.repository.rowmapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.Status;
+import org.digit.program.utils.CommonUtil;
 import org.egov.common.contract.models.AuditDetails;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -18,11 +19,10 @@ import java.util.List;
 @Slf4j
 public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
 
+    private final CommonUtil commonUtil;
 
-    private ObjectMapper mapper;
-
-    public SanctionRowMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public SanctionRowMapper(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
     }
 
 
@@ -39,6 +39,7 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             Double availableAmount = rs.getDouble("available_amount");
             String status = rs.getString("status");
             String statusMessage = rs.getString("status_message");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
             Long createdTime = rs.getLong("created_time");
@@ -62,6 +63,7 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             sanction.setAllocatedAmount(allocatedAmount);
             sanction.setAvailableAmount(availableAmount);
             sanction.setStatus(status1);
+            sanction.setAdditionalDetails(additionalDetails);
             sanction.setAuditDetails(auditDetails);
 
             sanction.setFunctionCode(functionCode);

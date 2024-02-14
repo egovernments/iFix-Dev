@@ -3,6 +3,7 @@ package org.digit.program.repository.querybuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramSearch;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -10,24 +11,29 @@ import java.util.List;
 
 @Component
 public class ProgramQueryBuilder {
+
+    private final CommonUtil commonUtil;
     public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
             "( id, location_code, program_code, name, parent_id, description, client_host_url, status, status_message, " +
-            " start_date, end_date, is_active, created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " start_date, end_date, is_active, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
             " SET name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
-            " end_date = ?, is_active = ?, last_modified_by = ?, last_modified_time = ? " +
+            " end_date = ?, is_active = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
             " SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
-            " end_date = ?, is_active = ?, last_modified_by = ?, last_modified_time = ? " +
+            " end_date = ?, is_active = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String PROGRAM_SEARCH_QUERY = "SELECT * FROM eg_program JOIN eg_program_message_codes " +
             " ON eg_program.id = eg_program_message_codes.reference_id ";
 
+    public ProgramQueryBuilder(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
+    }
 
     public String buildProgramInsertQuery(Program program, List<Object> preparedStmtList) {
         preparedStmtList.add(program.getId());
@@ -42,6 +48,7 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getStartDate());
         preparedStmtList.add(program.getEndDate());
         preparedStmtList.add(program.isActive());
+        preparedStmtList.add(commonUtil.getPGObject(program.getAdditionalDetails()));
         preparedStmtList.add(program.getAuditDetails().getCreatedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getCreatedTime());
@@ -52,7 +59,7 @@ public class ProgramQueryBuilder {
 
 
     public String buildProgramUpdateQuery(Program program, List<Object> preparedStmtList, Boolean isOnProgramCreate) {
-        if (isOnProgramCreate) {
+        if (Boolean.TRUE.equals(isOnProgramCreate)) {
             preparedStmtList.add(program.getProgramCode());
         }
         preparedStmtList.add(program.getName());
@@ -62,6 +69,7 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getStatus().getStatusMessage());
         preparedStmtList.add(program.getEndDate());
         preparedStmtList.add(program.isActive());
+        preparedStmtList.add(commonUtil.getPGObject(program.getAdditionalDetails()));
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());

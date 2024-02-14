@@ -2,6 +2,7 @@ package org.digit.program.repository.querybuilder;
 
 import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.allocation.AllocationSearch;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -10,17 +11,23 @@ import java.util.List;
 @Component
 public class AllocationQueryBuilder {
 
+    private final CommonUtil commonUtil;
+
     public static final String ALLOCATION_INSERT_QUERY = "INSERT INTO eg_program_allocation " +
-            " (id, location_code, program_code, sanction_id, amount, status, status_message, type, " +
+            " (id, location_code, program_code, sanction_id, amount, status, status_message, type, additional_details, " +
             " created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String ALLOCATION_UPDATE_QUERY = "UPDATE eg_program_allocation " +
-            "SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +
+            "SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             "WHERE id = ?";
 
     public static final String ALLOCATION_SEARCH_QUERY = "SELECT * FROM eg_program_allocation JOIN eg_program_message_codes " +
             "ON eg_program_allocation.id = eg_program_message_codes.reference_id ";
+
+    public AllocationQueryBuilder(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
+    }
 
     public String buildAllocationInsertQuery(Allocation allocation, List<Object> preparedStmtList) {
         preparedStmtList.add(allocation.getId());
@@ -31,6 +38,7 @@ public class AllocationQueryBuilder {
         preparedStmtList.add(allocation.getStatus().getStatusCode().toString());
         preparedStmtList.add(allocation.getStatus().getStatusMessage());
         preparedStmtList.add(allocation.getType().toString());
+        preparedStmtList.add(commonUtil.getPGObject(allocation.getAdditionalDetails()));
         preparedStmtList.add(allocation.getAuditDetails().getCreatedBy());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(allocation.getAuditDetails().getCreatedTime());
@@ -41,6 +49,7 @@ public class AllocationQueryBuilder {
     public String buildAllocationUpdateQuery(Allocation allocation, List<Object> preparedStmtList) {
         preparedStmtList.add(allocation.getStatus().getStatusCode().toString());
         preparedStmtList.add(allocation.getStatus().getStatusMessage());
+        preparedStmtList.add(commonUtil.getPGObject(allocation.getAdditionalDetails()));
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(allocation.getId());

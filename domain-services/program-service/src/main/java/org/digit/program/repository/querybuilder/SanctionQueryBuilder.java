@@ -2,6 +2,7 @@ package org.digit.program.repository.querybuilder;
 
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.sanction.SanctionSearch;
+import org.digit.program.utils.CommonUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -10,21 +11,27 @@ import java.util.List;
 @Component
 public class SanctionQueryBuilder {
 
+    private final CommonUtil commonUtil;
+
     public static final String SANCTION_INSERT_QUERY = "INSERT INTO eg_program_sanction " +
             "( id, location_code, program_code, sanctioned_amount, allocated_amount, available_amount, status, status_message, " +
-            "created_by, last_modified_by, created_time, last_modified_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " additional_details, created_by, last_modified_by, created_time, last_modified_time) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
     public static final String SANCTION_UPDATE_QUERY = "UPDATE eg_program_sanction " +
-            "SET status = ?, status_message = ?, last_modified_by = ?, last_modified_time = ? " +
-            "WHERE id = ?";
+            " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
 
     public static final String SANCTION_UPDATE_ON_ALLOCATION_QUERY = "UPDATE eg_program_sanction " +
-            "SET allocated_amount = ?, available_amount = ?, last_modified_by = ?, last_modified_time = ? " +
-            "WHERE id = ?";
+            " SET allocated_amount = ?, available_amount = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
 
     public static final String SANCTION_SEARCH_QUERY = "SELECT * FROM eg_program_sanction JOIN eg_program_message_codes " +
-            "ON eg_program_sanction.id = eg_program_message_codes.reference_id ";
+            " ON eg_program_sanction.id = eg_program_message_codes.reference_id ";
+
+    public SanctionQueryBuilder(CommonUtil commonUtil) {
+        this.commonUtil = commonUtil;
+    }
 
     public String buildSanctionInsertQuery(Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getId());
@@ -35,6 +42,7 @@ public class SanctionQueryBuilder {
         preparedStmtList.add(sanction.getAvailableAmount());
         preparedStmtList.add(sanction.getStatus().getStatusCode().toString());
         preparedStmtList.add(sanction.getStatus().getStatusMessage());
+        preparedStmtList.add(commonUtil.getPGObject(sanction.getAdditionalDetails()));
         preparedStmtList.add(sanction.getAuditDetails().getCreatedBy());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(sanction.getAuditDetails().getCreatedTime());
@@ -46,6 +54,7 @@ public class SanctionQueryBuilder {
     public String buildSanctionUpdateQuery(Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getStatus().getStatusCode().toString());
         preparedStmtList.add(sanction.getStatus().getStatusMessage());
+        preparedStmtList.add(commonUtil.getPGObject(sanction.getAdditionalDetails()));
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(sanction.getId());
@@ -55,6 +64,7 @@ public class SanctionQueryBuilder {
     public String buildSanctionUpdateOnAllocationOrDisburseQuery(Sanction sanction, List<Object> preparedStmtList) {
         preparedStmtList.add(sanction.getAllocatedAmount());
         preparedStmtList.add(sanction.getAvailableAmount());
+        preparedStmtList.add(commonUtil.getPGObject(sanction.getAdditionalDetails()));
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(sanction.getId());

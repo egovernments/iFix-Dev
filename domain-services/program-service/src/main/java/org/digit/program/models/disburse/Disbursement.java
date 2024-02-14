@@ -1,6 +1,7 @@
 package org.digit.program.models.disburse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,6 +61,9 @@ public class Disbursement extends ExchangeCode {
     @NotNull
     @Valid
     private Individual individual;
+
+    @JsonProperty("additional_details")
+    private JsonNode additionalDetails;
 
     @JsonProperty("disbursements")
     private List<Disbursement> disbursements;
