@@ -61,7 +61,7 @@ public class CommonUtil {
             throw new CustomException("PARSING_ERROR", "Error while parsing");
         }
 
-        if(jsonNode.isEmpty())
+        if(jsonNode== null || jsonNode.isEmpty())
             jsonNode = null;
 
         return jsonNode;
