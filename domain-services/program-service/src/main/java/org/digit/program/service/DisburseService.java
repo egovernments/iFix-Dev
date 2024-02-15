@@ -45,7 +45,7 @@ public class DisburseService {
         log.info("Update Disburse");
         enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getSenderId());
-        disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+        disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
         dispatcherUtil.dispatchDisburse(disbursementRequest);
         return disbursementRequest;
     }
@@ -61,11 +61,12 @@ public class DisburseService {
         log.info("On Disburse");
         enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getSenderId());
-        if (disbursementRequest.getDisbursement().getStatus().equals(Status.FAILED)) {
-            Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburseFailure(disbursementRequest.getDisbursement());
+        if (disbursementRequest.getDisbursement().getStatus().getStatusCode().equals(Status.FAILED)) {
+            Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburseFailure(disbursementRequest
+                    .getDisbursement());
             disburseRepository.updateDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
         } else {
-            disburseRepository.updateDisburse(disbursementRequest.getDisbursement());
+            disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), true);
         }
         dispatcherUtil.dispatchDisburse(disbursementRequest);
         return disbursementRequest;

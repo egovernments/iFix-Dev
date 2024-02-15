@@ -33,19 +33,53 @@ public class AllocationValidator {
 
     public void validateAllocation(List<Allocation> allocations, boolean isCreate) {
 
-        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(allocations.get(0).getProgramCode()).build());
-        if (programs.isEmpty())
-            throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for ProgramCode: " + allocations.get(0).getProgramCode());
+        validateProgramAndLocationCodes(allocations);
 
+        List<Sanction> sanctionsFromSearch = validateSanction(allocations);
+
+        validateAmountWithSanctionedAmount(sanctionsFromSearch, allocations);
+
+        if (!isCreate) {
+            validateForUpdate(allocations);
+        }
+    }
+
+    public void validateProgramAndLocationCodes(List<Allocation> allocations) {
+        Set<String> programCodes = new HashSet<>();
+        Set<String> locationCodes = new HashSet<>();
+        for (Allocation allocation : allocations) {
+            programCodes.add(allocation.getProgramCode());
+            locationCodes.add(allocation.getLocationCode());
+        }
+        if (programCodes.size() > 1) {
+            throw new CustomException("PROGRAM_CODE_ERROR", "Program code should be same for all allocations");
+        }
+        if (locationCodes.size() > 1) {
+            throw new CustomException("LOCATION_CODE_ERROR", "Location code should be same for all allocations");
+        }
+
+        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
+                .programCode(allocations.get(0).getProgramCode())
+                .locationCode(allocations.get(0).getLocationCode()).build());
+        if (programs.isEmpty()) {
+            throw new CustomException("NO_PROGRAMS_FOUND", "No program found for code: " + allocations.get(0).getProgramCode());
+        }
+    }
+
+    public List<Sanction> validateSanction(List<Allocation> allocations) {
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
         List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
                 .ids(new ArrayList<>(sanctionIds)).build());
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
-            throw new IllegalArgumentException("No sanction found for id(s): " + sanctionIds);
+            throw new CustomException("SANCTIONS_NOT_FOUND", "No sanction found for id(s): " + sanctionIds);
         }
+        return sanctionFromSearch;
+    }
+
+    public void validateAmountWithSanctionedAmount(List<Sanction> sanctionsFromSearch, List<Allocation> allocations) {
         Map<String, Double> sanctionIdAllocatedAmountMap = new HashMap<>();
-        for (Sanction sanction : sanctionFromSearch) {
+        for (Sanction sanction : sanctionsFromSearch) {
             sanctionIdAllocatedAmountMap.put(sanction.getId(), 0.0);
         }
 
@@ -55,31 +89,29 @@ public class AllocationValidator {
             else
                 sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) - allocation.getAmount());
         }
-        for (Sanction sanction : sanctionFromSearch) {
+        for (Sanction sanction : sanctionsFromSearch) {
             if (sanctionIdAllocatedAmountMap.get(sanction.getId()) > 0 && sanctionIdAllocatedAmountMap.get(sanction.getId()) > (sanction.getSanctionedAmount() - sanction.getAllocatedAmount()))
                 throw new CustomException("SANCTIONED_AMOUNT_ERROR", "Sanctioned amount should be greater than allocated amount");
             if (sanctionIdAllocatedAmountMap.get(sanction.getId()) < 0 && Math.abs(sanctionIdAllocatedAmountMap.get(sanction.getId())) > sanction.getAvailableAmount())
                 throw new CustomException("AVAILABLE_AMOUNT_ERROR", "Available amount should be greater than deduction amount");
         }
-
-        if (!isCreate) {
-            Set<String> allocationIds = new HashSet<>();
-            for (Allocation allocation : allocations) {
-                if (allocation.getId() == null || allocation.getId().isEmpty()) {
-                    throw new CustomException("INVALID_ALLOCATION_ID", "Allocation id cannot be empty");
-                } else {
-                    allocationIds.add(allocation.getId());
-                }
-            }
-            List<Allocation> allocationsFromSearch = allocationRepository.searchAllocation(AllocationSearch.builder()
-                    .ids(new ArrayList<>(allocationIds)).build());
-            if (allocationsFromSearch.size() != allocationIds.size()) {
-                allocationIds.removeAll(allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toSet()));
-                throw new IllegalArgumentException("No allocation found for id(s): " + allocationIds);
-            }
-        }
     }
 
-
+    public void validateForUpdate(List<Allocation> allocations) {
+        Set<String> allocationIds = new HashSet<>();
+        for (Allocation allocation : allocations) {
+            if (allocation.getId() == null || allocation.getId().isEmpty()) {
+                throw new CustomException("INVALID_ALLOCATION_ID", "Allocation id cannot be empty");
+            } else {
+                allocationIds.add(allocation.getId());
+            }
+        }
+        List<Allocation> allocationsFromSearch = allocationRepository.searchAllocation(AllocationSearch.builder()
+                .ids(new ArrayList<>(allocationIds)).build());
+        if (allocationsFromSearch.size() != allocationIds.size()) {
+            allocationIds.removeAll(allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toSet()));
+            throw new CustomException("ALLOCATIONS_NOT_FOUND", "No allocation found for id(s): " + allocationIds);
+        }
+    }
 
 }

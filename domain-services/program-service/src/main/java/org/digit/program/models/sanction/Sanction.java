@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,12 +30,17 @@ public class Sanction extends ExchangeCode {
 
     @JsonProperty("sanctioned_amount")
     @NotNull
+    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
     private Double sanctionedAmount;
 
     @JsonProperty("allocated_amount")
+    @DecimalMin(value = "0.0", message = "Amount must be equal to 0")
+    @DecimalMax(value = "0.0", message = "Amount must be equal to 0")
     private Double allocatedAmount;
 
     @JsonProperty("available_amount")
+    @DecimalMin(value = "0.0", message = "Amount must be equal to 0")
+    @DecimalMax(value = "0.0", message = "Amount must be equal to 0")
     private Double availableAmount;
 
     @JsonProperty("additional_details")

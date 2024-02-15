@@ -34,7 +34,7 @@ public class ProgramService {
     public ProgramRequest createProgram(ProgramRequest programRequest) {
         log.info("create Program");
         commonValidator.validateRequest(programRequest.getHeader());
-        programValidator.validateProgram(programRequest.getProgram(), true);
+        programValidator.validateProgram(programRequest.getProgram(), true, false);
         enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
         programRepository.saveProgram(programRequest.getProgram());
         dispatcherUtil.dispatchProgram(programRequest);
@@ -45,7 +45,7 @@ public class ProgramService {
     public ProgramRequest updateProgram(ProgramRequest programRequest) {
         log.info("update Program");
         commonValidator.validateRequest(programRequest.getHeader());
-        programValidator.validateProgram(programRequest.getProgram(), false);
+        programValidator.validateProgram(programRequest.getProgram(), false, false);
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), false);
@@ -64,7 +64,7 @@ public class ProgramService {
     public ProgramRequest onProgramCreate(ProgramRequest programRequest) {
         log.info("on Program Create");
         commonValidator.validateRequest(programRequest.getHeader());
-        programValidator.validateProgram(programRequest.getProgram(), false);
+        programValidator.validateProgram(programRequest.getProgram(), false, true);
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), true);
@@ -75,7 +75,7 @@ public class ProgramService {
     public ProgramRequest onProgramUpdate(ProgramRequest programRequest) {
         log.info("on Program Update");
         commonValidator.validateRequest(programRequest.getHeader());
-        programValidator.validateProgram(programRequest.getProgram(), false);
+        programValidator.validateProgram(programRequest.getProgram(), false, false);
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), false);

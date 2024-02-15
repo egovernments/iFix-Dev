@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -38,6 +40,7 @@ public class Program extends ExchangeCode {
 
     @JsonProperty("start_date")
     @NotNull
+    @Min(value = 1, message = "Value must be greater than 0")
     private long startDate;
 
     @JsonProperty("end_date")

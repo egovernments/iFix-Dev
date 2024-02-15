@@ -73,7 +73,7 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());
-        return isOnProgramCreate ? ON_PROGRAM_UPDATE_QUERY : PROGRAM_UPDATE_QUERY;
+        return Boolean.TRUE.equals(isOnProgramCreate) ? ON_PROGRAM_UPDATE_QUERY : PROGRAM_UPDATE_QUERY;
     }
 
     public String buildProgramSearchQuery(ProgramSearch programSearch, List<Object> preparedStmtList) {

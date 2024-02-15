@@ -9,6 +9,7 @@ import org.digit.program.constants.AllocationType;
 import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,6 +35,7 @@ public class Allocation extends ExchangeCode {
 
     @JsonProperty("amount")
     @NotNull
+    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
     private Double amount;
 
     @JsonProperty("type")

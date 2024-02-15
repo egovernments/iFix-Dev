@@ -1,6 +1,7 @@
 package org.digit.program.validator;
 
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.Status;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.ProgramRepository;
@@ -18,7 +19,7 @@ public class ProgramValidator {
         this.programRepository = programRepository;
     }
 
-    public void validateProgram(Program program, Boolean isCreate) {
+    public void validateProgram(Program program, Boolean isCreate, Boolean isOnProgramCreate) {
         if (program.getStartDate() == 0)
             throw new CustomException("START_DATE_ERROR", "startDate should not be empty");
 
@@ -36,7 +37,11 @@ public class ProgramValidator {
             if (programs.isEmpty()) {
                 throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for id: " + program.getId());
             }
-            if (program.getProgramCode() == null || program.getProgramCode().isEmpty()) {
+            if (Boolean.FALSE.equals(isOnProgramCreate) && (program.getProgramCode() == null || program.getProgramCode().isEmpty())) {
+                throw new CustomException("PROGRAM_CODE_ERROR", "programCode should not be empty");
+            }
+            if (Boolean.TRUE.equals(isOnProgramCreate) && (program.getProgramCode() == null || program.getProgramCode().isEmpty()) &&
+                    program.getStatus().getStatusCode().equals(Status.APPROVED)) {
                 throw new CustomException("PROGRAM_CODE_ERROR", "programCode should not be empty");
             }
         }

@@ -12,8 +12,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class ExchangeCode {
 
-
     @JsonProperty("id")
+    @Size(min = 2, max = 64)
     private String id;
 
     @JsonProperty("function_code")

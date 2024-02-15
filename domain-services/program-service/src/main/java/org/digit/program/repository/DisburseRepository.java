@@ -61,21 +61,21 @@ public class DisburseRepository {
     }
 
     @Transactional
-    public void updateDisburse(Disbursement disbursement) {
+    public void updateDisburse(Disbursement disbursement, Boolean isOnCreate) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String disburseUpdateQuery = disburseQueryBuilder.buildDisburseUpdateQuery(disbursement, preparedStmtList);
+        String disburseUpdateQuery = disburseQueryBuilder.buildDisburseUpdateQuery(disbursement, preparedStmtList, isOnCreate);
         jdbcTemplate.update(disburseUpdateQuery, preparedStmtList.toArray());
 
         if (disbursement.getDisbursements() != null) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
-                updateDisburse(childDisbursement);
+                updateDisburse(childDisbursement, isOnCreate);
             }
         }
     }
 
     @Transactional
     public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
-        updateDisburse(disbursement);
+        updateDisburse(disbursement, true);
         sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
     }
 

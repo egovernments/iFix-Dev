@@ -17,21 +17,26 @@ public class DisburseQueryBuilder {
 
 
     public static final String DISBURSE_INSERT_QUERY = "INSERT INTO eg_program_disburse " +
-            "( id, location_code, program_code, parent_id, target_id, sanction_id, account_code, individual, net_amount, " +
-            " gross_amount, status, status_message, additional_details, created_by, last_modified_by, created_time, " +
-            " last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "( id, location_code, program_code, parent_id, target_id, sanction_id, transaction_id, account_code, " +
+            " individual, net_amount, gross_amount, status, status_message, additional_details, " +
+            " created_by, last_modified_by, created_time, last_modified_time) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String DISBURSE_UPDATE_QUERY = "UPDATE eg_program_disburse " +
             " SET status = ?, status_message = ?, additional_detail = ? last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ?";
 
+    public static final String ON_DISBURSE_CREATE_QUERY = "UPDATE eg_program_disburse " +
+            " SET transaction_id = ?, status = ?, status_message = ?, additional_detail = ? last_modified_by = ?, " +
+            " last_modified_time = ? " +
+            " WHERE id = ?";
+
     public static final String DISBURSE_SEARCH_QUERY = "SELECT * FROM eg_program_disburse JOIN eg_program_message_codes " +
-            "ON eg_program_disburse.id = eg_program_message_codes.reference_id ";
+            " ON eg_program_disburse.id = eg_program_message_codes.reference_id ";
 
     public static final String TRANSACTION_LOGS_INSERT_QUERY = "INSERT INTO eg_program_transaction_logs " +
-            "(id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " (id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public DisburseQueryBuilder(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
@@ -44,6 +49,7 @@ public class DisburseQueryBuilder {
         preparedStmtList.add(parentId);
         preparedStmtList.add(disbursement.getTargetId());
         preparedStmtList.add(disbursement.getSanctionId());
+        preparedStmtList.add(disbursement.getTransactionId());
         preparedStmtList.add(disbursement.getAccountCode());
         preparedStmtList.add(commonUtil.getPGObject(disbursement.getIndividual()));
         preparedStmtList.add(disbursement.getNetAmount());
@@ -58,14 +64,16 @@ public class DisburseQueryBuilder {
         return DISBURSE_INSERT_QUERY;
     }
 
-    public String buildDisburseUpdateQuery(Disbursement disbursement, List<Object> preparedStmtList) {
+    public String buildDisburseUpdateQuery(Disbursement disbursement, List<Object> preparedStmtList, Boolean isOnCreate) {
+        if (Boolean.TRUE.equals(isOnCreate))
+            preparedStmtList.add(disbursement.getTransactionId());
         preparedStmtList.add(disbursement.getStatus().getStatusCode().toString());
         preparedStmtList.add(disbursement.getStatus().getStatusMessage());
         preparedStmtList.add(commonUtil.getPGObject(disbursement.getAdditionalDetails()));
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(disbursement.getId());
-        return DISBURSE_UPDATE_QUERY;
+        return Boolean.TRUE.equals(isOnCreate) ? ON_DISBURSE_CREATE_QUERY : DISBURSE_UPDATE_QUERY;
     }
 
     public String buildTransactionInsertQuery (Disbursement disbursement, List<Object> preparedStmtList) {
@@ -115,7 +123,7 @@ public class DisburseQueryBuilder {
             addToPreparedStatement(preparedStmtList, parentIds);
         }
 
-        if (keepPagination) {
+        if (Boolean.TRUE.equals(keepPagination)) {
             disburseSearchQuery.append(" ORDER BY ? ");
             preparedStmtList.add(disburseSearch.getPagination().getSortBy());
             disburseSearchQuery.append(" LIMIT ? OFFSET ? ");

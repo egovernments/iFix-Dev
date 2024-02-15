@@ -9,6 +9,7 @@ import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -44,6 +45,10 @@ public class Disbursement extends ExchangeCode {
     @Size(min = 2, max = 64)
     private String sanctionId;
 
+    @JsonProperty("transaction_id")
+    @Size(min = 2, max = 64)
+    private String transactionId;
+
     @JsonProperty("account_code")
     @NotNull
     @Size(min = 2, max = 64)
@@ -51,10 +56,12 @@ public class Disbursement extends ExchangeCode {
 
     @JsonProperty("net_amount")
     @NotNull
+    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
     private Double netAmount;
 
     @JsonProperty("gross_amount")
     @NotNull
+    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
     private Double grossAmount;
 
     @JsonProperty("individual")
