@@ -23,17 +23,17 @@ public class SanctionController {
 
     @PostMapping(value = "/on-sanction/_create")
     public ResponseEntity<SanctionRequest> onSanctionCreate(@RequestBody @Valid SanctionRequest sanctionRequest) {
-        return ResponseEntity.ok(sanctionService.createSanction(sanctionRequest));
+        return ResponseEntity.ok(sanctionService.createSanction(sanctionRequest, "create"));
     }
 
     @PostMapping(value = "/on-sanction/_update")
     public ResponseEntity<SanctionRequest> onSanctionUpdate(@RequestBody @Valid SanctionRequest sanctionRequest) {
-        return ResponseEntity.ok(sanctionService.updateSanction(sanctionRequest));
+        return ResponseEntity.ok(sanctionService.updateSanction(sanctionRequest, "update"));
     }
 
     @PostMapping(value = "/sanction/_search")
     public ResponseEntity<SanctionSearchResponse> sanctionSearch(@RequestBody @Valid SanctionSearchRequest sanctionSearchRequest) {
-        return ResponseEntity.ok(sanctionService.searchSanction(sanctionSearchRequest));
+        return ResponseEntity.ok(sanctionService.searchSanction(sanctionSearchRequest, "search"));
     }
 
 }

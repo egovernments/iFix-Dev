@@ -30,7 +30,9 @@ public class SanctionValidator {
         log.info("validating Sanction");
         validateProgramAndLocationCodes(sanctions);
 
-        if (Boolean.FALSE.equals(isCreate)) {
+        if (Boolean.TRUE.equals(isCreate)) {
+            validateForCreate(sanctions);
+        } else {
             validateForUpdate(sanctions);
         }
     }
@@ -52,6 +54,19 @@ public class SanctionValidator {
                 .programCode(sanctions.get(0).getProgramCode()).locationCode(sanctions.get(0).getLocationCode()).build());
         if (CollectionUtils.isEmpty(programs)) {
             throw new CustomException("NO_PROGRAMS_FOUND" , "No active programs exists for program code: " + sanctions.get(0).getProgramCode());
+        }
+    }
+
+    public void validateForCreate(List<Sanction> sanctions) {
+        Set<String> idsFromRequest = sanctions.stream().filter(sanction -> sanction.getId() != null &&
+                !sanction.getId().isEmpty()).map(Sanction::getId).collect(Collectors.toSet());
+        if (!idsFromRequest.isEmpty()) {
+            List<Sanction> existingSanctions = sanctionRepository.searchSanction(SanctionSearch.builder()
+                    .ids(new ArrayList<>(idsFromRequest)).build());
+            if (!existingSanctions.isEmpty()) {
+                List<String> ids = existingSanctions.stream().map(Sanction::getId).collect(Collectors.toList());
+                throw new CustomException("DUPLICATE_SANCTION_ID", "Duplicate sanction id(s): " + ids);
+            }
         }
     }
 

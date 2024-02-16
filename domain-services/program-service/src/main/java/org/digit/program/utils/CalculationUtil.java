@@ -29,18 +29,13 @@ public class CalculationUtil {
         this.enrichmentService = enrichmentService;
     }
 
-    public Sanction calculateAndReturnSanctionForOnDisburseFailure(Disbursement disbursement) {
+    public Sanction calculateAndReturnSanctionForOnDisburseFailure(Disbursement disbursement, String senderId) {
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
-        Double allocatedAmount;
-        Double availableAmount;
-        allocatedAmount = sanction.getAllocatedAmount() + disbursement.getNetAmount();
-        availableAmount = sanction.getAvailableAmount() + disbursement.getNetAmount();
-        sanction.setAllocatedAmount(allocatedAmount);
-        sanction.setAvailableAmount(availableAmount);
-        sanction.getAuditDetails().setLastModifiedBy("c");
-        sanction.getAuditDetails().setLastModifiedTime(System.currentTimeMillis());
+        sanction.setAllocatedAmount(sanction.getAllocatedAmount() + disbursement.getNetAmount());
+        sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getNetAmount());
+        enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
         return sanction;
     }
 
@@ -48,8 +43,13 @@ public class CalculationUtil {
         //Search disburse and return null if targetId is already present in db
         List<Disbursement> disbursements = disburseRepository.searchDisbursements(DisburseSearch.builder()
                 .targetId(disbursement.getTargetId()).build());
-        if (!disbursements.isEmpty() && disbursements.get(0).getStatus().getStatusCode().equals(Status.PARTIAL)) {
-            return null;
+
+        if (!disbursements.isEmpty()) {
+            List<Status> statuses = disbursements.stream().
+                    map(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode()).collect(Collectors.toList());
+            if (statuses.contains(Status.PARTIAL)) {
+                return null;
+            }
         }
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();

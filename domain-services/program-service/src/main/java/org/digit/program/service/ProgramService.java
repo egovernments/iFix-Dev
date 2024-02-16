@@ -31,9 +31,9 @@ public class ProgramService {
         this.commonValidator = commonValidator;
     }
 
-    public ProgramRequest createProgram(ProgramRequest programRequest) {
+    public ProgramRequest createProgram(ProgramRequest programRequest, String action) {
         log.info("create Program");
-        commonValidator.validateRequest(programRequest.getHeader());
+        commonValidator.validateRequest(programRequest.getHeader(), action);
         programValidator.validateProgram(programRequest.getProgram(), true, false);
         enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
         programRepository.saveProgram(programRequest.getProgram());
@@ -42,9 +42,9 @@ public class ProgramService {
 
     }
 
-    public ProgramRequest updateProgram(ProgramRequest programRequest) {
+    public ProgramRequest updateProgram(ProgramRequest programRequest, String action) {
         log.info("update Program");
-        commonValidator.validateRequest(programRequest.getHeader());
+        commonValidator.validateRequest(programRequest.getHeader(), action);
         programValidator.validateProgram(programRequest.getProgram(), false, false);
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
@@ -53,18 +53,21 @@ public class ProgramService {
         return programRequest;
     }
 
-    public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest) {
+    public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest, String action) {
         log.info("search Program");
         List<Program> programs;
+        commonValidator.validateRequest(programSearchRequest.getHeader(), action);
         programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
         log.info("Found {} programs", programs.size());
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
-    public ProgramRequest onProgramCreate(ProgramRequest programRequest) {
+    public ProgramRequest onProgramCreate(ProgramRequest programRequest, String action) {
         log.info("on Program Create");
-        commonValidator.validateRequest(programRequest.getHeader());
+        commonValidator.validateRequest(programRequest.getHeader(), action);
         programValidator.validateProgram(programRequest.getProgram(), false, true);
+        commonValidator.validateReplyForProgramCreate(programRequest.getHeader(), programRequest.getProgram().getId(),
+                programRequest.getProgram().getLocationCode());
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), true);
@@ -72,10 +75,12 @@ public class ProgramService {
         return programRequest;
     }
 
-    public ProgramRequest onProgramUpdate(ProgramRequest programRequest) {
+    public ProgramRequest onProgramUpdate(ProgramRequest programRequest, String action) {
         log.info("on Program Update");
-        commonValidator.validateRequest(programRequest.getHeader());
+        commonValidator.validateRequest(programRequest.getHeader(), action);
         programValidator.validateProgram(programRequest.getProgram(), false, false);
+        commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getProgramCode(),
+                programRequest.getProgram().getLocationCode());
         enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                 programRequest.getHeader().getSenderId());
         programRepository.updateProgram(programRequest.getProgram(), false);

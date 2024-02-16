@@ -50,7 +50,6 @@ public class Disbursement extends ExchangeCode {
     private String transactionId;
 
     @JsonProperty("account_code")
-    @NotNull
     @Size(min = 2, max = 64)
     private String accountCode;
 
@@ -65,7 +64,6 @@ public class Disbursement extends ExchangeCode {
     private Double grossAmount;
 
     @JsonProperty("individual")
-    @NotNull
     @Valid
     private Individual individual;
 

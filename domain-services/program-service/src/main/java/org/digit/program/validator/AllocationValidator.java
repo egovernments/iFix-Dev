@@ -31,7 +31,7 @@ public class AllocationValidator {
         this.allocationRepository = allocationRepository;
     }
 
-    public void validateAllocation(List<Allocation> allocations, boolean isCreate) {
+    public void validateAllocation(List<Allocation> allocations, Boolean isCreate) {
 
         validateProgramAndLocationCodes(allocations);
 
@@ -39,7 +39,9 @@ public class AllocationValidator {
 
         validateAmountWithSanctionedAmount(sanctionsFromSearch, allocations);
 
-        if (!isCreate) {
+        if (Boolean.TRUE.equals(isCreate)) {
+            validateForCreate(allocations);
+        } else {
             validateForUpdate(allocations);
         }
     }
@@ -111,6 +113,19 @@ public class AllocationValidator {
         if (allocationsFromSearch.size() != allocationIds.size()) {
             allocationIds.removeAll(allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toSet()));
             throw new CustomException("ALLOCATIONS_NOT_FOUND", "No allocation found for id(s): " + allocationIds);
+        }
+    }
+
+    public void validateForCreate(List<Allocation> allocations) {
+        Set<String> idsFromRequest = allocations.stream().filter(allocation -> allocation.getId() != null &&
+                !allocation.getId().isEmpty()).map(Allocation::getId).collect(Collectors.toSet());
+        if (!idsFromRequest.isEmpty()) {
+            List<Allocation> allocationsFromSearch = allocationRepository
+                    .searchAllocation(AllocationSearch.builder().ids(new ArrayList<>(idsFromRequest)).build());
+            if (!allocationsFromSearch.isEmpty()) {
+                List<String> ids = allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toList());
+                throw new CustomException("DUPLICATE_ALLOCATION_ID", "Duplicate allocation id(s): " + ids);
+            }
         }
     }
 

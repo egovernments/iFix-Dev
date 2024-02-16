@@ -24,26 +24,26 @@ public class ProgramController {
 
     @PostMapping(value = "/program/_create")
     public ResponseEntity<ProgramRequest> createProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.createProgram(programRequest));
+        return ResponseEntity.ok(programService.createProgram(programRequest, "create"));
     }
 
     @PostMapping(value = "/program/_update")
     public ResponseEntity<ProgramRequest> updateProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.updateProgram(programRequest));
+        return ResponseEntity.ok(programService.updateProgram(programRequest, "update"));
     }
 
     @PostMapping(value = "/program/_search")
     public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody @Valid ProgramSearchRequest programSearchRequest) {
-        return ResponseEntity.ok(programService.searchProgram(programSearchRequest));
+        return ResponseEntity.ok(programService.searchProgram(programSearchRequest, "search"));
     }
 
     @PostMapping(value = "/on-program/_create")
     public ResponseEntity<ProgramRequest> onProgramCreate(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.onProgramCreate(programRequest));
+        return ResponseEntity.ok(programService.onProgramCreate(programRequest, "create"));
     }
 
     @PostMapping(value = "/on-program/_update")
     public ResponseEntity<ProgramRequest> onProgram(@RequestBody @Valid ProgramRequest programRequest) {
-            return ResponseEntity.ok(programService.onProgramUpdate(programRequest));
+            return ResponseEntity.ok(programService.onProgramUpdate(programRequest, "update"));
     }
 }

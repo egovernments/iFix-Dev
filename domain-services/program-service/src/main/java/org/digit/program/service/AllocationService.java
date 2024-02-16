@@ -35,10 +35,12 @@ public class AllocationService {
         this.allocationValidator = allocationValidator;
     }
 
-    public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
+    public AllocationRequest createAllocation(AllocationRequest allocationRequest, String action) {
         log.info("Create Allocation");
-        commonValidator.validateRequest(allocationRequest.getHeader());
+        commonValidator.validateRequest(allocationRequest.getHeader(), action);
         allocationValidator.validateAllocation(allocationRequest.getAllocations(), true);
+        commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocations().get(0).getProgramCode(),
+                allocationRequest.getAllocations().get(0).getLocationCode());
         enrichmentService.enrichAllocationCreate(allocationRequest.getAllocations(), allocationRequest.getHeader().getSenderId());
         List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocations());
         allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocations(), sanctions);
@@ -46,18 +48,21 @@ public class AllocationService {
         return allocationRequest;
     }
 
-    public AllocationRequest updateAllocation (AllocationRequest allocationRequest) {
+    public AllocationRequest updateAllocation (AllocationRequest allocationRequest, String action) {
         log.info("Update Allocation");
-        commonValidator.validateRequest(allocationRequest.getHeader());
+        commonValidator.validateRequest(allocationRequest.getHeader(), action);
         allocationValidator.validateAllocation(allocationRequest.getAllocations(), false);
+        commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocations().get(0).getProgramCode(),
+                allocationRequest.getAllocations().get(0).getLocationCode());
         enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocations(), allocationRequest.getHeader().getSenderId());
         allocationRepository.updateAllocation(allocationRequest.getAllocations());
         dispatcherUtil.dispatchOnAllocation(allocationRequest);
         return allocationRequest;
     }
 
-    public AllocationResponse searchAllocation (AllocationSearchRequest allocationSearchRequest) {
+    public AllocationResponse searchAllocation (AllocationSearchRequest allocationSearchRequest, String action) {
         log.info("Search Allocation");
+        commonValidator.validateRequest(allocationSearchRequest.getHeader(), action);
         List<Allocation> allocations = allocationRepository.searchAllocation(allocationSearchRequest.getAllocationSearch());
         return AllocationResponse.builder().header(allocationSearchRequest.getHeader())
                 .allocations(allocations).build();

@@ -10,6 +10,8 @@ import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.DisburseRepository;
 import org.digit.program.utils.CalculationUtil;
 import org.digit.program.utils.DispatcherUtil;
+import org.digit.program.validator.CommonValidator;
+import org.digit.program.validator.DisbursementValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,16 +24,22 @@ public class DisburseService {
     private final EnrichmentService enrichmentService;
     private final CalculationUtil calculationUtil;
     private final DisburseRepository disburseRepository;
+    private final DisbursementValidator disbursementValidator;
+    private final CommonValidator commonValidator;
 
-    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository) {
+    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository, DisbursementValidator disbursementValidator, CommonValidator commonValidator) {
         this.dispatcherUtil = dispatcherUtil;
         this.enrichmentService = enrichmentService;
         this.calculationUtil = calculationUtil;
         this.disburseRepository = disburseRepository;
+        this.disbursementValidator = disbursementValidator;
+        this.commonValidator = commonValidator;
     }
 
-    public DisbursementRequest createDisburse(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest createDisburse(DisbursementRequest disbursementRequest, String action) {
         log.info("Create Disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), action);
+        disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true);
         enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getSenderId());
         Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
@@ -41,8 +49,10 @@ public class DisburseService {
         return disbursementRequest;
     }
 
-    public DisbursementRequest updateDisburse(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest updateDisburse(DisbursementRequest disbursementRequest, String action) {
         log.info("Update Disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), action);
+        disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false);
         enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getSenderId());
         disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
@@ -50,20 +60,24 @@ public class DisburseService {
         return disbursementRequest;
     }
 
-    public DisburseSearchResponse searchDisburse(DisburseSearchRequest disburseSearchRequest) {
+    public DisburseSearchResponse searchDisburse(DisburseSearchRequest disburseSearchRequest, String action) {
         log.info("Search Disburse");
+        commonValidator.validateRequest(disburseSearchRequest.getHeader(), action);
         List<Disbursement> disbursements = disburseRepository.searchDisbursements(disburseSearchRequest.getDisburseSearch());
         return DisburseSearchResponse.builder().header(disburseSearchRequest.getHeader())
                 .disbursements(disbursements).build();
     }
 
-    public DisbursementRequest onDisburseCreate(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest onDisburseCreate(DisbursementRequest disbursementRequest, String action) {
         log.info("On Disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), action);
         enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
                 disbursementRequest.getHeader().getSenderId());
+        commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getProgramCode(),
+                disbursementRequest.getDisbursement().getLocationCode());
         if (disbursementRequest.getDisbursement().getStatus().getStatusCode().equals(Status.FAILED)) {
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburseFailure(disbursementRequest
-                    .getDisbursement());
+                    .getDisbursement(), disbursementRequest.getHeader().getSenderId());
             disburseRepository.updateDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
         } else {
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), true);
@@ -72,4 +86,16 @@ public class DisburseService {
         return disbursementRequest;
     }
 
+    public DisbursementRequest onDisburseUpdate(DisbursementRequest disbursementRequest, String action) {
+        log.info("Update on Disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), action);
+        disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false);
+        commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getProgramCode(),
+                disbursementRequest.getDisbursement().getLocationCode());
+        enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
+                disbursementRequest.getHeader().getSenderId());
+        disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
+        dispatcherUtil.dispatchDisburse(disbursementRequest);
+        return disbursementRequest;
+    }
 }
