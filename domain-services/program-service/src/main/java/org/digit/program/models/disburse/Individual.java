@@ -2,7 +2,6 @@ package org.digit.program.models.disburse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.egov.common.contract.user.enums.Gender;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

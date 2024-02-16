@@ -23,11 +23,11 @@ public class DisburseQueryBuilder {
             " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String DISBURSE_UPDATE_QUERY = "UPDATE eg_program_disburse " +
-            " SET status = ?, status_message = ?, additional_detail = ? last_modified_by = ?, last_modified_time = ? " +
+            " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ?";
 
     public static final String ON_DISBURSE_CREATE_QUERY = "UPDATE eg_program_disburse " +
-            " SET transaction_id = ?, status = ?, status_message = ?, additional_detail = ? last_modified_by = ?, " +
+            " SET transaction_id = ?, status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, " +
             " last_modified_time = ? " +
             " WHERE id = ?";
 

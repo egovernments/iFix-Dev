@@ -92,10 +92,12 @@ public class EnrichmentService {
             disbursement.setId(UUID.randomUUID().toString());
         AuditDetails auditDetails = getAuditDetails(senderId, null);
         disbursement.setAuditDetails(auditDetails);
+        disbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
                 childDisbursement.setId(UUID.randomUUID().toString());
             childDisbursement.setAuditDetails(auditDetails);
+            childDisbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
     }
 

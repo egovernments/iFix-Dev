@@ -23,7 +23,8 @@ public class SanctionQueryBuilder {
             " WHERE id = ? ";
 
     public static final String SANCTION_UPDATE_ON_ALLOCATION_QUERY = "UPDATE eg_program_sanction " +
-            " SET allocated_amount = ?, available_amount = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " SET allocated_amount = ?, available_amount = ?, additional_details = ?, last_modified_by = ?, " +
+            " last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String SANCTION_SEARCH_QUERY = "SELECT * FROM eg_program_sanction JOIN eg_program_message_codes " +
