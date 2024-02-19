@@ -71,10 +71,13 @@ public class AllocationValidator {
     public List<Sanction> validateSanction(List<Allocation> allocations) {
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
         List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
-                .ids(new ArrayList<>(sanctionIds)).build());
+                .ids(new ArrayList<>(sanctionIds)).programCode(allocations.get(0).getProgramCode()).build());
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
             throw new CustomException("SANCTIONS_NOT_FOUND", "No sanction found for id(s): " + sanctionIds);
+        }
+        if (!sanctionFromSearch.get(0).getProgramCode().equalsIgnoreCase(allocations.get(0).getProgramCode())) {
+            throw new CustomException("PROGRAM_CODE_ERROR", "Program code should be same as sanction program code");
         }
         return sanctionFromSearch;
     }

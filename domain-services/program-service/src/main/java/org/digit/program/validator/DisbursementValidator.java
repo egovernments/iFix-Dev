@@ -1,5 +1,6 @@
 package org.digit.program.validator;
 
+import org.digit.program.constants.Status;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.repository.DisburseRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DisbursementValidator {
@@ -30,6 +32,7 @@ public class DisbursementValidator {
         }
         validateAmount(disbursement);
         validateId(disbursement, isCreate);
+        validateTargetId(disbursement);
     }
 
     /**
@@ -75,10 +78,24 @@ public class DisbursementValidator {
         List<Disbursement> disbursementsFromSearch = disburseRepository.searchDisbursements(DisburseSearch.builder()
                 .ids(Collections.singletonList(disbursement.getId())).build());
 
-        if (isCreate && !disbursementsFromSearch.isEmpty())
+        if (Boolean.TRUE.equals(isCreate) && !disbursementsFromSearch.isEmpty())
             throw new CustomException("DISBURSEMENT_ID_ERROR", "Disbursement id should be unique");
-        if (!isCreate && disbursementsFromSearch.isEmpty())
+        if (Boolean.FALSE.equals(isCreate) && disbursementsFromSearch.isEmpty())
             throw new CustomException("NO_DISBURSEMENT_FOUND", "No disbursement found for id: " + disbursement.getId());
+    }
+
+    /**
+     * Validates if disbursement exists in workflow for target id
+     * @param disbursement
+     */
+    public void validateTargetId(Disbursement disbursement) {
+        List<Disbursement> disbursementsFromDB = disburseRepository.searchDisbursements(DisburseSearch.builder()
+                .targetId(disbursement.getTargetId()).build());
+        List<Status> statuses = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus()
+                .getStatusCode()).collect(Collectors.toList());
+        if (statuses.contains(Status.INITIATED) || statuses.contains(Status.INPROCESS))
+            throw new CustomException("DISBURSEMENT_ALREADY PRESENT_ERROR", "Disbursement already present for target id: "
+                    + disbursement.getTargetId());
     }
 
 }

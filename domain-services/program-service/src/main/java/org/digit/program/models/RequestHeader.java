@@ -26,7 +26,7 @@ public class RequestHeader{
     private MessageType messageType;
 
     @JsonProperty("action")
-    @NotNull
+    @NotNull(message = "Action must be valid")
     private Action action;
 
     @JsonProperty("sender_id")
