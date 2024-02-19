@@ -71,8 +71,7 @@ public class DisburseService {
     public DisbursementRequest onDisburseCreate(DisbursementRequest disbursementRequest, String action) {
         log.info("On Disburse");
         commonValidator.validateRequest(disbursementRequest.getHeader(), action);
-        enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
-                disbursementRequest.getHeader().getSenderId());
+        disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true);
         commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getProgramCode(),
                 disbursementRequest.getDisbursement().getLocationCode());
         if (disbursementRequest.getDisbursement().getStatus().getStatusCode().equals(Status.FAILED)) {
