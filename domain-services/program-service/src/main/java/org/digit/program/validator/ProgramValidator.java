@@ -27,7 +27,8 @@ public class ProgramValidator {
             throw new CustomException("DATES_ERROR", "startDate should be less than endDate");
 
         if (program.getParentId() != null) {
-            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getParentId())).build());
+            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
+                    .ids(Collections.singletonList(program.getParentId())).build());
             if (programs.isEmpty())
                 throw new CustomException("PROGRAM_PARENT_ID_NOT_FOUND", "Program not found for ParentId: " + program.getParentId());
         }
@@ -43,22 +44,24 @@ public class ProgramValidator {
         if (program.getId() == null || program.getId().isEmpty())
             throw new CustomException("PROGRAM_ID_ERROR", "programId should not be empty for update");
 
-        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getId())).build());
+        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
+                .ids(Collections.singletonList(program.getId())).build());
         if (programs.isEmpty()) {
             throw new CustomException("PROGRAM_NOT_FOUND", "Program not found for id: " + program.getId());
         }
         if (Boolean.FALSE.equals(isOnProgramCreate) && (program.getProgramCode() == null || program.getProgramCode().isEmpty())) {
             throw new CustomException("PROGRAM_CODE_ERROR", "programCode should not be empty");
         }
-        if (Boolean.TRUE.equals(isOnProgramCreate) && (program.getProgramCode() == null || program.getProgramCode().isEmpty()) &&
-                program.getStatus().getStatusCode().equals(Status.APPROVED)) {
+        if (Boolean.TRUE.equals(isOnProgramCreate) && (program.getProgramCode() == null || program.getProgramCode()
+                .isEmpty()) && program.getStatus().getStatusCode().equals(Status.APPROVED)) {
             throw new CustomException("PROGRAM_CODE_ERROR", "programCode should not be empty");
         }
     }
 
     public void validateForCreate(Program program) {
-        if (program.getId() != null || !program.getId().isEmpty()) {
-            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(program.getId())).build());
+        if (program.getId() != null && !program.getId().isEmpty()) {
+            List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
+                    .ids(Collections.singletonList(program.getId())).build());
             if (!programs.isEmpty())
                 throw new CustomException("PROGRAM_FOUND_FOR_CREATE", "Program already present for id: " + program.getId());
         }
