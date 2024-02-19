@@ -27,6 +27,9 @@ public class DisburseSearch {
     @JsonProperty("target_id")
     private String targetId;
 
+    @JsonProperty("transaction_id")
+    private String transactionId;
+
     @JsonProperty("pagination")
     private Pagination pagination;
 

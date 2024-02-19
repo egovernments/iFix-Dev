@@ -109,6 +109,11 @@ public class DisburseQueryBuilder {
             disburseSearchQuery.append(" eg_program_disburse.program_code = ? ");
             preparedStmtList.add(disburseSearch.getProgramCode());
         }
+        if (disburseSearch.getTransactionId() != null) {
+            addClauseIfRequired(disburseSearchQuery, preparedStmtList);
+            disburseSearchQuery.append(" eg_program_disburse.transaction_id = ? ");
+            preparedStmtList.add(disburseSearch.getTransactionId());
+        }
         if (disburseSearch.getTargetId() != null) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
             disburseSearchQuery.append(" eg_program_disburse.target_id = ? ");

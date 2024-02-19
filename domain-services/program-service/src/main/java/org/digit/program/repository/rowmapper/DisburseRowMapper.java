@@ -40,6 +40,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             String targetId = rs.getString("target_id");
             String parentId = rs.getString("parent_id");
             String sanctionId = rs.getString("sanction_id");
+            String transactionId = rs.getString("transaction_id");
             String accountCode = rs.getString("account_code");
             JsonNode individual = commonUtil.getJsonNode(rs, "individual");
             Double netAmount = rs.getDouble("net_amount");
@@ -74,6 +75,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             disbursement.setTargetId(targetId);
             disbursement.setParentId(parentId);
             disbursement.setSanctionId(sanctionId);
+            disbursement.setTransactionId(transactionId);
             disbursement.setAccountCode(accountCode);
             disbursement.setIndividual(individual1);
             disbursement.setNetAmount(netAmount);
