@@ -32,7 +32,8 @@ public class DisbursementValidator {
         }
         validateAmount(disbursement);
         validateId(disbursement, isCreate);
-        validateTargetId(disbursement);
+        if (Boolean.TRUE.equals(isCreate))
+            validateTargetId(disbursement);
     }
 
     /**
@@ -85,7 +86,7 @@ public class DisbursementValidator {
     }
 
     /**
-     * Validates if disbursement exists in workflow for target id
+     * Validates if disbursement exists in workflow for target id for create
      * @param disbursement
      */
     public void validateTargetId(Disbursement disbursement) {
