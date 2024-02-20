@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class CommonUtil {
@@ -86,4 +88,20 @@ public class CommonUtil {
         return json;
     }
 
+    public boolean isSameDomain(String url1, String url2) {
+        boolean isValid = false;
+        String domain1 = extractHostUrlFromURL(url1);
+        String domain2 = extractHostUrlFromURL(url2);
+        if (domain1 != null && domain2 != null) {
+            isValid = domain1.equals(domain2);
+        }
+        return isValid;
+    }
+
+    public String extractHostUrlFromURL(String input) {
+        // Regular expression pattern to match the domain with http/https
+        Pattern pattern = Pattern.compile("(https?://[a-zA-Z0-9.-]+)");
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find() ? matcher.group(1) : null;
+    }
 }

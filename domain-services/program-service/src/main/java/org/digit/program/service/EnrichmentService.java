@@ -9,6 +9,7 @@ import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.sanction.Sanction;
+import org.digit.program.utils.CommonUtil;
 import org.digit.program.utils.IdGenUtil;
 import org.egov.common.contract.models.AuditDetails;
 import org.egov.common.contract.request.RequestInfo;
@@ -23,22 +24,24 @@ public class EnrichmentService {
 
     private final IdGenUtil idGenUtil;
     private final ProgramConfiguration configs;
+    private final CommonUtil commonUtil;
 
-    public EnrichmentService(IdGenUtil idGenUtil, ProgramConfiguration configs) {
+    public EnrichmentService(IdGenUtil idGenUtil, ProgramConfiguration configs, CommonUtil commonUtil) {
         this.idGenUtil = idGenUtil;
         this.configs = configs;
+        this.commonUtil = commonUtil;
     }
 
     public void enrichProgramForCreate(RequestHeader header, Program program) {
         log.info("Enrich Program for Create");
-        if (header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+        if (commonUtil.isSameDomain(header.getReceiverId(), configs.getDomain())) {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(),
                     configs.getIdName(), "", 1).get(0));
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.APPROVED).build());
         } else {
             if (program.getId() == null || StringUtils.isEmpty(program.getId()))
                 program.setId(UUID.randomUUID().toString());
-            program.setClientHostUrl(configs.getDomain());
+            program.setClientHostUrl(commonUtil.extractHostUrlFromURL(configs.getDomain()));
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
         program.setActive(true);
@@ -54,7 +57,7 @@ public class EnrichmentService {
 
     public void enrichSanctionCreate(List<Sanction> sanctions, RequestHeader header) {
         log.info("Enrich sanction create");
-        if (!header.getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+        if (!commonUtil.isSameDomain(header.getReceiverId(), configs.getDomain())) {
             for (Sanction sanction : sanctions) {
                 if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
                     sanction.setId(UUID.randomUUID().toString());

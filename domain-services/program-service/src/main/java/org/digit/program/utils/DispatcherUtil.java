@@ -19,11 +19,13 @@ public class DispatcherUtil {
     private final ServiceRequestRepository restRepo;
     private final ProgramConfiguration configs;
     private final ObjectMapper mapper;
+    private final CommonUtil commonUtil;
 
-    public DispatcherUtil(ServiceRequestRepository restRepo, ProgramConfiguration configs, ObjectMapper mapper) {
+    public DispatcherUtil(ServiceRequestRepository restRepo, ProgramConfiguration configs, ObjectMapper mapper, CommonUtil commonUtil) {
         this.restRepo = restRepo;
         this.configs = configs;
         this.mapper = mapper;
+        this.commonUtil = commonUtil;
     }
 
     public void dispatchProgram (ProgramRequest programRequest) {
@@ -33,7 +35,7 @@ public class DispatcherUtil {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        if (programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (commonUtil.isSameDomain(programRequest.getHeader().getReceiverId(), configs.getDomain()))
             sendOnProgram(programRequest, message);
         else
             forwardMessage(programRequest.getId(), programRequest.getSignature(),
@@ -47,7 +49,7 @@ public class DispatcherUtil {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        if (!programRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!commonUtil.isSameDomain(programRequest.getHeader().getReceiverId(), configs.getDomain()))
             forwardMessage(programRequest.getId(), programRequest.getSignature(),
                     programRequest.getHeader(), message);
     }
@@ -69,7 +71,7 @@ public class DispatcherUtil {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        if (!sanctionRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!commonUtil.isSameDomain(sanctionRequest.getHeader().getReceiverId(), configs.getDomain()))
             forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
                     sanctionRequest.getHeader(), message);
     }
@@ -81,13 +83,13 @@ public class DispatcherUtil {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        if (!allocationRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain()))
+        if (!commonUtil.isSameDomain(allocationRequest.getHeader().getReceiverId(), configs.getDomain()))
             forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(),
                     allocationRequest.getHeader(), message);
     }
 
     public void dispatchDisburse (DisbursementRequest disbursementRequest) {
-        if (!disbursementRequest.getHeader().getReceiverId().split("@")[1].equalsIgnoreCase(configs.getDomain())) {
+        if (!commonUtil.isSameDomain(disbursementRequest.getHeader().getReceiverId(), configs.getDomain())) {
             String message;
             try {
                 message = mapper.writeValueAsString(disbursementRequest.getDisbursement());
@@ -125,5 +127,4 @@ public class DispatcherUtil {
         Object response = restRepo.fetchResult(url, disbursementRequest);
         return response;
     }
-
 }
