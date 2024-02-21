@@ -5,16 +5,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.Action;
+import org.digit.program.constants.AllocationType;
 import org.digit.program.constants.MessageType;
+import org.digit.program.models.Migration.*;
 import org.digit.program.models.RequestHeader;
+import org.digit.program.models.Status;
+import org.digit.program.models.allocation.Allocation;
+import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramRequest;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionRequest;
 import org.digit.program.repository.ServiceRequestRepository;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.security.Signature;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,5 +116,94 @@ public class MigrationService {
         }
         log.info("TenantIds Fetched Successfully: "+ tenantIds);
         return tenantIds;
+    }
+
+    public void createSanctionAllocation(RequestInfo requestInfo) {
+        log.info("Started Creating Sanction Allocation For Each Tenant");
+        JsonNode response = getTenantIds();
+        List<String> tenantIds = getChildTenantIds(response);
+        for(String tenantId: tenantIds){
+            callOnSanctionAllocation(tenantId, requestInfo);
+        }
+    }
+
+    private void callOnSanctionAllocation(String tenantId, RequestInfo requestInfo) {
+        log.info("Creating Sanction Allocation For Tenant: "+ tenantId);
+        FundsSearchRequest fundsSearchRequest = FundsSearchRequest.builder()
+                .requestInfo(requestInfo)
+                .searchCriteria(SanctionDetailsSearchCriteria.builder().tenantId(tenantId).build())
+                .build();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(programConfiguration.getIfmsServiceHost()).append(programConfiguration.getIfmsServiceFundsSearchPath());
+        Object response = serviceRequestRepository.fetchResult(stringBuilder, fundsSearchRequest);
+        FundsSearchResponse fundsSearchResponse = objectMapper.convertValue(response, FundsSearchResponse.class);
+        callOnSanctionAllocationForFunds(fundsSearchResponse,tenantId);
+    }
+
+    private void callOnSanctionAllocationForFunds(FundsSearchResponse fundsSearchResponse, String tenantId) {
+        log.info("Calling On Sanction Allocation For Tenant: "+ tenantId);
+        List<SanctionDetail> sanctionDetails = fundsSearchResponse.getFunds();
+        List<Sanction> sanctionList = new ArrayList<>();
+        List<Allocation> allocationList = new ArrayList<>();
+        for(SanctionDetail sanctionDetail: sanctionDetails) {
+            Sanction sanction = new Sanction();
+            sanction.setId(sanctionDetail.getId());
+            sanction.setLocationCode(sanctionDetail.getTenantId());
+            sanction.setProgramCode(sanctionDetail.getProgramCode());
+            sanction.setSanctionedAmount(sanctionDetail.getSanctionedAmount().doubleValue());
+            sanction.setAllocatedAmount((double) 0);
+            sanctionList.add(sanction);
+            for(Allotment allotment: sanctionDetail.getAllotmentDetails()) {
+                Allocation allocation = new Allocation();
+                allocation.setId(allotment.getId());
+                allocation.setSanctionId(allotment.getSanctionId());
+                //TODO: Check if the amount is correct
+//                allocation.setAmount(allotment.getDecimalAllottedAmount());
+                allocation.setLocationCode(allotment.getTenantId());
+                allocation.setAuditDetails(allotment.getAuditDetails());
+                allocation.setProgramCode(allotment.getProgramCode());
+                allocation.setStatus(Status.builder().statusCode(org.digit.program.constants.Status.INITIATED).build());
+                if(allotment.getAllotmentTxnType().equals("Allotment withdrawal")){
+                    allocation.setType(AllocationType.DEDUCTION);
+                }else{
+                    allocation.setType(AllocationType.ALLOCATION);
+                }
+                allocationList.add(allocation);
+            }
+        }
+
+        String signature = "Signature:  namespace=\\\"g2p\\\", kidId=\\\"{sender_id}|{unique_key_id}|{algorithm}\\\", algorithm=\\\"ed25519\\\", created=\\\"1606970629\\\", expires=\\\"1607030629\\\", headers=\\\"(created) (expires) digest\\\", signature=\\\"Base64(signing content)";
+        RequestHeader requestHeader = RequestHeader.builder()
+                .messageId("123")
+                .messageTs(System.currentTimeMillis())
+                .action(Action.CREATE)
+                .messageType(MessageType.PROGRAM)
+                .senderId("program@https://unified-dev.digit.org")
+                .senderUri("https://spp.example.org/{namespace}/callback/on-search")
+                .receiverId("program@https://unified-qa.digit.org")
+                .isMsgEncrypted(false)
+                .build();
+
+        SanctionRequest sanctionRequest = SanctionRequest.builder()
+                .signature(signature)
+                .header(requestHeader)
+                .sanctions(sanctionList)
+                .build();
+
+        StringBuilder sanctionCreateUrl = new StringBuilder();
+        sanctionCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceOnSanctionEndpoint());
+        Object sanctionResponse = serviceRequestRepository.fetchResult(sanctionCreateUrl, sanctionRequest);
+        log.info("Sanction Created Successfully: "+ sanctionResponse);
+        if(sanctionResponse != null) {
+            StringBuilder allocationCreateUrl = new StringBuilder();
+            allocationCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceOnAllocationEndpoint());
+            AllocationRequest allocationRequest = AllocationRequest.builder()
+                    .signature(signature)
+                    .header(requestHeader)
+                    .allocations(allocationList)
+                    .build();
+            Object allocationResponse = serviceRequestRepository.fetchResult(allocationCreateUrl, allocationRequest);
+            log.info("Allocation Created Successfully: "+ allocationResponse);
+        }
     }
 }
