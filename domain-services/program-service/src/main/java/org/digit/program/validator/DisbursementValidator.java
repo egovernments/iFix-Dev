@@ -30,6 +30,7 @@ public class DisbursementValidator {
         for (Disbursement childDisbursement : childDisbursements) {
             validateChildDisbursement(childDisbursement);
         }
+        validateChildDisbursements(disbursement, childDisbursements);
         validateAmount(disbursement);
         validateId(disbursement, isCreate);
         if (Boolean.TRUE.equals(isCreate))
@@ -49,6 +50,25 @@ public class DisbursementValidator {
             throw new CustomException("ACCOUNT_CODE_ERROR", "Account code should not be null or empty");
         if (disbursement.getDisbursements() != null)
             throw new CustomException("DISBURSEMENT_ERROR", "Currently child disbursement should not have child disbursements");
+    }
+
+    /**
+     * Validate if disbursement and child disbursement have same location_code and program_code
+     * @param disbursement
+     * @param childDisbursements
+     */
+    public void validateChildDisbursements(Disbursement disbursement, List<Disbursement> childDisbursements) {
+        List<String> locationCodes = childDisbursements.stream().map(Disbursement::getLocationCode).distinct().collect(Collectors.toList());
+        if (locationCodes.size() > 1)
+            throw new CustomException("DISBURSEMENT_LOCATION_CODE_ERROR", "Disbursement location code should be same as child disbursement location code");
+        List<String> programCodes = childDisbursements.stream().map(Disbursement::getProgramCode).distinct().collect(Collectors.toList());
+        if (programCodes.size() > 1)
+            throw new CustomException("DISBURSEMENT_PROGRAM_CODE_ERROR", "Disbursement program code should be same as child disbursement program code");
+
+        if (!disbursement.getLocationCode().equals(locationCodes.get(0)))
+            throw new CustomException("DISBURSEMENT_LOCATION_CODE_ERROR", "Disbursement location code should be same as child disbursement location code");
+        if (!disbursement.getProgramCode().equals(programCodes.get(0)))
+            throw new CustomException("DISBURSEMENT_PROGRAM_CODE_ERROR", "Disbursement program code should be same as child disbursement program code");
     }
 
     /**
@@ -101,9 +121,14 @@ public class DisbursementValidator {
                     + disbursement.getTargetId());
     }
 
-    public void validateTransactionId(Disbursement disbursement) {
-        if (disbursement.getStatus().getStatusCode().equals(Status.INITIATED) || disbursement.getStatus().getStatusCode().equals(Status.FAILED))
-            throw new CustomException("TRANSACTION_ID_MANDATORY", "Transaction id is mandatory");
+    public void  validateTransactionId(Disbursement disbursement) {
+        if (disbursement.getStatus().getStatusCode().equals(Status.INITIATED) || disbursement.getStatus().getStatusCode().equals(Status.FAILED)) {
+            List<String> transactionIds = disbursement.getDisbursements().stream().map(Disbursement::getTransactionId).collect(Collectors.toList());
+            transactionIds.add(disbursement.getTransactionId());
+            if (transactionIds.contains(null))
+                throw new CustomException("TRANSACTION_ID_MANDATORY", "Transaction id is mandatory");
+        }
+
     }
 
 }
