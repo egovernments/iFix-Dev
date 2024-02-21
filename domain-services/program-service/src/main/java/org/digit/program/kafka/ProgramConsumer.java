@@ -157,4 +157,10 @@ public class ProgramConsumer {
             log.error("Error: ", e);
         }
     }
+
+    @KafkaListener(topics = {"${error.kafka.topic}"})
+    public void listenError(final String receivedObject,  @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Consumed message from topic: {}", topic);
+        log.info("Received message: {}", receivedObject);
+    }
 }

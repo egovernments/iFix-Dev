@@ -25,7 +25,7 @@ public class DisbursementValidator {
      * @param disbursement
      * @param isCreate
      */
-    public void validateDisbursement(Disbursement disbursement, Boolean isCreate) {
+    public void validateDisbursement(Disbursement disbursement, Boolean isCreate, Boolean isOnDisburseCreate) {
         List<Disbursement> childDisbursements = disbursement.getDisbursements();
         for (Disbursement childDisbursement : childDisbursements) {
             validateChildDisbursement(childDisbursement);
@@ -34,6 +34,8 @@ public class DisbursementValidator {
         validateId(disbursement, isCreate);
         if (Boolean.TRUE.equals(isCreate))
             validateTargetId(disbursement);
+        if (Boolean.TRUE.equals(isOnDisburseCreate))
+            validateTransactionId(disbursement);
     }
 
     /**
@@ -97,6 +99,11 @@ public class DisbursementValidator {
         if (statuses.contains(Status.INITIATED) || statuses.contains(Status.INPROCESS))
             throw new CustomException("DISBURSEMENT_ALREADY PRESENT_ERROR", "Disbursement already present for target id: "
                     + disbursement.getTargetId());
+    }
+
+    public void validateTransactionId(Disbursement disbursement) {
+        if (disbursement.getStatus().getStatusCode().equals(Status.INITIATED) || disbursement.getStatus().getStatusCode().equals(Status.FAILED))
+            throw new CustomException("TRANSACTION_ID_MANDATORY", "Transaction id is mandatory");
     }
 
 }

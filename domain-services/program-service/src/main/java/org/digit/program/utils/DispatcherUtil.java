@@ -10,6 +10,7 @@ import org.digit.program.models.RequestHeader;
 import org.digit.program.models.RequestMessage;
 import org.digit.program.models.sanction.SanctionRequest;
 import org.digit.program.repository.ServiceRequestRepository;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,12 +33,12 @@ public class DispatcherUtil {
         try {
             message = mapper.writeValueAsString(programRequest.getProgram());
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (commonUtil.isSameDomain(programRequest.getHeader().getReceiverId(), configs.getDomain()))
             sendOnProgram(programRequest, message);
         else
-            forwardMessage(programRequest.getId(), programRequest.getSignature(),
+            forwardMessage(programRequest.getSignature(),
                     programRequest.getHeader(), message);
     }
 
@@ -46,15 +47,15 @@ public class DispatcherUtil {
         try {
             message = mapper.writeValueAsString(programRequest.getProgram());
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (!commonUtil.isSameDomain(programRequest.getHeader().getReceiverId(), configs.getDomain()))
-            forwardMessage(programRequest.getId(), programRequest.getSignature(),
+            forwardMessage(programRequest.getSignature(),
                     programRequest.getHeader(), message);
     }
 
     public void sendOnProgram(ProgramRequest programRequest, String message){
-        RequestMessage requestMessage = RequestMessage.builder().id(programRequest.getId())
+        RequestMessage requestMessage = RequestMessage.builder()
                 .header(programRequest.getHeader()).signature(programRequest.getSignature())
                 .message(message).build();
         commonUtil.updateUri(requestMessage.getHeader());
@@ -68,10 +69,10 @@ public class DispatcherUtil {
         try {
             message = mapper.writeValueAsString(sanctionRequest.getSanctions());
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (!commonUtil.isSameDomain(sanctionRequest.getHeader().getReceiverId(), configs.getDomain()))
-            forwardMessage(sanctionRequest.getId(), sanctionRequest.getSignature(),
+            forwardMessage(sanctionRequest.getSignature(),
                     sanctionRequest.getHeader(), message);
     }
 
@@ -80,10 +81,10 @@ public class DispatcherUtil {
         try {
             message = mapper.writeValueAsString(allocationRequest.getAllocations());
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (!commonUtil.isSameDomain(allocationRequest.getHeader().getReceiverId(), configs.getDomain()))
-            forwardMessage(allocationRequest.getId(), allocationRequest.getSignature(),
+            forwardMessage(allocationRequest.getSignature(),
                     allocationRequest.getHeader(), message);
     }
 
@@ -96,17 +97,17 @@ public class DispatcherUtil {
             try {
                 message = mapper.writeValueAsString(disbursementRequest.getDisbursement());
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
             }
-             forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
+             forwardMessage(disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
             
         }
         return response;
     }
 
-    public Object forwardMessage(String id, String signature, RequestHeader requestHeader, String message){
-        RequestMessage requestMessage = RequestMessage.builder().id(id)
+    public Object forwardMessage(String signature, RequestHeader requestHeader, String message){
+        RequestMessage requestMessage = RequestMessage.builder()
                 .header(requestHeader).signature(signature)
                 .message(message).build();
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())

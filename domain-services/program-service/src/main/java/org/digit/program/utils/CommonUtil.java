@@ -62,7 +62,7 @@ public class CommonUtil {
             }
 
         } catch (IOException e) {
-            throw new CustomException("PARSING_ERROR", "Error while parsing");
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
 
         if(jsonNode== null || jsonNode.isEmpty())
@@ -77,7 +77,7 @@ public class CommonUtil {
         try {
             value = mapper.writeValueAsString(jsonObject);
         } catch (JsonProcessingException e) {
-            throw new CustomException();
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
 
         PGobject json = new PGobject();
@@ -85,14 +85,14 @@ public class CommonUtil {
         try {
             json.setValue(value);
         } catch (SQLException e) {
-            throw new CustomException("", "");
+            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         return json;
     }
 
     public void updateUri(RequestHeader requestHeader){
         requestHeader.setReceiverId(requestHeader.getSenderId());
-        requestHeader.setSenderId(requestHeader.getSenderId().split("@")[0] + configs.getDomain());
+        requestHeader.setSenderId(requestHeader.getSenderId().split("@")[0] + "@" + configs.getDomain());
         requestHeader.setMessageType(MessageType.fromValue("on-" + requestHeader.getMessageType().toString()));
     }
 

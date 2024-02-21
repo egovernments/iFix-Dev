@@ -8,6 +8,7 @@ import org.digit.program.models.disburse.Individual;
 import org.digit.program.models.Status;
 import org.digit.program.utils.CommonUtil;
 import org.egov.common.contract.models.AuditDetails;
+import org.egov.tracer.model.CustomException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
@@ -66,7 +67,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             try {
                 individual1 = objectMapper.treeToValue(individual, Individual.class);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("JSON_PROCESSING_ERROR", e.getMessage());
             }
 
             disbursement.setId(id);

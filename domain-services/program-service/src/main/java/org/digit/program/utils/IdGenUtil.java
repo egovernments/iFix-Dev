@@ -8,6 +8,7 @@ import org.egov.common.contract.idgen.IdGenerationResponse;
 import org.egov.common.contract.idgen.IdRequest;
 import org.egov.common.contract.idgen.IdResponse;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -40,7 +41,7 @@ public class IdGenUtil {
         List<IdResponse> idResponses = response.getIdResponses();
 
         if (CollectionUtils.isEmpty(idResponses))
-            throw new RuntimeException("IDGEN_ERROR - No ids returned from IdGen Service");
+            throw new CustomException("IDGEN_ERROR", "No ids returned from IdGen Service");
 
         return idResponses.stream().map(IdResponse::getId).collect(Collectors.toList());
     }

@@ -10,8 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class RequestMessage {
 
-    @JsonProperty("id")
-    private String id;
     @JsonProperty("signature")
     private String signature;
 
@@ -22,10 +20,5 @@ public class RequestMessage {
     @NotNull
     @JsonProperty("message")
     private String message;
-
-//    public RequestMessage(){
-//        UUID uuid = UUID.randomUUID();
-//        this.id = uuid.toString();
-//    }
 
 }

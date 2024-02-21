@@ -57,8 +57,8 @@ public class ProgramService {
             enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
             programRepository.saveProgram(programRequest.getProgram());
             dispatcherUtil.dispatchProgram(programRequest);
-        } catch (CustomException e) {
-            errorHandler.handleProgramError(programRequest, e);
+        } catch (CustomException exception) {
+            errorHandler.handleProgramError(programRequest, exception);
         }
     }
 

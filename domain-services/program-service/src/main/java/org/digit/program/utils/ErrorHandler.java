@@ -11,7 +11,9 @@ import org.digit.program.models.program.ProgramRequest;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.sanction.SanctionRequest;
 import org.egov.tracer.model.CustomException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ErrorHandler {
     private final ProgramProducer producer;
     private final DispatcherUtil dispatcherUtil;
