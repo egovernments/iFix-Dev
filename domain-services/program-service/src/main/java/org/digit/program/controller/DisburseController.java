@@ -24,28 +24,28 @@ public class DisburseController {
 
     @PostMapping(value = "/disburse/_create")
     public ResponseEntity<DisbursementRequest> createDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        return ResponseEntity.ok(disburseService.createDisburse(disbursementRequest, "create"));
+        return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest, "create", "disburse"));
     }
 
     @PostMapping(value = "/disburse/_update")
     public ResponseEntity<DisbursementRequest> updateDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        return ResponseEntity.ok(disburseService.updateDisburse(disbursementRequest, "update"));
+        return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest, "update", "disburse"));
     }
 
     @PostMapping(value = "/disburse/_search")
     public ResponseEntity<DisburseSearchResponse> searchDisburse(@RequestBody @Valid DisburseSearchRequest disburseSearchRequest) {
-        return ResponseEntity.ok(disburseService.searchDisburse(disburseSearchRequest, "search"));
+        return ResponseEntity.ok(disburseService.searchDisburse(disburseSearchRequest, "search", "disburse"));
 
     }
 
     @PostMapping(value = "/on-disburse/_create")
     public ResponseEntity<DisbursementRequest> onDisburseCreate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        return ResponseEntity.ok(disburseService.onDisburseCreate(disbursementRequest, "create"));
+        return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest, "create", "on-disburse"));
     }
 
     @PostMapping(value = "/on-disburse/_update")
     public ResponseEntity<DisbursementRequest> onDisburseUpdate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        return ResponseEntity.ok(disburseService.onDisburseUpdate(disbursementRequest, "update"));
+        return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest, "update", "on-disburse"));
     }
 
 

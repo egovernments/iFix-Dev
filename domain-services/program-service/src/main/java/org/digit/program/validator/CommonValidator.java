@@ -22,7 +22,7 @@ public class CommonValidator {
         this.programRepository = programRepository;
     }
 
-    public void validateRequest(RequestHeader requestHeader, String action) {
+    public void validateRequest(RequestHeader requestHeader, String action, String messageType) {
         if (!action.equalsIgnoreCase(Action.SEARCH.toString()) && requestHeader.getReceiverId()
                 .equals(requestHeader.getSenderId()))
             throw new CustomException("RECEIVER_ID_SENDER_ID_ERROR", "ReceiverId should not be same as SenderId");
@@ -30,9 +30,11 @@ public class CommonValidator {
             throw new CustomException("RECEIVER_ID_ERROR", "ReceiverId is wrong, it should have @");
         if (!requestHeader.getSenderId().contains("@"))
             throw new CustomException("SENDER_ID_ERROR", "SenderId is wrong, it should have @");
-        if (!action.equalsIgnoreCase(requestHeader.getAction().toString())) {
+        if (!action.equalsIgnoreCase(requestHeader.getAction().toString()))
             throw new CustomException("ACTION_ERROR", "Action in request header should be same as url");
-        }
+        if (!messageType.equalsIgnoreCase(requestHeader.getMessageType().toString()))
+            throw new CustomException("MESSAGE_TYPE_ERROR", "MessageType in request header should be same as url");
+
     }
 
     public void validateReply(RequestHeader requestHeader, String programCode, String locationCode) {

@@ -25,17 +25,17 @@ public class AllocationController {
 
     @PostMapping(value = "/on-allocation/_create")
     public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        return ResponseEntity.ok(allocationService.createAllocation(allocationRequest, "create"));
+        return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest, "create", "on-allocation"));
     }
 
     @PostMapping(value = "/on-allocation/_update")
     public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        return ResponseEntity.ok(allocationService.updateAllocation(allocationRequest, "update"));
+        return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest, "update", "on-allocation"));
     }
 
     @PostMapping(value = "/allocation/_search")
     public ResponseEntity<AllocationResponse> searchAllocation(@RequestBody @Valid AllocationSearchRequest allocationSearchRequest) {
-        return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest, "search"));
+        return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest, "search", "allocation"));
 
     }
 }

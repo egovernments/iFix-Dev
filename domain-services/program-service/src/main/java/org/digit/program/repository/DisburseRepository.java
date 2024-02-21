@@ -75,8 +75,9 @@ public class DisburseRepository {
 
     @Transactional
     public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+        if (sanction != null)
+            sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         updateDisburse(disbursement, true);
-        sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
     }
 
     @Transactional

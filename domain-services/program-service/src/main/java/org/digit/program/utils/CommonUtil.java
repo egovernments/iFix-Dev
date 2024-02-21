@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.digit.program.configuration.ProgramConfiguration;
+import org.digit.program.constants.MessageType;
 import org.digit.program.constants.SortOrder;
 import org.digit.program.models.Pagination;
+import org.digit.program.models.RequestHeader;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Component;
@@ -86,6 +88,12 @@ public class CommonUtil {
             throw new CustomException("", "");
         }
         return json;
+    }
+
+    public void updateUri(RequestHeader requestHeader){
+        requestHeader.setReceiverId(requestHeader.getSenderId());
+        requestHeader.setSenderId(requestHeader.getSenderId().split("@")[0] + configs.getDomain());
+        requestHeader.setMessageType(MessageType.fromValue("on-" + requestHeader.getMessageType().toString()));
     }
 
     public boolean isSameDomain(String url1, String url2) {

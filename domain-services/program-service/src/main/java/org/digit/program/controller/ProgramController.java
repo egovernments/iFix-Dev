@@ -24,26 +24,26 @@ public class ProgramController {
 
     @PostMapping(value = "/program/_create")
     public ResponseEntity<ProgramRequest> createProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.createProgram(programRequest, "create"));
+        return ResponseEntity.ok(programService.pushToKafka(programRequest, "create", "program"));
     }
 
     @PostMapping(value = "/program/_update")
     public ResponseEntity<ProgramRequest> updateProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.updateProgram(programRequest, "update"));
+        return ResponseEntity.ok(programService.pushToKafka(programRequest, "update", "program"));
     }
 
     @PostMapping(value = "/program/_search")
     public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody @Valid ProgramSearchRequest programSearchRequest) {
-        return ResponseEntity.ok(programService.searchProgram(programSearchRequest, "search"));
+        return ResponseEntity.ok(programService.searchProgram(programSearchRequest, "search", "program"));
     }
 
     @PostMapping(value = "/on-program/_create")
     public ResponseEntity<ProgramRequest> onProgramCreate(@RequestBody @Valid ProgramRequest programRequest) {
-        return ResponseEntity.ok(programService.onProgramCreate(programRequest, "create"));
+        return ResponseEntity.ok(programService.pushToKafka(programRequest, "create", "on-program"));
     }
 
     @PostMapping(value = "/on-program/_update")
-    public ResponseEntity<ProgramRequest> onProgram(@RequestBody @Valid ProgramRequest programRequest) {
-            return ResponseEntity.ok(programService.onProgramUpdate(programRequest, "update"));
+    public ResponseEntity<ProgramRequest> onProgramUpdate(@RequestBody @Valid ProgramRequest programRequest) {
+            return ResponseEntity.ok(programService.pushToKafka(programRequest, "update", "on-program"));
     }
 }

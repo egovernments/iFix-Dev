@@ -30,7 +30,10 @@ public class CalculationUtil {
         this.enrichmentService = enrichmentService;
     }
 
-    public Sanction calculateAndReturnSanctionForOnDisburseFailure(Disbursement disbursement, String senderId) {
+    public Sanction calculateAndReturnSanctionForOnDisburse(Disbursement disbursement, String senderId) {
+        if (!disbursement.getStatus().getStatusCode().equals(Status.FAILED))
+            return null;
+
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
@@ -54,7 +57,6 @@ public class CalculationUtil {
         }
 
         log.info("calculateSanctionAmount");
-
         SanctionSearch sanctionSearch = SanctionSearch.builder().locationCode(disbursement.getLocationCode())
                 .programCode(disbursement.getProgramCode()).build();
         List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch);
@@ -65,10 +67,12 @@ public class CalculationUtil {
                 break;
             }
         }
+
         if (sanction == null) {
-            throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount" +
+            throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount " +
                     disbursement.getNetAmount());
         }
+
         disbursement.setSanctionId(sanction.getId());
         for (Disbursement childDisbursement : disbursement.getDisbursements())
             childDisbursement.setSanctionId(sanction.getId());
@@ -76,7 +80,6 @@ public class CalculationUtil {
         sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getNetAmount());
         sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));
         return sanction;
-
     }
 
     public List<Sanction> calculateAndReturnSanction(List<Allocation> allocations) {

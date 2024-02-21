@@ -3,7 +3,6 @@ package org.digit.program.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.configuration.ProgramConfiguration;
-import org.digit.program.constants.MessageType;
 import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.disburse.DisbursementRequest;
 import org.digit.program.models.program.ProgramRequest;
@@ -58,7 +57,7 @@ public class DispatcherUtil {
         RequestMessage requestMessage = RequestMessage.builder().id(programRequest.getId())
                 .header(programRequest.getHeader()).signature(programRequest.getSignature())
                 .message(message).build();
-        updateUri(requestMessage);
+        commonUtil.updateUri(requestMessage.getHeader());
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
                 .append(programRequest.getHeader().getMessageType());
         restRepo.fetchResult(url, requestMessage);
@@ -88,26 +87,22 @@ public class DispatcherUtil {
                     allocationRequest.getHeader(), message);
     }
 
-    public void dispatchDisburse (DisbursementRequest disbursementRequest) {
-        if (!commonUtil.isSameDomain(disbursementRequest.getHeader().getReceiverId(), configs.getDomain())) {
+    public Object dispatchDisburse (DisbursementRequest disbursementRequest) {
+        Object response = null;
+        if (commonUtil.isSameDomain(disbursementRequest.getHeader().getReceiverId(), configs.getDomain())) {
+            response = forwardToAdapter(disbursementRequest);
+        } else {
             String message;
             try {
                 message = mapper.writeValueAsString(disbursementRequest.getDisbursement());
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
+             forwardMessage(disbursementRequest.getId(), disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
-        } else {
-            forwardToAdapter(disbursementRequest);
+            
         }
-    }
-
-    private void updateUri(RequestMessage requestMessage){
-        String senderId = requestMessage.getHeader().getSenderId();
-        requestMessage.getHeader().setSenderId(requestMessage.getHeader().getReceiverId());
-        requestMessage.getHeader().setReceiverId(senderId);
-        requestMessage.getHeader().setMessageType(MessageType.fromValue("on-" + requestMessage.getHeader().getMessageType().toString()));
+        return response;
     }
 
     public Object forwardMessage(String id, String signature, RequestHeader requestHeader, String message){

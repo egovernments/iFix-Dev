@@ -54,30 +54,42 @@ public class ProgramConfiguration {
     @Value("${program.domain}")
     private String domain;
 
+    // Exchange configuration
     @Value("${exchange.host}")
     private String exchangeHost;
-
     @Value("${exchange.path}")
     private String exchangePath;
 
+    // Adapter configuration
     @Value("${adapter.host}")
     private String adapterHost;
-
     @Value("${adapter.path}")
     private String adapterPath;
 
+    // Idgen configuration
     @Value("${egov.idgen.host}")
     private String idGenHost;
-
     @Value("${egov.idgen.path}")
     private String idGenPath;
-
     @Value("${egov.idgen.idname}")
     private String idName;
 
+    // Search configuration
     @Value("${search.max.limit}")
     private Integer searchMaxLimit;
-
     @Value("${search.default.limit}")
     private Integer searchDefaultLimit;
+
+    // Kafka configuration
+    @Value("${program.kafka.topic}")
+    private String programTopic;
+    @Value("${sanction.kafka.topic}")
+    private String sanctionTopic;
+    @Value("${allocation.kafka.topic}")
+    private String allocationTopic;
+    @Value("${disburse.kafka.topic}")
+    private String disburseTopic;
+    @Value("${error.kafka.topic}")
+    private String errorTopic;
+
 }

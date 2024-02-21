@@ -38,9 +38,6 @@ public class Disbursement extends ExchangeCode {
     @Size(min = 2, max = 64)
     private String parentId;
 
-    @JsonProperty("disbursement_date")
-    private String disbursementDate;
-
     @JsonProperty("sanction_id")
     @Size(min = 2, max = 64)
     private String sanctionId;
