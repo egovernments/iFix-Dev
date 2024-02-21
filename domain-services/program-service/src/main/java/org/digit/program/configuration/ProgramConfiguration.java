@@ -121,4 +121,14 @@ public class ProgramConfiguration {
     private String programServiceHost;
     @Value("${egov.program.service.create.path}")
     private String programServiceCreatePath;
+    @Value("${egov.program.service.onsanction.path}")
+    private String programServiceOnSanctionEndpoint;
+    @Value("${egov.program.service.onallocation.path}")
+    private String programServiceOnAllocationEndpoint;
+
+    // IFMS Configuration for migration
+    @Value("${egov.ifms.service.host}")
+    private String ifmsServiceHost;
+    @Value("${egov.ifms.service.funds.search.path}")
+    private String ifmsServiceFundsSearchPath;
 }
