@@ -69,6 +69,7 @@ public class Disbursement extends ExchangeCode {
 
     @JsonProperty("disbursements")
     @Valid
+    @NotNull
     private List<Disbursement> disbursements;
 
     @JsonProperty("audit_details")
