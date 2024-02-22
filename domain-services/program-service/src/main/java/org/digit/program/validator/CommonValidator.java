@@ -6,6 +6,7 @@ import org.digit.program.models.RequestHeader;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.ProgramRepository;
+import org.digit.program.utils.CommonUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,11 @@ import java.util.List;
 public class CommonValidator {
 
     private final ProgramRepository programRepository;
+    private final CommonUtil commonUtil;
 
-    public CommonValidator(ProgramRepository programRepository) {
+    public CommonValidator(ProgramRepository programRepository, CommonUtil commonUtil) {
         this.programRepository = programRepository;
+        this.commonUtil = commonUtil;
     }
 
     public void validateRequest(RequestHeader requestHeader, String action, String messageType) {
@@ -40,14 +43,14 @@ public class CommonValidator {
     public void validateReply(RequestHeader requestHeader, String programCode, String locationCode) {
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(programCode)
                 .locationCode(locationCode).build());
-        if (!requestHeader.getReceiverId().split("@")[1].equalsIgnoreCase(programs.get(0).getClientHostUrl()))
+        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
             throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as program client host url");
     }
 
     public void validateReplyForProgramCreate(RequestHeader requestHeader, String id, String locationCode) {
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(id))
                 .locationCode(locationCode).build());
-        if (!requestHeader.getReceiverId().split("@")[1].equalsIgnoreCase(programs.get(0).getClientHostUrl()))
-            throw new CustomException("RECEIVER_ID_ERROR", "ReceiverId should be same as program client host url");
+        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
+            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should not be same as program client host url");
     }
 }
