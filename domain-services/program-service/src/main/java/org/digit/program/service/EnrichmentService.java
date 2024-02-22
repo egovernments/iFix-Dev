@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -104,12 +105,19 @@ public class EnrichmentService {
         }
     }
 
-    public void enrichDisburseUpdate(Disbursement disbursement, String senderId) {
+    public void enrichDisburseUpdate(Disbursement disbursement, String senderId, Boolean isReply) {
         log.info("Enrich disburse update");
         AuditDetails auditDetails = getAuditDetails(senderId, disbursement.getAuditDetails());
         disbursement.setAuditDetails(auditDetails);
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             childDisbursement.setAuditDetails(auditDetails);
+        }
+        if (isReply) {
+            List<Status> statuses = disbursement.getDisbursements().stream()
+                    .map(disbursement1 -> disbursement1.getStatus().getStatusCode()).distinct().collect(Collectors.toList());
+            if (statuses.contains(Status.FAILED) && statuses.contains(Status.SUCCESSFUL)) {
+                disbursement.getStatus().setStatusCode(Status.PARTIAL);
+            }
         }
     }
 

@@ -73,7 +73,7 @@ public class DisburseService {
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
-                    disbursementRequest.getHeader().getSenderId());
+                    disbursementRequest.getHeader().getSenderId(), false);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
         } catch (CustomException exception) {
@@ -95,7 +95,7 @@ public class DisburseService {
             Disbursement disbursement = disbursementRequest.getDisbursement();
             disbursementValidator.validateDisbursement(disbursement, false, true);
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursement.getProgramCode(), disbursement.getLocationCode());
-            enrichmentService.enrichDisburseUpdate(disbursement, disbursementRequest.getHeader().getSenderId());
+            enrichmentService.enrichDisburseUpdate(disbursement, disbursementRequest.getHeader().getSenderId(), true);
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburse(disbursement,
                     disbursementRequest.getHeader().getSenderId());
             disburseRepository.updateDisburseAndSanction(disbursement, sanction);
@@ -113,7 +113,7 @@ public class DisburseService {
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getProgramCode(),
                     disbursementRequest.getDisbursement().getLocationCode());
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
-                    disbursementRequest.getHeader().getSenderId());
+                    disbursementRequest.getHeader().getSenderId(), true);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
         } catch (CustomException exception) {
