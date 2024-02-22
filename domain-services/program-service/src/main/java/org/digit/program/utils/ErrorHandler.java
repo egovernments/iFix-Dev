@@ -83,9 +83,9 @@ public class ErrorHandler {
      */
     public org.digit.program.models.Status setErrorStatus(org.digit.program.models.Status status, CustomException exception) {
         if (status == null)
-            return new org.digit.program.models.Status(Status.ERROR, exception.getCode() + exception.getMessage());
+            return new org.digit.program.models.Status(Status.ERROR, exception.getCode() + " " + exception.getMessage());
         status.setStatusCode(Status.ERROR);
-        status.setStatusMessage(exception.getCode() + exception.getMessage());
+        status.setStatusMessage(exception.getCode() + " " + exception.getMessage());
         return status;
     }
 

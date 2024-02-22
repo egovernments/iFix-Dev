@@ -44,6 +44,8 @@ public class DisbursementValidator {
      * @param disbursement
      */
     public void validateChildDisbursement(Disbursement disbursement) {
+        if (disbursement == null)
+            throw new CustomException("DISBURSEMENT_ERROR", "Child disbursement should not be null");
         if (disbursement.getIndividual() == null)
             throw new CustomException("INDIVIDUAL_ERROR", "Individual should not be null");
         if (disbursement.getAccountCode() == null || disbursement.getAccountCode().isEmpty())
