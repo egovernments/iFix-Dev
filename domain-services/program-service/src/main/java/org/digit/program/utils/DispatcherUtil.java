@@ -3,6 +3,7 @@ package org.digit.program.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.program.configuration.ProgramConfiguration;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.disburse.DisbursementRequest;
 import org.digit.program.models.program.ProgramRequest;
@@ -88,10 +89,14 @@ public class DispatcherUtil {
                     allocationRequest.getHeader(), message);
     }
 
-    public Object dispatchDisburse (DisbursementRequest disbursementRequest) {
+    public DisbursementRequest dispatchDisburse (DisbursementRequest disbursementRequest) {
         Object response = null;
         if (commonUtil.isSameDomain(disbursementRequest.getHeader().getReceiverId(), configs.getDomain())) {
             response = forwardToAdapter(disbursementRequest);
+            if (disbursementRequest.getHeader().getMessageType().equals(MessageType.DISBURSE)) {
+                DisbursementRequest disbursementReply = mapper.convertValue(response, DisbursementRequest.class);
+                return disbursementReply;
+            }
         } else {
             String message;
             try {
@@ -101,9 +106,9 @@ public class DispatcherUtil {
             }
              forwardMessage(disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
-            
+
         }
-        return response;
+        return null;
     }
 
     public Object forwardMessage(String signature, RequestHeader requestHeader, String message){

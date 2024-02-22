@@ -10,6 +10,7 @@ import org.digit.program.models.disburse.DisbursementRequest;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.repository.DisburseRepository;
 import org.digit.program.utils.CalculationUtil;
+import org.digit.program.utils.CommonUtil;
 import org.digit.program.utils.DispatcherUtil;
 import org.digit.program.utils.ErrorHandler;
 import org.digit.program.validator.CommonValidator;
@@ -32,8 +33,9 @@ public class DisburseService {
     private final ProgramProducer producer;
     private final ProgramConfiguration configs;
     private final ErrorHandler errorHandler;
+    private final CommonUtil commonUtil;
 
-    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository, DisbursementValidator disbursementValidator, CommonValidator commonValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler) {
+    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository, DisbursementValidator disbursementValidator, CommonValidator commonValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler, CommonUtil commonUtil) {
         this.dispatcherUtil = dispatcherUtil;
         this.enrichmentService = enrichmentService;
         this.calculationUtil = calculationUtil;
@@ -43,6 +45,7 @@ public class DisburseService {
         this.producer = producer;
         this.configs = configs;
         this.errorHandler = errorHandler;
+        this.commonUtil = commonUtil;
     }
 
     public DisbursementRequest pushToKafka(DisbursementRequest disbursementRequest, String action, String messageType) {
@@ -61,7 +64,11 @@ public class DisburseService {
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
             disburseRepository.createDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
-            dispatcherUtil.dispatchDisburse(disbursementRequest);
+            DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
+            if (disbursementRequestFromAdapter != null) {
+                commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
+                onDisburseCreate(disbursementRequestFromAdapter);
+            }
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
@@ -75,7 +82,11 @@ public class DisburseService {
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId(), false);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
-            dispatcherUtil.dispatchDisburse(disbursementRequest);
+            DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
+            if (disbursementRequestFromAdapter != null) {
+                commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
+                onDisburseUpdate(disbursementRequestFromAdapter);
+            }
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
