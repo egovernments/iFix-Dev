@@ -3,7 +3,10 @@ package org.digit.program.validator;
 import org.digit.program.constants.Status;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
+import org.digit.program.models.sanction.Sanction;
+import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.DisburseRepository;
+import org.digit.program.repository.SanctionRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +18,11 @@ import java.util.stream.Collectors;
 public class DisbursementValidator {
 
     private final DisburseRepository disburseRepository;
+    private final SanctionRepository sanctionRepository;
 
-    public DisbursementValidator(DisburseRepository disburseRepository) {
+    public DisbursementValidator(DisburseRepository disburseRepository, SanctionRepository sanctionRepository) {
         this.disburseRepository = disburseRepository;
+        this.sanctionRepository = sanctionRepository;
     }
 
     /**
@@ -33,8 +38,11 @@ public class DisbursementValidator {
         validateChildDisbursements(disbursement, childDisbursements);
         validateAmount(disbursement);
         validateId(disbursement, isCreate);
-        if (Boolean.TRUE.equals(isCreate))
+        if (Boolean.TRUE.equals(isCreate)) {
             validateTargetId(disbursement);
+            validateSanctionAmount(disbursement);
+        }
+
         if (Boolean.TRUE.equals(isOnDisburseCreate))
             validateTransactionId(disbursement);
     }
@@ -88,6 +96,22 @@ public class DisbursementValidator {
             throw new CustomException("DISBURSEMENT_NET_AMOUNT_ERROR", "Disbursement amount should be equal to child disbursement net amount");
         if (Double.compare(disbursement.getGrossAmount(), grossAmountSum) != 0)
             throw new CustomException("DISBURSEMENT_GROSS_AMOUNT_ERROR", "Disbursement amount should be equal to child disbursement gross amount");
+    }
+
+
+    public void validateSanctionAmount(Disbursement disbursement) {
+        if (disbursement.getSanctionId() != null) {
+            for (Disbursement childDisbursement : disbursement.getDisbursements()) {
+                if (childDisbursement.getSanctionId() == null || !childDisbursement.getSanctionId().equalsIgnoreCase(disbursement.getSanctionId()))
+                    throw new CustomException("DISBURSEMENT_SANCTION_ID_ERROR", "Disbursement sanction id should be same as child disbursement sanction id");
+            }
+            List<Sanction> sanctions = sanctionRepository.searchSanction(SanctionSearch.builder()
+                    .ids(Collections.singletonList(disbursement.getSanctionId())).build());
+            if (sanctions.isEmpty())
+                throw new CustomException("NO_SANCTION_FOUND", "No sanction found for id: " + disbursement.getSanctionId());
+            if (sanctions.get(0).getAvailableAmount() < disbursement.getNetAmount())
+                throw new CustomException("SANCTION_AVAILABLE_AMOUNT_ERROR", "Sanction available amount should be greater than disbursement amount");
+        }
     }
 
     /**

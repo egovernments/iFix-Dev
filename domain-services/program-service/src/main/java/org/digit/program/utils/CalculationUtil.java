@@ -55,29 +55,36 @@ public class CalculationUtil {
                 return null;
             }
         }
-
-        log.info("calculateSanctionAmount");
-        SanctionSearch sanctionSearch = SanctionSearch.builder().locationCode(disbursement.getLocationCode())
-                .programCode(disbursement.getProgramCode()).build();
-        List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch);
         Sanction sanction = null;
-        for (Sanction sanctionFromDB : sanctions) {
-            if (sanctionFromDB.getAvailableAmount().compareTo(disbursement.getNetAmount()) >= 0) {
-                sanction = sanctionFromDB;
-                break;
+        log.info("calculateSanctionAmount");
+        if (disbursement.getSanctionId() != null) {
+            SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
+            sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
+        } else {
+            SanctionSearch sanctionSearch = SanctionSearch.builder().locationCode(disbursement.getLocationCode())
+                    .programCode(disbursement.getProgramCode()).build();
+            List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch);
+
+            for (Sanction sanctionFromDB : sanctions) {
+                if (sanctionFromDB.getAvailableAmount().compareTo(disbursement.getNetAmount()) >= 0) {
+                    sanction = sanctionFromDB;
+                    break;
+                }
             }
+
+            if (sanction == null) {
+                throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount " +
+                        disbursement.getNetAmount());
+            }
+
+            disbursement.setSanctionId(sanction.getId());
+            for (Disbursement childDisbursement : disbursement.getDisbursements())
+                childDisbursement.setSanctionId(sanction.getId());
         }
 
-        if (sanction == null) {
-            throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount " +
-                    disbursement.getNetAmount());
-        }
-
-        disbursement.setSanctionId(sanction.getId());
-        for (Disbursement childDisbursement : disbursement.getDisbursements())
-            childDisbursement.setSanctionId(sanction.getId());
         sanction.setAllocatedAmount(sanction.getAllocatedAmount() - disbursement.getNetAmount());
         sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getNetAmount());
+
         sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));
         return sanction;
     }
