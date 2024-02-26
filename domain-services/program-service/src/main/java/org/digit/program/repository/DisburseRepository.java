@@ -38,6 +38,12 @@ public class DisburseRepository {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Persists disbursement for create
+     * @param disbursement
+     * @param parentId
+     * @param isRoot
+     */
     @Transactional
     public void saveDisburse(Disbursement disbursement, String parentId, Boolean isRoot) {
         List<Object> preparedStmtList = new ArrayList<>();
@@ -60,6 +66,11 @@ public class DisburseRepository {
         }
     }
 
+    /**
+     * Persists disbursement for update
+     * @param disbursement
+     * @param isOnCreate
+     */
     @Transactional
     public void updateDisburse(Disbursement disbursement, Boolean isOnCreate) {
         List<Object> preparedStmtList = new ArrayList<>();
@@ -73,6 +84,11 @@ public class DisburseRepository {
         }
     }
 
+    /**
+     * Updates sanction and disbursement in transactional manner
+     * @param disbursement
+     * @param sanction
+     */
     @Transactional
     public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
         if (sanction != null)
@@ -80,6 +96,11 @@ public class DisburseRepository {
         updateDisburse(disbursement, true);
     }
 
+    /**
+     * Updates sanction and creates disbursement in transactional manner
+     * @param disbursement
+     * @param sanction
+     */
     @Transactional
     public void createDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
         if (sanction != null)
@@ -87,6 +108,11 @@ public class DisburseRepository {
         saveDisburse(disbursement, null, true);
     }
 
+    /**
+     * Searches disbursement and sets child disbursement for corresponding disbursement
+     * @param disburseSearch
+     * @return
+     */
     public List<Disbursement> searchDisbursements(DisburseSearch disburseSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         List<Disbursement> disbursements;
@@ -102,6 +128,11 @@ public class DisburseRepository {
 
     }
 
+    /**
+     * Sets child disbursement for disbursement search
+     * @param disbursements
+     * @return
+     */
     private List<Disbursement> setChildDisbursements(List<Disbursement> disbursements) {
         List<String> parentIds = disbursements.stream().map(Disbursement::getId).collect(Collectors.toList());
         List<Object> preparedStmtList = new ArrayList<>();

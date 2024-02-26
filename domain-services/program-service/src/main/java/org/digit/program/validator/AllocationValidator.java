@@ -31,21 +31,28 @@ public class AllocationValidator {
         this.allocationRepository = allocationRepository;
     }
 
+    /**
+     * Validates location and program codes and if sanction is present for given sanction id
+     * @param allocations
+     * @param isCreate
+     */
     public void validateAllocation(List<Allocation> allocations, Boolean isCreate) {
 
         validateProgramAndLocationCodes(allocations);
 
         List<Sanction> sanctionsFromSearch = validateSanction(allocations);
 
-        validateAmountWithSanctionedAmount(sanctionsFromSearch, allocations);
-
         if (Boolean.TRUE.equals(isCreate)) {
-            validateForCreate(allocations);
+            validateForCreate(allocations, sanctionsFromSearch);
         } else {
             validateForUpdate(allocations);
         }
     }
 
+    /**
+     * Validates program and location codes for all allocations
+     * @param allocations
+     */
     public void validateProgramAndLocationCodes(List<Allocation> allocations) {
         Set<String> programCodes = new HashSet<>();
         Set<String> locationCodes = new HashSet<>();
@@ -82,6 +89,11 @@ public class AllocationValidator {
         return sanctionFromSearch;
     }
 
+    /**
+     * Validates if allocated amount exceeds sanctioned amount or deduction amount is less than available amount
+     * @param sanctionsFromSearch
+     * @param allocations
+     */
     public void validateAmountWithSanctionedAmount(List<Sanction> sanctionsFromSearch, List<Allocation> allocations) {
         Map<String, Double> sanctionIdAllocatedAmountMap = new HashMap<>();
         for (Sanction sanction : sanctionsFromSearch) {
@@ -102,6 +114,10 @@ public class AllocationValidator {
         }
     }
 
+    /**
+     * Validates allocation id exists
+     * @param allocations
+     */
     public void validateForUpdate(List<Allocation> allocations) {
         Set<String> allocationIds = new HashSet<>();
         for (Allocation allocation : allocations) {
@@ -119,7 +135,12 @@ public class AllocationValidator {
         }
     }
 
-    public void validateForCreate(List<Allocation> allocations) {
+    /**
+     * Validates if allocation id already exists
+     * @param allocations
+     * @param sanctionsFromSearch
+     */
+    public void validateForCreate(List<Allocation> allocations, List<Sanction> sanctionsFromSearch) {
         Set<String> idsFromRequest = allocations.stream().filter(allocation -> allocation.getId() != null &&
                 !allocation.getId().isEmpty()).map(Allocation::getId).collect(Collectors.toSet());
         if (!idsFromRequest.isEmpty()) {
@@ -130,6 +151,8 @@ public class AllocationValidator {
                 throw new CustomException("DUPLICATE_ALLOCATION_ID", "Duplicate allocation id(s): " + ids);
             }
         }
+
+        validateAmountWithSanctionedAmount(sanctionsFromSearch, allocations);
     }
 
 }

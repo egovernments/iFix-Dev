@@ -19,7 +19,14 @@ public class ProgramValidator {
         this.programRepository = programRepository;
     }
 
+    /**
+     * Validates common fields for program create and update
+     * @param program
+     * @param isCreate
+     * @param isOnProgramCreate
+     */
     public void validateProgram(Program program, Boolean isCreate, Boolean isOnProgramCreate) {
+        log.info("Validating program");
         if (program.getStartDate() == 0)
             throw new CustomException("START_DATE_ERROR", "startDate should not be empty");
 
@@ -38,8 +45,14 @@ public class ProgramValidator {
         } else {
             validateForUpdate(program, isOnProgramCreate);
         }
+        log.debug("Validated program for {}", program.getName());
     }
 
+    /**
+     * Validates fields required for update and create reply
+     * @param program
+     * @param isOnProgramCreate
+     */
     public void validateForUpdate(Program program, Boolean isOnProgramCreate) {
         if (program.getId() == null || program.getId().isEmpty())
             throw new CustomException("PROGRAM_ID_ERROR", "programId should not be empty for update");
@@ -58,6 +71,10 @@ public class ProgramValidator {
         }
     }
 
+    /**
+     * Validates if program is already present for id.
+     * @param program
+     */
     public void validateForCreate(Program program) {
         if (program.getId() != null && !program.getId().isEmpty()) {
             List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()

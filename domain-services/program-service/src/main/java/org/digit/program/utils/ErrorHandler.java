@@ -1,5 +1,6 @@
 package org.digit.program.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.Status;
 import org.digit.program.kafka.ProgramProducer;
@@ -14,6 +15,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ErrorHandler {
     private final ProgramProducer producer;
     private final DispatcherUtil dispatcherUtil;
@@ -29,21 +31,25 @@ public class ErrorHandler {
     }
 
     public void handleProgramError(ProgramRequest programRequest, CustomException exception) {
+        log.info("Handling Program Error");
         programRequest.getProgram().setStatus(setErrorStatus(programRequest.getProgram().getStatus(), exception));
         commonUtil.updateUri(programRequest.getHeader());
         try {
             dispatcherUtil.dispatchOnProgram(programRequest);
         } catch (Exception e) {
+            log.error("Error while dispatching program", e);
             producer.push(configs.getErrorTopic(), programRequest);
         }
     }
 
     public void handleProgramReplyError(ProgramRequest programRequest, CustomException exception) {
+        log.info("Handling Program Reply Error");
         programRequest.getProgram().setStatus(setErrorStatus(programRequest.getProgram().getStatus(), exception));
         producer.push(configs.getErrorTopic(), programRequest);
     }
 
     public void handleSanctionError(SanctionRequest sanctionRequest, CustomException exception) {
+        log.info("Handling Sanction Error");
         for (Sanction sanction : sanctionRequest.getSanctions()) {
             sanction.setStatus(setErrorStatus(sanction.getStatus(), exception));
         }
@@ -51,6 +57,7 @@ public class ErrorHandler {
     }
 
     public void handleAllocationError(AllocationRequest allocationRequest, CustomException exception) {
+        log.info("Handling Allocation Error");
         for (Allocation allocation : allocationRequest.getAllocations()) {
             allocation.setStatus(setErrorStatus(allocation.getStatus(), exception));
         }
@@ -58,6 +65,7 @@ public class ErrorHandler {
     }
 
     public void handleDisburseError(DisbursementRequest disbursementRequest, CustomException exception) {
+        log.info("Handling Disburse Error");
         for (Disbursement disbursement : disbursementRequest.getDisbursement().getDisbursements()) {
             disbursement.setStatus(setErrorStatus(disbursement.getStatus(), exception));
         }
@@ -66,11 +74,13 @@ public class ErrorHandler {
         try {
             dispatcherUtil.dispatchDisburse(disbursementRequest);
         } catch (Exception e) {
+            log.error("Error while dispatching disbursement", e);
             producer.push(configs.getErrorTopic(), disbursementRequest);
         }
     }
 
-    public void handleOnDisburseError(DisbursementRequest disbursementRequest, CustomException exception) {
+    public void handleDisburseReplyError(DisbursementRequest disbursementRequest, CustomException exception) {
+        log.info("Handling Disburse Reply Error");
         disbursementRequest.getDisbursement().setStatus(setErrorStatus(disbursementRequest.getDisbursement().getStatus(), exception));
         producer.push(configs.getErrorTopic(), disbursementRequest);
     }

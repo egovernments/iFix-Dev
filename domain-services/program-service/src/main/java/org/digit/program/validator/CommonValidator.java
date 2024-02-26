@@ -25,7 +25,14 @@ public class CommonValidator {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Validates request header
+     * @param requestHeader
+     * @param action
+     * @param messageType
+     */
     public void validateRequest(RequestHeader requestHeader, String action, String messageType) {
+        log.info("Validating request header");
         if (!action.equalsIgnoreCase(Action.SEARCH.toString()) && requestHeader.getReceiverId()
                 .equals(requestHeader.getSenderId()))
             throw new CustomException("RECEIVER_ID_SENDER_ID_ERROR", "ReceiverId should not be same as SenderId");
@@ -37,9 +44,15 @@ public class CommonValidator {
             throw new CustomException("ACTION_ERROR", "Action in request header should be same as url");
         if (!messageType.equalsIgnoreCase(requestHeader.getMessageType().toString()))
             throw new CustomException("MESSAGE_TYPE_ERROR", "MessageType in request header should be same as url");
-
+        log.debug("Validated request header for {} {}", messageType, action);
     }
 
+    /**
+     * Validates if reply is for same domain present in program
+     * @param requestHeader
+     * @param programCode
+     * @param locationCode
+     */
     public void validateReply(RequestHeader requestHeader, String programCode, String locationCode) {
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(programCode)
                 .locationCode(locationCode).build());
@@ -47,7 +60,14 @@ public class CommonValidator {
             throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as program client host url");
     }
 
+    /**
+     * Validates if reply is for same domain present in program
+     * @param requestHeader
+     * @param id
+     * @param locationCode
+     */
     public void validateReplyForProgramCreate(RequestHeader requestHeader, String id, String locationCode) {
+        log.info("Validating Reply");
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(id))
                 .locationCode(locationCode).build());
         if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))

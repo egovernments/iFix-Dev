@@ -30,6 +30,10 @@ public class SanctionRepository {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Persists new sanctions
+     * @param sanctions
+     */
     @Transactional
     public void saveSanction(List<Sanction> sanctions) {
         for (Sanction sanction : sanctions) {
@@ -43,6 +47,10 @@ public class SanctionRepository {
         }
     }
 
+    /**
+     * Persists sanction update
+     * @param sanctions
+     */
     @Transactional
     public void updateSanction(List<Sanction> sanctions) {
         for (Sanction sanction : sanctions) {
@@ -56,6 +64,10 @@ public class SanctionRepository {
         }
     }
 
+    /**
+     * Updates sanction amounts on allocation or disburse
+     * @param sanctions
+     */
     @Transactional
     public void updateSanctionOnAllocationOrDisburse(List<Sanction> sanctions) {
         for (Sanction sanction : sanctions) {
@@ -70,6 +82,11 @@ public class SanctionRepository {
 
     }
 
+    /**
+     * Sets pagination and searches for sanctions
+     * @param sanctionSearch
+     * @return
+     */
     public List<Sanction> searchSanction(SanctionSearch sanctionSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         sanctionSearch.setPagination(commonUtil.enrichSearch(sanctionSearch.getPagination()));

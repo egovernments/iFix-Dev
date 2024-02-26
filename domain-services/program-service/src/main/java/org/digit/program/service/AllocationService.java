@@ -33,7 +33,10 @@ public class AllocationService {
     private final ProgramConfiguration configs;
     private final ErrorHandler errorHandler;
 
-    public AllocationService(AllocationRepository allocationRepository, EnrichmentService enrichmentService, DispatcherUtil dispatcherUtil, CalculationUtil calculationUtil, CommonValidator commonValidator, AllocationValidator allocationValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler) {
+    public AllocationService(AllocationRepository allocationRepository, EnrichmentService enrichmentService,
+                             DispatcherUtil dispatcherUtil, CalculationUtil calculationUtil,
+                             CommonValidator commonValidator, AllocationValidator allocationValidator,
+                             ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler) {
         this.allocationRepository = allocationRepository;
         this.enrichmentService = enrichmentService;
         this.dispatcherUtil = dispatcherUtil;
@@ -45,6 +48,13 @@ public class AllocationService {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * Validates url messageType and action with header and push to kafka topic
+     * @param allocationRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public AllocationRequest pushToKafka(AllocationRequest allocationRequest, String action, String messageType) {
         log.info("pushToKafka");
         commonValidator.validateRequest(allocationRequest.getHeader(), action, messageType);
@@ -52,6 +62,10 @@ public class AllocationService {
         return allocationRequest;
     }
 
+    /**
+     * Validates, enriches, persists and dispatches on-allocation create request
+     * @param allocationRequest
+     */
     public void createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
         try {
@@ -68,6 +82,10 @@ public class AllocationService {
 
     }
 
+    /**
+     * Validates, enriches persists and dispatches on-allocation update request
+     * @param allocationRequest
+     */
     public void updateAllocation (AllocationRequest allocationRequest) {
         log.info("Update Allocation");
         try {
@@ -83,6 +101,13 @@ public class AllocationService {
 
     }
 
+    /**
+     * Validates url with header and searches for allocation
+     * @param allocationSearchRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public AllocationResponse searchAllocation (AllocationSearchRequest allocationSearchRequest, String action, String messageType) {
         log.info("Search Allocation");
         commonValidator.validateRequest(allocationSearchRequest.getHeader(), action, messageType);

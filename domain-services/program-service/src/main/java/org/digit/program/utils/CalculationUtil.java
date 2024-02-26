@@ -30,6 +30,12 @@ public class CalculationUtil {
         this.enrichmentService = enrichmentService;
     }
 
+    /**
+     * If status of disburse reply is failed then add the disbursement amount to sanction and return the sanction
+     * @param disbursement
+     * @param senderId
+     * @return
+     */
     public Sanction calculateAndReturnSanctionForOnDisburse(Disbursement disbursement, String senderId) {
         if (!disbursement.getStatus().getStatusCode().equals(Status.FAILED))
             return null;
@@ -43,6 +49,15 @@ public class CalculationUtil {
         return sanction;
     }
 
+    /**
+     * Searches the db for disbursement on target id and if any previous disbursement is partial then return null
+     * If sanction id is present, decrease the available amount and return the sanction else find a sanction with
+     * available amount more than disbursement amount and decrease the available amount and return the sanction.
+     *
+     * @param disbursement
+     * @param senderId
+     * @return
+     */
     public Sanction calculateAndReturnSanctionForDisburse(Disbursement disbursement, String senderId) {
         //Search disburse and return null if targetId is already present in db
         List<Disbursement> disbursements = disburseRepository.searchDisbursements(DisburseSearch.builder()
@@ -89,6 +104,12 @@ public class CalculationUtil {
         return sanction;
     }
 
+    /**
+     * For list of allocations fetch the sanctions and calculate sanctioned or deducted amount and update the
+     * sanctioned amount and available amount and return list of sanctions.
+     * @param allocations
+     * @return
+     */
     public List<Sanction> calculateAndReturnSanction(List<Allocation> allocations) {
         log.info("calculateSanctionAmount");
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());

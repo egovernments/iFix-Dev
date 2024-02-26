@@ -55,6 +55,11 @@ public class DisburseService {
         return disbursementRequest;
     }
 
+    /**
+     * Validates, enriches and calculates sanction available amount and persist disbursement and sanction to repository also
+     * forwards the request
+     * @param disbursementRequest
+     */
     public void createDisburse(DisbursementRequest disbursementRequest) {
         log.info("Create Disburse");
         try {
@@ -75,6 +80,10 @@ public class DisburseService {
 
     }
 
+    /**
+     * Validates, enriches, updates and forwards disbursement.
+     * @param disbursementRequest
+     */
     public void updateDisburse(DisbursementRequest disbursementRequest) {
         log.info("Update Disburse");
         try {
@@ -92,6 +101,13 @@ public class DisburseService {
         }
     }
 
+    /**
+     * Validates header and searches for disbursement
+     * @param disburseSearchRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public DisburseSearchResponse searchDisburse(DisburseSearchRequest disburseSearchRequest, String action, String messageType) {
         log.info("Search Disburse");
         commonValidator.validateRequest(disburseSearchRequest.getHeader(), action, messageType);
@@ -100,6 +116,11 @@ public class DisburseService {
                 .disbursements(disbursements).build();
     }
 
+    /**
+     * Validates, enriches, calculates sanction available amount in case of failure and persist disbursement and sanction to repository
+     * Forwards disbursement
+     * @param disbursementRequest
+     */
     public void onDisburseCreate(DisbursementRequest disbursementRequest) {
         log.info("On Disburse Create");
         try {
@@ -112,11 +133,15 @@ public class DisburseService {
             disburseRepository.updateDisburseAndSanction(disbursement, sanction);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
         } catch (CustomException exception) {
-            errorHandler.handleOnDisburseError(disbursementRequest, exception);
+            errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
 
     }
 
+    /**
+     * Validates enriches, and persists disburse update
+     * @param disbursementRequest
+     */
     public void onDisburseUpdate(DisbursementRequest disbursementRequest) {
         log.info("On Disburse Update");
         try {
@@ -128,7 +153,7 @@ public class DisburseService {
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
         } catch (CustomException exception) {
-            errorHandler.handleOnDisburseError(disbursementRequest, exception);
+            errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
     }
 }

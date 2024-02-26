@@ -30,7 +30,9 @@ public class SanctionService {
     private final ProgramConfiguration configs;
     private final ErrorHandler errorHandler;
 
-    public SanctionService(SanctionRepository sanctionRepository, EnrichmentService enrichmentService, SanctionValidator sanctionValidator, DispatcherUtil dispatcherUtil, CommonValidator commonValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler) {
+    public SanctionService(SanctionRepository sanctionRepository, EnrichmentService enrichmentService,
+                           SanctionValidator sanctionValidator, DispatcherUtil dispatcherUtil, CommonValidator commonValidator,
+                           ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler) {
         this.sanctionRepository = sanctionRepository;
         this.enrichmentService = enrichmentService;
         this.sanctionValidator = sanctionValidator;
@@ -41,6 +43,13 @@ public class SanctionService {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * Validates url messageType and action with header and push to kafka topic
+     * @param sanctionRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public SanctionRequest pushToKafka(SanctionRequest sanctionRequest, String action, String messageType) {
         log.info("pushToKafka");
         commonValidator.validateRequest(sanctionRequest.getHeader(), action, messageType);
@@ -48,6 +57,10 @@ public class SanctionService {
         return sanctionRequest;
     }
 
+    /**
+     * Validates request, enriches, persists and dispatches on-sanction create request
+     * @param sanctionRequest
+     */
     public void createSanction(SanctionRequest sanctionRequest) {
         log.info("createSanction");
         try {
@@ -64,6 +77,10 @@ public class SanctionService {
         }
     }
 
+    /**
+     * Validates request, enriches, persists and dispatches on-sanction update request
+     * @param sanctionRequest
+     */
     public void updateSanction(SanctionRequest sanctionRequest) {
         log.info("updateSanction");
         try {
@@ -78,6 +95,13 @@ public class SanctionService {
         }
     }
 
+    /**
+     * Validates url messageType and action with header and searches for sanctions
+     * @param sanctionSearchRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public SanctionSearchResponse searchSanction(SanctionSearchRequest sanctionSearchRequest, String action, String messageType) {
         log.info("searchSanction");
         List<Sanction> sanctions;

@@ -33,8 +33,13 @@ public class EnrichmentService {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Enriches data required for create program if not already present
+     * @param header
+     * @param program
+     */
     public void enrichProgramForCreate(RequestHeader header, Program program) {
-        log.info("Enrich Program for Create");
+        log.info("Enriching Program for Create");
         if (commonUtil.isSameDomain(header.getReceiverId(), configs.getDomain())) {
             program.setProgramCode(idGenUtil.getIdList(RequestInfo.builder().build(), program.getLocationCode(),
                     configs.getIdName(), "", 1).get(0));
@@ -47,15 +52,25 @@ public class EnrichmentService {
         }
         program.setActive(true);
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
-        log.info("Enrichment for create completed");
+        log.debug("Enrichment for create completed for id: {}", program.getId());
     }
 
+    /**
+     * Enriches audit details for program update and reply
+     * @param program
+     * @param senderId
+     */
     public void enrichProgramForUpdateOrOnProgram(Program program, String senderId) {
         log.info("Enrich Program for Update/OnProgram");
         program.setAuditDetails(getAuditDetails(senderId, program.getAuditDetails()));
-        log.info("Enrichment for update/on-program completed");
+        log.debug("Enrichment for update/on-program completed for id: {}", program.getId());
     }
 
+    /**
+     * Set audit details and id if not present for sanction create
+     * @param sanctions
+     * @param header
+     */
     public void enrichSanctionCreate(List<Sanction> sanctions, RequestHeader header) {
         log.info("Enrich sanction create");
         if (!commonUtil.isSameDomain(header.getReceiverId(), configs.getDomain())) {
@@ -67,6 +82,11 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting audit details for sanction update
+     * @param sanctions
+     * @param senderId
+     */
     public void enrichSanctionUpdate(List<Sanction> sanctions, String senderId) {
         log.info("Enrich sanction update");
         for (Sanction sanction : sanctions) {
@@ -74,6 +94,11 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting audit details and id if not present for allocation create
+     * @param allocations
+     * @param senderId
+     */
     public void enrichAllocationCreate(List<Allocation> allocations, String senderId) {
         log.info("Enrich allocation create");
         for (Allocation allocation : allocations) {
@@ -83,6 +108,11 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting audit details for allocation update
+     * @param allocations
+     * @param senderId
+     */
     public void enrichAllocationUpdate(List<Allocation> allocations, String senderId) {
         log.info("Enrich allocation update");
         for (Allocation allocation : allocations) {
@@ -90,6 +120,11 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting id(if not present) and audit details for disbursement and child disbursement and status for create
+     * @param disbursement
+     * @param senderId
+     */
     public void enrichDisburseCreate(Disbursement disbursement, String senderId) {
         log.info("Enrich disburse create");
         if (disbursement.getId() == null || StringUtils.isEmpty(disbursement.getId()))
@@ -105,6 +140,12 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting audit details for disbursement and child disbursement and status for update
+     * @param disbursement
+     * @param senderId
+     * @param isReply
+     */
     public void enrichDisburseUpdate(Disbursement disbursement, String senderId, Boolean isReply) {
         log.info("Enrich disburse update");
         AuditDetails auditDetails = getAuditDetails(senderId, disbursement.getAuditDetails());
@@ -121,6 +162,12 @@ public class EnrichmentService {
         }
     }
 
+    /**
+     * Setting audit details
+     * @param senderId
+     * @param prevAuditDetails
+     * @return
+     */
     public AuditDetails getAuditDetails(String senderId, AuditDetails prevAuditDetails) {
         Long time = System.currentTimeMillis();
         if (prevAuditDetails == null) {

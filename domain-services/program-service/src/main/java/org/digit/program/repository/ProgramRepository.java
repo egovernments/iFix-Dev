@@ -24,7 +24,9 @@ public class ProgramRepository {
     private final ExchangeCodeQueryBuilder exchangeCodeQueryBuilder;
     private final CommonUtil commonUtil;
 
-    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper, ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder, CommonUtil commonUtil) {
+    public ProgramRepository(JdbcTemplate jdbcTemplate, ProgramRowMapper programRowMapper,
+                             ProgramQueryBuilder programQueryBuilder, ExchangeCodeQueryBuilder exchangeCodeQueryBuilder,
+                             CommonUtil commonUtil) {
         this.jdbcTemplate = jdbcTemplate;
         this.programRowMapper = programRowMapper;
         this.programQueryBuilder = programQueryBuilder;
@@ -32,8 +34,13 @@ public class ProgramRepository {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Saves program for create
+     * @param program
+     */
     @Transactional
     public void saveProgram(Program program) {
+        log.info("Persisting Create Program");
         List<Object> preparedStmtList = new ArrayList<>();
         String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeProgramInsertQuery(program, preparedStmtList);
         jdbcTemplate.update(exchangeCodeInsertQuery, preparedStmtList.toArray());
@@ -41,11 +48,17 @@ public class ProgramRepository {
         preparedStmtList = new ArrayList<>();
         String programInsertQuery = programQueryBuilder.buildProgramInsertQuery(program, preparedStmtList);
         jdbcTemplate.update(programInsertQuery, preparedStmtList.toArray());
-        log.info("create Program persisted");
+        log.info("Create Program persisted");
     }
 
+    /**
+     * Persists program for update and replies
+     * @param program
+     * @param isOnProgramCreate
+     */
     @Transactional
     public void updateProgram(Program program, Boolean isOnProgramCreate) {
+        log.info("Persisting Update/Reply Program");
         List<Object> preparedStmtList = new ArrayList<>();
         String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeProgramUpdateQuery(program, preparedStmtList, isOnProgramCreate);
         jdbcTemplate.update(exchangeCodeUpdateQuery, preparedStmtList.toArray());
@@ -53,9 +66,14 @@ public class ProgramRepository {
         preparedStmtList = new ArrayList<>();
         String programUpdateQuery = programQueryBuilder.buildProgramUpdateQuery(program, preparedStmtList, isOnProgramCreate);
         jdbcTemplate.update(programUpdateQuery, preparedStmtList.toArray());
-        log.info("update Program persisted");
+        log.info("Program Update/Reply persisted");
     }
 
+    /**
+     * Sets pagination if null and searches program according to criteria
+     * @param programSearch
+     * @return
+     */
     public List<Program> searchProgram(ProgramSearch programSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         programSearch.setPagination(commonUtil.enrichSearch(programSearch.getPagination()));

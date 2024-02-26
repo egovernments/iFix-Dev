@@ -26,6 +26,11 @@ public class SanctionValidator {
         this.programRepository = programRepository;
     }
 
+    /**
+     * Validates sanction request
+     * @param sanctions
+     * @param isCreate
+     */
     public void validateSanction(List<Sanction> sanctions, Boolean isCreate) {
         log.info("validating Sanction");
         validateProgramAndLocationCodes(sanctions);
@@ -37,6 +42,10 @@ public class SanctionValidator {
         }
     }
 
+    /**
+     * Validates program and locatin codes is same for all sanctions and if program is present for given program code
+     * @param sanctions
+     */
     public void validateProgramAndLocationCodes(List<Sanction> sanctions) {
         Set<String> programCodes = new HashSet<>();
         Set<String> locationCodes = new HashSet<>();
@@ -56,7 +65,10 @@ public class SanctionValidator {
             throw new CustomException("NO_PROGRAMS_FOUND" , "No active programs exists for program code: " + sanctions.get(0).getProgramCode());
         }
     }
-
+    /**
+     * Validates if id is already present in db for given sanctions for create
+     * @param sanctions
+     */
     public void validateForCreate(List<Sanction> sanctions) {
         Set<String> idsFromRequest = sanctions.stream().filter(sanction -> sanction.getId() != null &&
                 !sanction.getId().isEmpty()).map(Sanction::getId).collect(Collectors.toSet());
@@ -70,6 +82,10 @@ public class SanctionValidator {
         }
     }
 
+    /**
+     * Validates if ids are present in db for given sanctions for update
+     * @param sanctions
+     */
     public void validateForUpdate(List<Sanction> sanctions) {
         Set<String> sanctionIds = new HashSet<>();
         for (Sanction sanction : sanctions) {

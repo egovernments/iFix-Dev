@@ -43,15 +43,27 @@ public class ProgramService {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * Validates url messageType and action with header and push to kafka topic
+     * @param programRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public ProgramRequest pushToKafka(ProgramRequest programRequest, String action, String messageType) {
-        log.info("push Program to Kafka");
+        log.info("Pushing Program to Kafka");
         commonValidator.validateRequest(programRequest.getHeader(), action, messageType);
         producer.push(configs.getProgramTopic(), programRequest);
+        log.info("Pushed Program to Kafka");
         return programRequest;
     }
 
+    /**
+     * Validates program request, enriches the required fields, persists to db and dispatches the program.
+     * @param programRequest
+     */
     public void createProgram(ProgramRequest programRequest) {
-        log.info("create Program");
+        log.info("Creating Program");
         try {
             programValidator.validateProgram(programRequest.getProgram(), true, false);
             enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
@@ -60,10 +72,15 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramError(programRequest, exception);
         }
+        log.info("Created Program");
     }
 
+    /**
+     * Validates program request, enriches the required fields, persists to db and dispatches the program.
+     * @param programRequest
+     */
     public void updateProgram(ProgramRequest programRequest) {
-        log.info("update Program");
+        log.info("Updating Program");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
             enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
@@ -75,8 +92,15 @@ public class ProgramService {
         }
     }
 
+    /**
+     * Validates url with request header and search for programs in db.
+     * @param programSearchRequest
+     * @param action
+     * @param messageType
+     * @return
+     */
     public ProgramSearchResponse searchProgram(ProgramSearchRequest programSearchRequest, String action, String messageType) {
-        log.info("search Program");
+        log.info("Searching Program");
         List<Program> programs;
         commonValidator.validateRequest(programSearchRequest.getHeader(), action, messageType);
         programs = programRepository.searchProgram(programSearchRequest.getProgramSearch());
@@ -84,8 +108,12 @@ public class ProgramService {
         return ProgramSearchResponse.builder().programs(programs).header(programSearchRequest.getHeader()).build();
     }
 
+    /**
+     * Validates program reply, enriches the audit details, persists to db and dispatches the program.
+     * @param programRequest
+     */
     public void onProgramCreate(ProgramRequest programRequest) {
-        log.info("on Program Create");
+        log.info("On-Program Create");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, true);
             commonValidator.validateReplyForProgramCreate(programRequest.getHeader(), programRequest.getProgram().getId(),
@@ -97,11 +125,14 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
-
     }
 
+    /**
+     * Validates program reply, enriches the audit details, persists to db and dispatches the program.
+     * @param programRequest
+     */
     public void onProgramUpdate(ProgramRequest programRequest) {
-        log.info("on Program Update");
+        log.info("On-Program Update");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
             commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getProgramCode(),
@@ -113,6 +144,5 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
-
     }
 }

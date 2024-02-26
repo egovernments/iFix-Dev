@@ -36,6 +36,10 @@ public class AllocationRepository {
         this.commonUtil = commonUtil;
     }
 
+    /**
+     * Persists new allocations
+     * @param allocations
+     */
     @Transactional
     public void saveAllocation(List<Allocation> allocations) {
         for (Allocation allocation : allocations) {
@@ -50,6 +54,10 @@ public class AllocationRepository {
 
     }
 
+    /**
+     * Persists allocation update
+     * @param allocations
+     */
     @Transactional
     public void updateAllocation(List<Allocation> allocations) {
         for (Allocation allocation : allocations) {
@@ -63,12 +71,22 @@ public class AllocationRepository {
         }
     }
 
+    /**
+     * Saves allocation and sanction amount update in transactional manner.
+     * @param allocations
+     * @param sanctions
+     */
     @Transactional
     public void saveAllocationsAndSanctions(List<Allocation> allocations, List<Sanction> sanctions) {
         saveAllocation(allocations);
         sanctionRepository.updateSanctionOnAllocationOrDisburse(sanctions);
     }
 
+    /**
+     * Sets pagination and searches for allocationsxx
+     * @param allocationSearch
+     * @return
+     */
     public List<Allocation> searchAllocation(AllocationSearch allocationSearch) {
         List<Object> preparedStmtList = new ArrayList<>();
         allocationSearch.setPagination(commonUtil.enrichSearch(allocationSearch.getPagination()));

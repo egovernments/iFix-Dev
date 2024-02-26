@@ -98,7 +98,10 @@ public class DisbursementValidator {
             throw new CustomException("DISBURSEMENT_GROSS_AMOUNT_ERROR", "Disbursement amount should be equal to child disbursement gross amount");
     }
 
-
+    /**
+     * Validates sanction and available amount for given sanction id
+     * @param disbursement
+     */
     public void validateSanctionAmount(Disbursement disbursement) {
         if (disbursement.getSanctionId() != null) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
@@ -147,6 +150,10 @@ public class DisbursementValidator {
                     + disbursement.getTargetId());
     }
 
+    /**
+     * Validates if transaction id is present for disbursement reply
+     * @param disbursement
+     */
     public void  validateTransactionId(Disbursement disbursement) {
         if (disbursement.getStatus().getStatusCode().equals(Status.INITIATED) || disbursement.getStatus().getStatusCode().equals(Status.FAILED)) {
             List<String> transactionIds = disbursement.getDisbursements().stream().map(Disbursement::getTransactionId).collect(Collectors.toList());
