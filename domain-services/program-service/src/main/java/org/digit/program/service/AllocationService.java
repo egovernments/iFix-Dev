@@ -49,15 +49,12 @@ public class AllocationService {
     }
 
     /**
-     * Validates url messageType and action with header and push to kafka topic
+     * Pushes to kafka topic
      * @param allocationRequest
-     * @param action
-     * @param messageType
      * @return
      */
-    public AllocationRequest pushToKafka(AllocationRequest allocationRequest, String action, String messageType) {
+    public AllocationRequest pushToKafka(AllocationRequest allocationRequest) {
         log.info("pushToKafka");
-        commonValidator.validateRequest(allocationRequest.getHeader(), action, messageType);
         producer.push(configs.getAllocationTopic(), allocationRequest);
         return allocationRequest;
     }
@@ -66,7 +63,7 @@ public class AllocationService {
      * Validates, enriches, persists and dispatches on-allocation create request
      * @param allocationRequest
      */
-    public void createAllocation(AllocationRequest allocationRequest) {
+    public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocations(), true);
@@ -79,14 +76,14 @@ public class AllocationService {
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
-
+        return allocationRequest;
     }
 
     /**
      * Validates, enriches persists and dispatches on-allocation update request
      * @param allocationRequest
      */
-    public void updateAllocation (AllocationRequest allocationRequest) {
+    public AllocationRequest updateAllocation (AllocationRequest allocationRequest) {
         log.info("Update Allocation");
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocations(), false);
@@ -98,7 +95,7 @@ public class AllocationService {
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
-
+        return allocationRequest;
     }
 
     /**

@@ -44,15 +44,12 @@ public class ProgramService {
     }
 
     /**
-     * Validates url messageType and action with header and push to kafka topic
+     * Pushes to kafka topic
      * @param programRequest
-     * @param action
-     * @param messageType
      * @return
      */
-    public ProgramRequest pushToKafka(ProgramRequest programRequest, String action, String messageType) {
+    public ProgramRequest pushToKafka(ProgramRequest programRequest) {
         log.info("Pushing Program to Kafka");
-        commonValidator.validateRequest(programRequest.getHeader(), action, messageType);
         producer.push(configs.getProgramTopic(), programRequest);
         log.info("Pushed Program to Kafka");
         return programRequest;
@@ -62,7 +59,7 @@ public class ProgramService {
      * Validates program request, enriches the required fields, persists to db and dispatches the program.
      * @param programRequest
      */
-    public void createProgram(ProgramRequest programRequest) {
+    public ProgramRequest createProgram(ProgramRequest programRequest) {
         log.info("Creating Program");
         try {
             programValidator.validateProgram(programRequest.getProgram(), true, false);
@@ -73,13 +70,14 @@ public class ProgramService {
             errorHandler.handleProgramError(programRequest, exception);
         }
         log.info("Created Program");
+        return programRequest;
     }
 
     /**
      * Validates program request, enriches the required fields, persists to db and dispatches the program.
      * @param programRequest
      */
-    public void updateProgram(ProgramRequest programRequest) {
+    public ProgramRequest updateProgram(ProgramRequest programRequest) {
         log.info("Updating Program");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
@@ -90,6 +88,7 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramError(programRequest, exception);
         }
+        return programRequest;
     }
 
     /**
@@ -112,7 +111,7 @@ public class ProgramService {
      * Validates program reply, enriches the audit details, persists to db and dispatches the program.
      * @param programRequest
      */
-    public void onProgramCreate(ProgramRequest programRequest) {
+    public ProgramRequest onProgramCreate(ProgramRequest programRequest) {
         log.info("On-Program Create");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, true);
@@ -125,13 +124,14 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
+        return programRequest;
     }
 
     /**
      * Validates program reply, enriches the audit details, persists to db and dispatches the program.
      * @param programRequest
      */
-    public void onProgramUpdate(ProgramRequest programRequest) {
+    public ProgramRequest onProgramUpdate(ProgramRequest programRequest) {
         log.info("On-Program Update");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
@@ -144,5 +144,6 @@ public class ProgramService {
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
+        return programRequest;
     }
 }

@@ -44,15 +44,12 @@ public class SanctionService {
     }
 
     /**
-     * Validates url messageType and action with header and push to kafka topic
+     * Pushes to kafka topic
      * @param sanctionRequest
-     * @param action
-     * @param messageType
      * @return
      */
-    public SanctionRequest pushToKafka(SanctionRequest sanctionRequest, String action, String messageType) {
+    public SanctionRequest pushToKafka(SanctionRequest sanctionRequest) {
         log.info("pushToKafka");
-        commonValidator.validateRequest(sanctionRequest.getHeader(), action, messageType);
         producer.push(configs.getSanctionTopic(), sanctionRequest);
         return sanctionRequest;
     }
@@ -61,7 +58,7 @@ public class SanctionService {
      * Validates request, enriches, persists and dispatches on-sanction create request
      * @param sanctionRequest
      */
-    public void createSanction(SanctionRequest sanctionRequest) {
+    public SanctionRequest createSanction(SanctionRequest sanctionRequest) {
         log.info("createSanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
@@ -75,13 +72,14 @@ public class SanctionService {
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
+        return sanctionRequest;
     }
 
     /**
      * Validates request, enriches, persists and dispatches on-sanction update request
      * @param sanctionRequest
      */
-    public void updateSanction(SanctionRequest sanctionRequest) {
+    public SanctionRequest updateSanction(SanctionRequest sanctionRequest) {
         log.info("updateSanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanctions(), false);
@@ -93,6 +91,7 @@ public class SanctionService {
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
+        return sanctionRequest;
     }
 
     /**

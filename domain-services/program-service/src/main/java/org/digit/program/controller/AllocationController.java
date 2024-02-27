@@ -1,9 +1,11 @@
 package org.digit.program.controller;
 
+import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.models.allocation.AllocationRequest;
 import org.digit.program.models.allocation.AllocationResponse;
 import org.digit.program.models.allocation.AllocationSearchRequest;
 import org.digit.program.service.AllocationService;
+import org.digit.program.validator.CommonValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,20 +19,31 @@ import javax.validation.Valid;
 public class AllocationController {
 
     private final AllocationService allocationService;
+    private final CommonValidator commonValidator;
+    private final ProgramConfiguration configs;
 
-
-    public AllocationController(AllocationService allocationService) {
+    public AllocationController(AllocationService allocationService, CommonValidator commonValidator, ProgramConfiguration configs) {
         this.allocationService = allocationService;
+        this.commonValidator = commonValidator;
+        this.configs = configs;
     }
 
     @PostMapping(value = "/on-allocation/_create")
     public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest, "create", "on-allocation"));
+        commonValidator.validateRequest(allocationRequest.getHeader(), "create", "on-allocation");
+        if (configs.getIsAsyncEnabled()) {
+            return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
+        }
+        return ResponseEntity.ok(allocationService.createAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/on-allocation/_update")
     public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest, "update", "on-allocation"));
+        commonValidator.validateRequest(allocationRequest.getHeader(), "update", "on-allocation");
+        if (configs.getIsAsyncEnabled()) {
+            return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
+        }
+        return ResponseEntity.ok(allocationService.updateAllocation(allocationRequest));
     }
 
     @PostMapping(value = "/allocation/_search")

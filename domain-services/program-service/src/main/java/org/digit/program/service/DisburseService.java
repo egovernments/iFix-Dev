@@ -48,9 +48,13 @@ public class DisburseService {
         this.commonUtil = commonUtil;
     }
 
-    public DisbursementRequest pushToKafka(DisbursementRequest disbursementRequest, String action, String messageType) {
+    /**
+     * Pushes to kafka topic
+     * @param disbursementRequest
+     * @return
+     */
+    public DisbursementRequest pushToKafka(DisbursementRequest disbursementRequest) {
         log.info("pushToKafka");
-        commonValidator.validateRequest(disbursementRequest.getHeader(), action, messageType);
         producer.push(configs.getDisburseTopic(), disbursementRequest);
         return disbursementRequest;
     }
@@ -60,7 +64,7 @@ public class DisburseService {
      * forwards the request
      * @param disbursementRequest
      */
-    public void createDisburse(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest createDisburse(DisbursementRequest disbursementRequest) {
         log.info("Create Disburse");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true, false);
@@ -77,14 +81,14 @@ public class DisburseService {
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
-
+        return disbursementRequest;
     }
 
     /**
      * Validates, enriches, updates and forwards disbursement.
      * @param disbursementRequest
      */
-    public void updateDisburse(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest updateDisburse(DisbursementRequest disbursementRequest) {
         log.info("Update Disburse");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
@@ -99,6 +103,7 @@ public class DisburseService {
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
+        return disbursementRequest;
     }
 
     /**
@@ -121,7 +126,7 @@ public class DisburseService {
      * Forwards disbursement
      * @param disbursementRequest
      */
-    public void onDisburseCreate(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest onDisburseCreate(DisbursementRequest disbursementRequest) {
         log.info("On Disburse Create");
         try {
             Disbursement disbursement = disbursementRequest.getDisbursement();
@@ -135,14 +140,14 @@ public class DisburseService {
         } catch (CustomException exception) {
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
-
+        return disbursementRequest;
     }
 
     /**
      * Validates enriches, and persists disburse update
      * @param disbursementRequest
      */
-    public void onDisburseUpdate(DisbursementRequest disbursementRequest) {
+    public DisbursementRequest onDisburseUpdate(DisbursementRequest disbursementRequest) {
         log.info("On Disburse Update");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
@@ -155,5 +160,6 @@ public class DisburseService {
         } catch (CustomException exception) {
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
+        return disbursementRequest;
     }
 }
