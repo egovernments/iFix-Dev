@@ -91,7 +91,7 @@ public class DispatcherUtil {
     public void dispatchOnSanction (SanctionRequest sanctionRequest) {
         String message;
         try {
-            message = mapper.writeValueAsString(sanctionRequest.getSanctions());
+            message = mapper.writeValueAsString(sanctionRequest.getSanction());
         } catch (JsonProcessingException e) {
             throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
@@ -107,7 +107,7 @@ public class DispatcherUtil {
     public void dispatchOnAllocation (AllocationRequest allocationRequest) {
         String message;
         try {
-            message = mapper.writeValueAsString(allocationRequest.getAllocations());
+            message = mapper.writeValueAsString(allocationRequest.getAllocation());
         } catch (JsonProcessingException e) {
             throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }

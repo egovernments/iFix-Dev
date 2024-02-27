@@ -56,8 +56,8 @@ public class CommonValidator {
     public void validateReply(RequestHeader requestHeader, String programCode, String locationCode) {
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(programCode)
                 .locationCode(locationCode).build());
-        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
-            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as program client host url");
+//        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
+//            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as program client host url");
     }
 
     /**

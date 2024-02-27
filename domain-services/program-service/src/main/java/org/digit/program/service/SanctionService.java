@@ -61,13 +61,13 @@ public class SanctionService {
     public SanctionRequest createSanction(SanctionRequest sanctionRequest) {
         log.info("createSanction");
         try {
-            sanctionValidator.validateSanction(sanctionRequest.getSanctions(), true);
-            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanctions().get(0)
+            sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), true);
+            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0)
                             .getProgramCode(),
-                    sanctionRequest.getSanctions().get(0).getLocationCode());
-            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanctions(),
+                    sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
+            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(),
                     sanctionRequest.getHeader());
-            sanctionRepository.saveSanction(sanctionRequest.getSanctions());
+            sanctionRepository.saveSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);
@@ -82,11 +82,11 @@ public class SanctionService {
     public SanctionRequest updateSanction(SanctionRequest sanctionRequest) {
         log.info("updateSanction");
         try {
-            sanctionValidator.validateSanction(sanctionRequest.getSanctions(), false);
-            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanctions().get(0).getProgramCode(),
-                    sanctionRequest.getSanctions().get(0).getLocationCode());
-            enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanctions(), sanctionRequest.getHeader().getSenderId());
-            sanctionRepository.updateSanction(sanctionRequest.getSanctions());
+            sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), false);
+            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getProgramCode(),
+                    sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
+            enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader().getSenderId());
+            sanctionRepository.updateSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);

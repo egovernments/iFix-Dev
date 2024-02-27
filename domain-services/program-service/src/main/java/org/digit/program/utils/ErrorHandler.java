@@ -50,7 +50,7 @@ public class ErrorHandler {
 
     public void handleSanctionError(SanctionRequest sanctionRequest, CustomException exception) {
         log.info("Handling Sanction Error");
-        for (Sanction sanction : sanctionRequest.getSanctions()) {
+        for (Sanction sanction : sanctionRequest.getSanction().getChildren()) {
             sanction.setStatus(setErrorStatus(sanction.getStatus(), exception));
         }
         producer.push(configs.getErrorTopic(), sanctionRequest);
@@ -58,7 +58,7 @@ public class ErrorHandler {
 
     public void handleAllocationError(AllocationRequest allocationRequest, CustomException exception) {
         log.info("Handling Allocation Error");
-        for (Allocation allocation : allocationRequest.getAllocations()) {
+        for (Allocation allocation : allocationRequest.getAllocation().getChildren()) {
             allocation.setStatus(setErrorStatus(allocation.getStatus(), exception));
         }
         producer.push(configs.getErrorTopic(), allocationRequest);

@@ -9,7 +9,9 @@ import org.egov.common.contract.models.AuditDetails;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -55,4 +57,9 @@ public class Program extends ExchangeCode {
 
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;
+
+    @JsonProperty("children")
+    @Null
+    private List<Program> programs;
+
 }

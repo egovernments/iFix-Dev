@@ -67,11 +67,11 @@ public class Disbursement extends ExchangeCode {
     @JsonProperty("additional_details")
     private JsonNode additionalDetails;
 
-    @JsonProperty("disbursements")
-    @Valid
-    private List<Disbursement> disbursements;
-
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;
+
+    @JsonProperty("children")
+    @Valid
+    private List<Disbursement> disbursements;
 
 }

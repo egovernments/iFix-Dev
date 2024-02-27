@@ -6,7 +6,6 @@ import org.digit.program.models.RequestHeader;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @Builder
@@ -27,6 +26,6 @@ public class AllocationRequest {
     @JsonProperty("message")
     @NotNull
     @Valid
-    private List<Allocation> allocations;
+    private Allocation allocation;
 
 }

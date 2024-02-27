@@ -66,12 +66,12 @@ public class AllocationService {
     public AllocationRequest createAllocation(AllocationRequest allocationRequest) {
         log.info("Create Allocation");
         try {
-            allocationValidator.validateAllocation(allocationRequest.getAllocations(), true);
-            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocations().get(0).getProgramCode(),
-                    allocationRequest.getAllocations().get(0).getLocationCode());
-            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocations(), allocationRequest.getHeader().getSenderId());
-            List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocations());
-            allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocations(), sanctions);
+            allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), true);
+            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getProgramCode(),
+                    allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
+            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
+            List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocation().getChildren());
+            allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocation().getChildren(), sanctions);
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
@@ -86,11 +86,11 @@ public class AllocationService {
     public AllocationRequest updateAllocation (AllocationRequest allocationRequest) {
         log.info("Update Allocation");
         try {
-            allocationValidator.validateAllocation(allocationRequest.getAllocations(), false);
-            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocations().get(0).getProgramCode(),
-                    allocationRequest.getAllocations().get(0).getLocationCode());
-            enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocations(), allocationRequest.getHeader().getSenderId());
-            allocationRepository.updateAllocation(allocationRequest.getAllocations());
+            allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), false);
+            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getProgramCode(),
+                    allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
+            enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
+            allocationRepository.updateAllocation(allocationRequest.getAllocation().getChildren());
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
