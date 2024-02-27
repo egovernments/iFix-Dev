@@ -1,6 +1,7 @@
 package org.digit.program.repository.querybuilder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.digit.program.constants.Status;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.utils.CommonUtil;
@@ -15,17 +16,17 @@ public class ProgramQueryBuilder {
     private final CommonUtil commonUtil;
     public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
             "( id, location_code, program_code, name, parent_id, description, client_host_url, status, status_message, " +
-            " start_date, end_date, is_active, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " start_date, end_date, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
             " SET name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
-            " end_date = ?, is_active = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
             " SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
-            " end_date = ?, is_active = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String PROGRAM_SEARCH_QUERY = "SELECT * FROM eg_program JOIN eg_program_message_codes " +
@@ -47,7 +48,6 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getStatus().getStatusMessage());
         preparedStmtList.add(program.getStartDate());
         preparedStmtList.add(program.getEndDate());
-        preparedStmtList.add(program.isActive());
         preparedStmtList.add(commonUtil.getPGObject(program.getAdditionalDetails()));
         preparedStmtList.add(program.getAuditDetails().getCreatedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
@@ -68,7 +68,6 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getStatus().getStatusCode().toString());
         preparedStmtList.add(program.getStatus().getStatusMessage());
         preparedStmtList.add(program.getEndDate());
-        preparedStmtList.add(program.isActive());
         preparedStmtList.add(commonUtil.getPGObject(program.getAdditionalDetails()));
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
@@ -110,11 +109,11 @@ public class ProgramQueryBuilder {
             preparedStmtList.add(programSearch.getParentId());
         }
         addClauseIfRequired(programSearchQuery, preparedStmtList);
-        programSearchQuery.append(" eg_program.is_active = ? ");
-        if (programSearch.getIsActive() != null) {
-            preparedStmtList.add(programSearch.getIsActive());
+        programSearchQuery.append(" eg_program.status = ? ");
+        if (programSearch.getStatus() != null) {
+            preparedStmtList.add(programSearch.getStatus().toString());
         } else {
-            preparedStmtList.add(true);
+            preparedStmtList.add(Status.ACTIVE.toString());
         }
 
         programSearchQuery.append(" ORDER BY ? ");

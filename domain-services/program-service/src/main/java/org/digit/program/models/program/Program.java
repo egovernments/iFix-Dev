@@ -50,9 +50,6 @@ public class Program extends ExchangeCode {
     @Size(min = 2, max = 128)
     private String clientHostUrl;
 
-    @JsonProperty("is_active")
-    private boolean isActive;
-
     @JsonProperty("additional_details")
     private JsonNode additionalDetails;
 

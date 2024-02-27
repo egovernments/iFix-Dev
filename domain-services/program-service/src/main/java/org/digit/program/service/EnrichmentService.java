@@ -50,7 +50,7 @@ public class EnrichmentService {
             program.setClientHostUrl(commonUtil.extractHostUrlFromURL(configs.getDomain()));
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
-        program.setActive(true);
+        program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         log.debug("Enrichment for create completed for id: {}", program.getId());
     }

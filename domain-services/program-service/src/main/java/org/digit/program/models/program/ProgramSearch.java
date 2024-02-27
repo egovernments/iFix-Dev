@@ -2,6 +2,7 @@ package org.digit.program.models.program;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.constants.Status;
 import org.digit.program.models.Pagination;
 
 import javax.validation.constraints.NotNull;
@@ -29,8 +30,8 @@ public class ProgramSearch {
     @JsonProperty("program_code")
     private String programCode;
 
-    @JsonProperty("is_active")
-    private Boolean isActive;
+    @JsonProperty("status")
+    private Status status;
 
     @JsonProperty("pagination")
     private Pagination pagination;
