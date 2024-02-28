@@ -14,9 +14,9 @@ public class AllocationQueryBuilder {
     private final CommonUtil commonUtil;
 
     public static final String ALLOCATION_INSERT_QUERY = "INSERT INTO eg_program_allocation " +
-            " (id, location_code, program_code, sanction_id, amount, status, status_message, type, additional_details, " +
-            " created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " (id, location_code, program_code, sanction_id, net_amount, gross_amount, status, status_message, type, " +
+            " additional_details, created_by, last_modified_by, created_time, last_modified_time) " +
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String ALLOCATION_UPDATE_QUERY = "UPDATE eg_program_allocation " +
             "SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
@@ -34,7 +34,8 @@ public class AllocationQueryBuilder {
         preparedStmtList.add(allocation.getLocationCode());
         preparedStmtList.add(allocation.getProgramCode());
         preparedStmtList.add(allocation.getSanctionId());
-        preparedStmtList.add(allocation.getAmount());
+        preparedStmtList.add(allocation.getNetAmount());
+        preparedStmtList.add(allocation.getGrossAmount());
         preparedStmtList.add(allocation.getStatus().getStatusCode().toString());
         preparedStmtList.add(allocation.getStatus().getStatusMessage());
         preparedStmtList.add(allocation.getType().toString());

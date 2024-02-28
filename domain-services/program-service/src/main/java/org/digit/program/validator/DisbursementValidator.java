@@ -118,7 +118,7 @@ public class DisbursementValidator {
     }
 
     /**
-     * Validates if disbursement id is unique and disbursement exists for update
+     * Validates if disbursement id is unique for create and disbursement exists for update
      * @param disbursement
      * @param isCreate
      */

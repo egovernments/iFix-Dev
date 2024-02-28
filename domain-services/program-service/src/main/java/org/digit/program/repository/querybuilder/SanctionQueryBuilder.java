@@ -14,9 +14,9 @@ public class SanctionQueryBuilder {
     private final CommonUtil commonUtil;
 
     public static final String SANCTION_INSERT_QUERY = "INSERT INTO eg_program_sanction " +
-            "( id, location_code, program_code, sanctioned_amount, allocated_amount, available_amount, status, status_message, " +
+            "( id, location_code, program_code, net_amount, gross_amount, allocated_amount, available_amount, status, status_message, " +
             " additional_details, created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
     public static final String SANCTION_UPDATE_QUERY = "UPDATE eg_program_sanction " +
             " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
@@ -38,7 +38,8 @@ public class SanctionQueryBuilder {
         preparedStmtList.add(sanction.getId());
         preparedStmtList.add(sanction.getLocationCode());
         preparedStmtList.add(sanction.getProgramCode());
-        preparedStmtList.add(sanction.getSanctionedAmount());
+        preparedStmtList.add(sanction.getNetAmount());
+        preparedStmtList.add(sanction.getGrossAmount());
         preparedStmtList.add(sanction.getAllocatedAmount());
         preparedStmtList.add(sanction.getAvailableAmount());
         preparedStmtList.add(sanction.getStatus().getStatusCode().toString());

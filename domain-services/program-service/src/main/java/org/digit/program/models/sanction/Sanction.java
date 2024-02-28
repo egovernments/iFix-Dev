@@ -30,10 +30,15 @@ public class Sanction extends ExchangeCode {
     @Size(min = 2, max = 64)
     private String programCode;
 
-    @JsonProperty("sanctioned_amount")
+    @JsonProperty("net_amount")
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
-    private Double sanctionedAmount;
+    private Double netAmount;
+
+    @JsonProperty("gross_amount")
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
+    private Double grossAmount;
 
     @JsonIgnore
     private Double allocatedAmount;

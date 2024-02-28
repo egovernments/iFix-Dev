@@ -34,7 +34,8 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             String id = rs.getString("id");
             String locationCode = rs.getString("location_code");
             String programCode = rs.getString("program_code");
-            Double sanctionAmount = rs.getDouble("sanctioned_amount");
+            Double netAmount = rs.getDouble("net_amount");
+            Double grossAmount = rs.getDouble("gross_amount");
             Double allocatedAmount = rs.getDouble("allocated_amount");
             Double availableAmount = rs.getDouble("available_amount");
             String status = rs.getString("status");
@@ -59,7 +60,8 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             sanction.setId(id);
             sanction.setLocationCode(locationCode);
             sanction.setProgramCode(programCode);
-            sanction.setSanctionedAmount(sanctionAmount);
+            sanction.setNetAmount(netAmount);
+            sanction.setGrossAmount(grossAmount);
             sanction.setAllocatedAmount(allocatedAmount);
             sanction.setAvailableAmount(availableAmount);
             sanction.setStatus(status1);

@@ -102,12 +102,12 @@ public class AllocationValidator {
 
         for (Allocation allocation : allocations) {
             if (allocation.getType().equals(AllocationType.ALLOCATION))
-                sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) + allocation.getAmount());
+                sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) + allocation.getGrossAmount());
             else
-                sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) - allocation.getAmount());
+                sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) - allocation.getGrossAmount());
         }
         for (Sanction sanction : sanctionsFromSearch) {
-            if (sanctionIdAllocatedAmountMap.get(sanction.getId()) > 0 && sanctionIdAllocatedAmountMap.get(sanction.getId()) > (sanction.getSanctionedAmount() - sanction.getAllocatedAmount()))
+            if (sanctionIdAllocatedAmountMap.get(sanction.getId()) > 0 && sanctionIdAllocatedAmountMap.get(sanction.getId()) > (sanction.getGrossAmount() - sanction.getAllocatedAmount()))
                 throw new CustomException("SANCTIONED_AMOUNT_ERROR", "Sanctioned amount should be greater than allocated amount");
             if (sanctionIdAllocatedAmountMap.get(sanction.getId()) < 0 && Math.abs(sanctionIdAllocatedAmountMap.get(sanction.getId())) > sanction.getAvailableAmount())
                 throw new CustomException("AVAILABLE_AMOUNT_ERROR", "Available amount should be greater than deduction amount");
