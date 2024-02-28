@@ -138,7 +138,6 @@ public class DispatcherUtil {
             }
              forwardMessage(disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
-
         }
         return null;
     }

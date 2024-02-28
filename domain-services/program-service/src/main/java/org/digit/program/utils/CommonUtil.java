@@ -91,9 +91,11 @@ public class CommonUtil {
     }
 
     public void updateUri(RequestHeader requestHeader){
-        requestHeader.setReceiverId(requestHeader.getSenderId());
-        requestHeader.setSenderId(requestHeader.getSenderId().split("@")[0] + "@" + configs.getDomain());
-        requestHeader.setMessageType(MessageType.fromValue("on-" + requestHeader.getMessageType().toString()));
+        if (!requestHeader.getMessageType().toString().contains("on-")) {
+            requestHeader.setReceiverId(requestHeader.getSenderId());
+            requestHeader.setSenderId(requestHeader.getSenderId().split("@")[0] + "@" + configs.getDomain());
+            requestHeader.setMessageType(MessageType.fromValue("on-" + requestHeader.getMessageType().toString()));
+        }
     }
 
     public boolean isSameDomain(String url1, String url2) {

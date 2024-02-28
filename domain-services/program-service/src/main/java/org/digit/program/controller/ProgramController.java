@@ -31,7 +31,7 @@ public class ProgramController {
     @PostMapping(value = "/program/_create")
     public ResponseEntity<ProgramRequest> createProgram(@RequestBody @Valid ProgramRequest programRequest) {
         commonValidator.validateRequest(programRequest.getHeader(), "create", "program");
-        if (configs.getIsAsyncEnabled()) {
+        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
         return ResponseEntity.ok(programService.createProgram(programRequest));
@@ -40,7 +40,7 @@ public class ProgramController {
     @PostMapping(value = "/program/_update")
     public ResponseEntity<ProgramRequest> updateProgram(@RequestBody @Valid ProgramRequest programRequest) {
         commonValidator.validateRequest(programRequest.getHeader(), "update", "program");
-        if (configs.getIsAsyncEnabled()) {
+        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
         return ResponseEntity.ok(programService.updateProgram(programRequest));
@@ -54,7 +54,7 @@ public class ProgramController {
     @PostMapping(value = "/on-program/_create")
     public ResponseEntity<ProgramRequest> onProgramCreate(@RequestBody @Valid ProgramRequest programRequest) {
         commonValidator.validateRequest(programRequest.getHeader(), "create", "on-program");
-        if (configs.getIsAsyncEnabled()) {
+        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
         return ResponseEntity.ok(programService.onProgramCreate(programRequest));
@@ -63,7 +63,7 @@ public class ProgramController {
     @PostMapping(value = "/on-program/_update")
     public ResponseEntity<ProgramRequest> onProgramUpdate(@RequestBody @Valid ProgramRequest programRequest) {
         commonValidator.validateRequest(programRequest.getHeader(), "update", "on-program");
-        if (configs.getIsAsyncEnabled()) {
+        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
         return ResponseEntity.ok(programService.onProgramUpdate(programRequest));
