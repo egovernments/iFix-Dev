@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class SanctionRequest {
 
-
-    private String id;
     @JsonProperty("signature")
     private String signature;
 

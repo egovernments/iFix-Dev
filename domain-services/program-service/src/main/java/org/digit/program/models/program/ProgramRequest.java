@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ProgramRequest {
 
-    private String id;
     @JsonProperty("signature")
     private String signature;
 

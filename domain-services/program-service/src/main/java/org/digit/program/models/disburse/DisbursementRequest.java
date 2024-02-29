@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class DisbursementRequest {
 
-
-    private String id;
     @JsonProperty("signature")
     private String signature;
 
