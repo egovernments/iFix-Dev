@@ -128,7 +128,7 @@ public class EncryptionDecryptionTest {
         String message = "{\"location_code\":\"pg.citya\",\"name\":\"Test 1\",\"start_date\":0,\"end_date\":0,\"client_host_url\":\"https://unified-dev.digit.org\",\"function_code\":\"string\",\"administration_code\":\"string\",\"recipient_segment_code\":\"string\",\"economic_segment_code\":\"string\",\"source_of_fund_code\":\"string\",\"target_segment_code\":\"string\",\"currency_code\":\"string\",\"locale_code\":\"string\",\"status\":{\"status_code\":\"RECEIVED\",\"status_message\":\"string\"}}";
         String signature = null;
         try {
-            PrivateKey privateKey = encService.getPrivateKey(endpointOnePrivateKey);
+            PrivateKey privateKey = encService.getPrivateKey(endpointTwoPrivateKey);
             signature = encService.signMessage(message, privateKey);
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class EncryptionDecryptionTest {
         System.out.println("Test Sign Message");
         SecurityService encService = new SecurityService();
         String message = "{\"location_code\":\"pg.citya\",\"name\":\"Test 1\",\"start_date\":0,\"end_date\":0,\"client_host_url\":\"https://unified-dev.digit.org\",\"function_code\":\"string\",\"administration_code\":\"string\",\"recipient_segment_code\":\"string\",\"economic_segment_code\":\"string\",\"source_of_fund_code\":\"string\",\"target_segment_code\":\"string\",\"currency_code\":\"string\",\"locale_code\":\"string\",\"status\":{\"status_code\":\"RECEIVED\",\"status_message\":\"string\"}}";
-        String signature = "o4qqCaqTzV49ntZzHWBO+0XKvE2r021gzvJy29upqTOWDuxQiPqyJkhNTBPc2AupvsZVZ3Fli96o+Rxyw0PaLQpud2PtNp01cbBrFzhHe2aCWybuwW7wTgvPxRz3814os3GKD6srmwHZ7r2hE4ScNkUzfV8J1d9qDK2Qb/fniGF/Vq4pKdVxXOx7RBMaFgrXRFrsXoa+AR9ZxIf8cUVHabs5PskKGf805BCiPDcts7HZoq1WQ3JsDKeBMvq+4+CE9lKWHRR6pcBHa+WWiykuujg0dbt7V7oHaOPsLstHjJQZaTqxwz/XPszGioqi/Ah+1QVdOAxb8cVTxxEQIIlizg==";
+        String signature = "TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==";
         boolean signatureVerified = false;
         try {
             PublicKey publicKey = encService.getPublicKey(endpointOnePublicKey);
