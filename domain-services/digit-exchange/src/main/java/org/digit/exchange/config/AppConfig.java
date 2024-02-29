@@ -77,11 +77,17 @@ public class AppConfig {
     @Value("${app.error.topic.name}")
     private String errorTopic;
 
+    @Value("${app.events.log.topic.name}")
+    private String exchangeEventLogTopic;
+
+    @Value("${app.enable.events.log}")
+    private boolean enabledEventLogs;
+
     @Value("${app.receiver.endpoints}")
     private String receiverEndpointsStr;
     private Map<String, String> receiverEndpoints;
 
-    @Value("${app.auth.validate-external-service.enabled}")
+    @Value("${app.auth.sign.validation}")
     private boolean authEnabledExternalService;
     @Value("${app.auth.private-key}")
     private String serverPrivateKey;

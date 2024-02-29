@@ -12,6 +12,8 @@ import org.digit.exchange.model.RequestMessage;
 import org.digit.exchange.model.RequestMessageWrapper;
 import org.digit.exchange.repository.ServiceRequestRepository;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.ServletContext;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -23,19 +25,26 @@ public class ExchangeService {
     private final ObjectMapper mapper;
     private final ServiceRequestRepository restRepo;
     private final SecurityService securityService;
+    private ServletContext servletContext;
 
-    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo, SecurityService securityService) {
+
+    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo, SecurityService securityService,  ServletContext servletContext) {
         this.producer = producer;
         this.config = config;
         this.mapper = mapper;
         this.restRepo = restRepo;
         this.securityService = securityService;
+        this.servletContext = servletContext;
     }
 
     public RequestMessage processMessage(ExchangeType type, RequestMessage messageRequest) {
         RequestMessageWrapper requestMessageWrapper = new RequestMessageWrapper(type, messageRequest);
         producer.push( config.getExchangeTopic(), requestMessageWrapper);
         log.info("Pushed message to kafka topic");
+        // If log events is true then process and push to the kafka
+        if (config.isEnabledEventLogs()) {
+            emitEventsToTopic(requestMessageWrapper);
+        }
         return messageRequest;
     }
 
@@ -78,6 +87,21 @@ public class ExchangeService {
             }
         }
 
+    }
+
+    public void emitEventsToTopic(RequestMessageWrapper requestMessageWrapper) {
+        try {
+            log.info("Converting message to Json Node for emit events");
+            JsonNode jsonNode;
+            RequestMessage requestMessage = requestMessageWrapper.getRequestMessage();
+            jsonNode = mapper.readTree(requestMessageWrapper.getRequestMessage().getMessage());
+            log.info("Converted message to Json Node");
+            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature()).header(requestMessage.getHeader()).jsonNode(jsonNode).build();
+            producer.push( config.getExchangeEventLogTopic(), jsonMessage);
+            log.info("Pushed message to kafka topic : " + config.getExchangeEventLogTopic());
+        }catch (Exception e) {
+            log.error("Exception while emitting events: {}", e.getMessage());
+        }
     }
 
     private void handleErrorForSameDomain(RequestMessageWrapper requestMessageWrapper, Boolean isReply) {
@@ -143,29 +167,8 @@ public class ExchangeService {
             return baseUrl + "/" + message.getHeader().getMessageType().toString() + "/_" + message.getHeader().getAction();
         } else {
             String receiverDomain = securityService.extractHostUrlFromURL(message.getHeader().getReceiverId());
-            return receiverDomain + "/digit-exchange/v1/exchange/" + message.getHeader().getMessageType().toString();
+            String contextPath = servletContext.getContextPath();
+            return receiverDomain + contextPath +"/v1/exchange/" + message.getHeader().getMessageType().toString();
         }
-    }
-
-    public static boolean matchDomains(String domain1, String domain2) {
-        try {
-            URI uri1 = new URI(normalizeUrl(domain1));
-            URI uri2 = new URI(normalizeUrl(domain2));
-
-            // Check if the normalized domains are equal
-            return uri1.getHost().equalsIgnoreCase(uri2.getHost());
-        } catch (URISyntaxException e) {
-            // Handle URI syntax exception if needed
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private static String normalizeUrl(String url) {
-        // Add a default scheme (e.g., "http://") if not present
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
-        }
-        return url;
     }
 }
