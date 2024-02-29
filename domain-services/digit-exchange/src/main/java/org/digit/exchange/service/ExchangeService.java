@@ -22,12 +22,14 @@ public class ExchangeService {
     private final AppConfig config;
     private final ObjectMapper mapper;
     private final ServiceRequestRepository restRepo;
+    private final SecurityService securityService;
 
-    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo) {
+    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo, SecurityService securityService) {
         this.producer = producer;
         this.config = config;
         this.mapper = mapper;
         this.restRepo = restRepo;
+        this.securityService = securityService;
     }
 
     public RequestMessage processMessage(ExchangeType type, RequestMessage messageRequest) {
@@ -44,8 +46,7 @@ public class ExchangeService {
         if(url==null)
             return;
         log.info("Receiver url mapped: {}", url);
-        String receiverDomain = requestMessage.getHeader().getReceiverId().contains("@") ? requestMessage.getHeader().getReceiverId().split("@")[1] : requestMessage.getHeader().getReceiverId();
-        if(matchDomains(receiverDomain, config.getDomain())){
+        if(securityService.isSameDomain(requestMessage.getHeader().getReceiverId(), config.getDomain())){
             log.info("Converting message to Json Node");
             JsonNode jsonNode;
             try {
@@ -64,6 +65,10 @@ public class ExchangeService {
 //                handleErrorForSameDomain(requestMessageWrapper, isReply);
             }
         } else {
+            // If sending the request from this server to another server then sign the message
+            if (securityService.isSameDomain(requestMessage.getHeader().getSenderId(), config.getDomain())) {
+                requestMessage = securityService.signRequestMessage(requestMessage);
+            }
             try {
                 restRepo.fetchResult(url, requestMessage);
                 log.info("Posted request to : {}", url);
@@ -128,9 +133,8 @@ public class ExchangeService {
 
 
     String getReceiverEndPoint(RequestMessage message, Boolean isReply){
-        String receiverDomain = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[1] : message.getHeader().getReceiverId();
-        if(matchDomains(receiverDomain, config.getDomain())){
-            // Get the reciver Service name and get the host from config
+        if(securityService.isSameDomain(message.getHeader().getReceiverId(), config.getDomain())){
+            // Get the receiver Service name and get the host from config
             String receiverService = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[0] : "program";
             if (!config.getReceiverEndpoints().containsKey(receiverService))
                 return null;
@@ -138,7 +142,8 @@ public class ExchangeService {
             //Retrieve url from config
             return baseUrl + "/" + message.getHeader().getMessageType().toString() + "/_" + message.getHeader().getAction();
         } else {
-            return receiverDomain + "/digit-exchange/v1/" + message.getHeader().getMessageType().toString();
+            String receiverDomain = securityService.extractHostUrlFromURL(message.getHeader().getReceiverId());
+            return receiverDomain + "/digit-exchange/v1/exchange/" + message.getHeader().getMessageType().toString();
         }
     }
 

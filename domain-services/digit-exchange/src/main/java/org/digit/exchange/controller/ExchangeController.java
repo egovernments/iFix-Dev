@@ -23,8 +23,8 @@ public class ExchangeController {
         this.exchangeService = exchangeService;
     }
 
-    @PostMapping(value = "/{subpath1}")
-    public ResponseEntity<RequestMessage> program(@RequestBody RequestMessage messageRequest, @PathVariable("subpath1") String type) {
+    @PostMapping(value = "/exchange/{exchangeType}")
+    public ResponseEntity<RequestMessage> program(@RequestBody RequestMessage messageRequest, @PathVariable("exchangeType") String type) {
         log.info("Received message from: {} to {}", messageRequest.getHeader().getSenderId(), messageRequest.getHeader().getReceiverId());
         try {
             RequestMessage response = exchangeService.processMessage(ExchangeType.fromValue(type), messageRequest);
