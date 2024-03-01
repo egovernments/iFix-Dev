@@ -2,7 +2,6 @@ package org.digit.exchange.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digit.exchange.filters.pre.SignValidator;
-import org.digit.exchange.repository.ExchangeServerRepository;
 import org.digit.exchange.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
