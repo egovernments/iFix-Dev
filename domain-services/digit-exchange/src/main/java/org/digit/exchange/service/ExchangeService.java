@@ -75,9 +75,9 @@ public class ExchangeService {
             }
         } else {
             // If sending the request from this server to another server then sign the message
-            if (securityService.isSameDomain(requestMessage.getHeader().getSenderId(), config.getDomain())) {
-                requestMessage = securityService.signRequestMessage(requestMessage);
-            }
+//            if (securityService.isSameDomain(requestMessage.getHeader().getSenderId(), config.getDomain())) {
+//                requestMessage = securityService.signRequestMessage(requestMessage);
+//            }
             try {
                 restRepo.fetchResult(url, requestMessage);
                 log.info("Posted request to : {}", url);
