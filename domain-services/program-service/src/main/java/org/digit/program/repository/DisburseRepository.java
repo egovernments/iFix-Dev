@@ -102,7 +102,7 @@ public class DisburseRepository {
      * @param sanction
      */
     @Transactional
-    public void createDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+    public void saveDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
         if (sanction != null)
             sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         saveDisburse(disbursement, null, true);

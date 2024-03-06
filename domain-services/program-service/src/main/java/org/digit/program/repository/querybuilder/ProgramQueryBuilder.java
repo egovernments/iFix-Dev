@@ -15,17 +15,17 @@ public class ProgramQueryBuilder {
 
     private final CommonUtil commonUtil;
     public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
-            "( id, location_code, program_code, name, parent_id, description, client_host_url, status, status_message, " +
+            "( id, location_code, program_code, name, parent_id, description, status, status_message, " +
             " start_date, end_date, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
-            " SET name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
+            " SET name = ?, description = ?, status = ?, status_message = ?, " +
             " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
-            " SET program_code = ?, name = ?, description = ?, client_host_url = ?, status = ?, status_message = ?, " +
+            " SET program_code = ?, name = ?, description = ?, status = ?, status_message = ?, " +
             " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 

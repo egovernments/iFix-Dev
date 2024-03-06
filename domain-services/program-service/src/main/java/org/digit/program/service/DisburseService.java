@@ -72,7 +72,7 @@ public class DisburseService {
                     disbursementRequest.getHeader().getSenderId());
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
-            disburseRepository.createDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
+            disburseRepository.saveDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
