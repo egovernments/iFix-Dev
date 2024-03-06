@@ -1,28 +1,28 @@
 package org.digit.program.validator;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.Action;
 import org.digit.program.models.RequestHeader;
-import org.digit.program.models.program.Program;
-import org.digit.program.models.program.ProgramSearch;
 import org.digit.program.repository.ProgramRepository;
 import org.digit.program.utils.CommonUtil;
+import org.digit.program.utils.MdmsUtil;
+import org.egov.mdms.model.MdmsResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 @Component
 @Slf4j
 public class CommonValidator {
-
-    private final ProgramRepository programRepository;
     private final CommonUtil commonUtil;
+    private final MdmsUtil mdmsUtil;
+    private final ObjectMapper mapper;
 
-    public CommonValidator(ProgramRepository programRepository, CommonUtil commonUtil) {
-        this.programRepository = programRepository;
+    public CommonValidator(CommonUtil commonUtil, MdmsUtil mdmsUtil, ObjectMapper mapper) {
         this.commonUtil = commonUtil;
+        this.mdmsUtil = mdmsUtil;
+        this.mapper = mapper;
     }
 
     /**
@@ -50,27 +50,13 @@ public class CommonValidator {
     /**
      * Validates if reply is for same domain present in program
      * @param requestHeader
-     * @param programCode
      * @param locationCode
      */
-    public void validateReply(RequestHeader requestHeader, String programCode, String locationCode) {
-        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().programCode(programCode)
-                .locationCode(locationCode).build());
-//        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
-//            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as program client host url");
-    }
-
-    /**
-     * Validates if reply is for same domain present in program
-     * @param requestHeader
-     * @param id
-     * @param locationCode
-     */
-    public void validateReplyForProgramCreate(RequestHeader requestHeader, String id, String locationCode) {
-        log.info("Validating Reply");
-        List<Program> programs = programRepository.searchProgram(ProgramSearch.builder().ids(Collections.singletonList(id))
-                .locationCode(locationCode).build());
-        if (!commonUtil.isSameDomain(requestHeader.getReceiverId(), programs.get(0).getClientHostUrl()))
-            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should not be same as program client host url");
+    public void validateReply(RequestHeader requestHeader, String locationCode) {
+        MdmsResponse mdmsResponse = mdmsUtil.callMdms(locationCode);
+        JsonNode node = mapper.convertValue(mdmsResponse.getMdmsRes().get("exchange").get("ExchangeServers").get(0), JsonNode.class);
+        if (!commonUtil.isSameDomain(node.get("hostUrl").asText(), requestHeader.getReceiverId())) {
+            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as client host url");
+        }
     }
 }

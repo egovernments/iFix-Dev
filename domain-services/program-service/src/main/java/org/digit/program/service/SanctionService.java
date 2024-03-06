@@ -62,11 +62,8 @@ public class SanctionService {
         log.info("createSanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), true);
-            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0)
-                            .getProgramCode(),
-                    sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
-            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(),
-                    sanctionRequest.getHeader());
+            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
+            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader());
             sanctionRepository.saveSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
         } catch (CustomException exception) {
@@ -83,8 +80,7 @@ public class SanctionService {
         log.info("updateSanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), false);
-            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getProgramCode(),
-                    sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
+            commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
             enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader().getSenderId());
             sanctionRepository.updateSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);

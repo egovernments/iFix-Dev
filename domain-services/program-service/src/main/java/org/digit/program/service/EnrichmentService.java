@@ -47,7 +47,6 @@ public class EnrichmentService {
         } else {
             if (program.getId() == null || StringUtils.isEmpty(program.getId()))
                 program.setId(UUID.randomUUID().toString());
-            program.setClientHostUrl(commonUtil.extractHostUrlFromURL(configs.getDomain()));
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());

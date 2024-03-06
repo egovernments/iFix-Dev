@@ -74,6 +74,12 @@ public class ProgramConfiguration {
     @Value("${egov.idgen.idname}")
     private String idName;
 
+    // Mdms configuration
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+    @Value("${egov.mdms.path}")
+    private String mdmsPath;
+
     // Search configuration
     @Value("${search.max.limit}")
     private Integer searchMaxLimit;

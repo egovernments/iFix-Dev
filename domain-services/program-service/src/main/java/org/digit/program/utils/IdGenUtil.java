@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class IdGenUtil {
-    private ObjectMapper mapper;
-    private ServiceRequestRepository restRepo;
-    private ProgramConfiguration configs;
+    private final ObjectMapper mapper;
+    private final ServiceRequestRepository restRepo;
+    private final ProgramConfiguration configs;
 
     public IdGenUtil(ObjectMapper mapper, ServiceRequestRepository restRepo, ProgramConfiguration configs) {
         this.mapper = mapper;

@@ -18,7 +18,7 @@ import java.util.*;
 @Slf4j
 public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
 
-    private CommonUtil commonUtil;
+    private final CommonUtil commonUtil;
 
     public ProgramRowMapper(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
@@ -36,8 +36,8 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             String name = rs.getString("name");
             String parentId = rs.getString("parent_id");
             String description = rs.getString("description");
-            Long startDate = rs.getLong("start_date");
-            Long endDate = rs.getLong("end_date");
+            long startDate = rs.getLong("start_date");
+            long endDate = rs.getLong("end_date");
             String clientHostUrl = rs.getString("client_host_url");
             JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
@@ -65,7 +65,6 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setDescription(description);
             program.setStartDate(startDate);
             program.setEndDate(endDate);
-            program.setClientHostUrl(clientHostUrl);
             program.setAdditionalDetails(additionalDetails);
             program.setAuditDetails(auditDetails);
 

@@ -83,7 +83,7 @@ public class DisburseQueryBuilder {
         preparedStmtList.add(disbursement.getSanctionId());
         preparedStmtList.add(disbursement.getId());
         preparedStmtList.add(MessageType.DISBURSE.toString());
-        preparedStmtList.add(disbursement.getNetAmount());
+        preparedStmtList.add(disbursement.getGrossAmount());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());
         return TRANSACTION_LOGS_INSERT_QUERY;

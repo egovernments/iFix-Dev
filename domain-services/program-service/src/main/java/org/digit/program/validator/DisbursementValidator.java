@@ -112,7 +112,7 @@ public class DisbursementValidator {
                     .ids(Collections.singletonList(disbursement.getSanctionId())).build());
             if (sanctions.isEmpty())
                 throw new CustomException("NO_SANCTION_FOUND", "No sanction found for id: " + disbursement.getSanctionId());
-            if (sanctions.get(0).getAvailableAmount() < disbursement.getNetAmount())
+            if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
                 throw new CustomException("SANCTION_AVAILABLE_AMOUNT_ERROR", "Sanction available amount should be greater than disbursement amount");
         }
     }

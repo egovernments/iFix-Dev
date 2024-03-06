@@ -115,8 +115,7 @@ public class ProgramService {
         log.info("On-Program Create");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, true);
-            commonValidator.validateReplyForProgramCreate(programRequest.getHeader(), programRequest.getProgram().getId(),
-                    programRequest.getProgram().getLocationCode());
+            commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getLocationCode());
             enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                     programRequest.getHeader().getSenderId());
             programRepository.updateProgram(programRequest.getProgram(), true);
@@ -135,8 +134,7 @@ public class ProgramService {
         log.info("On-Program Update");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
-            commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getProgramCode(),
-                    programRequest.getProgram().getLocationCode());
+            commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getLocationCode());
             enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
                     programRequest.getHeader().getSenderId());
             programRepository.updateProgram(programRequest.getProgram(), false);

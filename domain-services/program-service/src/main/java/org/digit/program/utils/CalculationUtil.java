@@ -43,8 +43,8 @@ public class CalculationUtil {
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
-        sanction.setAllocatedAmount(sanction.getAllocatedAmount() + disbursement.getNetAmount());
-        sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getNetAmount());
+        sanction.setAllocatedAmount(sanction.getAllocatedAmount() + disbursement.getGrossAmount());
+        sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
         enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
         return sanction;
     }
@@ -81,7 +81,7 @@ public class CalculationUtil {
             List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch);
 
             for (Sanction sanctionFromDB : sanctions) {
-                if (sanctionFromDB.getAvailableAmount().compareTo(disbursement.getNetAmount()) >= 0) {
+                if (sanctionFromDB.getAvailableAmount().compareTo(disbursement.getGrossAmount()) >= 0) {
                     sanction = sanctionFromDB;
                     break;
                 }
@@ -89,7 +89,7 @@ public class CalculationUtil {
 
             if (sanction == null) {
                 throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount " +
-                        disbursement.getNetAmount());
+                        disbursement.getGrossAmount());
             }
 
             disbursement.setSanctionId(sanction.getId());
@@ -97,8 +97,8 @@ public class CalculationUtil {
                 childDisbursement.setSanctionId(sanction.getId());
         }
 
-        sanction.setAllocatedAmount(sanction.getAllocatedAmount() - disbursement.getNetAmount());
-        sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getNetAmount());
+        sanction.setAllocatedAmount(sanction.getAllocatedAmount() - disbursement.getGrossAmount());
+        sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getGrossAmount());
 
         sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));
         return sanction;

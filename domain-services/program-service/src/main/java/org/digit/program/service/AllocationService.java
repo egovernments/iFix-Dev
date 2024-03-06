@@ -67,8 +67,7 @@ public class AllocationService {
         log.info("Create Allocation");
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), true);
-            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getProgramCode(),
-                    allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
+            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
             enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
             List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocation().getChildren());
             allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocation().getChildren(), sanctions);
@@ -87,8 +86,7 @@ public class AllocationService {
         log.info("Update Allocation");
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), false);
-            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getProgramCode(),
-                    allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
+            commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
             enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
             allocationRepository.updateAllocation(allocationRequest.getAllocation().getChildren());
             dispatcherUtil.dispatchOnAllocation(allocationRequest);

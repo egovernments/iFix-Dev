@@ -48,10 +48,6 @@ public class Program extends ExchangeCode {
     @JsonProperty("end_date")
     private long endDate;
 
-    @JsonProperty("client_host_url")
-    @Size(min = 2, max = 128)
-    private String clientHostUrl;
-
     @JsonProperty("additional_details")
     private JsonNode additionalDetails;
 

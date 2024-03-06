@@ -43,7 +43,6 @@ public class ProgramQueryBuilder {
         preparedStmtList.add(program.getName());
         preparedStmtList.add(program.getParentId());
         preparedStmtList.add(program.getDescription());
-        preparedStmtList.add(program.getClientHostUrl());
         preparedStmtList.add(program.getStatus().getStatusCode().toString());
         preparedStmtList.add(program.getStatus().getStatusMessage());
         preparedStmtList.add(program.getStartDate());
@@ -64,7 +63,6 @@ public class ProgramQueryBuilder {
         }
         preparedStmtList.add(program.getName());
         preparedStmtList.add(program.getDescription());
-        preparedStmtList.add(program.getClientHostUrl());
         preparedStmtList.add(program.getStatus().getStatusCode().toString());
         preparedStmtList.add(program.getStatus().getStatusMessage());
         preparedStmtList.add(program.getEndDate());
