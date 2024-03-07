@@ -9,6 +9,7 @@ import org.digit.program.constants.AllocationType;
 import org.digit.program.models.ExchangeCode;
 import org.egov.common.contract.models.AuditDetails;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -55,6 +56,7 @@ public class Allocation extends ExchangeCode {
     private AuditDetails auditDetails;
 
     @JsonProperty("children")
+    @Valid
     private List<Allocation> children;
 
 }
