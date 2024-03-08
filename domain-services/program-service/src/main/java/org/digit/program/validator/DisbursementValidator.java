@@ -134,6 +134,10 @@ public class DisbursementValidator {
             throw new CustomException("DISBURSEMENT_ID_ERROR", "Disbursement id should be unique");
         if (Boolean.FALSE.equals(isCreate) && disbursementsFromSearch.isEmpty())
             throw new CustomException("NO_DISBURSEMENT_FOUND", "No disbursement found for id: " + disbursement.getId());
+
+        List<String> childDisbursementIds = disbursement.getDisbursements().stream().map(Disbursement::getId).collect(Collectors.toList());
+        if (!disbursementsFromSearch.get(0).getDisbursements().stream().map(Disbursement::getId).collect(Collectors.toList()).containsAll(childDisbursementIds))
+            throw new CustomException("DISBURSEMENT_ID_ERROR", "Child disbursement id should be present in db");
     }
 
     /**

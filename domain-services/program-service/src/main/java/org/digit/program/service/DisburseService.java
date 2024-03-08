@@ -34,8 +34,9 @@ public class DisburseService {
     private final ProgramConfiguration configs;
     private final ErrorHandler errorHandler;
     private final CommonUtil commonUtil;
+    private final EncryptionService encryptionService;
 
-    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository, DisbursementValidator disbursementValidator, CommonValidator commonValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler, CommonUtil commonUtil) {
+    public DisburseService(DispatcherUtil dispatcherUtil, EnrichmentService enrichmentService, CalculationUtil calculationUtil, DisburseRepository disburseRepository, DisbursementValidator disbursementValidator, CommonValidator commonValidator, ProgramProducer producer, ProgramConfiguration configs, ErrorHandler errorHandler, CommonUtil commonUtil, EncryptionService encryptionService) {
         this.dispatcherUtil = dispatcherUtil;
         this.enrichmentService = enrichmentService;
         this.calculationUtil = calculationUtil;
@@ -46,6 +47,7 @@ public class DisburseService {
         this.configs = configs;
         this.errorHandler = errorHandler;
         this.commonUtil = commonUtil;
+        this.encryptionService = encryptionService;
     }
 
     /**
@@ -72,7 +74,8 @@ public class DisburseService {
                     disbursementRequest.getHeader().getSenderId());
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
-            disburseRepository.saveDisburseAndSanction(disbursementRequest.getDisbursement(), sanction);
+            Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
+            disburseRepository.saveDisburseAndSanction(disbursement, sanction);
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
@@ -117,6 +120,7 @@ public class DisburseService {
         log.info("Search Disburse");
         commonValidator.validateRequest(disburseSearchRequest.getHeader(), action, messageType);
         List<Disbursement> disbursements = disburseRepository.searchDisbursements(disburseSearchRequest.getDisburseSearch());
+        encryptionService.getDecryptedDisbursement(disbursements);
         return DisburseSearchResponse.builder().header(disburseSearchRequest.getHeader())
                 .disbursements(disbursements).build();
     }

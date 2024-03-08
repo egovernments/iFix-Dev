@@ -100,4 +100,10 @@ public class ProgramConfiguration {
     @Value("${error.kafka.topic}")
     private String errorTopic;
 
+    // Encryption Service
+    @Value("${encryption.key}")
+    private String encryptionKey;
+    @Value("${encryption.vector}")
+    private String encryptionVector;
+
 }

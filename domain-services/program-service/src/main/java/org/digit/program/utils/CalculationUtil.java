@@ -43,7 +43,6 @@ public class CalculationUtil {
         log.info("calculateSanctionAmount");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
-        sanction.setAllocatedAmount(sanction.getAllocatedAmount() + disbursement.getGrossAmount());
         sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
         enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
         return sanction;
@@ -97,7 +96,6 @@ public class CalculationUtil {
                 childDisbursement.setSanctionId(sanction.getId());
         }
 
-        sanction.setAllocatedAmount(sanction.getAllocatedAmount() - disbursement.getGrossAmount());
         sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getGrossAmount());
 
         sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));

@@ -38,7 +38,6 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             String description = rs.getString("description");
             long startDate = rs.getLong("start_date");
             long endDate = rs.getLong("end_date");
-            String clientHostUrl = rs.getString("client_host_url");
             JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
             String createdBy = rs.getString("created_by");
             String lastModifiedBy = rs.getString("last_modified_by");
