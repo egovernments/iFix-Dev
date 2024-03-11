@@ -82,6 +82,9 @@ public class ErrorHandler {
     public void handleDisburseReplyError(DisbursementRequest disbursementRequest, CustomException exception) {
         log.info("Handling Disburse Reply Error");
         disbursementRequest.getDisbursement().setStatus(setErrorStatus(disbursementRequest.getDisbursement().getStatus(), exception));
+        for (Disbursement disbursement : disbursementRequest.getDisbursement().getDisbursements()) {
+            disbursement.setStatus(setErrorStatus(disbursement.getStatus(), exception));
+        }
         producer.push(configs.getErrorTopic(), disbursementRequest);
     }
 

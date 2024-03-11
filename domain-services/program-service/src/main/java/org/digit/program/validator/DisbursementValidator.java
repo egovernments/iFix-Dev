@@ -32,6 +32,8 @@ public class DisbursementValidator {
      */
     public void validateDisbursement(Disbursement disbursement, Boolean isCreate, Boolean isOnDisburseCreate) {
         List<Disbursement> childDisbursements = disbursement.getDisbursements();
+        if (childDisbursements == null || childDisbursements.isEmpty())
+            throw new CustomException("CHILD_DISBURSEMENT_ERROR", "Child disbursements should not be null or empty");
         for (Disbursement childDisbursement : childDisbursements) {
             validateChildDisbursement(childDisbursement);
         }
