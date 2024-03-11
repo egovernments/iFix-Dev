@@ -30,7 +30,7 @@ public class SanctionController {
     @PostMapping(value = "/on-sanction/_create")
     public ResponseEntity<SanctionRequest> onSanctionCreate(@RequestBody @Valid SanctionRequest sanctionRequest) {
         commonValidator.validateRequest(sanctionRequest.getHeader(), "create", "on-sanction");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsSanctionAsync())) {
             return ResponseEntity.ok(sanctionService.pushToKafka(sanctionRequest));
         }
         return ResponseEntity.ok(sanctionService.createSanction(sanctionRequest));
@@ -39,7 +39,7 @@ public class SanctionController {
     @PostMapping(value = "/on-sanction/_update")
     public ResponseEntity<SanctionRequest> onSanctionUpdate(@RequestBody @Valid SanctionRequest sanctionRequest) {
         commonValidator.validateRequest(sanctionRequest.getHeader(), "update", "on-sanction");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsSanctionAsync())) {
             return ResponseEntity.ok(sanctionService.pushToKafka(sanctionRequest));
         }
         return ResponseEntity.ok(sanctionService.updateSanction(sanctionRequest));

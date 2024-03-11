@@ -31,7 +31,7 @@ public class DisburseController {
     @PostMapping(value = "/disburse/_create")
     public ResponseEntity<DisbursementRequest> createDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), "create", "disburse");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.createDisburse(disbursementRequest));
@@ -40,7 +40,7 @@ public class DisburseController {
     @PostMapping(value = "/disburse/_update")
     public ResponseEntity<DisbursementRequest> updateDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), "update", "disburse");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.updateDisburse(disbursementRequest));
@@ -55,7 +55,7 @@ public class DisburseController {
     @PostMapping(value = "/on-disburse/_create")
     public ResponseEntity<DisbursementRequest> onDisburseCreate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), "create", "on-disburse");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.onDisburseCreate(disbursementRequest));
@@ -64,7 +64,7 @@ public class DisburseController {
     @PostMapping(value = "/on-disburse/_update")
     public ResponseEntity<DisbursementRequest> onDisburseUpdate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), "update", "on-disburse");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.onDisburseUpdate(disbursementRequest));

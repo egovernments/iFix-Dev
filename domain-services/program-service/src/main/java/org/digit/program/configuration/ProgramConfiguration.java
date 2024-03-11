@@ -87,8 +87,14 @@ public class ProgramConfiguration {
     private Integer searchDefaultLimit;
 
     // Kafka configuration
-    @Value("${is.async.enabled}")
-    private Boolean isAsyncEnabled;
+    @Value("${is.program.async}")
+    private Boolean isProgramAsync;
+    @Value("${is.sanction.async}")
+    private Boolean isSanctionAsync;
+    @Value("${is.allocation.async}")
+    private Boolean isAllocationAsync;
+    @Value("${is.disburse.async}")
+    private Boolean isDisburseAsync;
     @Value("${program.kafka.topic}")
     private String programTopic;
     @Value("${sanction.kafka.topic}")

@@ -31,7 +31,7 @@ public class AllocationController {
     @PostMapping(value = "/on-allocation/_create")
     public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody @Valid AllocationRequest allocationRequest) {
         commonValidator.validateRequest(allocationRequest.getHeader(), "create", "on-allocation");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
         }
         return ResponseEntity.ok(allocationService.createAllocation(allocationRequest));
@@ -40,7 +40,7 @@ public class AllocationController {
     @PostMapping(value = "/on-allocation/_update")
     public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody @Valid AllocationRequest allocationRequest) {
         commonValidator.validateRequest(allocationRequest.getHeader(), "update", "on-allocation");
-        if (Boolean.TRUE.equals(configs.getIsAsyncEnabled())) {
+        if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
         }
         return ResponseEntity.ok(allocationService.updateAllocation(allocationRequest));
