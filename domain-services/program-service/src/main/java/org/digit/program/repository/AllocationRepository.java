@@ -1,5 +1,6 @@
 package org.digit.program.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.allocation.AllocationSearch;
 import org.digit.program.models.sanction.Sanction;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class AllocationRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -42,6 +44,7 @@ public class AllocationRepository {
      */
     @Transactional
     public void saveAllocation(List<Allocation> allocations) {
+        log.info("Persisting Create Allocation");
         for (Allocation allocation : allocations) {
             List<Object> preparedStmtList = new ArrayList<>();
             String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeAllocationInsertQuery(allocation, preparedStmtList);
@@ -51,7 +54,7 @@ public class AllocationRepository {
             String allocationInsertQuery = allocationQueryBuilder.buildAllocationInsertQuery(allocation, preparedStmtList);
             jdbcTemplate.update(allocationInsertQuery, preparedStmtList.toArray());
         }
-
+        log.info("Persisted Create Allocation");
     }
 
     /**
@@ -60,6 +63,7 @@ public class AllocationRepository {
      */
     @Transactional
     public void updateAllocation(List<Allocation> allocations) {
+        log.info("Persisting Update Allocation");
         for (Allocation allocation : allocations) {
             List<Object> preparedStmtList = new ArrayList<>();
             String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeAllocationUpdateQuery(allocation, preparedStmtList);
@@ -69,6 +73,7 @@ public class AllocationRepository {
             String allocationUpdateQuery = allocationQueryBuilder.buildAllocationUpdateQuery(allocation, preparedStmtList);
             jdbcTemplate.update(allocationUpdateQuery, preparedStmtList.toArray());
         }
+        log.info("Persisted Update Allocation");
     }
 
     /**

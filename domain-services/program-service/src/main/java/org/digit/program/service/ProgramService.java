@@ -66,10 +66,10 @@ public class ProgramService {
             enrichmentService.enrichProgramForCreate(programRequest.getHeader(), programRequest.getProgram());
             programRepository.saveProgram(programRequest.getProgram());
             dispatcherUtil.dispatchProgram(programRequest);
+            log.info("Created Program");
         } catch (CustomException exception) {
             errorHandler.handleProgramError(programRequest, exception);
         }
-        log.info("Created Program");
         return programRequest;
     }
 
@@ -85,6 +85,7 @@ public class ProgramService {
                     programRequest.getHeader().getSenderId());
             programRepository.updateProgram(programRequest.getProgram(), false);
             dispatcherUtil.dispatchProgram(programRequest);
+            log.info("Updated Program");
         } catch (CustomException exception) {
             errorHandler.handleProgramError(programRequest, exception);
         }
@@ -120,6 +121,7 @@ public class ProgramService {
                     programRequest.getHeader().getSenderId());
             programRepository.updateProgram(programRequest.getProgram(), true);
             dispatcherUtil.dispatchOnProgram(programRequest);
+            log.info("On-Program Created");
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
@@ -139,6 +141,7 @@ public class ProgramService {
                     programRequest.getHeader().getSenderId());
             programRepository.updateProgram(programRequest.getProgram(), false);
             dispatcherUtil.dispatchOnProgram(programRequest);
+            log.info("On-Program Updated");
         } catch (CustomException exception) {
             errorHandler.handleProgramReplyError(programRequest, exception);
         }

@@ -37,16 +37,15 @@ public class AllocationValidator {
      * @param isCreate
      */
     public void validateAllocation(List<Allocation> allocations, Boolean isCreate) {
-
+        log.info("Validating allocations");
         validateProgramAndLocationCodes(allocations);
-
         List<Sanction> sanctionsFromSearch = validateSanction(allocations);
-
         if (Boolean.TRUE.equals(isCreate)) {
             validateForCreate(allocations, sanctionsFromSearch);
         } else {
             validateForUpdate(allocations);
         }
+        log.info("Validated allocations");
     }
 
     /**

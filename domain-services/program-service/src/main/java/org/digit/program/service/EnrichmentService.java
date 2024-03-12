@@ -51,7 +51,7 @@ public class EnrichmentService {
         }
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
-        log.debug("Enrichment for create completed for id: {}", program.getId());
+        log.info("Enrichment for create completed for id: {}", program.getId());
     }
 
     /**
@@ -62,7 +62,7 @@ public class EnrichmentService {
     public void enrichProgramForUpdateOrOnProgram(Program program, String senderId) {
         log.info("Enrich Program for Update/OnProgram");
         program.setAuditDetails(getAuditDetails(senderId, program.getAuditDetails()));
-        log.debug("Enrichment for update/on-program completed for id: {}", program.getId());
+        log.info("Enrichment for update/on-program completed for id: {}", program.getId());
     }
 
     /**
@@ -152,7 +152,7 @@ public class EnrichmentService {
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             childDisbursement.setAuditDetails(auditDetails);
         }
-        if (isReply) {
+        if (Boolean.TRUE.equals(isReply)) {
             List<Status> statuses = disbursement.getDisbursements().stream()
                     .map(disbursement1 -> disbursement1.getStatus().getStatusCode()).distinct().collect(Collectors.toList());
             if (statuses.contains(Status.FAILED) && statuses.contains(Status.SUCCESSFUL)) {
@@ -180,7 +180,5 @@ public class EnrichmentService {
             prevAuditDetails.setLastModifiedBy(senderId);
             return prevAuditDetails;
         }
-
     }
-
 }

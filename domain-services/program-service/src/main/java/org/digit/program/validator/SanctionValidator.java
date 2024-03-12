@@ -40,6 +40,7 @@ public class SanctionValidator {
         } else {
             validateForUpdate(sanctions);
         }
+        log.info("validated Sanction");
     }
 
     /**

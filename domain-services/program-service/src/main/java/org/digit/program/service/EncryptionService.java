@@ -28,7 +28,7 @@ public class EncryptionService {
     }
 
     public Disbursement getEncryptedDisbursement (Disbursement disbursement) {
-        log.info("getEncryptedDisbursement");
+        log.info("Encrypting PII data");
         Disbursement encryptedDisbursement;
         try {
             encryptedDisbursement = mapper.readValue(mapper.writeValueAsString(disbursement), Disbursement.class);
@@ -67,21 +67,16 @@ public class EncryptionService {
                 childDisbursement.getIndividual().setAddress(Base64.getEncoder().encodeToString(addressBytes));
                 childDisbursement.setAccountCode(Base64.getEncoder().encodeToString(accountNumberBytes));
 
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchPaddingException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeyException e) {
-                throw new RuntimeException(e);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new CustomException("ENCRYPTION_ERROR", e.getMessage());
             }
         }
+        log.info("Encryption of PII data completed");
         return encryptedDisbursement;
     }
 
     public void getDecryptedDisbursement (List<Disbursement> disbursements) {
-        log.info("getDecryptedDisbursement");
+        log.info("Decrypting PII data");
         for (Disbursement disbursement : disbursements) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
                 String individualName = childDisbursement.getIndividual().getName();
@@ -113,24 +108,15 @@ public class EncryptionService {
                     childDisbursement.getIndividual().setPhone(new String(phoneBytes));
                     childDisbursement.getIndividual().setAddress(new String(addressBytes));
                     childDisbursement.setAccountCode(new String(accountNumberBytes));
-                } catch (NoSuchPaddingException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalBlockSizeException e) {
-                    throw new RuntimeException(e);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                } catch (BadPaddingException e) {
-                    throw new RuntimeException(e);
-                } catch (InvalidKeyException e) {
-                    throw new RuntimeException(e);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new CustomException("DECRYPTION_ERROR", e.getMessage());
                 }
             }
         }
+        log.info("Decrypted PII data successfully");
     }
 
-    public SecretKey getPrivateKey(String privateKeyString) throws Exception {
+    public SecretKey getPrivateKey(String privateKeyString) {
         String privateKeyPEM = privateKeyString.replaceAll("\\n", "")
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")

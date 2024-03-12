@@ -1,5 +1,6 @@
 package org.digit.program.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.sanction.SanctionSearch;
 import org.digit.program.repository.querybuilder.ExchangeCodeQueryBuilder;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class SanctionRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -36,6 +38,7 @@ public class SanctionRepository {
      */
     @Transactional
     public void saveSanction(List<Sanction> sanctions) {
+        log.info("Persisting Create Sanctions");
         for (Sanction sanction : sanctions) {
             List<Object> preparedStmtList = new ArrayList<>();
             String exchangeCodeInsertQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionInsertQuery(sanction, preparedStmtList);
@@ -45,6 +48,7 @@ public class SanctionRepository {
             String sanctionInsertQuery = sanctionQueryBuilder.buildSanctionInsertQuery(sanction, preparedStmtList);
             jdbcTemplate.update(sanctionInsertQuery, preparedStmtList.toArray());
         }
+        log.info("Sanctions persisted");
     }
 
     /**
@@ -53,6 +57,7 @@ public class SanctionRepository {
      */
     @Transactional
     public void updateSanction(List<Sanction> sanctions) {
+        log.info("Persisting Sanction Update");
         for (Sanction sanction : sanctions) {
             List<Object> preparedStmtList = new ArrayList<>();
             String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
@@ -62,6 +67,7 @@ public class SanctionRepository {
             String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateQuery(sanction, preparedStmtList);
             jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
         }
+        log.info("Sanction Update persisted");
     }
 
     /**
@@ -70,6 +76,7 @@ public class SanctionRepository {
      */
     @Transactional
     public void updateSanctionOnAllocationOrDisburse(List<Sanction> sanctions) {
+        log.info("Persisting Sanction Update on Allocation or Disburse");
         for (Sanction sanction : sanctions) {
             List<Object> preparedStmtList = new ArrayList<>();
             String exchangeCodeUpdateQuery = exchangeCodeQueryBuilder.buildExchangeCodeSanctionUpdateQuery(sanction, preparedStmtList);
@@ -79,7 +86,7 @@ public class SanctionRepository {
             String sanctionUpdateQuery = sanctionQueryBuilder.buildSanctionUpdateOnAllocationOrDisburseQuery(sanction, preparedStmtList);
             jdbcTemplate.update(sanctionUpdateQuery, preparedStmtList.toArray());
         }
-
+        log.info("Sanction Update on Allocation or Disburse persisted");
     }
 
     /**

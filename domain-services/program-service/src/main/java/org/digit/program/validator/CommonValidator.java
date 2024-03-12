@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.Action;
 import org.digit.program.models.RequestHeader;
-import org.digit.program.repository.ProgramRepository;
 import org.digit.program.utils.CommonUtil;
 import org.digit.program.utils.MdmsUtil;
 import org.egov.mdms.model.MdmsResponse;
@@ -44,7 +43,7 @@ public class CommonValidator {
             throw new CustomException("ACTION_ERROR", "Action in request header should be same as url");
         if (!messageType.equalsIgnoreCase(requestHeader.getMessageType().toString()))
             throw new CustomException("MESSAGE_TYPE_ERROR", "MessageType in request header should be same as url");
-        log.debug("Validated request header for {} {}", messageType, action);
+        log.info("Validated request header for {} {}", messageType, action);
     }
 
     /**

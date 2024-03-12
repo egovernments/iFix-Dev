@@ -1,5 +1,6 @@
 package org.digit.program.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.sanction.Sanction;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
+@Slf4j
 public class DisburseRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -64,6 +66,10 @@ public class DisburseRepository {
                 saveDisburse(childDisbursement, disbursement.getId(), false);
             }
         }
+        if (Boolean.TRUE.equals(isRoot))
+            log.debug("Saved parent Disbursement for id : {}", disbursement.getId());
+        else
+            log.debug("Saved child Disbursement for id : {}", disbursement.getId());
     }
 
     /**
@@ -82,6 +88,7 @@ public class DisburseRepository {
                 updateDisburse(childDisbursement, isOnCreate);
             }
         }
+        log.debug("Updated Parent/Child Disbursement for id : {}", disbursement.getId());
     }
 
     /**
@@ -91,9 +98,11 @@ public class DisburseRepository {
      */
     @Transactional
     public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+
         if (sanction != null)
             sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         updateDisburse(disbursement, true);
+        log.info("Persisted disbursement update with id : {}", disbursement.getId());
     }
 
     /**
@@ -106,6 +115,7 @@ public class DisburseRepository {
         if (sanction != null)
             sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         saveDisburse(disbursement, null, true);
+        log.info("Persisted disbursement with id : {}", disbursement.getId());
     }
 
     /**
@@ -114,6 +124,7 @@ public class DisburseRepository {
      * @return
      */
     public List<Disbursement> searchDisbursements(DisburseSearch disburseSearch) {
+        log.info("Searching for disbursements");
         List<Object> preparedStmtList = new ArrayList<>();
         List<Disbursement> disbursements;
         disburseSearch.setPagination(commonUtil.enrichSearch(disburseSearch.getPagination()));
@@ -125,13 +136,12 @@ public class DisburseRepository {
             return disbursements;
         }
         return setChildDisbursements(disbursements);
-
     }
 
     /**
-     * Sets child disbursement for disbursement search
-     * @param disbursements
-     * @return
+     * Set child disbursements for the given list of disbursements.
+     * @param  disbursements  the list of disbursements
+     * @return                the updated list of disbursements
      */
     private List<Disbursement> setChildDisbursements(List<Disbursement> disbursements) {
         List<String> parentIds = disbursements.stream().map(Disbursement::getId).collect(Collectors.toList());

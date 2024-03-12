@@ -36,6 +36,7 @@ public class ErrorHandler {
         commonUtil.updateUri(programRequest.getHeader());
         try {
             dispatcherUtil.dispatchOnProgram(programRequest);
+            log.info("Program Error dispatched");
         } catch (Exception e) {
             log.error("Error while dispatching program", e);
             producer.push(configs.getErrorTopic(), programRequest);
@@ -46,6 +47,7 @@ public class ErrorHandler {
         log.info("Handling Program Reply Error");
         programRequest.getProgram().setStatus(setErrorStatus(programRequest.getProgram().getStatus(), exception));
         producer.push(configs.getErrorTopic(), programRequest);
+        log.info("Program Reply Error pushed to error topic");
     }
 
     public void handleSanctionError(SanctionRequest sanctionRequest, CustomException exception) {
@@ -54,6 +56,7 @@ public class ErrorHandler {
             sanction.setStatus(setErrorStatus(sanction.getStatus(), exception));
         }
         producer.push(configs.getErrorTopic(), sanctionRequest);
+        log.info("Sanction Error pushed to error topic");
     }
 
     public void handleAllocationError(AllocationRequest allocationRequest, CustomException exception) {
@@ -62,6 +65,7 @@ public class ErrorHandler {
             allocation.setStatus(setErrorStatus(allocation.getStatus(), exception));
         }
         producer.push(configs.getErrorTopic(), allocationRequest);
+        log.info("Allocation Error pushed to error topic");
     }
 
     public void handleDisburseError(DisbursementRequest disbursementRequest, CustomException exception) {
@@ -73,8 +77,9 @@ public class ErrorHandler {
         commonUtil.updateUri(disbursementRequest.getHeader());
         try {
             dispatcherUtil.dispatchDisburse(disbursementRequest);
+            log.info("Disburse Error dispatched");
         } catch (Exception e) {
-            log.error("Error while dispatching disbursement", e);
+            log.error("Error while dispatching error disbursement", e);
             producer.push(configs.getErrorTopic(), disbursementRequest);
         }
     }
@@ -86,6 +91,7 @@ public class ErrorHandler {
             disbursement.setStatus(setErrorStatus(disbursement.getStatus(), exception));
         }
         producer.push(configs.getErrorTopic(), disbursementRequest);
+        log.info("Disburse Reply Error pushed to error topic");
     }
 
     /**

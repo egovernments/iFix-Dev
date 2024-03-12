@@ -45,7 +45,7 @@ public class ProgramValidator {
         } else {
             validateForUpdate(program, isOnProgramCreate);
         }
-        log.debug("Validated program for {}", program.getName());
+        log.info("Validated program for {}", program.getName());
     }
 
     /**

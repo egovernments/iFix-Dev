@@ -1,5 +1,6 @@
 package org.digit.program.validator;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.program.constants.Status;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class DisbursementValidator {
 
     private final DisburseRepository disburseRepository;
@@ -31,6 +33,7 @@ public class DisbursementValidator {
      * @param isCreate
      */
     public void validateDisbursement(Disbursement disbursement, Boolean isCreate, Boolean isOnDisburseCreate) {
+        log.info("Validating disbursement");
         List<Disbursement> childDisbursements = disbursement.getDisbursements();
         if (childDisbursements == null || childDisbursements.isEmpty())
             throw new CustomException("CHILD_DISBURSEMENT_ERROR", "Child disbursements should not be null or empty");
@@ -47,6 +50,7 @@ public class DisbursementValidator {
 
         if (Boolean.TRUE.equals(isOnDisburseCreate))
             validateTransactionId(disbursement);
+        log.info("Validation of disbursement completed");
     }
 
     /**

@@ -69,9 +69,10 @@ public class AllocationService {
             allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), true);
             commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
             enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
-            List<Sanction> sanctions = calculationUtil.calculateAndReturnSanction(allocationRequest.getAllocation().getChildren());
+            List<Sanction> sanctions = calculationUtil.calculateAndReturnSanctionForAllocation(allocationRequest.getAllocation().getChildren());
             allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocation().getChildren(), sanctions);
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
+            log.info("Allocation created successfully");
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
@@ -90,6 +91,7 @@ public class AllocationService {
             enrichmentService.enrichAllocationUpdate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
             allocationRepository.updateAllocation(allocationRequest.getAllocation().getChildren());
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
+            log.info("Allocation updated successfully");
         } catch (CustomException exception) {
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
@@ -107,6 +109,7 @@ public class AllocationService {
         log.info("Search Allocation");
         commonValidator.validateRequest(allocationSearchRequest.getHeader(), action, messageType);
         List<Allocation> allocations = allocationRepository.searchAllocation(allocationSearchRequest.getAllocationSearch());
+        log.info("Found {} allocations", allocations.size());
         return AllocationResponse.builder().header(allocationSearchRequest.getHeader())
                 .allocations(allocations).build();
     }

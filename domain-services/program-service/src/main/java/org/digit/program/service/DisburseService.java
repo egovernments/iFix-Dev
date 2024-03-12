@@ -81,6 +81,7 @@ public class DisburseService {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
                 onDisburseCreate(disbursementRequestFromAdapter);
             }
+            log.info("Disburse created successfully");
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
@@ -103,6 +104,7 @@ public class DisburseService {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
                 onDisburseUpdate(disbursementRequestFromAdapter);
             }
+            log.info("Disburse updated successfully");
         } catch (CustomException exception) {
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
@@ -120,6 +122,7 @@ public class DisburseService {
         log.info("Search Disburse");
         commonValidator.validateRequest(disburseSearchRequest.getHeader(), action, messageType);
         List<Disbursement> disbursements = disburseRepository.searchDisbursements(disburseSearchRequest.getDisburseSearch());
+        log.info("Found {} disbursements", disbursements.size());
         encryptionService.getDecryptedDisbursement(disbursements);
         return DisburseSearchResponse.builder().header(disburseSearchRequest.getHeader())
                 .disbursements(disbursements).build();
@@ -141,6 +144,7 @@ public class DisburseService {
                     disbursementRequest.getHeader().getSenderId());
             disburseRepository.updateDisburseAndSanction(disbursement, sanction);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
+            log.info("On Disburse created successfully");
         } catch (CustomException exception) {
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
 
@@ -160,6 +164,7 @@ public class DisburseService {
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader().getSenderId(), true);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
+            log.info("On Disburse updated successfully");
         } catch (CustomException exception) {
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }

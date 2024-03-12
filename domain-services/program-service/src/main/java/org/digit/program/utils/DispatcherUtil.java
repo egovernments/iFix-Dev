@@ -56,6 +56,7 @@ public class DispatcherUtil {
      * @param programRequest
      */
     public void dispatchOnProgram (ProgramRequest programRequest) {
+        log.info("Dispatching On Program");
         String message;
         try {
             message = mapper.writeValueAsString(programRequest.getProgram());
@@ -64,8 +65,8 @@ public class DispatcherUtil {
             throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (!commonUtil.isSameDomain(programRequest.getHeader().getReceiverId(), configs.getDomain()))
-            forwardMessage(programRequest.getSignature(),
-                    programRequest.getHeader(), message);
+            forwardMessage(programRequest.getSignature(), programRequest.getHeader(), message);
+        log.info("On Program Successfully Dispatched");
     }
 
     /**
@@ -89,6 +90,7 @@ public class DispatcherUtil {
      * @param sanctionRequest
      */
     public void dispatchOnSanction (SanctionRequest sanctionRequest) {
+        log.info("Dispatching On Sanction");
         String message;
         try {
             message = mapper.writeValueAsString(sanctionRequest.getSanction());
@@ -96,8 +98,8 @@ public class DispatcherUtil {
             throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
         }
         if (!commonUtil.isSameDomain(sanctionRequest.getHeader().getReceiverId(), configs.getDomain()))
-            forwardMessage(sanctionRequest.getSignature(),
-                    sanctionRequest.getHeader(), message);
+            forwardMessage(sanctionRequest.getSignature(), sanctionRequest.getHeader(), message);
+        log.info("On Sanction Successfully Dispatched");
     }
 
     /**
@@ -105,6 +107,7 @@ public class DispatcherUtil {
      * @param allocationRequest
      */
     public void dispatchOnAllocation (AllocationRequest allocationRequest) {
+        log.info("Dispatching On Allocation");
         String message;
         try {
             message = mapper.writeValueAsString(allocationRequest.getAllocation());
@@ -114,6 +117,7 @@ public class DispatcherUtil {
         if (!commonUtil.isSameDomain(allocationRequest.getHeader().getReceiverId(), configs.getDomain()))
             forwardMessage(allocationRequest.getSignature(),
                     allocationRequest.getHeader(), message);
+        log.info("On Allocation Successfully Dispatched");
     }
 
     /**
@@ -122,14 +126,18 @@ public class DispatcherUtil {
      * @return
      */
     public DisbursementRequest dispatchDisburse (DisbursementRequest disbursementRequest) {
+        log.info("Dispatching Disbursement");
         Object response = null;
         if (commonUtil.isSameDomain(disbursementRequest.getHeader().getReceiverId(), configs.getDomain())) {
+            log.info("Dispatching Disbursement to Adapter");
             response = forwardToAdapter(disbursementRequest);
             if (disbursementRequest.getHeader().getMessageType().equals(MessageType.DISBURSE)) {
                 DisbursementRequest disbursementReply = mapper.convertValue(response, DisbursementRequest.class);
+                log.info("Disbursement Successfully Dispatched");
                 return disbursementReply;
             }
         } else {
+            log.info("Forwarding Disbursement to Exchange");
             String message;
             try {
                 message = mapper.writeValueAsString(disbursementRequest.getDisbursement());
@@ -139,6 +147,7 @@ public class DispatcherUtil {
              forwardMessage(disbursementRequest.getSignature(),
                     disbursementRequest.getHeader(), message);
         }
+        log.info("Disbursement Successfully Dispatched");
         return null;
     }
 
@@ -156,8 +165,7 @@ public class DispatcherUtil {
                 .message(message).build();
         StringBuilder url = new StringBuilder(configs.getExchangeHost()).append(configs.getExchangePath())
                 .append(requestMessage.getHeader().getMessageType().toString());
-        Object response = restRepo.fetchResult(url, requestMessage);
-        return response;
+        return restRepo.fetchResult(url, requestMessage);
     }
 
     /**
@@ -169,7 +177,6 @@ public class DispatcherUtil {
         StringBuilder url = new StringBuilder(configs.getAdapterHost()).append(configs.getAdapterPath())
                 .append(disbursementRequest.getHeader().getMessageType().toString()).append("/_")
                 .append(disbursementRequest.getHeader().getAction().toString());
-        Object response = restRepo.fetchResult(url, disbursementRequest);
-        return response;
+        return restRepo.fetchResult(url, disbursementRequest);
     }
 }

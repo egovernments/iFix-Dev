@@ -59,13 +59,14 @@ public class SanctionService {
      * @param sanctionRequest
      */
     public SanctionRequest createSanction(SanctionRequest sanctionRequest) {
-        log.info("createSanction");
+        log.info("Creating Sanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), true);
             commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
             enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader());
             sanctionRepository.saveSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
+            log.info("Successfully Created Sanction");
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
@@ -84,6 +85,7 @@ public class SanctionService {
             enrichmentService.enrichSanctionUpdate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader().getSenderId());
             sanctionRepository.updateSanction(sanctionRequest.getSanction().getChildren());
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
+            log.info("Successfully Updated Sanction");
         } catch (CustomException exception) {
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
@@ -102,7 +104,7 @@ public class SanctionService {
         List<Sanction> sanctions;
         commonValidator.validateRequest(sanctionSearchRequest.getHeader(), action, messageType);
         sanctions = sanctionRepository.searchSanction(sanctionSearchRequest.getSanctionSearch());
+        log.info("Found {} sanctions", sanctions.size());
         return SanctionSearchResponse.builder().header(sanctionSearchRequest.getHeader()).sanctions(sanctions).build();
     }
-
 }

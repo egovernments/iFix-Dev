@@ -39,8 +39,7 @@ public class CalculationUtil {
     public Sanction calculateAndReturnSanctionForOnDisburse(Disbursement disbursement, String senderId) {
         if (!disbursement.getStatus().getStatusCode().equals(Status.FAILED))
             return null;
-
-        log.info("calculateSanctionAmount");
+        log.info("Calculating Sanction for on disburse");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
         Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
         sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
@@ -70,7 +69,7 @@ public class CalculationUtil {
             }
         }
         Sanction sanction = null;
-        log.info("calculateSanctionAmount");
+        log.info("Calculating Sanction for disburse");
         if (disbursement.getSanctionId() != null) {
             SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
             sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
@@ -99,6 +98,7 @@ public class CalculationUtil {
         sanction.setAvailableAmount(sanction.getAvailableAmount() - disbursement.getGrossAmount());
 
         sanction.setAuditDetails(enrichmentService.getAuditDetails(senderId, sanction.getAuditDetails()));
+        log.info("Sanction calculated for disburse");
         return sanction;
     }
 
@@ -108,8 +108,8 @@ public class CalculationUtil {
      * @param allocations
      * @return
      */
-    public List<Sanction> calculateAndReturnSanction(List<Allocation> allocations) {
-        log.info("calculateSanctionAmount");
+    public List<Sanction> calculateAndReturnSanctionForAllocation(List<Allocation> allocations) {
+        log.info("Calculating Sanction for allocation");
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
         Map<String, Sanction> sanctionIdVsSanction = sanctionRepository.searchSanction(SanctionSearch.builder()
                 .ids(new ArrayList<>(sanctionIds)).build()).stream().collect(Collectors.toMap(Sanction::getId, sanction -> sanction));
@@ -122,6 +122,7 @@ public class CalculationUtil {
                 sanctionIdVsSanction.get(allocation.getSanctionId()).setAvailableAmount(sanctionIdVsSanction.get(allocation.getSanctionId()).getAvailableAmount() - allocation.getGrossAmount());
             }
         }
+        log.info("Sanction calculated for allocation");
         return new ArrayList<>(sanctionIdVsSanction.values());
     }
 }
