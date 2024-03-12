@@ -75,7 +75,7 @@ public class SanctionValidator {
                 !sanction.getId().isEmpty()).map(Sanction::getId).collect(Collectors.toSet());
         if (!idsFromRequest.isEmpty()) {
             List<Sanction> existingSanctions = sanctionRepository.searchSanction(SanctionSearch.builder()
-                    .ids(new ArrayList<>(idsFromRequest)).build());
+                    .ids(new ArrayList<>(idsFromRequest)).build(), false);
             if (!existingSanctions.isEmpty()) {
                 List<String> ids = existingSanctions.stream().map(Sanction::getId).collect(Collectors.toList());
                 throw new CustomException("DUPLICATE_SANCTION_ID", "Duplicate sanction id(s): " + ids);
@@ -97,7 +97,7 @@ public class SanctionValidator {
             }
         }
         List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
-                .ids(new ArrayList<>(sanctionIds)).build());
+                .ids(new ArrayList<>(sanctionIds)).build(), false);
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
             throw new CustomException("NO_SANCTIONS_FOUND", "No sanction found for id(s): " + sanctionIds);

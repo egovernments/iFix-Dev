@@ -103,7 +103,7 @@ public class SanctionService {
         log.info("searchSanction");
         List<Sanction> sanctions;
         commonValidator.validateRequest(sanctionSearchRequest.getHeader(), action, messageType);
-        sanctions = sanctionRepository.searchSanction(sanctionSearchRequest.getSanctionSearch());
+        sanctions = sanctionRepository.searchSanction(sanctionSearchRequest.getSanctionSearch(), true);
         log.info("Found {} sanctions", sanctions.size());
         return SanctionSearchResponse.builder().header(sanctionSearchRequest.getHeader()).sanctions(sanctions).build();
     }

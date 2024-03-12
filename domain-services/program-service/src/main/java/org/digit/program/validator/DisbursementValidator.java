@@ -115,7 +115,7 @@ public class DisbursementValidator {
                     throw new CustomException("DISBURSEMENT_SANCTION_ID_ERROR", "Disbursement sanction id should be same as child disbursement sanction id");
             }
             List<Sanction> sanctions = sanctionRepository.searchSanction(SanctionSearch.builder()
-                    .ids(Collections.singletonList(disbursement.getSanctionId())).build());
+                    .ids(Collections.singletonList(disbursement.getSanctionId())).build(), false);
             if (sanctions.isEmpty())
                 throw new CustomException("NO_SANCTION_FOUND", "No sanction found for id: " + disbursement.getSanctionId());
             if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())

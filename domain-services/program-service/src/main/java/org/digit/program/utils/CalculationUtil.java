@@ -41,7 +41,7 @@ public class CalculationUtil {
             return null;
         log.info("Calculating Sanction for on disburse");
         SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
-        Sanction sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
+        Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
         sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
         enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
         return sanction;
@@ -72,11 +72,11 @@ public class CalculationUtil {
         log.info("Calculating Sanction for disburse");
         if (disbursement.getSanctionId() != null) {
             SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
-            sanction = sanctionRepository.searchSanction(sanctionSearch).get(0);
+            sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
         } else {
             SanctionSearch sanctionSearch = SanctionSearch.builder().locationCode(disbursement.getLocationCode())
                     .programCode(disbursement.getProgramCode()).build();
-            List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch);
+            List<Sanction> sanctions = sanctionRepository.searchSanction(sanctionSearch, false);
 
             for (Sanction sanctionFromDB : sanctions) {
                 if (sanctionFromDB.getAvailableAmount().compareTo(disbursement.getGrossAmount()) >= 0) {
@@ -112,7 +112,7 @@ public class CalculationUtil {
         log.info("Calculating Sanction for allocation");
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
         Map<String, Sanction> sanctionIdVsSanction = sanctionRepository.searchSanction(SanctionSearch.builder()
-                .ids(new ArrayList<>(sanctionIds)).build()).stream().collect(Collectors.toMap(Sanction::getId, sanction -> sanction));
+                .ids(new ArrayList<>(sanctionIds)).build(), false).stream().collect(Collectors.toMap(Sanction::getId, sanction -> sanction));
         for (Allocation allocation : allocations) {
             if (allocation.getType().equals(AllocationType.ALLOCATION)) {
                 sanctionIdVsSanction.get(allocation.getSanctionId()).setAllocatedAmount(sanctionIdVsSanction.get(allocation.getSanctionId()).getAllocatedAmount() + allocation.getGrossAmount());

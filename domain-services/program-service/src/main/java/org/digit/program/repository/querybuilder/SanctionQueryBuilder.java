@@ -73,7 +73,7 @@ public class SanctionQueryBuilder {
         return SANCTION_UPDATE_ON_ALLOCATION_QUERY;
     }
 
-    public String buildSanctionSearchQuery(SanctionSearch sanctionSearch, List<Object> preparedStmtList) {
+    public String buildSanctionSearchQuery(SanctionSearch sanctionSearch, List<Object> preparedStmtList, Boolean keepPagination) {
         StringBuilder sanctionSearchQuery = new StringBuilder(SANCTION_SEARCH_QUERY);
 
         List<String> ids = sanctionSearch.getIds();
@@ -93,12 +93,15 @@ public class SanctionQueryBuilder {
             preparedStmtList.add(sanctionSearch.getProgramCode());
         }
 
-        sanctionSearchQuery.append(" ORDER BY ? ");
-        preparedStmtList.add(sanctionSearch.getPagination().getSortBy());
-        sanctionSearchQuery.append(sanctionSearch.getPagination().getSortOrder().toString());
-        sanctionSearchQuery.append(" LIMIT ? OFFSET ?");
-        preparedStmtList.add(sanctionSearch.getPagination().getLimit());
-        preparedStmtList.add(sanctionSearch.getPagination().getOffset());
+        if (Boolean.TRUE.equals(keepPagination)) {
+            sanctionSearchQuery.append(" ORDER BY ? ");
+            preparedStmtList.add(sanctionSearch.getPagination().getSortBy());
+            sanctionSearchQuery.append(sanctionSearch.getPagination().getSortOrder().toString());
+            sanctionSearchQuery.append(" LIMIT ? OFFSET ?");
+            preparedStmtList.add(sanctionSearch.getPagination().getLimit());
+            preparedStmtList.add(sanctionSearch.getPagination().getOffset());
+        }
+
 
         return sanctionSearchQuery.toString();
     }

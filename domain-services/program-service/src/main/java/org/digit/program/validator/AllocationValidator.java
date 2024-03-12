@@ -77,7 +77,7 @@ public class AllocationValidator {
     public List<Sanction> validateSanction(List<Allocation> allocations) {
         Set<String> sanctionIds = allocations.stream().map(Allocation::getSanctionId).collect(Collectors.toSet());
         List<Sanction> sanctionFromSearch = sanctionRepository.searchSanction(SanctionSearch.builder()
-                .ids(new ArrayList<>(sanctionIds)).programCode(allocations.get(0).getProgramCode()).build());
+                .ids(new ArrayList<>(sanctionIds)).programCode(allocations.get(0).getProgramCode()).build(), false);
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
             throw new CustomException("SANCTIONS_NOT_FOUND", "No sanction found for id(s): " + sanctionIds);

@@ -94,10 +94,10 @@ public class SanctionRepository {
      * @param sanctionSearch
      * @return
      */
-    public List<Sanction> searchSanction(SanctionSearch sanctionSearch) {
+    public List<Sanction> searchSanction(SanctionSearch sanctionSearch, Boolean keepPagination) {
         List<Object> preparedStmtList = new ArrayList<>();
         sanctionSearch.setPagination(commonUtil.enrichSearch(sanctionSearch.getPagination()));
-        String sanctionSearchQuery = sanctionQueryBuilder.buildSanctionSearchQuery(sanctionSearch, preparedStmtList);
+        String sanctionSearchQuery = sanctionQueryBuilder.buildSanctionSearchQuery(sanctionSearch, preparedStmtList, keepPagination);
         return jdbcTemplate.query(sanctionSearchQuery, preparedStmtList.toArray(), sanctionRowMapper);
     }
 }
