@@ -30,28 +30,28 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
         while (rs.next()) {
 
             Program program = new Program();
-            String id = rs.getString("id");
-            String locationCode = rs.getString("location_code");
-            String programCode = rs.getString("program_code");
-            String name = rs.getString("name");
-            String parentId = rs.getString("parent_id");
-            String description = rs.getString("description");
-            long startDate = rs.getLong("start_date");
-            long endDate = rs.getLong("end_date");
-            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
-            String createdBy = rs.getString("created_by");
-            String lastModifiedBy = rs.getString("last_modified_by");
-            Long createdTime = rs.getLong("created_time");
-            Long lastModifiedTime = rs.getLong("last_modified_time");
+            String id = rs.getString("eg_program_id");
+            String locationCode = rs.getString("eg_program_location_code");
+            String programCode = rs.getString("eg_program_code");
+            String name = rs.getString("eg_program_name");
+            String parentId = rs.getString("eg_program_parent_id");
+            String description = rs.getString("eg_program_description");
+            long startDate = rs.getLong("eg_program_start_date");
+            long endDate = rs.getLong("eg_program_end_date");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "eg_program_additional_details");
+            String createdBy = rs.getString("eg_program_created_by");
+            String lastModifiedBy = rs.getString("eg_program_last_modified_by");
+            Long createdTime = rs.getLong("eg_program_created_time");
+            Long lastModifiedTime = rs.getLong("eg_program_last_modified_time");
 
-            String functionCode = rs.getString("function_code");
-            String administrationCode = rs.getString("administration_code");
-            String recipientSegmentCode = rs.getString("recipient_segment_code");
-            String economicSegmentCode = rs.getString("economic_segment_code");
-            String sourceOfFundCode = rs.getString("source_of_fund_code");
-            String targetSegmentCode = rs.getString("target_segment_code");
-            String status = rs.getString("status");
-            String statusMessage = rs.getString("status_message");
+            String functionCode = rs.getString("eg_program_message_codes_function_code");
+            String administrationCode = rs.getString("eg_program_message_codes_administration_code");
+            String recipientSegmentCode = rs.getString("eg_program_message_codes_recipient_segment_code");
+            String economicSegmentCode = rs.getString("eg_program_message_codes_economic_segment_code");
+            String sourceOfFundCode = rs.getString("eg_program_message_codes_source_of_fund_code");
+            String targetSegmentCode = rs.getString("eg_program_message_codes_target_segment_code");
+            String status = rs.getString("eg_program_status");
+            String statusMessage = rs.getString("eg_program_status_message");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
 

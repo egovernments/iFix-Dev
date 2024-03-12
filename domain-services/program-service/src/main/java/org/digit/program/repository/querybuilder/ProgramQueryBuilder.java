@@ -14,23 +14,60 @@ import java.util.List;
 public class ProgramQueryBuilder {
 
     private final CommonUtil commonUtil;
-    public static final String PROGRAM_INSERT_QUERY = "INSERT INTO eg_program " +
-            "( id, location_code, program_code, name, parent_id, description, status, status_message, " +
+    public static final String PROGRAM_INSERT_QUERY = " INSERT INTO eg_program " +
+            " ( id, location_code, program_code, name, parent_id, description, status, status_message, " +
             " start_date, end_date, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
-    public static final String PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
+    public static final String PROGRAM_UPDATE_QUERY = " UPDATE eg_program " +
             " SET name = ?, description = ?, status = ?, status_message = ?, " +
             " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
-    public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program " +
+    public static final String ON_PROGRAM_UPDATE_QUERY = " UPDATE eg_program " +
             " SET program_code = ?, name = ?, description = ?, status = ?, status_message = ?, " +
             " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
-    public static final String PROGRAM_SEARCH_QUERY = "SELECT * FROM eg_program JOIN eg_program_message_codes " +
+    public static final String FINAL_QUERY = " SELECT * FROM eg_program JOIN eg_program_message_codes " +
             " ON eg_program.id = eg_program_message_codes.reference_id ";
+
+    public static final String PROGRAM_SEARCH_QUERY = " SELECT " +
+            "    eg_program.id AS eg_program_id, " +
+            "    eg_program.location_code AS eg_program_location_code, " +
+            "    eg_program.program_code AS eg_program_code, " +
+            "    eg_program.name AS eg_program_name, " +
+            "    eg_program.parent_id AS eg_program_parent_id, " +
+            "    eg_program.description AS eg_program_description, " +
+            "    eg_program.status AS eg_program_status, " +
+            "    eg_program.status_message AS eg_program_status_message, " +
+            "    eg_program.start_date AS eg_program_start_date, " +
+            "    eg_program.end_date AS eg_program_end_date, " +
+            "    eg_program.additional_details AS eg_program_additional_details, " +
+            "    eg_program.created_by AS eg_program_created_by, " +
+            "    eg_program.last_modified_by AS eg_program_last_modified_by, " +
+            "    eg_program.created_time AS eg_program_created_time, " +
+            "    eg_program.last_modified_time AS eg_program_last_modified_time, " +
+
+            "    eg_program_message_codes.id AS eg_program_message_codes_id, " +
+            "    eg_program_message_codes.location_code AS eg_program_message_codes_location_code, " +
+            "    eg_program_message_codes.type AS eg_program_message_codes_type, " +
+            "    eg_program_message_codes.reference_id AS eg_program_message_codes_reference_id, " +
+            "    eg_program_message_codes.function_code AS eg_program_message_codes_function_code, " +
+            "    eg_program_message_codes.administration_code AS eg_program_message_codes_administration_code, " +
+            "    eg_program_message_codes.program_code AS eg_program_message_codes_program_code, " +
+            "    eg_program_message_codes.recipient_segment_code AS eg_program_message_codes_recipient_segment_code, " +
+            "    eg_program_message_codes.economic_segment_code AS eg_program_message_codes_economic_segment_code, " +
+            "    eg_program_message_codes.source_of_fund_code AS eg_program_message_codes_source_of_fund_code, " +
+            "    eg_program_message_codes.target_segment_code AS eg_program_message_codes_target_segment_code, " +
+            "    eg_program_message_codes.created_by AS eg_program_message_codes_created_by, " +
+            "    eg_program_message_codes.last_modified_by AS eg_program_message_codes_last_modified_by, " +
+            "    eg_program_message_codes.created_time AS eg_program_message_codes_created_time, " +
+            "    eg_program_message_codes.last_modified_time AS eg_program_message_codes_last_modified_time " +
+            " FROM " +
+            "    eg_program " +
+            " JOIN "  +
+            "    eg_program_message_codes ON eg_program.id = eg_program_message_codes.reference_id";
 
     public ProgramQueryBuilder(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;

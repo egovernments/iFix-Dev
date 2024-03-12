@@ -11,24 +11,23 @@ import java.util.List;
 @Component
 public class ExchangeCodeQueryBuilder {
 
-    public static final String EXCHANGE_CODE_INSERT_QUERY = "" +
-            "INSERT INTO eg_program_message_codes " +
-            " (id, location_code, reference_id, function_code, administration_code, program_code, " +
+    public static final String EXCHANGE_CODE_INSERT_QUERY = " INSERT INTO eg_program_message_codes " +
+            " ( id, location_code, reference_id, function_code, administration_code, program_code, " +
             " recipient_segment_code, economic_segment_code, source_of_fund_code, target_segment_code, " +
-            " created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
-    public static final String EXCHANGE_CODE_UPDATE_QUERY = "UPDATE eg_program_message_codes " +
+    public static final String EXCHANGE_CODE_UPDATE_QUERY = " UPDATE eg_program_message_codes " +
             " SET function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
             " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
             " last_modified_by = ?, last_modified_time = ? " +
-            " WHERE id = ?";
+            " WHERE id = ? ";
 
-    public static final String ON_PROGRAM_UPDATE_QUERY = "UPDATE eg_program_message_codes " +
-            "SET program_code = ?, function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
-            "economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
-            "last_modified_by = ?, last_modified_time = ? " +
-            "WHERE id = ?";
+    public static final String ON_PROGRAM_UPDATE_QUERY = " UPDATE eg_program_message_codes " +
+            " SET program_code = ?, function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
+            " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
+            " last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
 
     public String buildExchangeCodeProgramInsertQuery(Program program, List<Object> preparedStmtList) {
         preparedStmtList.add(program.getId());
@@ -49,7 +48,7 @@ public class ExchangeCodeQueryBuilder {
     }
 
     public String buildExchangeCodeProgramUpdateQuery(Program program, List<Object> preparedStmtList, Boolean isOnProgramCreate) {
-        if (isOnProgramCreate) {
+        if (Boolean.TRUE.equals(isOnProgramCreate)) {
             preparedStmtList.add(program.getProgramCode());
         }
         preparedStmtList.add(program.getFunctionCode());
@@ -61,7 +60,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());
-        return isOnProgramCreate ? ON_PROGRAM_UPDATE_QUERY : EXCHANGE_CODE_UPDATE_QUERY;
+        return Boolean.TRUE.equals(isOnProgramCreate) ? ON_PROGRAM_UPDATE_QUERY : EXCHANGE_CODE_UPDATE_QUERY;
     }
 
     public String buildExchangeCodeSanctionInsertQuery (Sanction sanction, List<Object> preparedStmtList) {

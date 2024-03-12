@@ -16,27 +16,63 @@ public class DisburseQueryBuilder {
     private final CommonUtil commonUtil;
 
 
-    public static final String DISBURSE_INSERT_QUERY = "INSERT INTO eg_program_disburse " +
-            "( id, location_code, program_code, parent_id, target_id, sanction_id, transaction_id, account_code, " +
+    public static final String DISBURSE_INSERT_QUERY = " INSERT INTO eg_program_disburse " +
+            " ( id, location_code, program_code, parent_id, target_id, sanction_id, transaction_id, account_code, " +
             " individual, net_amount, gross_amount, status, status_message, additional_details, " +
             " created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
-    public static final String DISBURSE_UPDATE_QUERY = "UPDATE eg_program_disburse " +
+    public static final String DISBURSE_UPDATE_QUERY = " UPDATE eg_program_disburse " +
             " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
-            " WHERE id = ?";
+            " WHERE id = ? ";
 
-    public static final String ON_DISBURSE_CREATE_QUERY = "UPDATE eg_program_disburse " +
+    public static final String ON_DISBURSE_CREATE_QUERY = " UPDATE eg_program_disburse " +
             " SET transaction_id = ?, status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, " +
             " last_modified_time = ? " +
-            " WHERE id = ?";
+            " WHERE id = ? ";
 
-    public static final String DISBURSE_SEARCH_QUERY = "SELECT * FROM eg_program_disburse JOIN eg_program_message_codes " +
-            " ON eg_program_disburse.id = eg_program_message_codes.reference_id ";
+    public static final String DISBURSE_SEARCH_QUERY = " SELECT " +
+            "  pd.id AS disburse_id, " +
+            "  pd.location_code AS disburse_location_code, " +
+            "  pd.program_code AS disburse_program_code, " +
+            "  pd.parent_id AS disburse_parent_id, " +
+            "  pd.target_id AS disburse_target_id, " +
+            "  pd.transaction_id AS disburse_transaction_id, " +
+            "  pd.sanction_id AS disburse_sanction_id, " +
+            "  pd.account_code AS disburse_account_code, " +
+            "  pd.individual AS disburse_individual, " +
+            "  pd.net_amount AS disburse_net_amount, " +
+            "  pd.gross_amount AS disburse_gross_amount, " +
+            "  pd.status AS disburse_status, " +
+            "  pd.status_message AS disburse_status_message, " +
+            "  pd.additional_details AS disburse_additional_details, " +
+            "  pd.created_by AS disburse_created_by, " +
+            "  pd.last_modified_by AS disburse_last_modified_by, " +
+            "  pd.created_time AS disburse_created_time, " +
+            "  pd.last_modified_time AS disburse_last_modified_time, " +
 
-    public static final String TRANSACTION_LOGS_INSERT_QUERY = "INSERT INTO eg_program_transaction_logs " +
-            " (id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "  pmc.id AS message_code_id, " +
+            "  pmc.location_code AS message_location_code, " +
+            "  pmc.type AS message_type, " +
+            "  pmc.reference_id AS message_reference_id, " +
+            "  pmc.function_code AS message_function_code, " +
+            "  pmc.administration_code AS message_administration_code, " +
+            "  pmc.program_code AS message_program_code, " +
+            "  pmc.recipient_segment_code AS message_recipient_segment_code, " +
+            "  pmc.economic_segment_code AS message_economic_segment_code, " +
+            "  pmc.source_of_fund_code AS message_source_of_fund_code, " +
+            "  pmc.target_segment_code AS message_target_segment_code, " +
+            "  pmc.created_by AS message_created_by, " +
+            "  pmc.last_modified_by AS message_last_modified_by, " +
+            "  pmc.created_time AS message_created_time, " +
+            "  pmc.last_modified_time AS message_last_modified_time " +
+
+            " FROM eg_program_disburse pd " +
+            " JOIN eg_program_message_codes pmc ON pd.id = pmc.reference_id  ";
+
+    public static final String TRANSACTION_LOGS_INSERT_QUERY = " INSERT INTO eg_program_transaction_logs " +
+            " ( id, location_code, program_code, sanction_id, disburse_id, type, amount, created_by, created_time ) " +
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public DisburseQueryBuilder(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
@@ -96,35 +132,35 @@ public class DisburseQueryBuilder {
         List<String> ids = disburseSearch.getIds();
         if (ids != null && !ids.isEmpty()) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.id IN (").append(createQuery(ids)).append(")");
+            disburseSearchQuery.append(" pd.id IN (").append(createQuery(ids)).append(")");
             addToPreparedStatement(preparedStmtList, ids);
         }
         if (disburseSearch.getLocationCode() != null) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.location_code = ? ");
+            disburseSearchQuery.append(" pd.location_code = ? ");
             preparedStmtList.add(disburseSearch.getLocationCode());
         }
         if (disburseSearch.getProgramCode() != null) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.program_code = ? ");
+            disburseSearchQuery.append(" pd.program_code = ? ");
             preparedStmtList.add(disburseSearch.getProgramCode());
         }
         if (disburseSearch.getTransactionId() != null) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.transaction_id = ? ");
+            disburseSearchQuery.append(" pd.transaction_id = ? ");
             preparedStmtList.add(disburseSearch.getTransactionId());
         }
         if (disburseSearch.getTargetId() != null) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.target_id = ? ");
+            disburseSearchQuery.append(" pd.target_id = ? ");
             preparedStmtList.add(disburseSearch.getTargetId());
         }
         if (parentIds == null || parentIds.isEmpty()) {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.parent_id IS NULL ");
+            disburseSearchQuery.append(" pd.parent_id IS NULL ");
         } else {
             addClauseIfRequired(disburseSearchQuery, preparedStmtList);
-            disburseSearchQuery.append(" eg_program_disburse.parent_id IN (").append(createQuery(parentIds)).append(")");
+            disburseSearchQuery.append(" pd.parent_id IN (").append(createQuery(parentIds)).append(")");
             addToPreparedStatement(preparedStmtList, parentIds);
         }
 

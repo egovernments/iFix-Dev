@@ -1,1 +1,0 @@
-ALTER TABLE eg_program_message_codes RENAME COLUMN parent_id TO reference_id;

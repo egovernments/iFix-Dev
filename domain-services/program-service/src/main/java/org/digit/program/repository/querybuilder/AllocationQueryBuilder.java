@@ -13,17 +13,49 @@ public class AllocationQueryBuilder {
 
     private final CommonUtil commonUtil;
 
-    public static final String ALLOCATION_INSERT_QUERY = "INSERT INTO eg_program_allocation " +
-            " (id, location_code, program_code, sanction_id, net_amount, gross_amount, status, status_message, type, " +
-            " additional_details, created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String ALLOCATION_INSERT_QUERY = " INSERT INTO eg_program_allocation " +
+            " ( id, location_code, program_code, sanction_id, net_amount, gross_amount, status, status_message, type, " +
+            " additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
-    public static final String ALLOCATION_UPDATE_QUERY = "UPDATE eg_program_allocation " +
-            "SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
-            "WHERE id = ?";
+    public static final String ALLOCATION_UPDATE_QUERY = " UPDATE eg_program_allocation " +
+            " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
+            " WHERE id = ? ";
 
-    public static final String ALLOCATION_SEARCH_QUERY = "SELECT * FROM eg_program_allocation JOIN eg_program_message_codes " +
-            "ON eg_program_allocation.id = eg_program_message_codes.reference_id ";
+    public static final String ALLOCATION_SEARCH_QUERY = " SELECT " +
+            "  pa.id AS allocation_id, " +
+            "  pa.location_code AS allocation_location_code, " +
+            "  pa.program_code AS allocation_program_code, " +
+            "  pa.sanction_id AS allocation_sanction_id, " +
+            "  pa.gross_amount AS allocation_gross_amount, " +
+            "  pa.net_amount AS allocation_net_amount, " +
+            "  pa.status AS allocation_status, " +
+            "  pa.status_message AS allocation_status_message, " +
+            "  pa.type AS allocation_type, " +
+            "  pa.additional_details AS allocation_additional_details, " +
+            "  pa.created_by AS allocation_created_by, " +
+            "  pa.last_modified_by AS allocation_last_modified_by, " +
+            "  pa.created_time AS allocation_created_time, " +
+            "  pa.last_modified_time AS allocation_last_modified_time, " +
+
+            "  pmc.id AS message_code_id, " +
+            "  pmc.location_code AS message_location_code, " +
+            "  pmc.type AS message_type, " +
+            "  pmc.reference_id AS message_reference_id, " +
+            "  pmc.function_code AS message_function_code, " +
+            "  pmc.administration_code AS message_administration_code, " +
+            "  pmc.program_code AS message_program_code, " +
+            "  pmc.recipient_segment_code AS message_recipient_segment_code, " +
+            "  pmc.economic_segment_code AS message_economic_segment_code, " +
+            "  pmc.source_of_fund_code AS message_source_of_fund_code, " +
+            "  pmc.target_segment_code AS message_target_segment_code, " +
+            "  pmc.created_by AS message_created_by, " +
+            "  pmc.last_modified_by AS message_last_modified_by, " +
+            "  pmc.created_time AS message_created_time, " +
+            "  pmc.last_modified_time AS message_last_modified_time " +
+
+            " FROM eg_program_allocation pa " +
+            " JOIN eg_program_message_codes pmc ON pa.sanction_id = pmc.reference_id ";
 
     public AllocationQueryBuilder(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
@@ -63,22 +95,22 @@ public class AllocationQueryBuilder {
         List<String> ids = allocationSearch.getIds();
         if (ids != null && !ids.isEmpty()) {
             addClauseIfRequired(allocationSearchQuery, preparedStmtList);
-            allocationSearchQuery.append(" eg_program_allocation.id IN (").append(createQuery(ids)).append(")");
+            allocationSearchQuery.append(" pa.id IN (").append(createQuery(ids)).append(")");
             addToPreparedStatement(preparedStmtList, ids);
         }
         if (allocationSearch.getLocationCode() != null) {
             addClauseIfRequired(allocationSearchQuery, preparedStmtList);
-            allocationSearchQuery.append(" eg_program_allocation.location_code = ? ");
+            allocationSearchQuery.append(" pa.location_code = ? ");
             preparedStmtList.add(allocationSearch.getLocationCode());
         }
         if (allocationSearch.getProgramCode() != null) {
             addClauseIfRequired(allocationSearchQuery, preparedStmtList);
-            allocationSearchQuery.append(" eg_program_allocation.program_code = ? ");
+            allocationSearchQuery.append(" pa.program_code = ? ");
             preparedStmtList.add(allocationSearch.getProgramCode());
         }
         if (allocationSearch.getSanctionId() != null) {
             addClauseIfRequired(allocationSearchQuery, preparedStmtList);
-            allocationSearchQuery.append(" eg_program_allocation.sanction_id = ? ");
+            allocationSearchQuery.append(" pa.sanction_id = ? ");
             preparedStmtList.add(allocationSearch.getSanctionId());
         }
         allocationSearchQuery.append(" ORDER BY ? ");

@@ -31,27 +31,27 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
         List<Sanction> sanctions = new ArrayList<>();
         while (rs.next()) {
             Sanction sanction = new Sanction();
-            String id = rs.getString("id");
-            String locationCode = rs.getString("location_code");
-            String programCode = rs.getString("program_code");
+            String id = rs.getString("sanction_id");
+            String locationCode = rs.getString("sanction_location_code");
+            String programCode = rs.getString("sanction_program_code");
             Double netAmount = rs.getDouble("net_amount");
             Double grossAmount = rs.getDouble("gross_amount");
             Double allocatedAmount = rs.getDouble("allocated_amount");
             Double availableAmount = rs.getDouble("available_amount");
-            String status = rs.getString("status");
-            String statusMessage = rs.getString("status_message");
-            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
-            String createdBy = rs.getString("created_by");
-            String lastModifiedBy = rs.getString("last_modified_by");
-            Long createdTime = rs.getLong("created_time");
-            Long lastModifiedTime = rs.getLong("last_modified_time");
+            String status = rs.getString("sanction_status");
+            String statusMessage = rs.getString("sanction_status_message");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "sanction_additional_details");
+            String createdBy = rs.getString("sanction_created_by");
+            String lastModifiedBy = rs.getString("sanction_last_modified_by");
+            Long createdTime = rs.getLong("sanction_created_time");
+            Long lastModifiedTime = rs.getLong("sanction_last_modified_time");
 
-            String functionCode = rs.getString("function_code");
-            String administrationCode = rs.getString("administration_code");
-            String recipientSegmentCode = rs.getString("recipient_segment_code");
-            String economicSegmentCode = rs.getString("economic_segment_code");
-            String sourceOfFundCode = rs.getString("source_of_fund_code");
-            String targetSegmentCode = rs.getString("target_segment_code");
+            String functionCode = rs.getString("message_function_code");
+            String administrationCode = rs.getString("message_administration_code");
+            String recipientSegmentCode = rs.getString("message_recipient_segment_code");
+            String economicSegmentCode = rs.getString("message_economic_segment_code");
+            String sourceOfFundCode = rs.getString("message_source_of_fund_code");
+            String targetSegmentCode = rs.getString("message_target_segment_code");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
 

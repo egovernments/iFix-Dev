@@ -13,10 +13,10 @@ public class SanctionQueryBuilder {
 
     private final CommonUtil commonUtil;
 
-    public static final String SANCTION_INSERT_QUERY = "INSERT INTO eg_program_sanction " +
-            "( id, location_code, program_code, net_amount, gross_amount, allocated_amount, available_amount, status, status_message, " +
-            " additional_details, created_by, last_modified_by, created_time, last_modified_time) " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+    public static final String SANCTION_INSERT_QUERY = " INSERT INTO eg_program_sanction " +
+            " ( id, location_code, program_code, net_amount, gross_amount, allocated_amount, available_amount, status, " +
+            " status_message, additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String SANCTION_UPDATE_QUERY = "UPDATE eg_program_sanction " +
             " SET status = ?, status_message = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
@@ -27,8 +27,40 @@ public class SanctionQueryBuilder {
             " last_modified_time = ? " +
             " WHERE id = ? ";
 
-    public static final String SANCTION_SEARCH_QUERY = "SELECT * FROM eg_program_sanction JOIN eg_program_message_codes " +
-            " ON eg_program_sanction.id = eg_program_message_codes.reference_id ";
+    public static final String SANCTION_SEARCH_QUERY = " SELECT " +
+            "  pmc.id AS message_code_id, " +
+            "  pmc.location_code AS message_location_code, " +
+            "  pmc.type AS message_type, " +
+            "  pmc.reference_id AS message_reference_id, " +
+            "  pmc.function_code AS message_function_code, " +
+            "  pmc.administration_code AS message_administration_code, " +
+            "  pmc.program_code AS message_program_code, " +
+            "  pmc.recipient_segment_code AS message_recipient_segment_code, " +
+            "  pmc.economic_segment_code AS message_economic_segment_code, " +
+            "  pmc.source_of_fund_code AS message_source_of_fund_code, " +
+            "  pmc.target_segment_code AS message_target_segment_code, " +
+            "  pmc.created_by AS message_created_by, " +
+            "  pmc.last_modified_by AS message_last_modified_by, " +
+            "  pmc.created_time AS message_created_time, " +
+            "  pmc.last_modified_time AS message_last_modified_time, " +
+
+            "  ps.id AS sanction_id, " +
+            "  ps.location_code AS sanction_location_code, " +
+            "  ps.program_code AS sanction_program_code, " +
+            "  ps.gross_amount, " +
+            "  ps.net_amount, " +
+            "  ps.allocated_amount, " +
+            "  ps.available_amount, " +
+            "  ps.status AS sanction_status, " +
+            "  ps.status_message AS sanction_status_message, " +
+            "  ps.additional_details AS sanction_additional_details, " +
+            "  ps.created_by AS sanction_created_by, " +
+            "  ps.last_modified_by AS sanction_last_modified_by, " +
+            "  ps.created_time AS sanction_created_time, " +
+            "  ps.last_modified_time AS sanction_last_modified_time " +
+
+            "  FROM eg_program_message_codes pmc " +
+            "  JOIN eg_program_sanction ps ON pmc.reference_id = ps.id ";
 
     public SanctionQueryBuilder(CommonUtil commonUtil) {
         this.commonUtil = commonUtil;
@@ -79,17 +111,17 @@ public class SanctionQueryBuilder {
         List<String> ids = sanctionSearch.getIds();
         if (ids != null && !ids.isEmpty()) {
             addClauseIfRequired(sanctionSearchQuery, preparedStmtList);
-            sanctionSearchQuery.append(" eg_program_sanction.id IN (").append(createQuery(ids)).append(")");
+            sanctionSearchQuery.append(" ps.id IN (").append(createQuery(ids)).append(")");
             addToPreparedStatement(preparedStmtList, ids);
         }
         if (sanctionSearch.getLocationCode() != null) {
             addClauseIfRequired(sanctionSearchQuery, preparedStmtList);
-            sanctionSearchQuery.append(" eg_program_sanction.location_code = ?");
+            sanctionSearchQuery.append(" ps.location_code = ?");
             preparedStmtList.add(sanctionSearch.getLocationCode());
         }
         if (sanctionSearch.getProgramCode() != null) {
             addClauseIfRequired(sanctionSearchQuery, preparedStmtList);
-            sanctionSearchQuery.append(" eg_program_sanction.program_code = ?");
+            sanctionSearchQuery.append(" ps.program_code = ?");
             preparedStmtList.add(sanctionSearch.getProgramCode());
         }
 

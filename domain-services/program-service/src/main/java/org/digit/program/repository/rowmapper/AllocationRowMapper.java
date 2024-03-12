@@ -29,27 +29,27 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
         List<Allocation> allocations = new ArrayList<>();
         while (rs.next()) {
             Allocation allocation = new Allocation();
-            String id = rs.getString("id");
-            String locationCode = rs.getString("location_code");
-            String programCode = rs.getString("program_code");
-            String sanctionId = rs.getString("sanction_id");
-            Double netAmount = rs.getDouble("net_amount");
-            Double grossAmount = rs.getDouble("gross_amount");
+            String id = rs.getString("allocation_id");
+            String locationCode = rs.getString("allocation_location_code");
+            String programCode = rs.getString("allocation_program_code");
+            String sanctionId = rs.getString("allocation_sanction_id");
+            Double netAmount = rs.getDouble("allocation_net_amount");
+            Double grossAmount = rs.getDouble("allocation_gross_amount");
             AllocationType allocationType = AllocationType.valueOf(rs.getString("type"));
-            String status = rs.getString("status");
-            String statusMessage = rs.getString("status_message");
-            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "additional_details");
-            String createdBy = rs.getString("created_by");
-            String lastModifiedBy = rs.getString("last_modified_by");
-            Long createdTime = rs.getLong("created_time");
-            Long lastModifiedTime = rs.getLong("last_modified_time");
+            String status = rs.getString("allocation_status");
+            String statusMessage = rs.getString("allocation_status_message");
+            JsonNode additionalDetails = commonUtil.getJsonNode(rs, "allocation_additional_details");
+            String createdBy = rs.getString("allocation_created_by");
+            String lastModifiedBy = rs.getString("allocation_last_modified_by");
+            Long createdTime = rs.getLong("allocation_created_time");
+            Long lastModifiedTime = rs.getLong("allocation_last_modified_time");
 
-            String functionCode = rs.getString("function_code");
-            String administrationCode = rs.getString("administration_code");
-            String recipientSegmentCode = rs.getString("recipient_segment_code");
-            String economicSegmentCode = rs.getString("economic_segment_code");
-            String sourceOfFundCode = rs.getString("source_of_fund_code");
-            String targetSegmentCode = rs.getString("target_segment_code");
+            String functionCode = rs.getString("message_function_code");
+            String administrationCode = rs.getString("message_administration_code");
+            String recipientSegmentCode = rs.getString("message_recipient_segment_code");
+            String economicSegmentCode = rs.getString("message_economic_segment_code");
+            String sourceOfFundCode = rs.getString("message_source_of_fund_code");
+            String targetSegmentCode = rs.getString("message_target_segment_code");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
             AuditDetails auditDetails = AuditDetails.builder().createdTime(createdTime).lastModifiedTime(lastModifiedTime).createdBy(createdBy).lastModifiedBy(lastModifiedBy).build();
