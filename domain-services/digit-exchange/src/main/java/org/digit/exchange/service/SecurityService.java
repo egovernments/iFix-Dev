@@ -111,8 +111,7 @@ public class SecurityService {
 
     public RequestMessage signRequestMessage(RequestMessage exchangeRequest) {
         try {
-            String message = extractHostUrlFromURL(exchangeRequest.getHeader().getSenderId());
-            String signedMessage = signMessage(message, getPrivateKey(config.getServerPrivateKey()));
+            String signedMessage = signMessage(exchangeRequest.getMessage(), getPrivateKey(config.getServerPrivateKey()));
             exchangeRequest.setSignature(signedMessage);
             return exchangeRequest;
         } catch (Exception e) {
@@ -131,7 +130,7 @@ public class SecurityService {
     }
     public static String extractHostUrlFromURL(String input) {
         // Regular expression pattern to match the domain with http/https
-        Pattern pattern = Pattern.compile("(https?://[a-zA-Z0-9.-]+)");
+        Pattern pattern = Pattern.compile("(https?://[a-zA-Z0-9.-]+(:\\d+)?)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
