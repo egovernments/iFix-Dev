@@ -68,7 +68,7 @@ public class AllocationService {
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), true);
             commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
-            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader().getSenderId());
+            enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader());
             List<Sanction> sanctions = calculationUtil.calculateAndReturnSanctionForAllocation(allocationRequest.getAllocation().getChildren());
             allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocation().getChildren(), sanctions);
             dispatcherUtil.dispatchOnAllocation(allocationRequest);

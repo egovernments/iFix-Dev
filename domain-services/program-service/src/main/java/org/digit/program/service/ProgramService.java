@@ -81,8 +81,7 @@ public class ProgramService {
         log.info("Updating Program");
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
-            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
-                    programRequest.getHeader().getSenderId());
+            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(), programRequest.getHeader());
             programRepository.updateProgram(programRequest.getProgram(), false);
             dispatcherUtil.dispatchProgram(programRequest);
             log.info("Updated Program");
@@ -117,8 +116,7 @@ public class ProgramService {
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, true);
             commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getLocationCode());
-            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
-                    programRequest.getHeader().getSenderId());
+            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(), programRequest.getHeader());
             programRepository.updateProgram(programRequest.getProgram(), true);
             dispatcherUtil.dispatchOnProgram(programRequest);
             log.info("On-Program Created");
@@ -137,8 +135,7 @@ public class ProgramService {
         try {
             programValidator.validateProgram(programRequest.getProgram(), false, false);
             commonValidator.validateReply(programRequest.getHeader(), programRequest.getProgram().getLocationCode());
-            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(),
-                    programRequest.getHeader().getSenderId());
+            enrichmentService.enrichProgramForUpdateOrOnProgram(programRequest.getProgram(), programRequest.getHeader());
             programRepository.updateProgram(programRequest.getProgram(), false);
             dispatcherUtil.dispatchOnProgram(programRequest);
             log.info("On-Program Updated");

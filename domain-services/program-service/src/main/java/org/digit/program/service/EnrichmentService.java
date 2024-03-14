@@ -54,17 +54,19 @@ public class EnrichmentService {
         program.setType(PROGRAM);
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
+        header.setMessageId(program.getId());
         log.info("Enrichment for create completed for id: {}", program.getId());
     }
 
     /**
      * Enriches audit details for program update and reply
      * @param program
-     * @param senderId
+     * @param header
      */
-    public void enrichProgramForUpdateOrOnProgram(Program program, String senderId) {
+    public void enrichProgramForUpdateOrOnProgram(Program program, RequestHeader header) {
         log.info("Enrich Program for Update/OnProgram");
-        program.setAuditDetails(getAuditDetails(senderId, program.getAuditDetails()));
+        program.setAuditDetails(getAuditDetails(header.getSenderId(), program.getAuditDetails()));
+        header.setMessageId(program.getId());
         log.info("Enrichment for update/on-program completed for id: {}", program.getId());
     }
 
@@ -81,6 +83,7 @@ public class EnrichmentService {
             sanction.setType(SANCTION);
             sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
+        header.setMessageId(sanctions.get(0).getId());
     }
 
     /**
@@ -98,16 +101,17 @@ public class EnrichmentService {
     /**
      * Setting audit details and id if not present for allocation create
      * @param allocations
-     * @param senderId
+     * @param header
      */
-    public void enrichAllocationCreate(List<Allocation> allocations, String senderId) {
+    public void enrichAllocationCreate(List<Allocation> allocations, RequestHeader header) {
         log.info("Enrich allocation create");
         for (Allocation allocation : allocations) {
             if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
                 allocation.setId(UUID.randomUUID().toString());
             allocation.setType(ALLOCATION);
-            allocation.setAuditDetails(getAuditDetails(senderId, null));
+            allocation.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
+        header.setMessageId(allocations.get(0).getId());
     }
 
     /**
@@ -125,16 +129,17 @@ public class EnrichmentService {
     /**
      * Setting id(if not present) and audit details for disbursement and child disbursement and status for create
      * @param disbursement
-     * @param senderId
+     * @param header
      */
-    public void enrichDisburseCreate(Disbursement disbursement, String senderId) {
+    public void enrichDisburseCreate(Disbursement disbursement, RequestHeader header) {
         log.info("Enrich disburse create");
         if (disbursement.getId() == null || StringUtils.isEmpty(disbursement.getId()))
             disbursement.setId(UUID.randomUUID().toString());
-        AuditDetails auditDetails = getAuditDetails(senderId, null);
+        AuditDetails auditDetails = getAuditDetails(header.getSenderId(), null);
         disbursement.setAuditDetails(auditDetails);
         disbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         disbursement.setType(DISBURSE);
+        header.setMessageId(disbursement.getId());
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
                 childDisbursement.setId(UUID.randomUUID().toString());
@@ -147,12 +152,12 @@ public class EnrichmentService {
     /**
      * Setting audit details for disbursement and child disbursement and status for update
      * @param disbursement
-     * @param senderId
+     * @param header
      * @param isReply
      */
-    public void enrichDisburseUpdate(Disbursement disbursement, String senderId, Boolean isReply) {
+    public void enrichDisburseUpdate(Disbursement disbursement, RequestHeader header, Boolean isReply) {
         log.info("Enrich disburse update");
-        AuditDetails auditDetails = getAuditDetails(senderId, disbursement.getAuditDetails());
+        AuditDetails auditDetails = getAuditDetails(header.getSenderId(), disbursement.getAuditDetails());
         disbursement.setAuditDetails(auditDetails);
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             childDisbursement.setAuditDetails(auditDetails);
@@ -164,6 +169,7 @@ public class EnrichmentService {
                 disbursement.getStatus().setStatusCode(Status.PARTIAL);
             }
         }
+        header.setMessageId(disbursement.getId());
     }
 
     /**

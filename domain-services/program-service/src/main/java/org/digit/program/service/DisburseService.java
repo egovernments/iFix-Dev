@@ -70,8 +70,7 @@ public class DisburseService {
         log.info("Create Disburse");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true, false);
-            enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(),
-                    disbursementRequest.getHeader().getSenderId());
+            enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader());
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
             Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
@@ -96,8 +95,7 @@ public class DisburseService {
         log.info("Update Disburse");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
-            enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(),
-                    disbursementRequest.getHeader().getSenderId(), false);
+            enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader(), false);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
@@ -139,7 +137,7 @@ public class DisburseService {
             Disbursement disbursement = disbursementRequest.getDisbursement();
             disbursementValidator.validateDisbursement(disbursement, false, true);
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursement.getLocationCode());
-            enrichmentService.enrichDisburseUpdate(disbursement, disbursementRequest.getHeader().getSenderId(), true);
+            enrichmentService.enrichDisburseUpdate(disbursement, disbursementRequest.getHeader(), true);
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburse(disbursement,
                     disbursementRequest.getHeader().getSenderId());
             disburseRepository.updateDisburseAndSanction(disbursement, sanction);
@@ -161,7 +159,7 @@ public class DisburseService {
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getLocationCode());
-            enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader().getSenderId(), true);
+            enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader(), true);
             disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
             log.info("On Disburse updated successfully");
