@@ -29,9 +29,6 @@ public class ProgramQueryBuilder {
             " end_date = ?, additional_details = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
-    public static final String FINAL_QUERY = " SELECT * FROM eg_program JOIN eg_program_message_codes " +
-            " ON eg_program.id = eg_program_message_codes.reference_id ";
-
     public static final String PROGRAM_SEARCH_QUERY = " SELECT " +
             "    eg_program.id AS eg_program_id, " +
             "    eg_program.location_code AS eg_program_location_code, " +

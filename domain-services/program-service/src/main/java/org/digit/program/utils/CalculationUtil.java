@@ -57,18 +57,23 @@ public class CalculationUtil {
      * @return
      */
     public Sanction calculateAndReturnSanctionForDisburse(Disbursement disbursement, String senderId) {
+        Sanction sanction = null;
         //Search disburse and return null if targetId is already present in db
-        List<Disbursement> disbursements = disburseRepository.searchDisbursements(DisburseSearch.builder()
+        List<Disbursement> disbursementsFromDB = disburseRepository.searchDisbursements(DisburseSearch.builder()
                 .targetId(disbursement.getTargetId()).build());
 
-        if (!disbursements.isEmpty()) {
-            List<Status> statuses = disbursements.stream().
-                    map(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode()).collect(Collectors.toList());
-            if (statuses.contains(Status.PARTIAL)) {
-                return null;
+        if (!disbursementsFromDB.isEmpty()) {
+            Optional<Disbursement> optionalDisbursement = disbursementsFromDB.stream()
+                    .filter(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode().equals(Status.PARTIAL))
+                    .findFirst();
+            if (optionalDisbursement.isPresent()) {
+                Disbursement disbursementWithPartialStatus = optionalDisbursement.get();
+                disbursement.setSanctionId(disbursementWithPartialStatus.getSanctionId());
+                for (Disbursement childDisbursement : disbursement.getDisbursements())
+                    childDisbursement.setSanctionId(disbursementWithPartialStatus.getSanctionId());
+                return sanction;
             }
         }
-        Sanction sanction = null;
         log.info("Calculating Sanction for disburse");
         if (disbursement.getSanctionId() != null) {
             SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
