@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Controller
 @RequestMapping("/v1")
 public class DisburseController {
@@ -30,7 +32,7 @@ public class DisburseController {
 
     @PostMapping(value = "/disburse/_create")
     public ResponseEntity<DisbursementRequest> createDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        commonValidator.validateRequest(disbursementRequest.getHeader(), "create", "disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), CREATE, DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
@@ -39,7 +41,7 @@ public class DisburseController {
 
     @PostMapping(value = "/disburse/_update")
     public ResponseEntity<DisbursementRequest> updateDisburse(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        commonValidator.validateRequest(disbursementRequest.getHeader(), "update", "disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), UPDATE, DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
@@ -48,13 +50,13 @@ public class DisburseController {
 
     @PostMapping(value = "/disburse/_search")
     public ResponseEntity<DisburseSearchResponse> searchDisburse(@RequestBody @Valid DisburseSearchRequest disburseSearchRequest) {
-        return ResponseEntity.ok(disburseService.searchDisburse(disburseSearchRequest, "search", "disburse"));
+        return ResponseEntity.ok(disburseService.searchDisburse(disburseSearchRequest, SEARCH, DISBURSE));
 
     }
 
     @PostMapping(value = "/on-disburse/_create")
     public ResponseEntity<DisbursementRequest> onDisburseCreate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        commonValidator.validateRequest(disbursementRequest.getHeader(), "create", "on-disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), CREATE, ON_DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
@@ -63,7 +65,7 @@ public class DisburseController {
 
     @PostMapping(value = "/on-disburse/_update")
     public ResponseEntity<DisbursementRequest> onDisburseUpdate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
-        commonValidator.validateRequest(disbursementRequest.getHeader(), "update", "on-disburse");
+        commonValidator.validateRequest(disbursementRequest.getHeader(), UPDATE, ON_DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }

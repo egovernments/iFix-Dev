@@ -26,6 +26,7 @@ public class ProgramConsumer {
     private final SanctionService sanctionService;
     private final AllocationService allocationService;
     private final DisburseService disburseService;
+    private static final String ERROR_TOPIC = "${error.kafka.topic}";
 
     public ProgramConsumer(ObjectMapper mapper,  ProgramProducer producer, ProgramService programService,
                            SanctionService sanctionService, AllocationService allocationService,
@@ -53,7 +54,7 @@ public class ProgramConsumer {
                         programService.updateProgram(programRequest);
                         break;
                     default:
-                        producer.push("error-queue", receivedObject);
+                        producer.push(ERROR_TOPIC, receivedObject);
                 }
             } else if (programRequest.getHeader().getMessageType().equals(MessageType.ON_PROGRAM)) {
                 switch (programRequest.getHeader().getAction()) {
@@ -64,12 +65,12 @@ public class ProgramConsumer {
                         programService.onProgramUpdate(programRequest);
                         break;
                     default:
-                        producer.push("error-queue", receivedObject);
+                        producer.push(ERROR_TOPIC, receivedObject);
                         break;
                 }
             }
         } catch (Exception e) {
-            producer.push("error-queue", receivedObject);
+            producer.push(ERROR_TOPIC, receivedObject);
             log.error("Error: ", e);
         }
     }
@@ -88,11 +89,11 @@ public class ProgramConsumer {
                     sanctionService.updateSanction(sanctionRequest);
                     break;
                 default:
-                    producer.push("error-queue", receivedObject);
+                    producer.push(ERROR_TOPIC, receivedObject);
                     break;
             }
         } catch ( Exception e) {
-            producer.push("error-queue", receivedObject);
+            producer.push(ERROR_TOPIC, receivedObject);
             log.error("Error: ", e);
         }
 
@@ -112,11 +113,11 @@ public class ProgramConsumer {
                     allocationService.updateAllocation(allocationRequest);
                     break;
                 default:
-                    producer.push("error-queue", receivedObject);
+                    producer.push(ERROR_TOPIC, receivedObject);
                     break;
             }
         } catch (Exception e) {
-            producer.push("error-queue", receivedObject);
+            producer.push(ERROR_TOPIC, receivedObject);
             log.error("Error: ", e);
         }
     }
@@ -136,7 +137,7 @@ public class ProgramConsumer {
                         disburseService.updateDisburse(disbursementRequest);
                         break;
                     default:
-                        producer.push("error-queue", receivedObject);
+                        producer.push(ERROR_TOPIC, receivedObject);
                         break;
                 }
             } else if (disbursementRequest.getHeader().getMessageType().equals(MessageType.ON_DISBURSE)) {
@@ -148,12 +149,12 @@ public class ProgramConsumer {
                         disburseService.onDisburseUpdate(disbursementRequest);
                         break;
                     default:
-                        producer.push("error-queue", receivedObject);
+                        producer.push(ERROR_TOPIC, receivedObject);
                         break;
                 }
             }
         } catch (Exception e) {
-            producer.push("error-queue", receivedObject);
+            producer.push(ERROR_TOPIC, receivedObject);
             log.error("Error: ", e);
         }
     }

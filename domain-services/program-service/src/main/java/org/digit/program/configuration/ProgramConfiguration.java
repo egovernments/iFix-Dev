@@ -79,6 +79,8 @@ public class ProgramConfiguration {
     private String mdmsHost;
     @Value("${egov.mdms.path}")
     private String mdmsPath;
+    @Value("${exchange.url.code}")
+    private String urlCode;
 
     // Search configuration
     @Value("${search.max.limit}")

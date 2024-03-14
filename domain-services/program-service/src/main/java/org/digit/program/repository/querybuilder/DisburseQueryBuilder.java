@@ -165,9 +165,8 @@ public class DisburseQueryBuilder {
         }
 
         if (Boolean.TRUE.equals(keepPagination)) {
-            disburseSearchQuery.append(" ORDER BY ? ");
-            preparedStmtList.add(disburseSearch.getPagination().getSortBy());
-            disburseSearchQuery.append(" LIMIT ? OFFSET ? ");
+            disburseSearchQuery.append(" ORDER BY ").append("pd.").append(disburseSearch.getPagination().getSortBy())
+                    .append(" ").append(disburseSearch.getPagination().getSortOrder()).append(" LIMIT ? OFFSET ? ");
             preparedStmtList.add(disburseSearch.getPagination().getLimit());
             preparedStmtList.add(disburseSearch.getPagination().getOffset());
         }

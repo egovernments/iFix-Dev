@@ -37,7 +37,7 @@ public class MdmsUtil {
                         .moduleDetails(Collections.singletonList(ModuleDetail.builder()
                                 .masterDetails(Collections.singletonList(MasterDetail.builder()
                                         .name(MDMS_MASTER_NAME)
-                                        .filter(FILTER_CODE)
+                                        .filter(FILTER_CODE_START+configs.getUrlCode()+FILTER_CODE_END)
                                         .build()))
                                 .moduleName(MDMS_MODULE_NAME)
                                 .build()))

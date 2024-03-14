@@ -151,10 +151,8 @@ public class ProgramQueryBuilder {
             preparedStmtList.add(Status.ACTIVE.toString());
         }
 
-        programSearchQuery.append(" ORDER BY ? ");
-        preparedStmtList.add(programSearch.getPagination().getSortBy());
-        programSearchQuery.append(programSearch.getPagination().getSortOrder().toString());
-        programSearchQuery.append(" LIMIT ? OFFSET ? ");
+        programSearchQuery.append(" ORDER BY ").append("eg_program.").append(programSearch.getPagination().getSortBy())
+                .append(" ").append(programSearch.getPagination().getSortOrder().toString()).append(" LIMIT ? OFFSET ? ");
         preparedStmtList.add(programSearch.getPagination().getLimit());
         preparedStmtList.add(programSearch.getPagination().getOffset());
 

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Controller
 @RequestMapping("/v1")
 public class SanctionController {
@@ -29,7 +31,7 @@ public class SanctionController {
 
     @PostMapping(value = "/on-sanction/_create")
     public ResponseEntity<SanctionRequest> onSanctionCreate(@RequestBody @Valid SanctionRequest sanctionRequest) {
-        commonValidator.validateRequest(sanctionRequest.getHeader(), "create", "on-sanction");
+        commonValidator.validateRequest(sanctionRequest.getHeader(), CREATE, ON_SANCTION);
         if (Boolean.TRUE.equals(configs.getIsSanctionAsync())) {
             return ResponseEntity.ok(sanctionService.pushToKafka(sanctionRequest));
         }
@@ -38,7 +40,7 @@ public class SanctionController {
 
     @PostMapping(value = "/on-sanction/_update")
     public ResponseEntity<SanctionRequest> onSanctionUpdate(@RequestBody @Valid SanctionRequest sanctionRequest) {
-        commonValidator.validateRequest(sanctionRequest.getHeader(), "update", "on-sanction");
+        commonValidator.validateRequest(sanctionRequest.getHeader(), UPDATE, ON_SANCTION);
         if (Boolean.TRUE.equals(configs.getIsSanctionAsync())) {
             return ResponseEntity.ok(sanctionService.pushToKafka(sanctionRequest));
         }
@@ -47,7 +49,7 @@ public class SanctionController {
 
     @PostMapping(value = "/sanction/_search")
     public ResponseEntity<SanctionSearchResponse> sanctionSearch(@RequestBody @Valid SanctionSearchRequest sanctionSearchRequest) {
-        return ResponseEntity.ok(sanctionService.searchSanction(sanctionSearchRequest, "search", "sanction"));
+        return ResponseEntity.ok(sanctionService.searchSanction(sanctionSearchRequest, SEARCH, SANCTION));
     }
 
 }

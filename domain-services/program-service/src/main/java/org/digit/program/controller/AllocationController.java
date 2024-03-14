@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Controller
 @RequestMapping("/v1")
 public class AllocationController {
@@ -30,7 +32,7 @@ public class AllocationController {
 
     @PostMapping(value = "/on-allocation/_create")
     public ResponseEntity<AllocationRequest> onAllocationCreate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        commonValidator.validateRequest(allocationRequest.getHeader(), "create", "on-allocation");
+        commonValidator.validateRequest(allocationRequest.getHeader(), CREATE, ON_ALLOCATION);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
         }
@@ -39,7 +41,7 @@ public class AllocationController {
 
     @PostMapping(value = "/on-allocation/_update")
     public ResponseEntity<AllocationRequest> onAllocationUpdate(@RequestBody @Valid AllocationRequest allocationRequest) {
-        commonValidator.validateRequest(allocationRequest.getHeader(), "update", "on-allocation");
+        commonValidator.validateRequest(allocationRequest.getHeader(), UPDATE, ON_ALLOCATION);
         if (Boolean.TRUE.equals(configs.getIsAllocationAsync())) {
             return ResponseEntity.ok(allocationService.pushToKafka(allocationRequest));
         }
@@ -48,7 +50,7 @@ public class AllocationController {
 
     @PostMapping(value = "/allocation/_search")
     public ResponseEntity<AllocationResponse> searchAllocation(@RequestBody @Valid AllocationSearchRequest allocationSearchRequest) {
-        return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest, "search", "allocation"));
+        return ResponseEntity.ok(allocationService.searchAllocation(allocationSearchRequest, SEARCH, ALLOCATION));
 
     }
 }

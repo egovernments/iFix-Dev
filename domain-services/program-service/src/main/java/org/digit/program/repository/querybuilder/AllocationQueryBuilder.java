@@ -113,9 +113,8 @@ public class AllocationQueryBuilder {
             allocationSearchQuery.append(" pa.sanction_id = ? ");
             preparedStmtList.add(allocationSearch.getSanctionId());
         }
-        allocationSearchQuery.append(" ORDER BY ? ");
-        preparedStmtList.add(allocationSearch.getPagination().getSortBy());
-        allocationSearchQuery.append(" LIMIT ? OFFSET ?");
+        allocationSearchQuery.append(" ORDER BY ").append("pa.").append(allocationSearch.getPagination().getSortBy())
+                .append(" ").append(allocationSearch.getPagination().getSortOrder()).append(" LIMIT ? OFFSET ? ");
         preparedStmtList.add(allocationSearch.getPagination().getLimit());
         preparedStmtList.add(allocationSearch.getPagination().getOffset());
 

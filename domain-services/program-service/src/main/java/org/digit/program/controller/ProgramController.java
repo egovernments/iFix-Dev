@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Controller
 @RequestMapping("/v1")
 public class ProgramController {
@@ -30,7 +32,7 @@ public class ProgramController {
 
     @PostMapping(value = "/program/_create")
     public ResponseEntity<ProgramRequest> createProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        commonValidator.validateRequest(programRequest.getHeader(), "create", "program");
+        commonValidator.validateRequest(programRequest.getHeader(), CREATE, PROGRAM);
         if (Boolean.TRUE.equals(configs.getIsProgramAsync())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
@@ -39,7 +41,7 @@ public class ProgramController {
 
     @PostMapping(value = "/program/_update")
     public ResponseEntity<ProgramRequest> updateProgram(@RequestBody @Valid ProgramRequest programRequest) {
-        commonValidator.validateRequest(programRequest.getHeader(), "update", "program");
+        commonValidator.validateRequest(programRequest.getHeader(), UPDATE, PROGRAM);
         if (Boolean.TRUE.equals(configs.getIsProgramAsync())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
@@ -48,12 +50,12 @@ public class ProgramController {
 
     @PostMapping(value = "/program/_search")
     public ResponseEntity<ProgramSearchResponse> searchProgram(@RequestBody @Valid ProgramSearchRequest programSearchRequest) {
-        return ResponseEntity.ok(programService.searchProgram(programSearchRequest, "search", "program"));
+        return ResponseEntity.ok(programService.searchProgram(programSearchRequest, SEARCH, PROGRAM));
     }
 
     @PostMapping(value = "/on-program/_create")
     public ResponseEntity<ProgramRequest> onProgramCreate(@RequestBody @Valid ProgramRequest programRequest) {
-        commonValidator.validateRequest(programRequest.getHeader(), "create", "on-program");
+        commonValidator.validateRequest(programRequest.getHeader(), CREATE, ON_PROGRAM);
         if (Boolean.TRUE.equals(configs.getIsProgramAsync())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }
@@ -62,7 +64,7 @@ public class ProgramController {
 
     @PostMapping(value = "/on-program/_update")
     public ResponseEntity<ProgramRequest> onProgramUpdate(@RequestBody @Valid ProgramRequest programRequest) {
-        commonValidator.validateRequest(programRequest.getHeader(), "update", "on-program");
+        commonValidator.validateRequest(programRequest.getHeader(), UPDATE, ON_PROGRAM);
         if (Boolean.TRUE.equals(configs.getIsProgramAsync())) {
             return ResponseEntity.ok(programService.pushToKafka(programRequest));
         }

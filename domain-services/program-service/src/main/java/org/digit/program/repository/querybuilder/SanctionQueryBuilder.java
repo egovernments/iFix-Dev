@@ -126,10 +126,8 @@ public class SanctionQueryBuilder {
         }
 
         if (Boolean.TRUE.equals(keepPagination)) {
-            sanctionSearchQuery.append(" ORDER BY ? ");
-            preparedStmtList.add(sanctionSearch.getPagination().getSortBy());
-            sanctionSearchQuery.append(sanctionSearch.getPagination().getSortOrder().toString());
-            sanctionSearchQuery.append(" LIMIT ? OFFSET ?");
+            sanctionSearchQuery.append(" ORDER BY ").append("ps.").append(sanctionSearch.getPagination().getSortBy())
+                    .append(" ").append(sanctionSearch.getPagination().getSortOrder().toString()).append(" LIMIT ? OFFSET ? ");
             preparedStmtList.add(sanctionSearch.getPagination().getLimit());
             preparedStmtList.add(sanctionSearch.getPagination().getOffset());
         }
