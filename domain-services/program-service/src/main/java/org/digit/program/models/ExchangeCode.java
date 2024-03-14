@@ -16,6 +16,10 @@ public class ExchangeCode {
     @Size(min = 2, max = 64)
     private String id;
 
+    @JsonProperty("type")
+    @Size(min = 2, max = 64)
+    private String type;
+
     @JsonProperty("function_code")
     @Size(min = 2, max = 64)
     private String functionCode;

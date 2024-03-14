@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Service
 @Slf4j
 public class EnrichmentService {
@@ -49,6 +51,7 @@ public class EnrichmentService {
                 program.setId(UUID.randomUUID().toString());
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
+        program.setType(PROGRAM);
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         log.info("Enrichment for create completed for id: {}", program.getId());
@@ -72,12 +75,11 @@ public class EnrichmentService {
      */
     public void enrichSanctionCreate(List<Sanction> sanctions, RequestHeader header) {
         log.info("Enrich sanction create");
-        if (!commonUtil.isSameDomain(header.getReceiverId(), configs.getDomain())) {
-            for (Sanction sanction : sanctions) {
-                if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
-                    sanction.setId(UUID.randomUUID().toString());
-                sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
-            }
+        for (Sanction sanction : sanctions) {
+            if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
+                sanction.setId(UUID.randomUUID().toString());
+            sanction.setType(SANCTION);
+            sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
     }
 
@@ -103,6 +105,7 @@ public class EnrichmentService {
         for (Allocation allocation : allocations) {
             if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
                 allocation.setId(UUID.randomUUID().toString());
+            allocation.setType(ALLOCATION);
             allocation.setAuditDetails(getAuditDetails(senderId, null));
         }
     }
@@ -131,11 +134,13 @@ public class EnrichmentService {
         AuditDetails auditDetails = getAuditDetails(senderId, null);
         disbursement.setAuditDetails(auditDetails);
         disbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
+        disbursement.setType(DISBURSE);
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
                 childDisbursement.setId(UUID.randomUUID().toString());
             childDisbursement.setAuditDetails(auditDetails);
             childDisbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
+            childDisbursement.setType(DISBURSE);
         }
     }
 

@@ -21,7 +21,7 @@ CREATE TABLE eg_program (
 CREATE TABLE eg_program_message_codes (
   id                          character varying(64),
   location_code               character varying(64) NOT NULL,
-  type                        character varying(64),
+  type                        character varying(64) NOT NULL,
   reference_id                character varying(64),
   function_code               character varying(128),
   administration_code         character varying(128),
