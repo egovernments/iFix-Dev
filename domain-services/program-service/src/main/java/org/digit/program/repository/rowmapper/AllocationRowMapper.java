@@ -35,7 +35,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             String sanctionId = rs.getString("allocation_sanction_id");
             Double netAmount = rs.getDouble("allocation_net_amount");
             Double grossAmount = rs.getDouble("allocation_gross_amount");
-            AllocationType allocationType = AllocationType.valueOf(rs.getString("type"));
+            AllocationType allocationType = AllocationType.valueOf(rs.getString("allocation_type"));
             String status = rs.getString("allocation_status");
             String statusMessage = rs.getString("allocation_status_message");
             JsonNode additionalDetails = commonUtil.getJsonNode(rs, "allocation_additional_details");
@@ -44,6 +44,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             Long createdTime = rs.getLong("allocation_created_time");
             Long lastModifiedTime = rs.getLong("allocation_last_modified_time");
 
+            String type = rs.getString("message_type");
             String functionCode = rs.getString("message_function_code");
             String administrationCode = rs.getString("message_administration_code");
             String recipientSegmentCode = rs.getString("message_recipient_segment_code");
@@ -60,11 +61,12 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             allocation.setSanctionId(sanctionId);
             allocation.setNetAmount(netAmount);
             allocation.setGrossAmount(grossAmount);
-            allocation.setType(allocationType);
+            allocation.setAllocationType(allocationType);
             allocation.setStatus(status1);
             allocation.setAdditionalDetails(additionalDetails);
             allocation.setAuditDetails(auditDetails);
 
+            allocation.setType(type);
             allocation.setFunctionCode(functionCode);
             allocation.setAdministrationCode(administrationCode);
             allocation.setRecipientSegmentCode(recipientSegmentCode);

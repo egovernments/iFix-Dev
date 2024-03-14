@@ -100,7 +100,7 @@ public class AllocationValidator {
         }
 
         for (Allocation allocation : allocations) {
-            if (allocation.getType().equals(AllocationType.ALLOCATION))
+            if (allocation.getAllocationType().equals(AllocationType.ALLOCATION))
                 sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) + allocation.getGrossAmount());
             else
                 sanctionIdAllocatedAmountMap.put(allocation.getSanctionId(), sanctionIdAllocatedAmountMap.get(allocation.getSanctionId()) - allocation.getGrossAmount());

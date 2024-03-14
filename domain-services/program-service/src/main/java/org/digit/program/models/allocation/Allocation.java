@@ -45,9 +45,9 @@ public class Allocation extends ExchangeCode {
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
     private Double grossAmount;
 
-    @JsonProperty("type")
+    @JsonProperty("allocation_type")
     @NotNull
-    private AllocationType type;
+    private AllocationType allocationType;
 
     @JsonProperty("additional_details")
     private JsonNode additionalDetails;

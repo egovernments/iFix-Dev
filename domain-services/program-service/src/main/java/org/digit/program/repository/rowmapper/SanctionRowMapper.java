@@ -46,6 +46,7 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             Long createdTime = rs.getLong("sanction_created_time");
             Long lastModifiedTime = rs.getLong("sanction_last_modified_time");
 
+            String type = rs.getString("message_type");
             String functionCode = rs.getString("message_function_code");
             String administrationCode = rs.getString("message_administration_code");
             String recipientSegmentCode = rs.getString("message_recipient_segment_code");
@@ -68,6 +69,7 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             sanction.setAdditionalDetails(additionalDetails);
             sanction.setAuditDetails(auditDetails);
 
+            sanction.setType(type);
             sanction.setFunctionCode(functionCode);
             sanction.setAdministrationCode(administrationCode);
             sanction.setRecipientSegmentCode(recipientSegmentCode);

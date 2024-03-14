@@ -119,7 +119,7 @@ public class CalculationUtil {
         Map<String, Sanction> sanctionIdVsSanction = sanctionRepository.searchSanction(SanctionSearch.builder()
                 .ids(new ArrayList<>(sanctionIds)).build(), false).stream().collect(Collectors.toMap(Sanction::getId, sanction -> sanction));
         for (Allocation allocation : allocations) {
-            if (allocation.getType().equals(AllocationType.ALLOCATION)) {
+            if (allocation.getAllocationType().equals(AllocationType.ALLOCATION)) {
                 sanctionIdVsSanction.get(allocation.getSanctionId()).setAllocatedAmount(sanctionIdVsSanction.get(allocation.getSanctionId()).getAllocatedAmount() + allocation.getGrossAmount());
                 sanctionIdVsSanction.get(allocation.getSanctionId()).setAvailableAmount(sanctionIdVsSanction.get(allocation.getSanctionId()).getAvailableAmount() + allocation.getGrossAmount());
             } else {

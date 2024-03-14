@@ -14,7 +14,7 @@ public class AllocationQueryBuilder {
     private final CommonUtil commonUtil;
 
     public static final String ALLOCATION_INSERT_QUERY = " INSERT INTO eg_program_allocation " +
-            " ( id, location_code, program_code, sanction_id, net_amount, gross_amount, status, status_message, type, " +
+            " ( id, location_code, program_code, sanction_id, net_amount, gross_amount, status, status_message, allocation_type, " +
             " additional_details, created_by, last_modified_by, created_time, last_modified_time ) " +
             " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
@@ -31,7 +31,7 @@ public class AllocationQueryBuilder {
             "  pa.net_amount AS allocation_net_amount, " +
             "  pa.status AS allocation_status, " +
             "  pa.status_message AS allocation_status_message, " +
-            "  pa.type AS allocation_type, " +
+            "  pa.allocation_type AS allocation_type, " +
             "  pa.additional_details AS allocation_additional_details, " +
             "  pa.created_by AS allocation_created_by, " +
             "  pa.last_modified_by AS allocation_last_modified_by, " +
@@ -70,7 +70,7 @@ public class AllocationQueryBuilder {
         preparedStmtList.add(allocation.getGrossAmount());
         preparedStmtList.add(allocation.getStatus().getStatusCode().toString());
         preparedStmtList.add(allocation.getStatus().getStatusMessage());
-        preparedStmtList.add(allocation.getType().toString());
+        preparedStmtList.add(allocation.getAllocationType().toString());
         preparedStmtList.add(commonUtil.getPGObject(allocation.getAdditionalDetails()));
         preparedStmtList.add(allocation.getAuditDetails().getCreatedBy());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());

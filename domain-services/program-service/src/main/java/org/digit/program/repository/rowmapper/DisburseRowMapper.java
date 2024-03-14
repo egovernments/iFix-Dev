@@ -54,6 +54,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             Long createdTime = rs.getLong("disburse_created_time");
             Long lastModifiedTime = rs.getLong("disburse_last_modified_time");
 
+            String type = rs.getString("message_type");
             String functionCode = rs.getString("message_function_code");
             String administrationCode = rs.getString("message_administration_code");
             String recipientSegmentCode = rs.getString("message_recipient_segment_code");
@@ -85,6 +86,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             disbursement.setAdditionalDetails(additionalDetails);
             disbursement.setAuditDetails(auditDetails);
 
+            disbursement.setType(type);
             disbursement.setFunctionCode(functionCode);
             disbursement.setAdministrationCode(administrationCode);
             disbursement.setRecipientSegmentCode(recipientSegmentCode);

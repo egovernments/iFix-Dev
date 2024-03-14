@@ -12,10 +12,10 @@ import java.util.List;
 public class ExchangeCodeQueryBuilder {
 
     public static final String EXCHANGE_CODE_INSERT_QUERY = " INSERT INTO eg_program_message_codes " +
-            " ( id, location_code, reference_id, function_code, administration_code, program_code, " +
+            " ( id, location_code, reference_id, type, function_code, administration_code, program_code, " +
             " recipient_segment_code, economic_segment_code, source_of_fund_code, target_segment_code, " +
             " created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String EXCHANGE_CODE_UPDATE_QUERY = " UPDATE eg_program_message_codes " +
             " SET function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
@@ -33,6 +33,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getId());
         preparedStmtList.add(program.getLocationCode());
         preparedStmtList.add(program.getId());
+        preparedStmtList.add(program.getType());
         preparedStmtList.add(program.getFunctionCode());
         preparedStmtList.add(program.getAdministrationCode());
         preparedStmtList.add(program.getProgramCode());
@@ -67,6 +68,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(sanction.getId());
         preparedStmtList.add(sanction.getLocationCode());
         preparedStmtList.add(sanction.getId());
+        preparedStmtList.add(sanction.getType());
         preparedStmtList.add(sanction.getFunctionCode());
         preparedStmtList.add(sanction.getAdministrationCode());
         preparedStmtList.add(sanction.getProgramCode());
@@ -98,6 +100,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(allocation.getId());
         preparedStmtList.add(allocation.getLocationCode());
         preparedStmtList.add(allocation.getId());
+        preparedStmtList.add(allocation.getType());
         preparedStmtList.add(allocation.getFunctionCode());
         preparedStmtList.add(allocation.getAdministrationCode());
         preparedStmtList.add(allocation.getProgramCode());
@@ -129,6 +132,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(disbursement.getId());
         preparedStmtList.add(disbursement.getLocationCode());
         preparedStmtList.add(disbursement.getId());
+        preparedStmtList.add(disbursement.getType());
         preparedStmtList.add(disbursement.getFunctionCode());
         preparedStmtList.add(disbursement.getAdministrationCode());
         preparedStmtList.add(disbursement.getProgramCode());

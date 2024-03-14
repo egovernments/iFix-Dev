@@ -66,7 +66,7 @@ CREATE TABLE eg_program_allocation (
   net_amount                    DOUBLE PRECISION,
   status                        character varying(64),
   status_message                character varying,
-  type                          character varying(64),
+  allocation_type               character varying(64),
   additional_details            JSONB,
   created_by                    character varying(256),
   last_modified_by              character varying(256),

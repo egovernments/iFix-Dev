@@ -44,6 +44,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             Long createdTime = rs.getLong("eg_program_created_time");
             Long lastModifiedTime = rs.getLong("eg_program_last_modified_time");
 
+            String type = rs.getString("eg_program_message_codes_type");
             String functionCode = rs.getString("eg_program_message_codes_function_code");
             String administrationCode = rs.getString("eg_program_message_codes_administration_code");
             String recipientSegmentCode = rs.getString("eg_program_message_codes_recipient_segment_code");
@@ -67,6 +68,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setAdditionalDetails(additionalDetails);
             program.setAuditDetails(auditDetails);
 
+            program.setType(type);
             program.setFunctionCode(functionCode);
             program.setAdministrationCode(administrationCode);
             program.setRecipientSegmentCode(recipientSegmentCode);
