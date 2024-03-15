@@ -145,7 +145,6 @@ public class DisburseService {
             log.info("On Disburse created successfully");
         } catch (CustomException exception) {
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
-
         }
         return disbursementRequest;
     }

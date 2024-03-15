@@ -37,14 +37,16 @@ public class CalculationUtil {
      * @return
      */
     public Sanction calculateAndReturnSanctionForOnDisburse(Disbursement disbursement, String senderId) {
-        if (!disbursement.getStatus().getStatusCode().equals(Status.FAILED))
+        if (disbursement.getStatus().getStatusCode().equals(Status.FAILED) || disbursement.getStatus().getStatusCode().equals(Status.ERROR)) {
+            log.info("Calculating Sanction for on disburse");
+            SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
+            Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
+            sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
+            enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
+            return sanction;
+        } else {
             return null;
-        log.info("Calculating Sanction for on disburse");
-        SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
-        Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
-        sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
-        enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
-        return sanction;
+        }
     }
 
     /**
