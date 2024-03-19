@@ -62,12 +62,15 @@ public class SanctionService {
         log.info("Creating Sanction");
         try {
             sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), true);
+            // Validates if receiver id is same as configured in mdms
             commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
             enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader());
             sanctionRepository.saveSanction(sanctionRequest.getSanction().getChildren());
+            // Forwards on sanction message to exchange service if sender and current domains are same
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
             log.info("Successfully Created Sanction");
         } catch (CustomException exception) {
+            log.error("Error while creating sanction", exception);
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
         return sanctionRequest;
@@ -87,6 +90,7 @@ public class SanctionService {
             dispatcherUtil.dispatchOnSanction(sanctionRequest);
             log.info("Successfully Updated Sanction");
         } catch (CustomException exception) {
+            log.error("Error while updating sanction", exception);
             errorHandler.handleSanctionError(sanctionRequest, exception);
         }
         return sanctionRequest;

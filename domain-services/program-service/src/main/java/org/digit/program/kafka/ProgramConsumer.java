@@ -11,6 +11,7 @@ import org.digit.program.service.AllocationService;
 import org.digit.program.service.DisburseService;
 import org.digit.program.service.ProgramService;
 import org.digit.program.service.SanctionService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -26,7 +27,8 @@ public class ProgramConsumer {
     private final SanctionService sanctionService;
     private final AllocationService allocationService;
     private final DisburseService disburseService;
-    private static final String ERROR_TOPIC = "${error.kafka.topic}";
+    @Value("${error.kafka.topic}")
+    private String errorTopic;
 
     public ProgramConsumer(ObjectMapper mapper,  ProgramProducer producer, ProgramService programService,
                            SanctionService sanctionService, AllocationService allocationService,
@@ -54,7 +56,7 @@ public class ProgramConsumer {
                         programService.updateProgram(programRequest);
                         break;
                     default:
-                        producer.push(ERROR_TOPIC, receivedObject);
+                        producer.push(errorTopic, receivedObject);
                 }
             } else if (programRequest.getHeader().getMessageType().equals(MessageType.ON_PROGRAM)) {
                 switch (programRequest.getHeader().getAction()) {
@@ -65,12 +67,12 @@ public class ProgramConsumer {
                         programService.onProgramUpdate(programRequest);
                         break;
                     default:
-                        producer.push(ERROR_TOPIC, receivedObject);
+                        producer.push(errorTopic, receivedObject);
                         break;
                 }
             }
         } catch (Exception e) {
-            producer.push(ERROR_TOPIC, receivedObject);
+            producer.push(errorTopic, receivedObject);
             log.error("Error: ", e);
         }
     }
@@ -89,11 +91,11 @@ public class ProgramConsumer {
                     sanctionService.updateSanction(sanctionRequest);
                     break;
                 default:
-                    producer.push(ERROR_TOPIC, receivedObject);
+                    producer.push(errorTopic, receivedObject);
                     break;
             }
         } catch ( Exception e) {
-            producer.push(ERROR_TOPIC, receivedObject);
+            producer.push(errorTopic, receivedObject);
             log.error("Error: ", e);
         }
 
@@ -113,11 +115,11 @@ public class ProgramConsumer {
                     allocationService.updateAllocation(allocationRequest);
                     break;
                 default:
-                    producer.push(ERROR_TOPIC, receivedObject);
+                    producer.push(errorTopic, receivedObject);
                     break;
             }
         } catch (Exception e) {
-            producer.push(ERROR_TOPIC, receivedObject);
+            producer.push(errorTopic, receivedObject);
             log.error("Error: ", e);
         }
     }
@@ -137,7 +139,7 @@ public class ProgramConsumer {
                         disburseService.updateDisburse(disbursementRequest);
                         break;
                     default:
-                        producer.push(ERROR_TOPIC, receivedObject);
+                        producer.push(errorTopic, receivedObject);
                         break;
                 }
             } else if (disbursementRequest.getHeader().getMessageType().equals(MessageType.ON_DISBURSE)) {
@@ -149,12 +151,12 @@ public class ProgramConsumer {
                         disburseService.onDisburseUpdate(disbursementRequest);
                         break;
                     default:
-                        producer.push(ERROR_TOPIC, receivedObject);
+                        producer.push(errorTopic, receivedObject);
                         break;
                 }
             }
         } catch (Exception e) {
-            producer.push(ERROR_TOPIC, receivedObject);
+            producer.push(errorTopic, receivedObject);
             log.error("Error: ", e);
         }
     }

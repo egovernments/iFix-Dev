@@ -67,13 +67,18 @@ public class AllocationService {
         log.info("Create Allocation");
         try {
             allocationValidator.validateAllocation(allocationRequest.getAllocation().getChildren(), true);
+            // Validates if receiver id is same as configured in mdms
             commonValidator.validateReply(allocationRequest.getHeader(), allocationRequest.getAllocation().getChildren().get(0).getLocationCode());
             enrichmentService.enrichAllocationCreate(allocationRequest.getAllocation().getChildren(), allocationRequest.getHeader());
+            // Calculates the allocated and available amount for each sanction in the list of allocation and returns the sanctions
             List<Sanction> sanctions = calculationUtil.calculateAndReturnSanctionForAllocation(allocationRequest.getAllocation().getChildren());
+            // Saves allocations and sanctions in transactional manner
             allocationRepository.saveAllocationsAndSanctions(allocationRequest.getAllocation().getChildren(), sanctions);
+            // Forwards on allocation message to exchange service if sender and current domains are same
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
             log.info("Allocation created successfully");
         } catch (CustomException exception) {
+            log.error("Error while creating allocation", exception);
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
         return allocationRequest;
@@ -93,6 +98,7 @@ public class AllocationService {
             dispatcherUtil.dispatchOnAllocation(allocationRequest);
             log.info("Allocation updated successfully");
         } catch (CustomException exception) {
+            log.error("Error while updating allocation", exception);
             errorHandler.handleAllocationError(allocationRequest, exception);
         }
         return allocationRequest;

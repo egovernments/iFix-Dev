@@ -68,6 +68,7 @@ public class ProgramService {
             dispatcherUtil.dispatchProgram(programRequest);
             log.info("Created Program");
         } catch (CustomException exception) {
+            log.error("Error while creating program", exception);
             errorHandler.handleProgramError(programRequest, exception);
         }
         return programRequest;
@@ -86,6 +87,7 @@ public class ProgramService {
             dispatcherUtil.dispatchProgram(programRequest);
             log.info("Updated Program");
         } catch (CustomException exception) {
+            log.error("Error while updating program", exception);
             errorHandler.handleProgramError(programRequest, exception);
         }
         return programRequest;
@@ -121,6 +123,7 @@ public class ProgramService {
             dispatcherUtil.dispatchOnProgram(programRequest);
             log.info("On-Program Created");
         } catch (CustomException exception) {
+            log.error("Error while creating on program", exception);
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
         return programRequest;
@@ -140,6 +143,7 @@ public class ProgramService {
             dispatcherUtil.dispatchOnProgram(programRequest);
             log.info("On-Program Updated");
         } catch (CustomException exception) {
+            log.error("Error while updating on program", exception);
             errorHandler.handleProgramReplyError(programRequest, exception);
         }
         return programRequest;

@@ -84,6 +84,7 @@ public class EnrichmentService {
             sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
         header.setMessageId(sanctions.get(0).getId());
+        log.info("Enrichment for create sanction completed");
     }
 
     /**
@@ -92,10 +93,10 @@ public class EnrichmentService {
      * @param senderId
      */
     public void enrichSanctionUpdate(List<Sanction> sanctions, String senderId) {
-        log.info("Enrich sanction update");
         for (Sanction sanction : sanctions) {
             sanction.setAuditDetails(getAuditDetails(senderId, sanction.getAuditDetails()));
         }
+        log.info("Enrichment for update sanction completed");
     }
 
     /**
@@ -104,7 +105,6 @@ public class EnrichmentService {
      * @param header
      */
     public void enrichAllocationCreate(List<Allocation> allocations, RequestHeader header) {
-        log.info("Enrich allocation create");
         for (Allocation allocation : allocations) {
             if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
                 allocation.setId(UUID.randomUUID().toString());
@@ -112,6 +112,7 @@ public class EnrichmentService {
             allocation.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
         header.setMessageId(allocations.get(0).getId());
+        log.info("Enrichment for create allocation completed");
     }
 
     /**
@@ -120,10 +121,10 @@ public class EnrichmentService {
      * @param senderId
      */
     public void enrichAllocationUpdate(List<Allocation> allocations, String senderId) {
-        log.info("Enrich allocation update");
         for (Allocation allocation : allocations) {
             allocation.setAuditDetails(getAuditDetails(senderId, allocation.getAuditDetails()));
         }
+        log.info("Enrichment for update allocation completed");
     }
 
     /**
@@ -147,6 +148,7 @@ public class EnrichmentService {
             childDisbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
             childDisbursement.setType(DISBURSE);
         }
+        log.info("Enrichment for create completed for id: {}", disbursement.getId());
     }
 
     /**
@@ -170,6 +172,7 @@ public class EnrichmentService {
             }
         }
         header.setMessageId(disbursement.getId());
+        log.info("Enrichment for update completed for id: {}", disbursement.getId());
     }
 
     /**

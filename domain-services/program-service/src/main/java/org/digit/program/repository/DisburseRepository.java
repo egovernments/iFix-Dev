@@ -98,7 +98,6 @@ public class DisburseRepository {
      */
     @Transactional
     public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
-
         if (sanction != null)
             sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
         updateDisburse(disbursement, true);
@@ -151,9 +150,14 @@ public class DisburseRepository {
         List<Disbursement> childDisbursements = jdbcTemplate.query(disburseChildSearchQuery, preparedStmtList.toArray(),
                 disburseRowMapper);
 
+        if (childDisbursements == null || childDisbursements.isEmpty()) {
+            return disbursements;
+        }
+        // Creating a map of parentId and list of Child disbursements
         Map<String, List<Disbursement>> disbursementsMap = childDisbursements.stream()
                 .collect(Collectors.groupingBy(Disbursement::getParentId));
 
+        // Setting child disbursements for parent disbursements
         for (Disbursement disbursement : disbursements) {
             if (disbursementsMap.containsKey(disbursement.getId()))
                 disbursement.setDisbursements(disbursementsMap.get(disbursement.getId()));

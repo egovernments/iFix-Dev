@@ -115,7 +115,9 @@ public class DisbursementValidator {
                     throw new CustomException("DISBURSEMENT_SANCTION_ID_ERROR", "Disbursement sanction id should be same as child disbursement sanction id");
             }
             List<Sanction> sanctions = sanctionRepository.searchSanction(SanctionSearch.builder()
-                    .ids(Collections.singletonList(disbursement.getSanctionId())).build(), false);
+                    .ids(Collections.singletonList(disbursement.getSanctionId()))
+                    .locationCode(disbursement.getLocationCode())
+                    .build(), false);
             if (sanctions.isEmpty())
                 throw new CustomException("NO_SANCTION_FOUND", "No sanction found for id: " + disbursement.getSanctionId());
             if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
@@ -160,7 +162,7 @@ public class DisbursementValidator {
         List<Status> statuses = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus()
                 .getStatusCode()).collect(Collectors.toList());
         if (statuses.contains(Status.INITIATED) || statuses.contains(Status.INPROCESS))
-            throw new CustomException("DISBURSEMENT_ALREADY PRESENT_ERROR", "Disbursement already present for target id: "
+            throw new CustomException("DISBURSEMENT_ALREADY_PRESENT_ERROR", "Disbursement already present for target id: "
                     + disbursement.getTargetId());
     }
 

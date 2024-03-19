@@ -47,7 +47,7 @@ public class CommonValidator {
     }
 
     /**
-     * Validates if reply is for same domain present in program
+     * Validates if receiver id is same as configured in mdms
      * @param requestHeader
      * @param locationCode
      */

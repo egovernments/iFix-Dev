@@ -70,18 +70,24 @@ public class DisburseService {
         log.info("Create Disburse");
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true, false);
+            // Enriches id, audit details and message type
             enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader());
+            Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
+            // Finds sanction with available amount if not already present and calculates new available amount
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
-            Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
+            // Persists disbursement and sanction in one transaction
             disburseRepository.saveDisburseAndSanction(disbursement, sanction);
+            // Dispatches disbursement to appropriate service
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
+                // Calls onDisburseCreate method which replies to the appropriate service
                 onDisburseCreate(disbursementRequestFromAdapter);
             }
             log.info("Disburse created successfully");
         } catch (CustomException exception) {
+            log.error("Error while creating disburse", exception);
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
         return disbursementRequest;
@@ -100,10 +106,12 @@ public class DisburseService {
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
+                // Calls onDisburseUpdate method which replies to the appropriate service
                 onDisburseUpdate(disbursementRequestFromAdapter);
             }
             log.info("Disburse updated successfully");
         } catch (CustomException exception) {
+            log.error("Error while updating disburse", exception);
             errorHandler.handleDisburseError(disbursementRequest, exception);
         }
         return disbursementRequest;
@@ -136,14 +144,17 @@ public class DisburseService {
         try {
             Disbursement disbursement = disbursementRequest.getDisbursement();
             disbursementValidator.validateDisbursement(disbursement, false, true);
+            // Validates if receiver id is same as configured in mdms
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursement.getLocationCode());
             enrichmentService.enrichDisburseUpdate(disbursement, disbursementRequest.getHeader(), true);
+            // If status is failed or error then increases the sanction amount and returns the sanction for update
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburse(disbursement,
                     disbursementRequest.getHeader().getSenderId());
             disburseRepository.updateDisburseAndSanction(disbursement, sanction);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
             log.info("On Disburse created successfully");
         } catch (CustomException exception) {
+            log.error("Error while on-disburse create", exception);
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
         return disbursementRequest;
@@ -163,6 +174,7 @@ public class DisburseService {
             dispatcherUtil.dispatchDisburse(disbursementRequest);
             log.info("On Disburse updated successfully");
         } catch (CustomException exception) {
+            log.error("Error while on-disburse update");
             errorHandler.handleDisburseReplyError(disbursementRequest, exception);
         }
         return disbursementRequest;

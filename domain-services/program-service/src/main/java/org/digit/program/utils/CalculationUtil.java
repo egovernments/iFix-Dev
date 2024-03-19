@@ -43,6 +43,7 @@ public class CalculationUtil {
             Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
             sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
             enrichmentService.getAuditDetails(senderId, disbursement.getAuditDetails());
+            log.info("Sanctioned amount increased for Failed or Error disbursement with id: {}", disbursement.getId());
             return sanction;
         } else {
             return null;
