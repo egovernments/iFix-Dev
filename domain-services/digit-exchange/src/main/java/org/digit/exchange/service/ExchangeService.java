@@ -3,6 +3,7 @@ package org.digit.exchange.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.exchange.config.AppConfig;
 import org.digit.exchange.constants.ExchangeType;
@@ -11,9 +12,10 @@ import org.digit.exchange.model.JsonMessage;
 import org.digit.exchange.model.RequestMessage;
 import org.digit.exchange.model.RequestMessageWrapper;
 import org.digit.exchange.repository.ServiceRequestRepository;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Service;
-import java.net.URI;
-import java.net.URISyntaxException;
+
+import javax.servlet.ServletContext;
 
 @Service
 @Slf4j
@@ -22,18 +24,28 @@ public class ExchangeService {
     private final AppConfig config;
     private final ObjectMapper mapper;
     private final ServiceRequestRepository restRepo;
+    private final SecurityService securityService;
+    private final ServletContext servletContext;
 
-    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo) {
+
+    public ExchangeService(ExchangeProducer producer, AppConfig config, ObjectMapper mapper, ServiceRequestRepository restRepo, SecurityService securityService,  ServletContext servletContext) {
         this.producer = producer;
         this.config = config;
         this.mapper = mapper;
         this.restRepo = restRepo;
+        this.securityService = securityService;
+        this.servletContext = servletContext;
     }
 
     public RequestMessage processMessage(ExchangeType type, RequestMessage messageRequest) {
         RequestMessageWrapper requestMessageWrapper = new RequestMessageWrapper(type, messageRequest);
         producer.push( config.getExchangeTopic(), requestMessageWrapper);
         log.info("Pushed message to kafka topic");
+        // If log events is true then process and push to the kafka
+        if (config.isEnabledEventLogs()) {
+            log.info("Emitting events to topic");
+            emitEventsToTopic(requestMessageWrapper);
+        }
         return messageRequest;
     }
 
@@ -44,49 +56,73 @@ public class ExchangeService {
         if(url==null)
             return;
         log.info("Receiver url mapped: {}", url);
-        String receiverDomain = requestMessage.getHeader().getReceiverId().contains("@") ? requestMessage.getHeader().getReceiverId().split("@")[1] : requestMessage.getHeader().getReceiverId();
-        if(matchDomains(receiverDomain, config.getDomain())){
+        if(securityService.isSameDomain(requestMessage.getHeader().getReceiverId(), config.getDomain())){
             log.info("Converting message to Json Node");
             JsonNode jsonNode;
             try {
                 jsonNode = mapper.readTree(requestMessage.getMessage());
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new CustomException("JSON_PROCESSING_EXCEPTION", e.getMessage());
             }
 
             log.info("Converted message to Json Node");
-            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature()).header(requestMessage.getHeader()).jsonNode(jsonNode).build();
+            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature())
+                    .header(requestMessage.getHeader()).jsonNode(jsonNode).build();
             try {
                 restRepo.fetchResult(url, jsonMessage);
                 log.info("Posted request to : {}", url);
-            } catch (Exception e) {
-                log.error("Exception while calling the API : {}", e.getMessage());
-//                handleErrorForSameDomain(requestMessageWrapper, isReply);
+            } catch (CustomException exception) {
+                log.error("Exception while calling the API : {}", exception.getMessage());
+                handleErrorForSameDomain(requestMessageWrapper, isReply, exception);
+            } catch (Exception exception) {
+                log.error("Exception while calling the API : {}", exception.getMessage());
+                handleErrorForSameDomain(requestMessageWrapper, isReply, new CustomException("EXTERANL_SERVICE_ERROR",
+                        exception.getMessage()));
             }
         } else {
+            // If sending the request from this server to another server then sign the message
+            if (securityService.isSameDomain(requestMessage.getHeader().getSenderId(), config.getDomain())) {
+                requestMessage = securityService.signRequestMessage(requestMessage);
+            }
             try {
                 restRepo.fetchResult(url, requestMessage);
                 log.info("Posted request to : {}", url);
-            } catch (Exception e) {
-                log.error("Exception while calling the API : {}", e.getMessage());
-//                handleErrorForDifferentDomain(requestMessageWrapper, isReply);
+            } catch (CustomException exception) {
+                log.error("Exception while calling the API : {}", exception.getMessage());
+                handleErrorForDifferentDomain(requestMessageWrapper, isReply, exception);
+            } catch (Exception exception) {
+                log.error("Exception while calling the API : {}", exception.getMessage());
+                handleErrorForDifferentDomain(requestMessageWrapper, isReply, new CustomException("EXTERANL_SERVICE_ERROR", exception.getMessage()));
             }
         }
 
     }
 
-    private void handleErrorForSameDomain(RequestMessageWrapper requestMessageWrapper, Boolean isReply) {
+    public void emitEventsToTopic(RequestMessageWrapper requestMessageWrapper) {
+        try {
+            log.info("Converting message to Json Node for emit events");
+            JsonNode jsonNode;
+            RequestMessage requestMessage = requestMessageWrapper.getRequestMessage();
+            jsonNode = mapper.readTree(requestMessageWrapper.getRequestMessage().getMessage());
+            log.info("Converted message to Json Node");
+            JsonMessage jsonMessage = JsonMessage.builder().signature(requestMessage.getSignature())
+                    .header(requestMessage.getHeader()).jsonNode(jsonNode).build();
+            producer.push( config.getExchangeEventLogTopic(), jsonMessage);
+            log.info("Pushed message to kafka topic : " + config.getExchangeEventLogTopic());
+        }catch (Exception e) {
+            log.error("Exception while emitting events: {}", e.getMessage());
+        }
+    }
+
+    private void handleErrorForSameDomain(RequestMessageWrapper requestMessageWrapper, Boolean isReply, CustomException exception) {
         if (Boolean.TRUE.equals(isReply)) {
             log.info("Pushing error to error topic for same domain");
             producer.push(config.getErrorTopic(), requestMessageWrapper);
         } else {
             log.info("Swapping receiver and sender domain");
-            String receiverDomain = requestMessageWrapper.getRequestMessage().getHeader().getSenderId();
-            String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
-            requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
-            requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
-            requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
+            updateHeaderDomains(requestMessageWrapper);
             String newUrl = getReceiverEndPoint(requestMessageWrapper.getRequestMessage(), true);
+            convertMessageAndSetStatus(requestMessageWrapper.getRequestMessage(), exception);
             try {
                 restRepo.fetchResult(newUrl, requestMessageWrapper.getRequestMessage());
             } catch (Exception ex) {
@@ -97,17 +133,14 @@ public class ExchangeService {
         }
     }
 
-    private void handleErrorForDifferentDomain(RequestMessageWrapper requestMessageWrapper, Boolean isReply) {
+    private void handleErrorForDifferentDomain(RequestMessageWrapper requestMessageWrapper, Boolean isReply, CustomException exception) {
         if (Boolean.TRUE.equals(isReply)) {
             producer.push(config.getErrorTopic(), requestMessageWrapper);
         } else {
             log.info("Swapping receiver and sender domain");
-            String receiverDomain = requestMessageWrapper.getRequestMessage().getHeader().getSenderId();
-            String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
-            requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
-            requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
-            requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
+            updateHeaderDomains(requestMessageWrapper);
             String newUrl = getReceiverEndPoint(requestMessageWrapper.getRequestMessage(), true);
+            convertMessageAndSetStatus(requestMessageWrapper.getRequestMessage(), exception);
             log.info("Converting message to Json Node");
             JsonNode newNode;
             try {
@@ -116,7 +149,10 @@ public class ExchangeService {
                 throw new RuntimeException(ex);
             }
 
-            JsonMessage newJsonMessage = JsonMessage.builder().signature(requestMessageWrapper.getRequestMessage().getSignature()).header(requestMessageWrapper.getRequestMessage().getHeader()).jsonNode(newNode).build();
+            JsonMessage newJsonMessage = JsonMessage.builder()
+                    .signature(requestMessageWrapper.getRequestMessage().getSignature())
+                    .header(requestMessageWrapper.getRequestMessage().getHeader())
+                    .jsonNode(newNode).build();
             try {
                 restRepo.fetchResult(newUrl, newJsonMessage);
             } catch (Exception ex) {
@@ -126,11 +162,17 @@ public class ExchangeService {
         }
     }
 
+    void updateHeaderDomains(RequestMessageWrapper requestMessageWrapper) {
+        String receiverDomain = requestMessageWrapper.getRequestMessage().getHeader().getSenderId();
+        String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
+        requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
+        requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
+        requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
+    }
 
     String getReceiverEndPoint(RequestMessage message, Boolean isReply){
-        String receiverDomain = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[1] : message.getHeader().getReceiverId();
-        if(matchDomains(receiverDomain, config.getDomain())){
-            // Get the reciver Service name and get the host from config
+        if(securityService.isSameDomain(message.getHeader().getReceiverId(), config.getDomain())){
+            // Get the receiver Service name and get the host from config
             String receiverService = message.getHeader().getReceiverId().contains("@") ? message.getHeader().getReceiverId().split("@")[0] : "program";
             if (!config.getReceiverEndpoints().containsKey(receiverService))
                 return null;
@@ -138,29 +180,40 @@ public class ExchangeService {
             //Retrieve url from config
             return baseUrl + "/" + message.getHeader().getMessageType().toString() + "/_" + message.getHeader().getAction();
         } else {
-            return receiverDomain + "/digit-exchange/v1/" + message.getHeader().getMessageType().toString();
+            String receiverDomain = securityService.extractHostUrlFromURL(message.getHeader().getReceiverId());
+            String contextPath = servletContext.getContextPath();
+            return receiverDomain + contextPath +"/v1/exchange/" + message.getHeader().getMessageType().toString();
         }
     }
 
-    public static boolean matchDomains(String domain1, String domain2) {
+    void convertMessageAndSetStatus(RequestMessage requestMessage, CustomException exception) {
+        ObjectNode objectNode;
         try {
-            URI uri1 = new URI(normalizeUrl(domain1));
-            URI uri2 = new URI(normalizeUrl(domain2));
+            objectNode = mapper.readValue(requestMessage.getMessage(), ObjectNode.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        setErrorStatuses(objectNode, exception);
 
-            // Check if the normalized domains are equal
-            return uri1.getHost().equalsIgnoreCase(uri2.getHost());
-        } catch (URISyntaxException e) {
-            // Handle URI syntax exception if needed
-            e.printStackTrace();
-            return false;
+        try {
+            requestMessage.setMessage(mapper.writeValueAsString(objectNode));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private static String normalizeUrl(String url) {
-        // Add a default scheme (e.g., "http://") if not present
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = "http://" + url;
+    void setErrorStatuses(ObjectNode objectNode, CustomException exception) {
+
+        if (objectNode.has("status"))
+            objectNode.remove("status");
+        ObjectNode statusNode = mapper.createObjectNode();
+        statusNode.put("status_code", "ERROR");
+        statusNode.put("status_message", exception.getCode() + " " + exception.getMessage());
+        objectNode.set("status", statusNode);
+        if (objectNode.has("children") && objectNode.get("children").isArray()) {
+            for (JsonNode child : objectNode.get("children")) {
+                setErrorStatuses((ObjectNode) child, exception);
+            }
         }
-        return url;
     }
 }
