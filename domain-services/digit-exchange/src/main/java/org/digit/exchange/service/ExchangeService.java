@@ -43,6 +43,7 @@ public class ExchangeService {
         log.info("Pushed message to kafka topic");
         // If log events is true then process and push to the kafka
         if (config.isEnabledEventLogs()) {
+            log.info("Emitting events to topic");
             emitEventsToTopic(requestMessageWrapper);
         }
         return messageRequest;
