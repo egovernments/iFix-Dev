@@ -11,6 +11,9 @@ import org.egov.mdms.model.MdmsResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 
+import static org.digit.program.constants.Error.*;
+import static org.digit.program.constants.ProgramConstants.*;
+
 @Component
 @Slf4j
 public class CommonValidator {
@@ -34,15 +37,15 @@ public class CommonValidator {
         log.info("Validating request header");
         if (!action.equalsIgnoreCase(Action.SEARCH.toString()) && requestHeader.getReceiverId()
                 .equals(requestHeader.getSenderId()))
-            throw new CustomException("RECEIVER_ID_SENDER_ID_ERROR", "ReceiverId should not be same as SenderId");
+            throw new CustomException(RECEIVER_ID_SENDER_ID_ERROR, RECEIVER_ID_SENDER_ID_ERROR_MSG);
         if (!requestHeader.getReceiverId().contains("@"))
-            throw new CustomException("RECEIVER_ID_ERROR", "ReceiverId is wrong, it should have @");
+            throw new CustomException(RECEIVER_ID_ERROR, RECEIVER_ID_ERROR_MSG);
         if (!requestHeader.getSenderId().contains("@"))
-            throw new CustomException("SENDER_ID_ERROR", "SenderId is wrong, it should have @");
+            throw new CustomException(SENDER_ID_ERROR, SENDER_ID_ERROR_MSG);
         if (!action.equalsIgnoreCase(requestHeader.getAction().toString()))
-            throw new CustomException("ACTION_ERROR", "Action in request header should be same as url");
+            throw new CustomException(ACTION_ERROR, ACTION_ERROR_MSG);
         if (!messageType.equalsIgnoreCase(requestHeader.getMessageType().toString()))
-            throw new CustomException("MESSAGE_TYPE_ERROR", "MessageType in request header should be same as url");
+            throw new CustomException(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_ERROR_MSG);
         log.info("Validated request header for {} {}", messageType, action);
     }
 
@@ -53,9 +56,9 @@ public class CommonValidator {
      */
     public void validateReply(RequestHeader requestHeader, String locationCode) {
         MdmsResponse mdmsResponse = mdmsUtil.callMdms(locationCode);
-        JsonNode node = mapper.convertValue(mdmsResponse.getMdmsRes().get("exchange").get("ExchangeServers").get(0), JsonNode.class);
-        if (!commonUtil.isSameDomain(node.get("hostUrl").asText(), requestHeader.getReceiverId())) {
-            throw new CustomException("RECEIVER_ID_CLIENT_HOST_URL_ERROR", "ReceiverId should be same as client host url");
+        JsonNode node = mapper.convertValue(mdmsResponse.getMdmsRes().get(EXCHANGE).get(EXCHANGE_SERVERS).get(0), JsonNode.class);
+        if (!commonUtil.isSameDomain(node.get(HOST_URL).asText(), requestHeader.getReceiverId())) {
+            throw new CustomException(RECEIVER_ID_CLIENT_HOST_URL_ERROR, RECEIVER_ID_CLIENT_HOST_URL_ERROR_MSG);
         }
     }
 }

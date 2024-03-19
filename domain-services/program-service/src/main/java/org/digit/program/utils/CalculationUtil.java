@@ -17,6 +17,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.digit.program.constants.Error.NO_SANCTION_AVAILABLE_FOR_AMOUNT;
+import static org.digit.program.constants.Error.NO_SANCTION_AVAILABLE_FOR_AMOUNT_MSG;
+
 @Component
 @Slf4j
 public class CalculationUtil {
@@ -94,7 +97,7 @@ public class CalculationUtil {
             }
 
             if (sanction == null) {
-                throw new CustomException("NO_SANCTION_AVAILABLE_FOR_AMOUNT", "no sanction available for disburse amount " +
+                throw new CustomException(NO_SANCTION_AVAILABLE_FOR_AMOUNT, NO_SANCTION_AVAILABLE_FOR_AMOUNT_MSG +
                         disbursement.getGrossAmount());
             }
 

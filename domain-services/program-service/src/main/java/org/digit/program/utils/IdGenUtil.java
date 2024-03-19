@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.digit.program.constants.Error.IDGEN_ERROR;
+import static org.digit.program.constants.Error.IDGEN_ERROR_MSG;
+
 @Component
 public class IdGenUtil {
     private final ObjectMapper mapper;
@@ -41,7 +44,7 @@ public class IdGenUtil {
         List<IdResponse> idResponses = response.getIdResponses();
 
         if (CollectionUtils.isEmpty(idResponses))
-            throw new CustomException("IDGEN_ERROR", "No ids returned from IdGen Service");
+            throw new CustomException(IDGEN_ERROR, IDGEN_ERROR_MSG);
 
         return idResponses.stream().map(IdResponse::getId).collect(Collectors.toList());
     }

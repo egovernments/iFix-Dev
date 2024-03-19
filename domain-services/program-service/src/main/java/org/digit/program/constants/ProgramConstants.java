@@ -18,5 +18,8 @@ public class ProgramConstants {
     public static final String DISBURSE = "disburse";
     public static final String ON_DISBURSE = "on-disburse";
 
+    public static final String EXCHANGE = "exchange";
+    public static final String EXCHANGE_SERVERS = "ExchangeServers";
+    public static final String HOST_URL = "hostUrl";
 
 }

@@ -14,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.digit.program.constants.Error.*;
+
 @Component
 @Slf4j
 public class SanctionValidator {
@@ -55,15 +57,15 @@ public class SanctionValidator {
             locationCodes.add(sanction.getLocationCode());
         }
         if (programCodes.size() > 1) {
-            throw new CustomException("SAME_PROGRAM_CODE", "Program code should be same for all Sanction");
+            throw new CustomException(SAME_PROGRAM_CODE, SAME_PROGRAM_CODE_MSG);
         }
         if (locationCodes.size() > 1) {
-            throw new CustomException("SAME_LOCATION_CODE", "Location code should be same for all Sanction");
+            throw new CustomException(SAME_LOCATION_CODE, SAME_LOCATION_CODE_MSG);
         }
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
                 .programCode(sanctions.get(0).getProgramCode()).locationCode(sanctions.get(0).getLocationCode()).build());
         if (CollectionUtils.isEmpty(programs)) {
-            throw new CustomException("NO_PROGRAMS_FOUND" , "No active programs exists for program code: " + sanctions.get(0).getProgramCode());
+            throw new CustomException(NO_PROGRAMS_FOUND , NO_PROGRAMS_FOUND_MSG + sanctions.get(0).getProgramCode());
         }
     }
     /**
@@ -78,7 +80,7 @@ public class SanctionValidator {
                     .ids(new ArrayList<>(idsFromRequest)).build(), false);
             if (!existingSanctions.isEmpty()) {
                 List<String> ids = existingSanctions.stream().map(Sanction::getId).collect(Collectors.toList());
-                throw new CustomException("DUPLICATE_SANCTION_ID", "Duplicate sanction id(s): " + ids);
+                throw new CustomException(DUPLICATE_SANCTION_ID, DUPLICATE_SANCTION_ID_MSG + ids);
             }
         }
     }
@@ -91,7 +93,7 @@ public class SanctionValidator {
         Set<String> sanctionIds = new HashSet<>();
         for (Sanction sanction : sanctions) {
             if (sanction.getId() == null || sanction.getId().isEmpty()) {
-                throw new CustomException("SANCTION_ID_NULL", "Sanction id cannot be null or empty");
+                throw new CustomException(SANCTION_ID_NULL, SANCTION_ID_NULL_MSG);
             } else {
                 sanctionIds.add(sanction.getId());
             }
@@ -100,7 +102,7 @@ public class SanctionValidator {
                 .ids(new ArrayList<>(sanctionIds)).build(), false);
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
-            throw new CustomException("NO_SANCTIONS_FOUND", "No sanction found for id(s): " + sanctionIds);
+            throw new CustomException(NO_SANCTIONS_FOUND, NO_SANCTIONS_FOUND_MSG + sanctionIds);
         }
     }
 }

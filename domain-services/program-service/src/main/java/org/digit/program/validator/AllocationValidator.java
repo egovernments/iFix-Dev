@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.digit.program.constants.Error.*;
+
 @Component
 @Slf4j
 public class AllocationValidator {
@@ -60,17 +62,17 @@ public class AllocationValidator {
             locationCodes.add(allocation.getLocationCode());
         }
         if (programCodes.size() > 1) {
-            throw new CustomException("PROGRAM_CODE_ERROR", "Program code should be same for all allocations");
+            throw new CustomException(PROGRAM_CODE_ERROR_ALLOCATION, PROGRAM_CODE_ERROR_ALLOCATION_MSG);
         }
         if (locationCodes.size() > 1) {
-            throw new CustomException("LOCATION_CODE_ERROR", "Location code should be same for all allocations");
+            throw new CustomException(LOCATION_CODE_ERROR, LOCATION_CODE_ERROR_MSG);
         }
 
         List<Program> programs = programRepository.searchProgram(ProgramSearch.builder()
                 .programCode(allocations.get(0).getProgramCode())
                 .locationCode(allocations.get(0).getLocationCode()).build());
         if (programs.isEmpty()) {
-            throw new CustomException("NO_PROGRAMS_FOUND", "No program found for code: " + allocations.get(0).getProgramCode());
+            throw new CustomException(NO_PROGRAMS_FOUND, NO_PROGRAMS_FOUND_MSG + allocations.get(0).getProgramCode());
         }
     }
 
@@ -80,10 +82,10 @@ public class AllocationValidator {
                 .ids(new ArrayList<>(sanctionIds)).programCode(allocations.get(0).getProgramCode()).build(), false);
         if (sanctionFromSearch.size() != sanctionIds.size()) {
             sanctionIds.removeAll(sanctionFromSearch.stream().map(Sanction::getId).collect(Collectors.toSet()));
-            throw new CustomException("SANCTIONS_NOT_FOUND", "No sanction found for id(s): " + sanctionIds);
+            throw new CustomException(SANCTIONS_NOT_FOUND, SANCTIONS_NOT_FOUND_MSG + sanctionIds);
         }
         if (!sanctionFromSearch.get(0).getProgramCode().equalsIgnoreCase(allocations.get(0).getProgramCode())) {
-            throw new CustomException("PROGRAM_CODE_ERROR", "Program code should be same as sanction program code");
+            throw new CustomException(PROGRAM_CODE_ERROR_SANCTION, PROGRAM_CODE_ERROR_SANCTION_MSG);
         }
         return sanctionFromSearch;
     }
@@ -107,9 +109,9 @@ public class AllocationValidator {
         }
         for (Sanction sanction : sanctionsFromSearch) {
             if (sanctionIdAllocatedAmountMap.get(sanction.getId()) > 0 && sanctionIdAllocatedAmountMap.get(sanction.getId()) > (sanction.getGrossAmount() - sanction.getAllocatedAmount()))
-                throw new CustomException("SANCTIONED_AMOUNT_ERROR", "Sanctioned amount should be greater than allocated amount");
+                throw new CustomException(SANCTIONED_AMOUNT_ERROR_ALLOCATION, SANCTIONED_AMOUNT_ERROR_ALLOCATION_MSG);
             if (sanctionIdAllocatedAmountMap.get(sanction.getId()) < 0 && Math.abs(sanctionIdAllocatedAmountMap.get(sanction.getId())) > sanction.getAvailableAmount())
-                throw new CustomException("AVAILABLE_AMOUNT_ERROR", "Available amount should be greater than deduction amount");
+                throw new CustomException(AVAILABLE_AMOUNT_ERROR_DEDUCTION, AVAILABLE_AMOUNT_ERROR_DEDUCTION_MSG);
         }
     }
 
@@ -121,7 +123,7 @@ public class AllocationValidator {
         Set<String> allocationIds = new HashSet<>();
         for (Allocation allocation : allocations) {
             if (allocation.getId() == null || allocation.getId().isEmpty()) {
-                throw new CustomException("INVALID_ALLOCATION_ID", "Allocation id cannot be empty");
+                throw new CustomException(INVALID_ALLOCATION_ID, INVALID_ALLOCATION_ID_MSG);
             } else {
                 allocationIds.add(allocation.getId());
             }
@@ -130,7 +132,7 @@ public class AllocationValidator {
                 .ids(new ArrayList<>(allocationIds)).build());
         if (allocationsFromSearch.size() != allocationIds.size()) {
             allocationIds.removeAll(allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toSet()));
-            throw new CustomException("ALLOCATIONS_NOT_FOUND", "No allocation found for id(s): " + allocationIds);
+            throw new CustomException(ALLOCATIONS_NOT_FOUND, ALLOCATIONS_NOT_FOUND_MSG + allocationIds);
         }
     }
 
@@ -147,7 +149,7 @@ public class AllocationValidator {
                     .searchAllocation(AllocationSearch.builder().ids(new ArrayList<>(idsFromRequest)).build());
             if (!allocationsFromSearch.isEmpty()) {
                 List<String> ids = allocationsFromSearch.stream().map(Allocation::getId).collect(Collectors.toList());
-                throw new CustomException("DUPLICATE_ALLOCATION_ID", "Duplicate allocation id(s): " + ids);
+                throw new CustomException(DUPLICATE_ALLOCATION_ID, DUPLICATE_ALLOCATION_ID_MSG + ids);
             }
         }
 
