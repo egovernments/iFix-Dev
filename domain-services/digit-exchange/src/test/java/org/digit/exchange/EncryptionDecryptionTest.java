@@ -1,11 +1,13 @@
 package org.digit.exchange;
 
+import lombok.extern.slf4j.Slf4j;
 import org.digit.exchange.service.SecurityService;
 import org.junit.Test;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+@Slf4j
 public class EncryptionDecryptionTest {
 
     public static final String endpointOnePrivateKey = "-----BEGIN PRIVATE KEY-----\n" +
@@ -86,7 +88,7 @@ public class EncryptionDecryptionTest {
 
     @Test
     public void encryptMessage() {
-        System.out.println("Test Sign Message");
+        log.info("Test Sign Message");
         SecurityService encService = new SecurityService();
         String message = "Hello World1";
         String signature = null;
@@ -96,34 +98,34 @@ public class EncryptionDecryptionTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Signature: " + signature);
+        log.info("Signature: " + signature);
     }
 
     @Test
     public void decryptMessage() {
-        System.out.println("Test decrypt message");
+        log.info("Test decrypt message");
         SecurityService encService = new SecurityService();
         String message = "Hello World1";
         String signature = "e4NwqUECBSjRblGRoI1taBCw6Bw+cTLKAzVPlL9KelkAJCJ3VWLXb7KzRg8lXXjOUgRgnXZcC+mNVI9+vl4cXP9eAuynudWNMm2HAtUZNKsteDHOptNJNIWYLTGes79nwGbGPDetZD/vU4KJl13ZuFKoHJoYnt3qYKK6RI7YKgBNStZ3ctvnyvHgHHiMUEZxcGFl/i7OrrNZerrRazdu993SXxykBlOgSLp0ViU1LdRnHbOOawqVBNkOkDvgQ1M2CUtqB4Z+36vFWfI/0VV/GF+ZBRl7EU+bz/YG+cmIEjuNvRxkvdrS1PL3BD0SVCEEhF6GlNhDmuExAYO8rDiYqw==";
         String decryptedMessage = null;
         try {
             PublicKey publicKey = encService.getPublicKey(endpointOnePublicKey);
-            System.out.println("Public Key: " + publicKey);
+            log.info("Public Key: " + publicKey);
             decryptedMessage = encService.decrypt(signature, publicKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("decryptedMessage: " + decryptedMessage);
+        log.info("decryptedMessage: " + decryptedMessage);
         if (message.equals(decryptedMessage)) {
-            System.out.println("Both messages are same!" );
+            log.info("Both messages are same!" );
         } else {
-            System.out.println("Both messages are not same!" );
+            log.info("Both messages are not same!" );
         }
     }
 
     @Test
     public void signMessage() {
-        System.out.println("Test Sign Message");
+        log.info("Test Sign Message");
         SecurityService encService = new SecurityService();
         String message = "{\"id\":\"0d2cc98d-b528-4fb3-993e-5efda3f61f60\",\"function_code\":null,\"administration_code\":null,\"recipient_segment_code\":null,\"economic_segment_code\":null,\"source_of_fund_code\":null,\"target_segment_code\":null,\"currency_code\":null,\"locale_code\":null,\"status\":{\"status_code\":\"INITIATED\",\"status_message\":\"INITIATED\"},\"location_code\":\"pg.citya\",\"program_code\":\"PG/2023-24/000310\",\"target_id\":\"EP/1013/2023-24/02/29/000090\",\"parent_id\":null,\"sanction_id\":\"7b6bb0f8-109d-4b94-bc97-c3220509c632\",\"transaction_id\":null,\"account_code\":null,\"net_amount\":100,\"gross_amount\":100,\"individual\":null,\"additional_details\":{\"billNumbers\":[\"PB/2023-24/000558\"],\"referenceIds\":[\"WO/2023-24/000783_PR_000491\"]},\"audit_details\":{\"createdBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"lastModifiedBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"createdTime\":1709188644862,\"lastModifiedTime\":1709188644862},\"children\":[{\"id\":\"bb14c451-634a-44b2-aa0c-78b069d6cd64\",\"function_code\":null,\"administration_code\":null,\"recipient_segment_code\":null,\"economic_segment_code\":null,\"source_of_fund_code\":null,\"target_segment_code\":null,\"currency_code\":\"INR\",\"locale_code\":\"en_IN\",\"status\":{\"status_code\":\"INITIATED\",\"status_message\":\"INITIATED\"},\"location_code\":\"pg.citya\",\"program_code\":\"PG/2023-24/000310\",\"target_id\":\"62d30121-261e-442b-b23c-5049c2141131\",\"parent_id\":null,\"sanction_id\":null,\"transaction_id\":null,\"account_code\":\"XYZ1230987@SBI000007\",\"net_amount\":12,\"gross_amount\":12,\"individual\":{\"name\":\"GSTTDS\",\"email\":null,\"phone\":\"9999999999\",\"pin\":null,\"address\":\"pg.citya\"},\"additional_details\":null,\"audit_details\":{\"createdBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"lastModifiedBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"createdTime\":1709188644862,\"lastModifiedTime\":1709188644862},\"children\":null},{\"id\":\"bc5db982-b9e6-47b3-aeac-c37f135b76ee\",\"function_code\":null,\"administration_code\":null,\"recipient_segment_code\":null,\"economic_segment_code\":null,\"source_of_fund_code\":null,\"target_segment_code\":null,\"currency_code\":\"INR\",\"locale_code\":\"en_IN\",\"status\":{\"status_code\":\"INITIATED\",\"status_message\":\"INITIATED\"},\"location_code\":\"pg.citya\",\"program_code\":\"PG/2023-24/000310\",\"target_id\":\"91c4d866-7ec1-49b6-9d02-492e42cbb0da\",\"parent_id\":null,\"sanction_id\":null,\"transaction_id\":null,\"account_code\":\"333367679911@SBIN0000063\",\"net_amount\":88,\"gross_amount\":88,\"individual\":{\"name\":\"roso\",\"email\":null,\"phone\":\"9876678790\",\"pin\":null,\"address\":\"pg.citya\"},\"additional_details\":null,\"audit_details\":{\"createdBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"lastModifiedBy\":\"ee3379e9-7f25-4be8-9cc1-dc599e1668c9\",\"createdTime\":1709188644862,\"lastModifiedTime\":1709188644862},\"children\":null}]}";
         String signature = null;
@@ -133,12 +135,12 @@ public class EncryptionDecryptionTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Signature: " + signature);
+        log.info("Signature: " + signature);
     }
 
     @Test
     public void validateMessage() {
-        System.out.println("Test Sign Message");
+        log.info("Test Sign Message");
         SecurityService encService = new SecurityService();
         String message = "{\"location_code\":\"pg.citya\",\"name\":\"Test 1\",\"start_date\":0,\"end_date\":0,\"client_host_url\":\"https://unified-dev.digit.org\",\"function_code\":\"string\",\"administration_code\":\"string\",\"recipient_segment_code\":\"string\",\"economic_segment_code\":\"string\",\"source_of_fund_code\":\"string\",\"target_segment_code\":\"string\",\"currency_code\":\"string\",\"locale_code\":\"string\",\"status\":{\"status_code\":\"RECEIVED\",\"status_message\":\"string\"}}";
         String signature = "TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==";
@@ -149,12 +151,12 @@ public class EncryptionDecryptionTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Signature Verified: " + signatureVerified);
+        log.info("Signature Verified: " + signatureVerified);
     }
 
     @Test
     public void signMessage1() {
-        System.out.println("Test Sign Message");
+        log.info("Test Sign Message");
         SecurityService encService = new SecurityService();
         String message = "{\"location_code\":\"pg.citya\",\"name\":\"Test 1\",\"start_date\":0,\"end_date\":0,\"client_host_url\":\"https://unified-dev.digit.org\",\"function_code\":\"string\",\"administration_code\":\"string\",\"recipient_segment_code\":\"string\",\"economic_segment_code\":\"string\",\"source_of_fund_code\":\"string\",\"target_segment_code\":\"string\",\"currency_code\":\"string\",\"locale_code\":\"string\",\"status\":{\"status_code\":\"RECEIVED\",\"status_message\":\"string\"}}{\"location_code\":\"pg.citya\",\"name\":\"Test 1\",\"start_date\":0,\"end_date\":0,\"client_host_url\":\"https://unified-dev.digit.org\",\"function_code\":\"string\",\"administration_code\":\"string\",\"recipient_segment_code\":\"string\",\"economic_segment_code\":\"string\",\"source_of_fund_code\":\"string\",\"target_segment_code\":\"string\",\"currency_code\":\"string\",\"locale_code\":\"string\",\"status\":{\"status_code\":\"RECEIVED\",\"status_message\":\"string\"}}";
         String signature = null;
@@ -164,7 +166,7 @@ public class EncryptionDecryptionTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Signature: " + signature);
+        log.info("Signature: " + signature);
     }
 
 }

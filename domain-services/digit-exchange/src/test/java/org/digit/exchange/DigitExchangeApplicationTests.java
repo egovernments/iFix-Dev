@@ -1,5 +1,6 @@
 package org.digit.exchange;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SpringBootTest
+@Slf4j
 class DigitExchangeApplicationTests {
 
 	@Test
@@ -24,9 +26,9 @@ class DigitExchangeApplicationTests {
 		String domain2 = extractDomain(str2);
 		String domain3 = extractDomain(str3);
 
-		System.out.println("Domain 1: " + domain1);
-		System.out.println("Domain 2: " + domain2);
-		System.out.println("Domain 3: " + domain3);
+		log.info("Domain 1: " + domain1);
+		log.info("Domain 2: " + domain2);
+		log.info("Domain 3: " + domain3);
 	}
 	private static String extractDomain(String input) {
 		// Regular expression pattern to match the domain with http/https
