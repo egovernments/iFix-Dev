@@ -4,6 +4,7 @@ package org.digit.program.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 @Data
@@ -54,16 +55,5 @@ public class ExchangeCode {
 
     @JsonProperty("status")
     private Status status;
-
-//    public ExchangeMessage() {
-//        // Initialize any default values if needed
-//    }
-
-
-//    public ExchangeMessage(){
-//        UUID uuid = UUID.randomUUID();
-//        this.id = uuid.toString();
-//        this.schemaVersion = "1.0.0";
-//    }
 
 }

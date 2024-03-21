@@ -13,20 +13,20 @@ public class ExchangeCodeQueryBuilder {
 
     public static final String EXCHANGE_CODE_INSERT_QUERY = " INSERT INTO eg_program_message_codes " +
             " ( id, location_code, reference_id, type, function_code, administration_code, program_code, " +
-            " recipient_segment_code, economic_segment_code, source_of_fund_code, target_segment_code, " +
-            " created_by, last_modified_by, created_time, last_modified_time ) " +
-            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            " recipient_segment_code, economic_segment_code, source_of_fund_code, target_segment_code, currency_code, " +
+            " locale_code, created_by, last_modified_by, created_time, last_modified_time ) " +
+            " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 
     public static final String EXCHANGE_CODE_UPDATE_QUERY = " UPDATE eg_program_message_codes " +
             " SET function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
-            " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
-            " last_modified_by = ?, last_modified_time = ? " +
+            " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, currency_code = ?, " +
+            " locale_code = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public static final String ON_PROGRAM_UPDATE_QUERY = " UPDATE eg_program_message_codes " +
             " SET program_code = ?, function_code = ?, administration_code = ?, recipient_segment_code = ?, " +
-            " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, " +
-            " last_modified_by = ?, last_modified_time = ? " +
+            " economic_segment_code = ?, source_of_fund_code = ?, target_segment_code = ?, currency_code = ?, " +
+            " locale_code = ?, last_modified_by = ?, last_modified_time = ? " +
             " WHERE id = ? ";
 
     public String buildExchangeCodeProgramInsertQuery(Program program, List<Object> preparedStmtList) {
@@ -41,6 +41,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getEconomicSegmentCode());
         preparedStmtList.add(program.getSourceOfFundCode());
         preparedStmtList.add(program.getTargetSegmentCode());
+        preparedStmtList.add(program.getCurrencyCode());
+        preparedStmtList.add(program.getLocaleCode());
         preparedStmtList.add(program.getAuditDetails().getCreatedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getCreatedTime());
@@ -58,6 +60,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getEconomicSegmentCode());
         preparedStmtList.add(program.getSourceOfFundCode());
         preparedStmtList.add(program.getTargetSegmentCode());
+        preparedStmtList.add(program.getCurrencyCode());
+        preparedStmtList.add(program.getLocaleCode());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(program.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(program.getId());
@@ -76,6 +80,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(sanction.getEconomicSegmentCode());
         preparedStmtList.add(sanction.getSourceOfFundCode());
         preparedStmtList.add(sanction.getTargetSegmentCode());
+        preparedStmtList.add(sanction.getCurrencyCode());
+        preparedStmtList.add(sanction.getLocaleCode());
         preparedStmtList.add(sanction.getAuditDetails().getCreatedBy());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(sanction.getAuditDetails().getCreatedTime());
@@ -90,6 +96,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(sanction.getEconomicSegmentCode());
         preparedStmtList.add(sanction.getSourceOfFundCode());
         preparedStmtList.add(sanction.getTargetSegmentCode());
+        preparedStmtList.add(sanction.getCurrencyCode());
+        preparedStmtList.add(sanction.getLocaleCode());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(sanction.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(sanction.getId());
@@ -108,6 +116,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(allocation.getEconomicSegmentCode());
         preparedStmtList.add(allocation.getSourceOfFundCode());
         preparedStmtList.add(allocation.getTargetSegmentCode());
+        preparedStmtList.add(allocation.getCurrencyCode());
+        preparedStmtList.add(allocation.getLocaleCode());
         preparedStmtList.add(allocation.getAuditDetails().getCreatedBy());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(allocation.getAuditDetails().getCreatedTime());
@@ -122,6 +132,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(allocation.getEconomicSegmentCode());
         preparedStmtList.add(allocation.getSourceOfFundCode());
         preparedStmtList.add(allocation.getTargetSegmentCode());
+        preparedStmtList.add(allocation.getCurrencyCode());
+        preparedStmtList.add(allocation.getLocaleCode());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(allocation.getAuditDetails().getLastModifiedTime());
         preparedStmtList.add(allocation.getId());
@@ -140,6 +152,8 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(disbursement.getEconomicSegmentCode());
         preparedStmtList.add(disbursement.getSourceOfFundCode());
         preparedStmtList.add(disbursement.getTargetSegmentCode());
+        preparedStmtList.add(disbursement.getCurrencyCode());
+        preparedStmtList.add(disbursement.getLocaleCode());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getLastModifiedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());

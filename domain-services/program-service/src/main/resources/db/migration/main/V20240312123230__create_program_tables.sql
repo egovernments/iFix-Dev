@@ -30,6 +30,8 @@ CREATE TABLE eg_program_message_codes (
   economic_segment_code       character varying(128),
   source_of_fund_code         character varying(128),
   target_segment_code         character varying(128),
+  currency_code               character varying(128),
+  locale_code                 character varying(128),
   created_by                  character varying(256),
   last_modified_by            character varying(256),
   created_time                bigint,

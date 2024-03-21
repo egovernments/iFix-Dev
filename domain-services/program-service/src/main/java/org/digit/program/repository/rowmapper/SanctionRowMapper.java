@@ -53,6 +53,8 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             String economicSegmentCode = rs.getString("message_economic_segment_code");
             String sourceOfFundCode = rs.getString("message_source_of_fund_code");
             String targetSegmentCode = rs.getString("message_target_segment_code");
+            String currencyCode = rs.getString("message_currency_code");
+            String localeCode = rs.getString("message_locale_code");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
 
@@ -76,6 +78,8 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             sanction.setEconomicSegmentCode(economicSegmentCode);
             sanction.setSourceOfFundCode(sourceOfFundCode);
             sanction.setTargetSegmentCode(targetSegmentCode);
+            sanction.setCurrencyCode(currencyCode);
+            sanction.setLocaleCode(localeCode);
 
             sanctions.add(sanction);
         }

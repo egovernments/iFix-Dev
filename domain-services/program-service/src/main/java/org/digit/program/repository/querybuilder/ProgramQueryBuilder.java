@@ -57,6 +57,8 @@ public class ProgramQueryBuilder {
             "    eg_program_message_codes.economic_segment_code AS eg_program_message_codes_economic_segment_code, " +
             "    eg_program_message_codes.source_of_fund_code AS eg_program_message_codes_source_of_fund_code, " +
             "    eg_program_message_codes.target_segment_code AS eg_program_message_codes_target_segment_code, " +
+            "    eg_program_message_codes.currency_code AS eg_program_message_codes_currency_code, " +
+            "    eg_program_message_codes.locale_code AS eg_program_message_codes_locale_code, " +
             "    eg_program_message_codes.created_by AS eg_program_message_codes_created_by, " +
             "    eg_program_message_codes.last_modified_by AS eg_program_message_codes_last_modified_by, " +
             "    eg_program_message_codes.created_time AS eg_program_message_codes_created_time, " +

@@ -51,6 +51,8 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             String economicSegmentCode = rs.getString("message_economic_segment_code");
             String sourceOfFundCode = rs.getString("message_source_of_fund_code");
             String targetSegmentCode = rs.getString("message_target_segment_code");
+            String currencyCode = rs.getString("message_currency_code");
+            String localeCode = rs.getString("message_locale_code");
 
             Status status1 = Status.builder().statusCode(org.digit.program.constants.Status.valueOf(status)).statusMessage(statusMessage).build();
             AuditDetails auditDetails = AuditDetails.builder().createdTime(createdTime).lastModifiedTime(lastModifiedTime).createdBy(createdBy).lastModifiedBy(lastModifiedBy).build();
@@ -73,6 +75,8 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             allocation.setEconomicSegmentCode(economicSegmentCode);
             allocation.setSourceOfFundCode(sourceOfFundCode);
             allocation.setTargetSegmentCode(targetSegmentCode);
+            allocation.setCurrencyCode(currencyCode);
+            allocation.setLocaleCode(localeCode);
 
             allocations.add(allocation);
 

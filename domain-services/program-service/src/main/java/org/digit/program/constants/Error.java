@@ -2,7 +2,6 @@ package org.digit.program.constants;
 
 public class Error {
 
-    public static final String INVALID_ID = "Id is mandatory";
     public static final String PROGRAM_CODE_ERROR_ALLOCATION = "PROGRAM_CODE_ERROR";
     public static final String PROGRAM_CODE_ERROR_ALLOCATION_MSG = "Program code should be same for all allocations";
 
@@ -143,4 +142,7 @@ public class Error {
 
     public static final String IDGEN_ERROR = "IDGEN_ERROR";
     public static final String IDGEN_ERROR_MSG = "No ids returned from IdGen Service";
+
+    public static final String PARSING_ERROR = "PARSING_ERROR";
+    public static final String PARSING_ERROR_MSG = "Error while parsing ";
 }

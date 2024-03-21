@@ -39,6 +39,8 @@ public class SanctionQueryBuilder {
             "  pmc.economic_segment_code AS message_economic_segment_code, " +
             "  pmc.source_of_fund_code AS message_source_of_fund_code, " +
             "  pmc.target_segment_code AS message_target_segment_code, " +
+            "  pmc.currency_code AS message_currency_code, " +
+            "  pmc.locale_code AS message_locale_code, " +
             "  pmc.created_by AS message_created_by, " +
             "  pmc.last_modified_by AS message_last_modified_by, " +
             "  pmc.created_time AS message_created_time, " +

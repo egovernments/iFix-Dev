@@ -51,6 +51,8 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             String economicSegmentCode = rs.getString("eg_program_message_codes_economic_segment_code");
             String sourceOfFundCode = rs.getString("eg_program_message_codes_source_of_fund_code");
             String targetSegmentCode = rs.getString("eg_program_message_codes_target_segment_code");
+            String currencyCode = rs.getString("eg_program_message_codes_currency_code");
+            String localeCode = rs.getString("eg_program_message_codes_locale_code");
             String status = rs.getString("eg_program_status");
             String statusMessage = rs.getString("eg_program_status_message");
 
@@ -75,6 +77,8 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setEconomicSegmentCode(economicSegmentCode);
             program.setSourceOfFundCode(sourceOfFundCode);
             program.setTargetSegmentCode(targetSegmentCode);
+            program.setCurrencyCode(currencyCode);
+            program.setLocaleCode(localeCode);
             program.setStatus(status1);
 
             programs.add(program);

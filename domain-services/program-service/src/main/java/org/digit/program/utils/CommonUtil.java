@@ -19,6 +19,9 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.digit.program.constants.Error.PARSING_ERROR;
+import static org.digit.program.constants.Error.PARSING_ERROR_MSG;
+
 @Component
 public class CommonUtil {
 
@@ -62,7 +65,7 @@ public class CommonUtil {
             }
 
         } catch (IOException e) {
-            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
+            throw new CustomException(PARSING_ERROR, PARSING_ERROR_MSG + e.getMessage());
         }
 
         if(jsonNode== null || jsonNode.isEmpty())
@@ -77,7 +80,7 @@ public class CommonUtil {
         try {
             value = mapper.writeValueAsString(jsonObject);
         } catch (JsonProcessingException e) {
-            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
+            throw new CustomException(PARSING_ERROR, PARSING_ERROR_MSG + e.getMessage());
         }
 
         PGobject json = new PGobject();
@@ -85,7 +88,7 @@ public class CommonUtil {
         try {
             json.setValue(value);
         } catch (SQLException e) {
-            throw new CustomException("PARSING_ERROR", "Error while parsing " + e.getMessage());
+            throw new CustomException(PARSING_ERROR, PARSING_ERROR_MSG + e.getMessage());
         }
         return json;
     }

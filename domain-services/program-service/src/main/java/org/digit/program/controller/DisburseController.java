@@ -58,7 +58,7 @@ public class DisburseController {
     public ResponseEntity<DisbursementRequest> onDisburseCreate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), CREATE, ON_DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsDisburseAsync())) {
-            ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
+            return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.onDisburseCreate(disbursementRequest));
     }
@@ -67,7 +67,7 @@ public class DisburseController {
     public ResponseEntity<DisbursementRequest> onDisburseUpdate(@RequestBody @Valid DisbursementRequest disbursementRequest) {
         commonValidator.validateRequest(disbursementRequest.getHeader(), UPDATE, ON_DISBURSE);
         if (Boolean.TRUE.equals(configs.getIsDisburseAsync())) {
-            ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
+            return ResponseEntity.ok(disburseService.pushToKafka(disbursementRequest));
         }
         return ResponseEntity.ok(disburseService.onDisburseUpdate(disbursementRequest));
     }
