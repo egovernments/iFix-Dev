@@ -35,6 +35,13 @@ config:
       - work-dir: "domain-services/fiscal-event-post-processor"
         image-name: "fiscal-event-post-processor"
         dockerfile: "build/maven/Dockerfile"
+  - name: "builds/iFix/domain-services/program-service"
+    build:
+      - work-dir: "domain-services/program-service"
+        image-name: "program-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/program-service/src/main/resources/db"
+        image-name: "program-service-db"
   - name: "builds/iFix/domain-services/digit-exchange"
     build:
       - work-dir: "domain-services/digit-exchange"
