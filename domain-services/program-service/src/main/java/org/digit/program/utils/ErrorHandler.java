@@ -84,6 +84,14 @@ public class ErrorHandler {
         }
     }
 
+    public void handleDisburseWhenIfmsAdapterThrowsError (DisbursementRequest disbursementRequest, CustomException exception) {
+        commonUtil.updateUri(disbursementRequest.getHeader());
+        for (Disbursement disbursement : disbursementRequest.getDisbursement().getDisbursements()) {
+            disbursement.setStatus(setErrorStatus(disbursement.getStatus(), exception));
+        }
+        disbursementRequest.getDisbursement().setStatus(setErrorStatus(disbursementRequest.getDisbursement().getStatus(), exception));
+    }
+
     public void handleDisburseReplyError(DisbursementRequest disbursementRequest, CustomException exception) {
         log.info("Handling Disburse Reply Error");
         disbursementRequest.getDisbursement().setStatus(setErrorStatus(disbursementRequest.getDisbursement().getStatus(), exception));
