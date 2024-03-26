@@ -2,6 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.sanction.Sanction;
 import org.digit.program.models.Status;
 import org.digit.program.utils.CommonUtil;
@@ -71,7 +72,7 @@ public class SanctionRowMapper implements ResultSetExtractor<List<Sanction>> {
             sanction.setAdditionalDetails(additionalDetails);
             sanction.setAuditDetails(auditDetails);
 
-            sanction.setType(type);
+            sanction.setType(MessageType.fromValue(type));
             sanction.setFunctionCode(functionCode);
             sanction.setAdministrationCode(administrationCode);
             sanction.setRecipientSegmentCode(recipientSegmentCode);

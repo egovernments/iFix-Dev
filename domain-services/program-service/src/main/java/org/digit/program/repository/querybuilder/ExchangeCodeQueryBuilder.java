@@ -33,7 +33,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(program.getId());
         preparedStmtList.add(program.getLocationCode());
         preparedStmtList.add(program.getId());
-        preparedStmtList.add(program.getType());
+        preparedStmtList.add(program.getType().toString());
         preparedStmtList.add(program.getFunctionCode());
         preparedStmtList.add(program.getAdministrationCode());
         preparedStmtList.add(program.getProgramCode());
@@ -72,7 +72,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(sanction.getId());
         preparedStmtList.add(sanction.getLocationCode());
         preparedStmtList.add(sanction.getId());
-        preparedStmtList.add(sanction.getType());
+        preparedStmtList.add(sanction.getType().toString());
         preparedStmtList.add(sanction.getFunctionCode());
         preparedStmtList.add(sanction.getAdministrationCode());
         preparedStmtList.add(sanction.getProgramCode());
@@ -108,7 +108,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(allocation.getId());
         preparedStmtList.add(allocation.getLocationCode());
         preparedStmtList.add(allocation.getId());
-        preparedStmtList.add(allocation.getType());
+        preparedStmtList.add(allocation.getType().toString());
         preparedStmtList.add(allocation.getFunctionCode());
         preparedStmtList.add(allocation.getAdministrationCode());
         preparedStmtList.add(allocation.getProgramCode());
@@ -144,7 +144,7 @@ public class ExchangeCodeQueryBuilder {
         preparedStmtList.add(disbursement.getId());
         preparedStmtList.add(disbursement.getLocationCode());
         preparedStmtList.add(disbursement.getId());
-        preparedStmtList.add(disbursement.getType());
+        preparedStmtList.add(disbursement.getType().toString());
         preparedStmtList.add(disbursement.getFunctionCode());
         preparedStmtList.add(disbursement.getAdministrationCode());
         preparedStmtList.add(disbursement.getProgramCode());

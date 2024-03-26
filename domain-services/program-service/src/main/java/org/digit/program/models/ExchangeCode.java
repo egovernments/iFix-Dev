@@ -3,6 +3,7 @@ package org.digit.program.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.digit.program.constants.MessageType;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -18,8 +19,7 @@ public class ExchangeCode {
     private String id;
 
     @JsonProperty("type")
-    @Size(min = 2, max = 64)
-    private String type;
+    private MessageType type;
 
     @JsonProperty("function_code")
     @Size(min = 2, max = 64)

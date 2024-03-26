@@ -2,6 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.digit.program.constants.AllocationType;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.allocation.Allocation;
 import org.digit.program.models.Status;
 import org.digit.program.utils.CommonUtil;
@@ -68,7 +69,7 @@ public class AllocationRowMapper implements ResultSetExtractor<List<Allocation>>
             allocation.setAdditionalDetails(additionalDetails);
             allocation.setAuditDetails(auditDetails);
 
-            allocation.setType(type);
+            allocation.setType(MessageType.fromValue(type));
             allocation.setFunctionCode(functionCode);
             allocation.setAdministrationCode(administrationCode);
             allocation.setRecipientSegmentCode(recipientSegmentCode);
