@@ -64,7 +64,7 @@ public class SanctionService {
             sanctionValidator.validateSanction(sanctionRequest.getSanction().getChildren(), true);
             // Validates if receiver id is same as configured in mdms
             commonValidator.validateReply(sanctionRequest.getHeader(), sanctionRequest.getSanction().getChildren().get(0).getLocationCode());
-            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction().getChildren(), sanctionRequest.getHeader());
+            enrichmentService.enrichSanctionCreate(sanctionRequest.getSanction(), sanctionRequest.getHeader());
             sanctionRepository.saveSanction(sanctionRequest.getSanction().getChildren());
             // Forwards on sanction message to exchange service if sender and current domains are same
             dispatcherUtil.dispatchOnSanction(sanctionRequest);

@@ -56,6 +56,7 @@ public class EnrichmentService {
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         header.setMessageId(program.getId());
+        header.setMessageTs(System.currentTimeMillis());
         log.info("Enrichment for create completed for id: {}", program.getId());
     }
 
@@ -68,23 +69,28 @@ public class EnrichmentService {
         log.info("Enrich Program for Update/OnProgram");
         program.setAuditDetails(getAuditDetails(header.getSenderId(), program.getAuditDetails()));
         header.setMessageId(program.getId());
+        header.setMessageTs(System.currentTimeMillis());
         log.info("Enrichment for update/on-program completed for id: {}", program.getId());
     }
 
     /**
      * Set audit details and id if not present for sanction create
-     * @param sanctions
+     * @param sanction
      * @param header
      */
-    public void enrichSanctionCreate(List<Sanction> sanctions, RequestHeader header) {
+    public void enrichSanctionCreate(Sanction sanction, RequestHeader header) {
         log.info("Enrich sanction create");
-        for (Sanction sanction : sanctions) {
-            if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
-                sanction.setId(UUID.randomUUID().toString());
-            sanction.setType(MessageType.SANCTION);
-            sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
+        for (Sanction childSanctions : sanction.getChildren()) {
+            if (childSanctions.getId() == null || StringUtils.isEmpty(childSanctions.getId()))
+                childSanctions.setId(UUID.randomUUID().toString());
+            childSanctions.setType(MessageType.SANCTION);
+            childSanctions.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
-        header.setMessageId(sanctions.get(0).getId());
+        sanction.setId(UUID.randomUUID().toString());
+        sanction.setType(MessageType.SANCTION);
+        sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
+        header.setMessageId(sanction.getId());
+        header.setMessageTs(System.currentTimeMillis());
         log.info("Enrichment for create sanction completed");
     }
 
@@ -102,17 +108,21 @@ public class EnrichmentService {
 
     /**
      * Setting audit details and id if not present for allocation create
-     * @param allocations
+     * @param allocation
      * @param header
      */
-    public void enrichAllocationCreate(List<Allocation> allocations, RequestHeader header) {
-        for (Allocation allocation : allocations) {
-            if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
-                allocation.setId(UUID.randomUUID().toString());
-            allocation.setType(MessageType.ALLOCATION);
-            allocation.setAuditDetails(getAuditDetails(header.getSenderId(), null));
+    public void enrichAllocationCreate(Allocation allocation, RequestHeader header) {
+        for (Allocation childAllocations : allocation.getChildren()) {
+            if (childAllocations.getId() == null || StringUtils.isEmpty(childAllocations.getId()))
+                childAllocations.setId(UUID.randomUUID().toString());
+            childAllocations.setType(MessageType.ALLOCATION);
+            childAllocations.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
-        header.setMessageId(allocations.get(0).getId());
+        allocation.setId(UUID.randomUUID().toString());
+        allocation.setType(MessageType.ALLOCATION);
+        allocation.setAuditDetails(getAuditDetails(header.getSenderId(), null));
+        header.setMessageId(allocation.getId());
+        header.setMessageTs(System.currentTimeMillis());
         log.info("Enrichment for create allocation completed");
     }
 
@@ -142,6 +152,7 @@ public class EnrichmentService {
         disbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         disbursement.setType(MessageType.DISBURSE);
         header.setMessageId(disbursement.getId());
+        header.setMessageTs(System.currentTimeMillis());
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
                 childDisbursement.setId(UUID.randomUUID().toString());
