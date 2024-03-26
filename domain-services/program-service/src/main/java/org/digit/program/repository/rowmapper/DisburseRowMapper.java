@@ -3,6 +3,7 @@ package org.digit.program.repository.rowmapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.disburse.Individual;
 import org.digit.program.models.Status;
@@ -88,7 +89,7 @@ public class DisburseRowMapper implements ResultSetExtractor<List<Disbursement>>
             disbursement.setAdditionalDetails(additionalDetails);
             disbursement.setAuditDetails(auditDetails);
 
-            disbursement.setType(type);
+            disbursement.setType(MessageType.fromValue(type));
             disbursement.setFunctionCode(functionCode);
             disbursement.setAdministrationCode(administrationCode);
             disbursement.setRecipientSegmentCode(recipientSegmentCode);

@@ -3,6 +3,7 @@ package org.digit.program.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.digit.program.configuration.ProgramConfiguration;
+import org.digit.program.constants.MessageType;
 import org.digit.program.constants.Status;
 import org.digit.program.models.RequestHeader;
 import org.digit.program.models.allocation.Allocation;
@@ -51,7 +52,7 @@ public class EnrichmentService {
                 program.setId(UUID.randomUUID().toString());
             program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
         }
-        program.setType(PROGRAM);
+        program.setType(MessageType.PROGRAM);
         program.setStatus(org.digit.program.models.Status.builder().statusCode(Status.ACTIVE).build());
         program.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         header.setMessageId(program.getId());
@@ -80,7 +81,7 @@ public class EnrichmentService {
         for (Sanction sanction : sanctions) {
             if (sanction.getId() == null || StringUtils.isEmpty(sanction.getId()))
                 sanction.setId(UUID.randomUUID().toString());
-            sanction.setType(SANCTION);
+            sanction.setType(MessageType.SANCTION);
             sanction.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
         header.setMessageId(sanctions.get(0).getId());
@@ -108,7 +109,7 @@ public class EnrichmentService {
         for (Allocation allocation : allocations) {
             if (allocation.getId() == null || StringUtils.isEmpty(allocation.getId()))
                 allocation.setId(UUID.randomUUID().toString());
-            allocation.setType(ALLOCATION);
+            allocation.setType(MessageType.ALLOCATION);
             allocation.setAuditDetails(getAuditDetails(header.getSenderId(), null));
         }
         header.setMessageId(allocations.get(0).getId());
@@ -139,14 +140,14 @@ public class EnrichmentService {
         AuditDetails auditDetails = getAuditDetails(header.getSenderId(), null);
         disbursement.setAuditDetails(auditDetails);
         disbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
-        disbursement.setType(DISBURSE);
+        disbursement.setType(MessageType.DISBURSE);
         header.setMessageId(disbursement.getId());
         for (Disbursement childDisbursement : disbursement.getDisbursements()) {
             if (childDisbursement.getId() == null || StringUtils.isEmpty(childDisbursement.getId()))
                 childDisbursement.setId(UUID.randomUUID().toString());
             childDisbursement.setAuditDetails(auditDetails);
             childDisbursement.setStatus(org.digit.program.models.Status.builder().statusCode(Status.INITIATED).build());
-            childDisbursement.setType(DISBURSE);
+            childDisbursement.setType(MessageType.DISBURSE);
         }
         log.info("Enrichment for create completed for id: {}", disbursement.getId());
     }

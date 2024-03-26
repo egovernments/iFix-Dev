@@ -2,6 +2,7 @@ package org.digit.program.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.MessageType;
 import org.digit.program.models.program.Program;
 import org.digit.program.models.Status;
 import org.digit.program.utils.CommonUtil;
@@ -70,7 +71,7 @@ public class ProgramRowMapper implements ResultSetExtractor<List<Program>> {
             program.setAdditionalDetails(additionalDetails);
             program.setAuditDetails(auditDetails);
 
-            program.setType(type);
+            program.setType(MessageType.fromValue(type));
             program.setFunctionCode(functionCode);
             program.setAdministrationCode(administrationCode);
             program.setRecipientSegmentCode(recipientSegmentCode);
