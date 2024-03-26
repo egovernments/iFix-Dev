@@ -79,7 +79,14 @@ public class DisburseService {
             // Persists disbursement and sanction in one transaction
             disburseRepository.saveDisburseAndSanction(disbursement, sanction);
             // Dispatches disbursement to appropriate service
-            DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
+            DisbursementRequest disbursementRequestFromAdapter = null;
+            try {
+                disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
+            } catch (CustomException e) {
+                errorHandler.handleDisburseWhenIfmsAdapterThrowsError(disbursementRequest, e);
+                onDisburseCreate(disbursementRequest);
+            }
+
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
                 // Calls onDisburseCreate method which replies to the appropriate service
