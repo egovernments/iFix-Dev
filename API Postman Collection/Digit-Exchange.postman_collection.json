@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "9433231c-3ee7-423f-9835-0fad77419e89",
+		"name": "Digit-Exchange",
+		"description": "The DIGIT Exchange Service is a robust data interchange platform designed to facilitate the seamless and secure exchange of digital information between two endpoints. Built with a fixed schema for headers and dynamic messaging capabilities, this service ensures reliable communication while prioritizing data integrity and confidentiality.\n\nEnvironment: Registry",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31932888"
+	},
+	"item": [
+		{
+			"name": "program",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n    \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType1}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "on-program",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n  \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType2}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "on-sanction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n  \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType3}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType3}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "on-allocation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n  \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType1}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Disburse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n  \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType5}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType5}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "on-Disburse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"signature\": \"TgE1hcA2E+YPMdPGz4vveKQpR0x+pgzRTlet52qh63Kekr71vWWScXqaRFtQW64uRFZGBUhHYYZQ2y6LffwnNOOQhhssaThhqVBhXNEwX9i75SNYXi5XSJVDYzSyHrhF20HW6RE9mAVWdc80i7d+FXlh+b/U+fnj+SrZ2s6Xd0WUZvU29LgqeUpyznlWLu1mDdJxNZavsDLWmxjTnknqBjDvwSc35WhFDhXDA2lWmm8YpZ1Y6TBmvvtVS7mAOTnhFy9sdCbrLcfXk5QWIsdzlvPqlkvdwEf30OZ6ewb680Aj3hO2OT5LCv7iLyz7C7srnB9lJT5gXiw+eSnktPXlDA==\",\r\n    \"header\": {\r\n        \"message_id\": \"123\",\r\n        \"message_ts\": \"string\",\r\n        \"action\": \"create\",\r\n        \"sender_id\": \"program@https://unified-qa.digit.org\",\r\n        \"sender_uri\": \"https://unified-qa.digit.org/exchange/v1/program\",\r\n        \"receiver_id\": \"program@https://unified-dev.digit.org\",\r\n        \"is_msg_encrypted\": false\r\n    },\r\n    \"message\": \"{\\n  \\\"id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n  \\\"function_code\\\": null,\\n  \\\"administration_code\\\": null,\\n  \\\"recipient_segment_code\\\": null,\\n  \\\"economic_segment_code\\\": null,\\n  \\\"source_of_fund_code\\\": null,\\n  \\\"target_segment_code\\\": null,\\n  \\\"currency_code\\\": null,\\n  \\\"locale_code\\\": null,\\n  \\\"status\\\": {\\n    \\\"status_code\\\": \\\"INITIATED\\\",\\n    \\\"status_message\\\": null\\n  },\\n  \\\"location_code\\\": \\\"pg.citya\\\",\\n  \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n  \\\"target_id\\\": \\\"EP/1013/2023-24/03/05/000103\\\",\\n  \\\"parent_id\\\": null,\\n  \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n  \\\"transaction_id\\\": null,\\n  \\\"account_code\\\": null,\\n  \\\"net_amount\\\": 2000,\\n  \\\"gross_amount\\\": 2000,\\n  \\\"individual\\\": null,\\n  \\\"additional_details\\\": {\\n    \\\"billNumbers\\\": [\\n      \\\"PB/2023-24/000571\\\"\\n    ],\\n    \\\"referenceIds\\\": [\\n      \\\"WO/2023-24/000921_PR_000504\\\"\\n    ]\\n  },\\n  \\\"audit_details\\\": {\\n    \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n    \\\"createdTime\\\": 1709630148244,\\n    \\\"lastModifiedTime\\\": 1709630148244\\n  },\\n  \\\"children\\\": [\\n    {\\n      \\\"id\\\": \\\"87ff88f3-8d80-48d6-b95d-cb4a838a5629\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"79eed6f6-677d-44a6-97e6-2d4120ba39fe\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"333367679914@SBIN0000063\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"roso\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9876678790\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"2829ab13-5a55-467e-bee7-abe9bb4b27b2\\\",\\n      \\\"function_code\\\": null,\\n      \\\"administration_code\\\": null,\\n      \\\"recipient_segment_code\\\": null,\\n      \\\"economic_segment_code\\\": null,\\n      \\\"source_of_fund_code\\\": null,\\n      \\\"target_segment_code\\\": null,\\n      \\\"currency_code\\\": null,\\n      \\\"locale_code\\\": null,\\n      \\\"status\\\": {\\n        \\\"status_code\\\": \\\"INITIATED\\\",\\n        \\\"status_message\\\": null\\n      },\\n      \\\"location_code\\\": \\\"pg.citya\\\",\\n      \\\"program_code\\\": \\\"PG/2023-24/000358\\\",\\n      \\\"target_id\\\": \\\"8d039ed7-0401-4d7c-81ed-696359b53c7e\\\",\\n      \\\"parent_id\\\": \\\"de023721-a469-412d-a494-1b88289a9879\\\",\\n      \\\"sanction_id\\\": \\\"4a1ec4f4-6767-4b95-a434-3d4c32a5310c\\\",\\n      \\\"transaction_id\\\": null,\\n      \\\"account_code\\\": \\\"XYZ1230987@SBI000007\\\",\\n      \\\"net_amount\\\": 1000,\\n      \\\"gross_amount\\\": 1000,\\n      \\\"individual\\\": {\\n        \\\"name\\\": \\\"LC\\\",\\n        \\\"email\\\": null,\\n        \\\"phone\\\": \\\"9999999999\\\",\\n        \\\"pin\\\": null,\\n        \\\"address\\\": \\\"pg.citya\\\"\\n      },\\n      \\\"additional_details\\\": null,\\n      \\\"audit_details\\\": {\\n        \\\"createdBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"lastModifiedBy\\\": \\\"program@https://unified-dev.digit.org\\\",\\n        \\\"createdTime\\\": 1709630148244,\\n        \\\"lastModifiedTime\\\": 1709630148244\\n      },\\n      \\\"children\\\": null\\n    }\\n  ]\\n}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/digit-exchange/v1/exchange/{{exchangeType6}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"digit-exchange",
+						"v1",
+						"exchange",
+						"{{exchangeType6}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "exchageType1",
+			"value": "program",
+			"type": "string"
+		},
+		{
+			"key": "exchageType2",
+			"value": "on-program",
+			"type": "string"
+		},
+		{
+			"key": "exchageType3",
+			"value": "on-sanction",
+			"type": "string"
+		},
+		{
+			"key": "exchageType4",
+			"value": "on-allocation",
+			"type": "string"
+		},
+		{
+			"key": "exchageType5",
+			"value": "disburse",
+			"type": "string"
+		},
+		{
+			"key": "exchageType6",
+			"value": "on-disburse",
+			"type": "string"
+		},
+		{
+			"key": "exchageType7",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
