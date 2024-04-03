@@ -26,6 +26,7 @@ import java.io.File;
 import java.security.Signature;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -143,51 +144,70 @@ public class MigrationService {
     private void callOnSanctionAllocationForFunds(FundsSearchResponse fundsSearchResponse, String tenantId) {
         log.info("Calling On Sanction Allocation For Tenant: "+ tenantId);
         List<SanctionDetail> sanctionDetails = fundsSearchResponse.getFunds();
+        if(sanctionDetails.isEmpty()) {
+            log.info("No Sanction Details Found For Tenant: "+ tenantId);
+            return;
+        }
         List<Sanction> sanctionList = new ArrayList<>();
         List<Allocation> allocationList = new ArrayList<>();
+        String sanctionId = UUID.randomUUID().toString();
+        Double totalSanctionedAmount = 0.0;
+        Double totalAvailableAmount = 0.0;
         for(SanctionDetail sanctionDetail: sanctionDetails) {
             Sanction sanction = new Sanction();
             sanction.setId(sanctionDetail.getId());
             sanction.setLocationCode(sanctionDetail.getTenantId());
             sanction.setProgramCode(sanctionDetail.getProgramCode());
-            sanction.setSanctionedAmount(sanctionDetail.getSanctionedAmount().doubleValue());
+            sanction.setNetAmount(sanctionDetail.getSanctionedAmount().doubleValue());
+            sanction.setGrossAmount(sanctionDetail.getSanctionedAmount().doubleValue());
+            sanction.setAvailableAmount(sanctionDetail.getFundsSummary().getAvailableAmount().doubleValue());
             sanction.setAllocatedAmount((double) 0);
             sanctionList.add(sanction);
+            totalSanctionedAmount += sanctionDetail.getSanctionedAmount().doubleValue();
+            totalAvailableAmount += sanctionDetail.getFundsSummary().getAvailableAmount().doubleValue();
             for(Allotment allotment: sanctionDetail.getAllotmentDetails()) {
                 Allocation allocation = new Allocation();
                 allocation.setId(allotment.getId());
                 allocation.setSanctionId(allotment.getSanctionId());
-                //TODO: Check if the amount is correct
-//                allocation.setAmount(allotment.getDecimalAllottedAmount());
+                allocation.setGrossAmount(allotment.getDecimalAllottedAmount().doubleValue());
+                allocation.setNetAmount(allotment.getDecimalAllottedAmount().doubleValue());
                 allocation.setLocationCode(allotment.getTenantId());
                 allocation.setAuditDetails(allotment.getAuditDetails());
-                allocation.setProgramCode(allotment.getProgramCode());
+                allocation.setProgramCode(sanctionDetail.getProgramCode());
                 allocation.setStatus(Status.builder().statusCode(org.digit.program.constants.Status.INITIATED).build());
                 if(allotment.getAllotmentTxnType().equals("Allotment withdrawal")){
-                    allocation.setType(AllocationType.DEDUCTION);
+                    allocation.setAllocationType(AllocationType.DEDUCTION);
                 }else{
-                    allocation.setType(AllocationType.ALLOCATION);
+                    allocation.setAllocationType(AllocationType.ALLOCATION);
                 }
                 allocationList.add(allocation);
             }
         }
-
+        Sanction sanction = new Sanction();
+        sanction.setId(sanctionId);
+        sanction.setChildren(sanctionList);
+        sanction.setNetAmount(totalSanctionedAmount);
+        sanction.setGrossAmount(totalSanctionedAmount);
+        sanction.setType(MessageType.ON_SANCTION);
+        sanction.setAvailableAmount(totalAvailableAmount);
+        sanction.setProgramCode(sanctionList.get(0).getProgramCode());
+        sanction.setLocationCode(tenantId);
         String signature = "Signature:  namespace=\\\"g2p\\\", kidId=\\\"{sender_id}|{unique_key_id}|{algorithm}\\\", algorithm=\\\"ed25519\\\", created=\\\"1606970629\\\", expires=\\\"1607030629\\\", headers=\\\"(created) (expires) digest\\\", signature=\\\"Base64(signing content)";
         RequestHeader requestHeader = RequestHeader.builder()
                 .messageId("123")
                 .messageTs(System.currentTimeMillis())
                 .action(Action.CREATE)
-                .messageType(MessageType.PROGRAM)
-                .senderId("program@https://unified-dev.digit.org")
+                .messageType(MessageType.ON_SANCTION)
+                .senderId("program@https://unified-qa.digit.org")
                 .senderUri("https://spp.example.org/{namespace}/callback/on-search")
-                .receiverId("program@https://unified-qa.digit.org")
+                .receiverId("program@https://unified-dev.digit.org")
                 .isMsgEncrypted(false)
                 .build();
 
         SanctionRequest sanctionRequest = SanctionRequest.builder()
                 .signature(signature)
                 .header(requestHeader)
-                .sanctions(sanctionList)
+                .sanction(sanction)
                 .build();
 
         StringBuilder sanctionCreateUrl = new StringBuilder();
@@ -195,12 +215,22 @@ public class MigrationService {
         Object sanctionResponse = serviceRequestRepository.fetchResult(sanctionCreateUrl, sanctionRequest);
         log.info("Sanction Created Successfully: "+ sanctionResponse);
         if(sanctionResponse != null) {
+            Allocation allocation = new Allocation();
+            allocation.setChildren(allocationList);
+            allocation.setNetAmount(totalSanctionedAmount);
+            allocation.setGrossAmount(totalSanctionedAmount);
+            allocation.setType(MessageType.ON_ALLOCATION);
+            requestHeader.setMessageType(MessageType.ON_ALLOCATION);
+            allocation.setAllocationType(AllocationType.ALLOCATION);
+            allocation.setLocationCode(tenantId);
+            allocation.setSanctionId(sanctionId);
+            allocation.setProgramCode(sanctionList.get(0).getProgramCode());
             StringBuilder allocationCreateUrl = new StringBuilder();
             allocationCreateUrl.append(programConfiguration.getProgramServiceHost()).append(programConfiguration.getProgramServiceOnAllocationEndpoint());
             AllocationRequest allocationRequest = AllocationRequest.builder()
                     .signature(signature)
                     .header(requestHeader)
-                    .allocations(allocationList)
+                    .allocation(allocation)
                     .build();
             Object allocationResponse = serviceRequestRepository.fetchResult(allocationCreateUrl, allocationRequest);
             log.info("Allocation Created Successfully: "+ allocationResponse);
