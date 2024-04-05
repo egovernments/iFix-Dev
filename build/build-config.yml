@@ -49,9 +49,9 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "domain-services/program-service/src/main/resources/db"
         image-name: "program-service-db"
-  - name: "builds/iFix/domain-services/digit-exchange"
+  - name: "builds/iFix/domain-services/digit-exchange-works"
     build:
-      - work-dir: "domain-services/digit-exchange-works"
+      - work-dir: "domain-services/digit-exchange"
         image-name: "digit-exchange-works"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "domain-services/digit-exchange/src/main/resources/db"
