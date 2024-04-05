@@ -51,12 +51,12 @@ config:
         image-name: "digit-exchange-db"
   - name: "builds/iFix/domain-services/digit-exchange"
     build:
-      - work-dir: "domain-services/digit-exchange"
+      - work-dir: "domain-services/digit-exchange-works"
         image-name: "digit-exchange-works"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "domain-services/digit-exchange/src/main/resources/db"
         image-name: "digit-exchange-works-db"
-  - name: "builds/iFix/domain-services/program-service"
+  - name: "builds/iFix/domain-services/program-service-works"
     build:
       - work-dir: "domain-services/program-service"
         image-name: "program-service-works"
