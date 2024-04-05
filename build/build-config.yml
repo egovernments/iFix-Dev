@@ -49,6 +49,20 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "domain-services/digit-exchange/src/main/resources/db"
         image-name: "digit-exchange-db"
+  - name: "builds/iFix/domain-services/digit-exchange"
+    build:
+      - work-dir: "domain-services/digit-exchange"
+        image-name: "digit-exchange-works"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/digit-exchange/src/main/resources/db"
+        image-name: "digit-exchange-works-db"
+  - name: "builds/iFix/domain-services/program-service"
+    build:
+      - work-dir: "domain-services/program-service"
+        image-name: "program-service-works"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "domain-services/program-service/src/main/resources/db"
+        image-name: "program-service-works-db"
   - name: "builds/iFix/core/ifix-zuul"
     build:
       - work-dir: "core/ifix-zuul"
