@@ -68,7 +68,7 @@ public class AppConfig {
 
     @Value("${app.name}")
     private String name;
-    @Value("${app.domain}")
+    @Value("${service.host.url}")
     private String domain;
 
     @Value("${app.exchange.topic.name}")
