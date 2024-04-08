@@ -182,7 +182,7 @@ public class ExchangeService {
         } else {
             String receiverDomain = securityService.extractHostUrlFromURL(message.getHeader().getReceiverId());
             String contextPath = servletContext.getContextPath();
-            return receiverDomain + contextPath +"/v1/exchange/" + message.getHeader().getMessageType().toString();
+            return receiverDomain  +"/v1/exchange/" + message.getHeader().getMessageType().toString();
         }
     }
 

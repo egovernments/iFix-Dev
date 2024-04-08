@@ -129,12 +129,18 @@ public class SecurityService {
         return isValid;
     }
     public static String extractHostUrlFromURL(String input) {
+        // Split and validate regex for domain
+        // String regex = "(https?://[a-zA-Z0-9.-]+(:\\d+)?)";
+
+        // Regex pattern to match the domain with http/https
+        String regex = "\\bhttps?://\\S+\\b";
+
         // Regular expression pattern to match the domain with http/https
-        Pattern pattern = Pattern.compile("(https?://[a-zA-Z0-9.-]+(:\\d+)?)");
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            return matcher.group(1); // Returns the matched domain with http/https
+            return matcher.group(); // Returns the matched domain with http/https
         } else {
             return null; // No match found
         }
