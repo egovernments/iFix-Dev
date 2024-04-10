@@ -170,6 +170,7 @@ public class MigrationService {
             sanction.setGrossAmount(sanctionDetail.getSanctionedAmount().doubleValue());
             sanction.setAvailableAmount(sanctionDetail.getFundsSummary().getAvailableAmount().doubleValue());
             sanction.setAllocatedAmount((double) 0);
+            sanction.setStatus(Status.builder().statusCode(org.digit.program.constants.Status.INITIATED).statusMessage("INITIATED").build());
             sanctionList.add(sanction);
             totalSanctionedAmount += sanctionDetail.getSanctionedAmount().doubleValue();
             totalAvailableAmount += sanctionDetail.getFundsSummary().getAvailableAmount().doubleValue();
@@ -200,15 +201,16 @@ public class MigrationService {
         sanction.setAvailableAmount(totalAvailableAmount);
         sanction.setProgramCode(sanctionList.get(0).getProgramCode());
         sanction.setLocationCode(tenantId);
+        sanction.setStatus(Status.builder().statusCode(org.digit.program.constants.Status.INITIATED).statusMessage("INITIATED").build());
         String signature = "Signature:  namespace=\\\"g2p\\\", kidId=\\\"{sender_id}|{unique_key_id}|{algorithm}\\\", algorithm=\\\"ed25519\\\", created=\\\"1606970629\\\", expires=\\\"1607030629\\\", headers=\\\"(created) (expires) digest\\\", signature=\\\"Base64(signing content)";
         RequestHeader requestHeader = RequestHeader.builder()
                 .messageId("123")
                 .messageTs(System.currentTimeMillis())
                 .action(Action.CREATE)
                 .messageType(MessageType.ON_SANCTION)
-                .senderId("program@https://unified-qa.digit.org")
+                .senderId("program@https://unified-dev.digit.org/ifms/digit-exchange")
                 .senderUri("https://spp.example.org/{namespace}/callback/on-search")
-                .receiverId("program@https://unified-dev.digit.org")
+                .receiverId("program@https://unified-dev.digit.org/mukta/digit-exchange")
                 .isMsgEncrypted(false)
                 .build();
 
