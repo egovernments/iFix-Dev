@@ -4,6 +4,8 @@ public class ProgramConstants {
 
     public static final String MDMS_MODULE_NAME = "exchange";
     public static final String MDMS_MASTER_NAME = "ExchangeServers";
+    public static final String MDMS_TENANTS_MODULE_NAME = "tenant";
+    public static final String MDMS_TENANT_MASTER_NAME = "tenants";
     public static final String FILTER_CODE_START = "[?(@.code=='";
     public static final String FILTER_CODE_END = "')]";
     public static final String CREATE = "create";
