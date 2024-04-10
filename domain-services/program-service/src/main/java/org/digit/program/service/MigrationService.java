@@ -138,7 +138,7 @@ public class MigrationService {
                 .searchCriteria(SanctionDetailsSearchCriteria.builder().tenantId(tenantId).build())
                 .build();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(programConfiguration.getIfmsServiceHost())
+        stringBuilder.append(programConfiguration.getAdapterHost())
                 .append(programConfiguration.getIfmsServiceFundsSearchPath());
         Object response = serviceRequestRepository.fetchResult(stringBuilder, fundsSearchRequest);
         FundsSearchResponse fundsSearchResponse = objectMapper.convertValue(response, FundsSearchResponse.class);

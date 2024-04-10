@@ -64,6 +64,8 @@ public class ProgramConfiguration {
     private String adapterHost;
     @Value("${adapter.path}")
     private String adapterPath;
+    @Value("${egov.ifms.service.funds.search.path}")
+    private String ifmsServiceFundsSearchPath;
 
     // Idgen configuration
     @Value("${egov.idgen.host}")
@@ -125,10 +127,4 @@ public class ProgramConfiguration {
     private String programServiceOnSanctionEndpoint;
     @Value("${egov.program.service.onallocation.path}")
     private String programServiceOnAllocationEndpoint;
-
-    // IFMS Configuration for migration
-    @Value("${egov.ifms.service.host}")
-    private String ifmsServiceHost;
-    @Value("${egov.ifms.service.funds.search.path}")
-    private String ifmsServiceFundsSearchPath;
 }
