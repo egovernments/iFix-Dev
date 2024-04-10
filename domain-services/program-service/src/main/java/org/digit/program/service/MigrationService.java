@@ -57,9 +57,9 @@ public class MigrationService {
                 .messageTs(System.currentTimeMillis())
                 .action(Action.CREATE)
                 .messageType(MessageType.PROGRAM)
-                .senderId("program@https://unified-dev.digit.org/ifms/digit-exchange")
+                .senderId("program@https://unified-dev.digit.org/mukta/digit-exchange")
                 .senderUri("https://spp.example.org/{namespace}/callback/on-search")
-                .receiverId("program@https://unified-dev.digit.org/mukta/digit-exchange")
+                .receiverId("program@https://unified-dev.digit.org/ifms/digit-exchange")
                 .isMsgEncrypted(false)
                 .build();
         StringBuilder programCreateUrl = new StringBuilder();

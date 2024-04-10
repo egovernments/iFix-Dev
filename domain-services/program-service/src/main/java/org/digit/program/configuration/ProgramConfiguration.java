@@ -115,9 +115,6 @@ public class ProgramConfiguration {
     @Value("${encryption.vector}")
     private String encryptionVector;
 
-    @Value("${egov.tenant.id.file.path}")
-    private String tenantIdFilePath;
-
     // Program Configuration For Migration
     @Value("${egov.program.service.host}")
     private String programServiceHost;
