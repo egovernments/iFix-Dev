@@ -50,7 +50,8 @@ public class ProgramConfiguration {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
-    @Value("${digit.exchange.context.path}")
+
+    @Value("${exchange.service.external.url}")
     private String domain;
 
     // Exchange configuration
