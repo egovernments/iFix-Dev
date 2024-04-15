@@ -65,6 +65,8 @@ public class ProgramConfiguration {
     private String adapterHost;
     @Value("${adapter.path}")
     private String adapterPath;
+    @Value("${egov.ifms.service.funds.search.path}")
+    private String ifmsServiceFundsSearchPath;
 
     // Idgen configuration
     @Value("${egov.idgen.host}")
@@ -113,5 +115,15 @@ public class ProgramConfiguration {
     private String encryptionKey;
     @Value("${encryption.vector}")
     private String encryptionVector;
+
+    // Program Configuration For Migration
+    @Value("${egov.program.service.host}")
+    private String programServiceHost;
+    @Value("${egov.program.service.create.path}")
+    private String programServiceCreatePath;
+    @Value("${egov.program.service.onsanction.path}")
+    private String programServiceOnSanctionEndpoint;
+    @Value("${egov.program.service.onallocation.path}")
+    private String programServiceOnAllocationEndpoint;
 
 }

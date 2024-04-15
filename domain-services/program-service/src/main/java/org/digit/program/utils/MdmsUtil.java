@@ -46,4 +46,19 @@ public class MdmsUtil {
         Object response = restRepo.fetchResult(new StringBuilder(configs.getMdmsHost()).append(configs.getMdmsPath()), mdmsCriteriaReq);
         return mapper.convertValue(response, MdmsResponse.class);
     }
+
+    public MdmsResponse fetchTenants(String tenantId) {
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build())
+                .mdmsCriteria(MdmsCriteria.builder().tenantId(tenantId)
+                        .moduleDetails(Collections.singletonList(ModuleDetail.builder()
+                                .masterDetails(Collections.singletonList(MasterDetail.builder()
+                                        .name(MDMS_TENANT_MASTER_NAME)
+                                        .build()))
+                                .moduleName(MDMS_TENANTS_MODULE_NAME)
+                                .build()))
+                        .build())
+                .build();
+        Object response = restRepo.fetchResult(new StringBuilder(configs.getMdmsHost()).append(configs.getMdmsPath()), mdmsCriteriaReq);
+        return mapper.convertValue(response, MdmsResponse.class);
+    }
 }
