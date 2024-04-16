@@ -45,7 +45,7 @@ public class MigrationService {
 
     public void createProgram() {
         log.info("Started Creating Program For Each Tenant");
-        String stateLevelTenantId = "pg";
+        String stateLevelTenantId = "od";
         JsonNode response = getTenantIds(stateLevelTenantId);
         List<String> tenantIds = getChildTenantIds(response,stateLevelTenantId);
         String signature = "Signature:  namespace=\\\"g2p\\\", kidId=\\\"{sender_id}|{unique_key_id}|{algorithm}\\\", algorithm=\\\"ed25519\\\", created=\\\"1606970629\\\", expires=\\\"1607030629\\\", headers=\\\"(created) (expires) digest\\\", signature=\\\"Base64(signing content)";
@@ -120,7 +120,7 @@ public class MigrationService {
 
     public void createSanctionAllocation(RequestInfo requestInfo) {
         log.info("Started Creating Sanction Allocation For Each Tenant");
-        String stateLevelTenantId = "pg";
+        String stateLevelTenantId = "od";
         JsonNode response = getTenantIds(stateLevelTenantId);
         List<String> tenantIds = getChildTenantIds(response,stateLevelTenantId);
         for (String tenantId : tenantIds) {
