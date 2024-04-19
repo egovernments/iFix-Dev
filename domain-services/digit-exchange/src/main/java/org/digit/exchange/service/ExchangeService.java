@@ -167,6 +167,7 @@ public class ExchangeService {
         String senderDomain = requestMessageWrapper.getRequestMessage().getHeader().getReceiverId();
         requestMessageWrapper.getRequestMessage().getHeader().setReceiverId(receiverDomain);
         requestMessageWrapper.getRequestMessage().getHeader().setSenderId(senderDomain);
+        requestMessageWrapper.getRequestMessage().getHeader().setMessageType(ExchangeType.fromValue("on-" + requestMessageWrapper.getRequestMessage().getHeader().getMessageType().toString()));
         requestMessageWrapper.setType(ExchangeType.fromValue("on-" + requestMessageWrapper.getType().toString()));
     }
 
