@@ -21,5 +21,7 @@ public class ProgramConstants {
     public static final String EXCHANGE = "exchange";
     public static final String EXCHANGE_SERVERS = "ExchangeServers";
     public static final String HOST_URL = "hostUrl";
+    public static final String CREDIT = "CREDIT";
+    public static final String DEBIT = "DEBIT";
 
 }

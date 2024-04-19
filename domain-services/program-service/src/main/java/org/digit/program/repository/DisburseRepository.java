@@ -1,6 +1,7 @@
 package org.digit.program.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.constants.Status;
 import org.digit.program.models.disburse.DisburseSearch;
 import org.digit.program.models.disburse.Disbursement;
 import org.digit.program.models.sanction.Sanction;
@@ -17,6 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.digit.program.constants.ProgramConstants.CREDIT;
+import static org.digit.program.constants.ProgramConstants.DEBIT;
 
 @Repository
 @Slf4j
@@ -58,7 +62,7 @@ public class DisburseRepository {
 
         if (Boolean.TRUE.equals(isRoot)) {
             preparedStmtList = new ArrayList<>();
-            String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList);
+            String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList, DEBIT);
             jdbcTemplate.update(transactionInsertQuery, preparedStmtList.toArray());
         }
         if (disbursement.getDisbursements() != null) {
@@ -78,14 +82,20 @@ public class DisburseRepository {
      * @param isOnCreate
      */
     @Transactional
-    public void updateDisburse(Disbursement disbursement, Boolean isOnCreate) {
+    public void updateDisburse(Disbursement disbursement, Boolean isOnCreate, Boolean isRoot) {
         List<Object> preparedStmtList = new ArrayList<>();
         String disburseUpdateQuery = disburseQueryBuilder.buildDisburseUpdateQuery(disbursement, preparedStmtList, isOnCreate);
         jdbcTemplate.update(disburseUpdateQuery, preparedStmtList.toArray());
 
+        if (Boolean.TRUE.equals(isRoot) && disbursement.getStatus() != null &&
+                (disbursement.getStatus().getStatusCode().equals(Status.FAILED) || disbursement.getStatus().getStatusCode().equals(Status.ERROR))) {
+            preparedStmtList = new ArrayList<>();
+            String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList, CREDIT);
+            jdbcTemplate.update(transactionInsertQuery, preparedStmtList.toArray());
+        }
         if (disbursement.getDisbursements() != null) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
-                updateDisburse(childDisbursement, isOnCreate);
+                updateDisburse(childDisbursement, isOnCreate, false);
             }
         }
         log.debug("Updated Parent/Child Disbursement for id : {}", disbursement.getId());
@@ -97,10 +107,10 @@ public class DisburseRepository {
      * @param sanction
      */
     @Transactional
-    public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction) {
+    public void updateDisburseAndSanction(Disbursement disbursement, Sanction sanction, Boolean isOnCreate) {
         if (sanction != null)
             sanctionRepository.updateSanctionOnAllocationOrDisburse(Collections.singletonList(sanction));
-        updateDisburse(disbursement, true);
+        updateDisburse(disbursement, isOnCreate, true);
         log.info("Persisted disbursement update with id : {}", disbursement.getId());
     }
 
