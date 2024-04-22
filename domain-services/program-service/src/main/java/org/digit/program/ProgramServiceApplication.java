@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
+@Import({TracerConfiguration.class})
 @ComponentScan(basePackages = {"org.digit.program", "org.digit.program.controller", "org.digit.program.configuration"})
 public class ProgramServiceApplication {
 
