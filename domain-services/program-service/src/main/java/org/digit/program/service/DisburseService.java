@@ -72,10 +72,11 @@ public class DisburseService {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), true, false);
             // Enriches id, audit details and message type
             enrichmentService.enrichDisburseCreate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader());
-            Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
             // Finds sanction with available amount if not already present and calculates new available amount
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForDisburse(disbursementRequest.getDisbursement(),
                     disbursementRequest.getHeader().getSenderId());
+            // Encrypts PII data
+            Disbursement disbursement = encryptionService.getEncryptedDisbursement(disbursementRequest.getDisbursement());
             // Persists disbursement and sanction in one transaction
             disburseRepository.saveDisburseAndSanction(disbursement, sanction);
             // Dispatches disbursement to appropriate service
