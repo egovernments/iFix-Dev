@@ -88,8 +88,8 @@ public class DisburseRepository {
         jdbcTemplate.update(disburseUpdateQuery, preparedStmtList.toArray());
 
         if (Boolean.TRUE.equals(isRoot) && disbursement.getStatus() != null &&
-                (disbursement.getStatus().getStatusCode().equals(Status.FAILED))  ||
-                disbursement.getStatus().getStatusCode().equals(Status.ERROR)) {
+                (disbursement.getStatus().getStatusCode().equals(Status.FAILED)  ||
+                disbursement.getStatus().getStatusCode().equals(Status.ERROR))) {
             preparedStmtList = new ArrayList<>();
             String transactionInsertQuery = disburseQueryBuilder.buildTransactionInsertQuery(disbursement, preparedStmtList, CREDIT);
             jdbcTemplate.update(transactionInsertQuery, preparedStmtList.toArray());
