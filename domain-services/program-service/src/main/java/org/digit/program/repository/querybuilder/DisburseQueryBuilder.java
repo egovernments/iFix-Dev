@@ -114,13 +114,13 @@ public class DisburseQueryBuilder {
         return Boolean.TRUE.equals(isOnCreate) ? ON_DISBURSE_CREATE_QUERY : DISBURSE_UPDATE_QUERY;
     }
 
-    public String buildTransactionInsertQuery (Disbursement disbursement, List<Object> preparedStmtList) {
+    public String buildTransactionInsertQuery (Disbursement disbursement, List<Object> preparedStmtList, String type) {
         preparedStmtList.add(UUID.randomUUID().toString());
         preparedStmtList.add(disbursement.getLocationCode());
         preparedStmtList.add(disbursement.getProgramCode());
         preparedStmtList.add(disbursement.getSanctionId());
         preparedStmtList.add(disbursement.getId());
-        preparedStmtList.add(MessageType.DISBURSE.toString());
+        preparedStmtList.add(type);
         preparedStmtList.add(disbursement.getGrossAmount());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedBy());
         preparedStmtList.add(disbursement.getAuditDetails().getCreatedTime());

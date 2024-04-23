@@ -109,7 +109,7 @@ public class DisburseService {
         try {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader(), false);
-            disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
+            disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false, true);
             DisbursementRequest disbursementRequestFromAdapter = dispatcherUtil.dispatchDisburse(disbursementRequest);
             if (disbursementRequestFromAdapter != null) {
                 commonUtil.updateUri(disbursementRequestFromAdapter.getHeader());
@@ -157,7 +157,7 @@ public class DisburseService {
             // If status is failed or error then increases the sanction amount and returns the sanction for update
             Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburse(disbursement,
                     disbursementRequest.getHeader().getSenderId());
-            disburseRepository.updateDisburseAndSanction(disbursement, sanction);
+            disburseRepository.updateDisburseAndSanction(disbursement, sanction, true);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
             log.info("On Disburse created successfully");
         } catch (CustomException exception) {
@@ -177,7 +177,10 @@ public class DisburseService {
             disbursementValidator.validateDisbursement(disbursementRequest.getDisbursement(), false, false);
             commonValidator.validateReply(disbursementRequest.getHeader(), disbursementRequest.getDisbursement().getLocationCode());
             enrichmentService.enrichDisburseUpdate(disbursementRequest.getDisbursement(), disbursementRequest.getHeader(), true);
-            disburseRepository.updateDisburse(disbursementRequest.getDisbursement(), false);
+            // If status is failed or error then increases the sanction amount and returns the sanction for update
+            Sanction sanction = calculationUtil.calculateAndReturnSanctionForOnDisburse(disbursementRequest.getDisbursement(),
+                    disbursementRequest.getHeader().getSenderId());
+            disburseRepository.updateDisburseAndSanction(disbursementRequest.getDisbursement(), sanction, false);
             dispatcherUtil.dispatchDisburse(disbursementRequest);
             log.info("On Disburse updated successfully");
         } catch (CustomException exception) {
