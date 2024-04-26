@@ -122,7 +122,10 @@ public class DisbursementValidator {
                     .build(), false);
             if (sanctions.isEmpty())
                 throw new CustomException(NO_SANCTION_FOUND, NO_SANCTION_FOUND_MSG + disbursement.getSanctionId());
-            if(!disbursementsFromDB.isEmpty()) {
+            if(disbursementsFromDB.isEmpty()) {
+                if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
+                    throw new CustomException(SANCTION_AVAILABLE_AMOUNT_ERROR, SANCTION_AVAILABLE_AMOUNT_ERROR_MSG);
+            } else {
                 List<Status> statusesFromDb = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus().getStatusCode()).collect(Collectors.toList());
                 if (!statusesFromDb.contains(Status.PARTIAL)) {
                     if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
