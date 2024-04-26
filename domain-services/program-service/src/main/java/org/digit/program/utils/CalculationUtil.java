@@ -43,6 +43,13 @@ public class CalculationUtil {
         if (disbursement.getStatus().getStatusCode().equals(Status.FAILED)  ||
                 disbursement.getStatus().getStatusCode().equals(Status.ERROR)) {
             log.info("Calculating Sanction for on disburse");
+            List<Disbursement> disbursementsFromDB = disburseRepository.searchDisbursements(DisburseSearch.builder()
+                    .targetId(disbursement.getTargetId()).build());
+            List<Status> statuses = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus()
+                    .getStatusCode()).collect(Collectors.toList());
+            if (statuses.contains(Status.PARTIAL)) {
+                return null;
+            }
             SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
             Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
             sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
