@@ -46,8 +46,8 @@ public class DisbursementValidator {
         validateAmount(disbursement);
         validateId(disbursement, isCreate);
         if (Boolean.TRUE.equals(isCreate)) {
-            validateTargetId(disbursement);
-            validateSanctionAmount(disbursement);
+            List<Disbursement> disbursementsFromDB = validateTargetId(disbursement);
+            validateSanctionAmount(disbursement, disbursementsFromDB);
         }
 
         if (Boolean.TRUE.equals(isOnDisburseCreate))
@@ -110,7 +110,7 @@ public class DisbursementValidator {
      * Validates sanction and available amount for given sanction id
      * @param disbursement
      */
-    public void validateSanctionAmount(Disbursement disbursement) {
+    public void validateSanctionAmount(Disbursement disbursement, List<Disbursement> disbursementsFromDB) {
         if (disbursement.getSanctionId() != null) {
             for (Disbursement childDisbursement : disbursement.getDisbursements()) {
                 if (childDisbursement.getSanctionId() == null || !childDisbursement.getSanctionId().equalsIgnoreCase(disbursement.getSanctionId()))
@@ -122,8 +122,17 @@ public class DisbursementValidator {
                     .build(), false);
             if (sanctions.isEmpty())
                 throw new CustomException(NO_SANCTION_FOUND, NO_SANCTION_FOUND_MSG + disbursement.getSanctionId());
-            if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
-                throw new CustomException(SANCTION_AVAILABLE_AMOUNT_ERROR, SANCTION_AVAILABLE_AMOUNT_ERROR_MSG);
+            if(disbursementsFromDB.isEmpty()) {
+                if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
+                    throw new CustomException(SANCTION_AVAILABLE_AMOUNT_ERROR, SANCTION_AVAILABLE_AMOUNT_ERROR_MSG);
+            } else {
+                List<Status> statusesFromDb = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus().getStatusCode()).collect(Collectors.toList());
+                if (!statusesFromDb.contains(Status.PARTIAL)) {
+                    if (sanctions.get(0).getAvailableAmount() < disbursement.getGrossAmount())
+                        throw new CustomException(SANCTION_AVAILABLE_AMOUNT_ERROR, SANCTION_AVAILABLE_AMOUNT_ERROR_MSG);
+                }
+            }
+
         }
     }
 
@@ -158,7 +167,7 @@ public class DisbursementValidator {
      * Validates if disbursement exists in workflow for target id for create
      * @param disbursement
      */
-    public void validateTargetId(Disbursement disbursement) {
+    public List<Disbursement> validateTargetId(Disbursement disbursement) {
         List<Disbursement> disbursementsFromDB = disburseRepository.searchDisbursements(DisburseSearch.builder()
                 .targetId(disbursement.getTargetId()).build());
         List<Status> statuses = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus()
@@ -166,6 +175,7 @@ public class DisbursementValidator {
         if (statuses.contains(Status.INITIATED) || statuses.contains(Status.INPROCESS))
             throw new CustomException(DISBURSEMENT_ALREADY_PRESENT_ERROR, DISBURSEMENT_ALREADY_PRESENT_ERROR_MSG
                     + disbursement.getTargetId());
+        return disbursementsFromDB;
     }
 
     /**

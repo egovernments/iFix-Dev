@@ -180,7 +180,10 @@ public class EnrichmentService {
             List<Status> statuses = disbursement.getDisbursements().stream()
                     .map(disbursement1 -> disbursement1.getStatus().getStatusCode()).distinct().collect(Collectors.toList());
             if (statuses.contains(Status.FAILED) && statuses.contains(Status.SUCCESSFUL)) {
-                disbursement.getStatus().setStatusCode(Status.PARTIAL);
+                if (disbursement.getStatus() != null && disbursement.getStatus().getStatusCode() != null &&
+                        !disbursement.getStatus().getStatusCode().equals(Status.COMPLETED)) {
+                    disbursement.getStatus().setStatusCode(Status.PARTIAL);
+                }
             }
         }
         header.setMessageId(disbursement.getId());
