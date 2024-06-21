@@ -42,6 +42,7 @@ public class FiscalDataEnrichmentService {
     Map<String, HashMap<Integer, String>> tenantIdVshierarchyLevelVsLabelMap = new HashMap<>();
 
     private HashMap<Integer, String> loadDepartmentHierarchyLevel(String tenantId){
+        log.info("Loading department hierarchy levels for tenantId: " + tenantId);
         DepartmentHierarchyLevelSearchCriteria criteria = DepartmentHierarchyLevelSearchCriteria.builder().tenantId(tenantId).build();
         DepartmentHierarchyLevelSearchRequest request = DepartmentHierarchyLevelSearchRequest.builder().criteria(criteria).requestHeader(new RequestHeader()).build();
         Object result = serviceRequestRepository.fetchResult(getIfixDepartmentEntityUri(), request);
@@ -51,10 +52,13 @@ public class FiscalDataEnrichmentService {
             if(!hierarchyLevelVsLabelMap.containsKey(hierarchyObject.getLevel()))
                 hierarchyLevelVsLabelMap.put(hierarchyObject.getLevel(), hierarchyObject.getLabel().replaceAll(" ", "_"));
         });
+
+        log.info("Loaded department hierarchy levels: " + hierarchyLevelVsLabelMap);
         return hierarchyLevelVsLabelMap;
     }
 
     public void enrichFiscalData(FiscalEvent fiscalEvent){
+        log.info("Enriching fiscal data for event: " + fiscalEvent);
         HashMap<String, Object> attributes = (HashMap<String, Object>) fiscalEvent.getAttributes();
 
         HashMap<String, Object> departmentEntity = new HashMap<>();
@@ -82,7 +86,7 @@ public class FiscalDataEnrichmentService {
 
         fiscalEvent.setHierarchyMap(hierarchyMap);
 
-        log.info(fiscalEvent.toString());
+        log.info("Enriched fiscal event: " + fiscalEvent.toString());
     }
 
     private StringBuilder getIfixDepartmentEntityUri(){
