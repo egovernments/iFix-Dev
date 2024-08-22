@@ -46,14 +46,14 @@ config:
     build:
       - work-dir: "domain-services/digit-exchange"
         image-name: "digit-exchange"
-        dockerfile: "build/maven/Dockerfile"
+        dockerfile: "build/maven-java17/Dockerfile"
       - work-dir: "domain-services/digit-exchange/src/main/resources/db"
         image-name: "digit-exchange-db"
   - name: "builds/iFix/domain-services/digit-exchange-works"
     build:
       - work-dir: "domain-services/digit-exchange"
         image-name: "digit-exchange-works"
-        dockerfile: "build/maven/Dockerfile"
+        dockerfile: "build/maven-java17/Dockerfile"
       - work-dir: "domain-services/digit-exchange/src/main/resources/db"
         image-name: "digit-exchange-works-db"
   - name: "builds/iFix/domain-services/program-service-works"
