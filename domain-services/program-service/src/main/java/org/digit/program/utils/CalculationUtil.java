@@ -2,6 +2,7 @@ package org.digit.program.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.AllocationType;
 import org.digit.program.constants.Status;
 import org.digit.program.models.allocation.Allocation;
@@ -32,11 +33,13 @@ public class CalculationUtil {
     private final SanctionRepository sanctionRepository;
     private final DisburseRepository disburseRepository;
     private final EnrichmentService enrichmentService;
+    private final ProgramConfiguration configs;
 
-    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository, EnrichmentService enrichmentService) {
+    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository, EnrichmentService enrichmentService, ProgramConfiguration configs) {
         this.sanctionRepository = sanctionRepository;
         this.disburseRepository = disburseRepository;
         this.enrichmentService = enrichmentService;
+        this.configs = configs;
     }
 
     /**
@@ -208,7 +211,7 @@ public class CalculationUtil {
     }
 
     /**
-     * This method validates the 90Days scenario and return true is COR PI request is valid else return false to create new PI
+     * This method validates the expiry time scenario and return true is COR PI request is valid else return false to take new sanction
      * @param currentDisbursement The payment instruction received from the disbursement
      * @param originalDisbursement The last payment instruction
      * @return The status of the payment
@@ -218,33 +221,34 @@ public class CalculationUtil {
         LocalDateTime originalPICreatedDate = convertEpochToLocalDateTime(originalDisbursement.getAuditDetails().getCreatedTime());
         LocalDateTime corPICreatedDate = convertEpochToLocalDateTime(currentDisbursement.getAuditDetails().getCreatedTime());
         LocalDateTime failureDate = convertEpochToLocalDateTime(originalDisbursement.getAuditDetails().getLastModifiedTime());  // lastModifiedDate of the originalPI
-        LocalDateTime failureDatePlus90 = failureDate.plusDays(90);
+        LocalDateTime failureDatePlusExpiryDays = failureDate.plusDays(configs.getOriginalExpireDays());
 
         // Check if financial year of COR PI Request createdDate and OriginalPI createdDate is same
         if (getFinancialYear(originalPICreatedDate).equals(getFinancialYear(corPICreatedDate))) {
 
-            // Check if corPICreatedDate <= (originalPIFailedDate + 90 days)
-            if (corPICreatedDate.isBefore(failureDatePlus90) || corPICreatedDate.isEqual(failureDatePlus90)) {
+            // Check if corPICreatedDate <= (originalPIFailedDate + expiry days)
+            if (corPICreatedDate.isBefore(failureDatePlusExpiryDays) || corPICreatedDate.isEqual(failureDatePlusExpiryDays)) {
                 // Normal Flow
                 log.info("Payment Instruction is valid for Correction PI Request for same financial year.");
                 return true;
             } else {
                 // Create New PI
-                log.info("New Payment Instruction is created due to 90 days scenario.");
+                log.info("New Payment Instruction is created due to expiry days scenario.");
                 return false;
             }
 
         } else {  // If financial year is not same
 
             // Check if (corPICreatedDate <= (originalPIFailedDate + 90 days)) and corPICreatedDate <= 30th April 23:59:59
-            if ((corPICreatedDate.isBefore(failureDatePlus90) || corPICreatedDate.isEqual(failureDatePlus90))
-                    && corPICreatedDate.getMonth().equals(Month.APRIL) && corPICreatedDate.getDayOfMonth() <= 30) {
+            LocalDateTime endOfApril = LocalDateTime.of(corPICreatedDate.getYear(),
+                    configs.getOriginalExpireFinancialYearMonth(), configs.getOriginalExpireFinancialYearDate(), 23, 59, 59);
+            if (!corPICreatedDate.isAfter(failureDatePlusExpiryDays) && !corPICreatedDate.isAfter(endOfApril)) {
                 // Normal flow
                 log.info("Payment Instruction is valid for Correction PI Request.");
                 return true;
             } else {
                 // Create new PI
-                log.info("New Payment Instruction is created due to 90 days or 30th April scenario");
+                log.info("New sanction is taken due to expiry days or 30th April scenario");
                 return false;
             }
 

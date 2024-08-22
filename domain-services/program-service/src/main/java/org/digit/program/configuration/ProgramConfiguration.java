@@ -114,4 +114,11 @@ public class ProgramConfiguration {
     @Value("${encryption.vector}")
     private String encryptionVector;
 
+    @Value("${original.disburse.expire.days}")
+    private Integer originalExpireDays;
+    @Value("${original.disburse.expire.financial.year.date}")
+    private Integer originalExpireFinancialYearDate;
+    @Value("${original.disburse.expire.financial.year.month}")
+    private Integer originalExpireFinancialYearMonth;
+
 }
