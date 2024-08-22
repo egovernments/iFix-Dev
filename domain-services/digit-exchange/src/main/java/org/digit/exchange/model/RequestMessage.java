@@ -1,14 +1,14 @@
 package org.digit.exchange.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
 
 
 @Getter
@@ -22,6 +22,7 @@ public class RequestMessage {
     private String signature;
     @JsonProperty("header")
     @NotNull
+    @Valid
     private RequestHeader header;
     @NotNull
     @JsonProperty("message")
