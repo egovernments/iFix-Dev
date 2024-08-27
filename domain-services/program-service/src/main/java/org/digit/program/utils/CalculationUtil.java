@@ -91,7 +91,7 @@ public class CalculationUtil {
         if (!disbursementsFromDB.isEmpty()) {
             List<Disbursement> originalDisbursementsFromDB = filterDisbursements(disbursementsFromDB);
             List<Disbursement> disbursementWithPartialStatuses = originalDisbursementsFromDB.stream()
-                    .filter(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode().equals(Status.PARTIAL))
+                    .filter(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode().equals(Status.PARTIAL) || disbursementFromDB.getStatus().getStatusCode().equals(Status.COMPLETED))
                     .collect(Collectors.toList());
             Disbursement disbursementWithPartialStatus = null;
             if (!CollectionUtils.isEmpty(disbursementWithPartialStatuses) && isValidForCORPIRequest(disbursement, disbursementWithPartialStatuses.get(0)))
