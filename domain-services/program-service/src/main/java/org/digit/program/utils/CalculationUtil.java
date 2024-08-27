@@ -220,8 +220,7 @@ public class CalculationUtil {
 
         LocalDateTime originalPICreatedDate = convertEpochToLocalDateTime(originalDisbursement.getAuditDetails().getCreatedTime());
         LocalDateTime corPICreatedDate = convertEpochToLocalDateTime(currentDisbursement.getAuditDetails().getCreatedTime());
-        LocalDateTime failureDate = convertEpochToLocalDateTime(originalDisbursement.getAuditDetails().getLastModifiedTime());  // lastModifiedDate of the originalPI
-        LocalDateTime failureDatePlusExpiryDays = failureDate.plusDays(configs.getOriginalExpireDays());
+        LocalDateTime failureDatePlusExpiryDays = originalPICreatedDate.plusDays(configs.getOriginalExpireDays());
 
         // Check if financial year of COR PI Request createdDate and OriginalPI createdDate is same
         if (getFinancialYear(originalPICreatedDate).equals(getFinancialYear(corPICreatedDate))) {
@@ -242,7 +241,7 @@ public class CalculationUtil {
             // Check if (corPICreatedDate <= (originalPIFailedDate + 90 days)) and corPICreatedDate <= 30th April 23:59:59
             LocalDateTime endOfApril = LocalDateTime.of(corPICreatedDate.getYear(),
                     configs.getOriginalExpireFinancialYearMonth(), configs.getOriginalExpireFinancialYearDate(), 23, 59, 59);
-            if (!corPICreatedDate.isAfter(failureDatePlusExpiryDays) && !corPICreatedDate.isAfter(endOfApril)) {
+            if (!corPICreatedDate.isAfter(endOfApril)) {
                 // Normal flow
                 log.info("Payment Instruction is valid for Correction PI Request.");
                 return true;
