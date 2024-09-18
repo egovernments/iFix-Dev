@@ -5,7 +5,7 @@ import lombok.*;
 import org.digit.exchange.constants.Action;
 import org.digit.exchange.constants.ExchangeType;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 
 @Getter
