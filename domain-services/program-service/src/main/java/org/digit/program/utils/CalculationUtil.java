@@ -1,6 +1,8 @@
 package org.digit.program.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
+import org.digit.program.configuration.ProgramConfiguration;
 import org.digit.program.constants.AllocationType;
 import org.digit.program.constants.Status;
 import org.digit.program.models.allocation.Allocation;
@@ -13,7 +15,12 @@ import org.digit.program.repository.SanctionRepository;
 import org.digit.program.service.EnrichmentService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,11 +33,13 @@ public class CalculationUtil {
     private final SanctionRepository sanctionRepository;
     private final DisburseRepository disburseRepository;
     private final EnrichmentService enrichmentService;
+    private final ProgramConfiguration configs;
 
-    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository, EnrichmentService enrichmentService) {
+    public CalculationUtil(SanctionRepository sanctionRepository, DisburseRepository disburseRepository, EnrichmentService enrichmentService, ProgramConfiguration configs) {
         this.sanctionRepository = sanctionRepository;
         this.disburseRepository = disburseRepository;
         this.enrichmentService = enrichmentService;
+        this.configs = configs;
     }
 
     /**
@@ -45,11 +54,14 @@ public class CalculationUtil {
             log.info("Calculating Sanction for on disburse");
             List<Disbursement> disbursementsFromDB = disburseRepository.searchDisbursements(DisburseSearch.builder()
                     .targetId(disbursement.getTargetId()).build());
-            List<Status> statuses = disbursementsFromDB.stream().map(disbursement1 -> disbursement1.getStatus()
-                    .getStatusCode()).collect(Collectors.toList());
-            if (statuses.contains(Status.PARTIAL)) {
+            // Sort disbursements in descending order of created time
+
+            List<Disbursement> originalDisbursementsFromDB = filterDisbursements(disbursementsFromDB);
+            if(originalDisbursementsFromDB.get(0).getStatus().equals(Status.PARTIAL)) {
                 return null;
             }
+
+            // fetch the first disbursement whose isRevised flag present in additional details is true
             SanctionSearch sanctionSearch = SanctionSearch.builder().ids(Collections.singletonList(disbursement.getSanctionId())).build();
             Sanction sanction = sanctionRepository.searchSanction(sanctionSearch, false).get(0);
             sanction.setAvailableAmount(sanction.getAvailableAmount() + disbursement.getGrossAmount());
@@ -77,11 +89,15 @@ public class CalculationUtil {
                 .targetId(disbursement.getTargetId()).build());
 
         if (!disbursementsFromDB.isEmpty()) {
-            Optional<Disbursement> optionalDisbursement = disbursementsFromDB.stream()
-                    .filter(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode().equals(Status.PARTIAL))
-                    .findFirst();
-            if (optionalDisbursement.isPresent()) {
-                Disbursement disbursementWithPartialStatus = optionalDisbursement.get();
+            List<Disbursement> originalDisbursementsFromDB = filterDisbursements(disbursementsFromDB);
+            List<Disbursement> disbursementWithPartialStatuses = originalDisbursementsFromDB.stream()
+                    .filter(disbursementFromDB -> disbursementFromDB.getStatus().getStatusCode().equals(Status.PARTIAL) || disbursementFromDB.getStatus().getStatusCode().equals(Status.COMPLETED))
+                    .collect(Collectors.toList());
+            Disbursement disbursementWithPartialStatus = null;
+            if (!CollectionUtils.isEmpty(disbursementWithPartialStatuses) && isValidForCORPIRequest(disbursement, disbursementWithPartialStatuses.get(0)))
+                disbursementWithPartialStatus = disbursementWithPartialStatuses.get(0);
+
+            if (disbursementWithPartialStatus != null) {
                 disbursement.setSanctionId(disbursementWithPartialStatus.getSanctionId());
                 for (Disbursement childDisbursement : disbursement.getDisbursements())
                     childDisbursement.setSanctionId(disbursementWithPartialStatus.getSanctionId());
@@ -143,5 +159,98 @@ public class CalculationUtil {
         }
         log.info("Sanction calculated for allocation");
         return new ArrayList<>(sanctionIdVsSanction.values());
+    }
+
+    public List<Disbursement> filterDisbursements(List<Disbursement> disbursementsFromDB) {
+
+        return disbursementsFromDB.stream()
+                .filter(disbursementFromDB -> {
+                    Object additionalDetailsObj = disbursementFromDB.getAdditionalDetails();
+                    if (additionalDetailsObj instanceof JsonNode) {
+                        JsonNode additionalDetails = (JsonNode) additionalDetailsObj;
+                        JsonNode isRevisedNode = additionalDetails.get("isRevised");
+                        return isRevisedNode != null && !isRevisedNode.asBoolean();
+                    }
+                    return false;
+                })
+                .sorted(Comparator.comparing(disbursementFromDB -> disbursementFromDB.getAuditDetails().getCreatedTime(), Comparator.reverseOrder()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Method to convert epochDateTimeFormat to LocalDateTime
+     * @param epochTime The epoch time in milliseconds
+     * @return The corresponding LocalDateTime object
+     */
+    private LocalDateTime convertEpochToLocalDateTime(long epochTime) {
+        Instant instant = Instant.ofEpochMilli(epochTime);
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    /**
+     * Method to get the financial year of the given date
+     * @param date The date for which the financial year is needed
+     * @return The financial year in the format "YYYY-YYYY"
+     */
+    private String getFinancialYear(LocalDateTime date){
+
+        int year = date.getYear();
+        int month = date.getMonthValue();
+
+        // Check if the date falls in the current or next financial year
+        int startYear, endYear;
+        if (month < 4) { // Before April, so belongs to the previous financial year
+            startYear = year - 1;
+            endYear = year;
+        } else {
+            startYear = year;
+            endYear = year + 1;
+        }
+
+        return startYear + "-" + endYear;
+    }
+
+    /**
+     * This method validates the expiry time scenario and return true is COR PI request is valid else return false to take new sanction
+     * @param currentDisbursement The payment instruction received from the disbursement
+     * @param originalDisbursement The last payment instruction
+     * @return The status of the payment
+     */
+    private boolean isValidForCORPIRequest(Disbursement currentDisbursement, Disbursement originalDisbursement) {
+
+        LocalDateTime originalPICreatedDate = convertEpochToLocalDateTime(originalDisbursement.getAuditDetails().getCreatedTime());
+        LocalDateTime corPICreatedDate = convertEpochToLocalDateTime(currentDisbursement.getAuditDetails().getCreatedTime());
+        LocalDateTime failureDatePlusExpiryDays = originalPICreatedDate.plusDays(configs.getOriginalExpireDays());
+
+        // Check if financial year of COR PI Request createdDate and OriginalPI createdDate is same
+        if (getFinancialYear(originalPICreatedDate).equals(getFinancialYear(corPICreatedDate))) {
+
+            // Check if corPICreatedDate <= (originalPIFailedDate + expiry days)
+            if (corPICreatedDate.isBefore(failureDatePlusExpiryDays) || corPICreatedDate.isEqual(failureDatePlusExpiryDays)) {
+                // Normal Flow
+                log.info("Payment Instruction is valid for Correction PI Request for same financial year.");
+                return true;
+            } else {
+                // Create New PI
+                log.info("New Payment Instruction is created due to expiry days scenario.");
+                return false;
+            }
+
+        } else {  // If financial year is not same
+
+            // Check if (corPICreatedDate <= (originalPIFailedDate + 90 days)) and corPICreatedDate <= 30th April 23:59:59
+            LocalDateTime endOfApril = LocalDateTime.of(corPICreatedDate.getYear(),
+                    configs.getOriginalExpireFinancialYearMonth(), configs.getOriginalExpireFinancialYearDate(), 23, 59, 59);
+            if (!corPICreatedDate.isAfter(endOfApril)) {
+                // Normal flow
+                log.info("Payment Instruction is valid for Correction PI Request.");
+                return true;
+            } else {
+                // Create new PI
+                log.info("New sanction is taken due to expiry days or 30th April scenario");
+                return false;
+            }
+
+        }
     }
 }
