@@ -15,7 +15,7 @@ import org.digit.exchange.repository.ServiceRequestRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 @Service
 @Slf4j

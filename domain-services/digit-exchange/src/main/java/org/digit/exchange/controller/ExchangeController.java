@@ -1,5 +1,6 @@
 package org.digit.exchange.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.digit.exchange.constants.ExchangeType;
 import org.digit.exchange.exception.ResourceNotFoundException;
@@ -24,7 +25,7 @@ public class ExchangeController {
     }
 
     @PostMapping(value = "/exchange/{exchangeType}")
-    public ResponseEntity<RequestMessage> program(@RequestBody RequestMessage messageRequest, @PathVariable("exchangeType") String type) {
+    public ResponseEntity<RequestMessage> program(@RequestBody @Valid RequestMessage messageRequest, @PathVariable("exchangeType") String type) {
         log.info("Received message from: {} to {}", messageRequest.getHeader().getSenderId(), messageRequest.getHeader().getReceiverId());
         try {
             RequestMessage response = exchangeService.processMessage(ExchangeType.fromValue(type), messageRequest);
