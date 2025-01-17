@@ -39,7 +39,7 @@ config:
     build:
       - work-dir: "domain-services/program-service"
         image-name: "program-service"
-        dockerfile: "build/maven/Dockerfile"
+        dockerfile: "build/maven-java17/Dockerfile"
       - work-dir: "domain-services/program-service/src/main/resources/db"
         image-name: "program-service-db"
   - name: "builds/iFix/domain-services/digit-exchange"
@@ -60,7 +60,7 @@ config:
     build:
       - work-dir: "domain-services/program-service"
         image-name: "program-service-works"
-        dockerfile: "build/maven/Dockerfile"
+        dockerfile: "build/maven-java17/Dockerfile"
       - work-dir: "domain-services/program-service/src/main/resources/db"
         image-name: "program-service-works-db"
   - name: "builds/iFix/core/ifix-zuul"
